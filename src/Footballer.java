@@ -12,7 +12,7 @@ public class Footballer {
 	public int attack;
 	public int defence;
 	private String team;
-	public int stamina;
+	public int stamina; 
 	public String position;
 	
 	// Define Player Characteristics

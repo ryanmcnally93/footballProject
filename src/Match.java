@@ -13,7 +13,7 @@ public class Match {
 		
 		Footballer allPlayers[] = {ryan, majid, michael, chester, josh, steven};
 		int gameTurn = 0;
-		int arsenal = 0;
+		int arsenal = 0; 
 		int tottenham = 0;
 		ArrayList<String> arsenalScorers = new ArrayList<>();
 		ArrayList<String> tottenhamScorers = new ArrayList<>();
