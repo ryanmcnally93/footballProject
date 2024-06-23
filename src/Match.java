@@ -4,31 +4,48 @@ import java.util.List;
 public class Match {
 	
 	private int score;
-	private String homeTeam;
-	private String awayTeam;
+	private Footballer[] homeTeam;
+	private Footballer[] awayTeam;
 	private int minute;
+	private ArrayList<String> homeScorers;
+	private ArrayList<String> awayScorers;
 	
-	public Match(String homeTeam, String awayTeam) {
+	public Match(Footballer[] homeTeam, Footballer[] awayTeam) {
 		this.homeTeam = homeTeam;
 		this.awayTeam = awayTeam;
 		this.minute = 0;
+		this.homeScorers = new ArrayList<>();
+		this.awayScorers = new ArrayList<>();
 	}
 
 	public static void main(String[] args) {
-		Footballer jesus = new Footballer("Gabriel Jesus", 31, 30000, 200, 20, 100, "Arsenal", "Striker");
-		Footballer majid = new Footballer("Richarlison", 31, 30000, 180, 100, 100, "Tottenham", "Striker");
-		Footballer josh = new Footballer("William Saliba", 31, 30000, 20, 205, 100, "Arsenal", "Defender");
-		Footballer steven = new Footballer("Steven", 31, 30000, 40, 210, 100, "Tottenham", "Defender");
-		Footballer michael = new Footballer("Martin Odegaard", 31, 30000, 160, 180, 100, "Arsenal", "Midfielder");
-		Footballer chester = new Footballer("Chester", 31, 30000, 180, 170, 100, "Tottenham", "Midfielder");
+		Footballer jesus = new Footballer("Gabriel Jesus", 31, 30000, 180, 30, 100, "Arsenal", "Striker");
+		Footballer trossard = new Footballer("Leandro Trossard", 31, 30000, 200, 40, 100, "Arsenal", "Winger");
+		Footballer saka = new Footballer("Bukayo Saka", 31, 30000, 180, 65, 100, "Arsenal", "Winger");
+		Footballer partey = new Footballer("Thomas Partey", 31, 30000, 90, 180, 100, "Arsenal", "Midfielder");
+		Footballer odegaard = new Footballer("Martin Odegaard", 31, 30000, 180, 120, 100, "Arsenal", "Midfielder");
+		Footballer rice = new Footballer("Declan Rice", 31, 30000, 110, 190, 100, "Arsenal", "Midfielder");
+		Footballer tomiyasu = new Footballer("Takehiro Tomiyasu", 31, 30000, 45, 215, 100, "Arsenal", "Defender");
+		Footballer saliba = new Footballer("William Saliba", 31, 30000, 45, 260, 100, "Arsenal", "Defender");
+		Footballer gabriel = new Footballer("Gabriel Magalhaes", 31, 30000, 45, 245, 100, "Arsenal", "Defender");
+		Footballer white = new Footballer("Ben White", 31, 30000, 75, 215, 100, "Arsenal", "Defender");
 		
-		Footballer allPlayers[] = {jesus, majid, michael, chester, josh, steven};
+		Footballer johnson = new Footballer("Brennan Johnson", 31, 30000, 180, 30, 100, "Tottenham", "Striker");
+		Footballer son = new Footballer("Heung-Min Son", 31, 30000, 200, 40, 100, "Tottenham", "Winger");
+		Footballer kulusevski = new Footballer("Dejan Kulusevski", 31, 30000, 180, 65, 100, "Tottenham", "Winger");
+		Footballer maddison = new Footballer("James Maddison", 31, 30000, 90, 180, 100, "Tottenham", "Midfielder");
+		Footballer bissouma = new Footballer("Yves Bissouma", 31, 30000, 180, 120, 100, "Tottenham", "Midfielder");
+		Footballer sarr = new Footballer("Pape Matar Sarr", 31, 30000, 110, 190, 100, "Tottenham", "Midfielder");
+		Footballer udogie = new Footballer("Destiny Udogie", 31, 30000, 45, 215, 100, "Tottenham", "Defender");
+		Footballer vanDeVen = new Footballer("Micky van de Ven", 31, 30000, 45, 260, 100, "Tottenham", "Defender");
+		Footballer romero = new Footballer("Cristian Romero", 31, 30000, 45, 245, 100, "Tottenham", "Defender");
+		Footballer porro = new Footballer("Guglielmo Vicario", 31, 30000, 75, 215, 100, "Tottenham", "Defender");
 		
-		ArrayList<String> arsenalScorers = new ArrayList<>();
-		ArrayList<String> tottenhamScorers = new ArrayList<>();
+		Footballer arsenal[] = {jesus, trossard, saka, odegaard, partey, rice, tomiyasu, gabriel, saliba, white};
+		Footballer tottenham[] = {johnson, son, kulusevski, maddison, bissouma, sarr, udogie, vanDeVen, romero, porro};
 		
-		Match match = new Match("Arsenal", "Tottenham");
-		match.startRun(jesus, allPlayers, 0, 0, arsenalScorers, tottenhamScorers);
+		Match match = new Match(arsenal, tottenham);
+		match.startRun(jesus, 0, 0);
 		
 	}
 	
