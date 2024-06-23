@@ -3,19 +3,22 @@ import java.util.List;
 
 public class Match {
 	
-	private int score;
-	private Footballer[] homeTeam;
-	private Footballer[] awayTeam;
+	private int homeScore;
+	private int awayScore;
+	private ArrayList<Footballer> homeTeam;
+	private ArrayList<Footballer> awayTeam;
 	private int minute;
-	private ArrayList<String> homeScorers;
-	private ArrayList<String> awayScorers;
+	public ArrayList<String> homeScorers;
+	public ArrayList<String> awayScorers;
 	
-	public Match(Footballer[] homeTeam, Footballer[] awayTeam) {
+	public Match(ArrayList<Footballer> homeTeam, ArrayList<Footballer> awayTeam) {
 		this.homeTeam = homeTeam;
 		this.awayTeam = awayTeam;
 		this.minute = 0;
-		this.homeScorers = new ArrayList<>();
-		this.awayScorers = new ArrayList<>();
+		this.homeScorers = new ArrayList<String>();
+		this.awayScorers = new ArrayList<String>();
+		this.homeScore = 0;
+		this.awayScore = 0;
 	}
 
 	public static void main(String[] args) {
@@ -41,94 +44,116 @@ public class Match {
 		Footballer romero = new Footballer("Cristian Romero", 31, 30000, 45, 245, 100, "Tottenham", "Defender");
 		Footballer porro = new Footballer("Guglielmo Vicario", 31, 30000, 75, 215, 100, "Tottenham", "Defender");
 		
-		Footballer arsenal[] = {jesus, trossard, saka, odegaard, partey, rice, tomiyasu, gabriel, saliba, white};
-		Footballer tottenham[] = {johnson, son, kulusevski, maddison, bissouma, sarr, udogie, vanDeVen, romero, porro};
+		ArrayList<Footballer> arsenal = new ArrayList<Footballer>();
+		arsenal.add(jesus);
+		arsenal.add(trossard);
+		arsenal.add(saka);
+		arsenal.add(odegaard);
+		arsenal.add(partey);
+		arsenal.add(rice);
+		arsenal.add(tomiyasu);
+		arsenal.add(gabriel);
+		arsenal.add(saliba);
+		arsenal.add(white);
+		ArrayList<Footballer> tottenham = new ArrayList<Footballer>();
+		tottenham.add(johnson);
+		tottenham.add(son);
+		tottenham.add(kulusevski);
+		tottenham.add(maddison);
+		tottenham.add(bissouma);
+		tottenham.add(sarr);
+		tottenham.add(udogie);
+		tottenham.add(vanDeVen);
+		tottenham.add(romero);
+		tottenham.add(porro);
 		
 		Match match = new Match(arsenal, tottenham);
-		match.startRun(jesus, 0, 0);
+		match.startRun(jesus);
 		
 	}
 	
 	/* This is effectively a start game method,
 	first time round is run with Ryan
 	but whoever wins the ball continues a run of their own */
-	public void startRun(Footballer player, Footballer[] enemies, int arsenal, int tottenham, List<String> arsenalScorers, List<String> tottenhamScorers) {
+	public void startRun(Footballer player) {
 		
-		if(fullTimeCheck(this.getMinute(),arsenal,arsenalScorers,tottenham,tottenhamScorers)) {return;};
+		if(fullTimeCheck()) {return;};
+		int enemyCounter = 0;
+		
 		
 		// Making sure the game is under 90 minutes.
 		// Inserted game time was 0
-		for (Footballer enemy : enemies) {
+		for (Footballer enemy : getAwayTeam()) {
 				
-			// Make sure I only run past opposition players
-			if (enemy.getTeam() != player.getTeam()) {
-				// Run the function to see if the dribble was successful
-				if (getPastPlayer(player, enemy) == true) {
-					// Increment minute and do a full time check
-					addMinute();
-					if(fullTimeCheck(this.getMinute(),arsenal,arsenalScorers,tottenham,tottenhamScorers)) {return;};
-					// Print the successful dribble if not full time
-					System.out.println(player.getName() + " sprinted past " + enemy.getName());
-					// Check to see if this is the last defender
-					if (enemy.getPosition() == "Defender") {
-						// Confirm goal
-						System.out.println(player.getName() + " scores for " + player.getTeam() + " in the " + this.getMinute() + "th minute!");
-						
-						// Create the score card and print
-						if (player.getTeam() == "Arsenal") {
-							arsenal++;
-							boolean aFound = false;
-							for (int i = 0;i<arsenalScorers.size();i++) {
-								String scorer = arsenalScorers.get(i);
-								
-								if (scorer.contains(player.getName()) ) {
-									aFound = true;
-									// Update scorer
-									scorer = scorer.substring(0, scorer.length() - 1);
-									scorer = scorer + ", " + this.getMinute() + ")";
-									arsenalScorers.set(i, scorer);
-									break;
-								}
-								
+			// Run the function to see if the dribble was successful
+			if (getPastPlayer(player, enemy) == true) {
+				enemyCounter++;
+				// Increment minute and do a full time check
+				addMinute();
+				if(fullTimeCheck()) {return;};
+				// Print the successful dribble if not full time
+				System.out.println(player.getName() + " sprinted past " + enemy.getName());
+				
+				// Check to see if this is the last defender
+				// This is where the issue persists
+				if (enemyCounter == 3) {
+					// Confirm goal
+					System.out.println(player.getName() + " scores for " + player.getTeam() + " in the " + this.getMinute() + "th minute!");
+					
+					// Create the score card and print
+					if (player.getTeam() == "Arsenal") {
+						homeScore++;
+						boolean aFound = false;
+						for (int i = 0;i<getHomeScorers().size();i++) {
+							String scorer = getHomeScorers().get(i);
+							
+							if (scorer.contains(player.getName()) ) {
+								aFound = true;
+								// Update scorer
+								String minutes = scorer.substring(0, scorer.length() - 1);
+								String updatedMinutes = minutes + ", " + this.getMinute() + ")";
+								this.homeScorers.set(i, updatedMinutes);
+								break;
 							}
-							if (!aFound) {
-								arsenalScorers.add(player.getName() + "(" + getMinute() + ")");
-							}
-						} else {
-							tottenham++;
-							boolean tFound = false;
-							for (int i = 0;i<tottenhamScorers.size();i++) {
-								String scorer = tottenhamScorers.get(i);
-								
-								if (scorer.contains(player.getName()) ) {
-									tFound = true;
-									// Update scorer
-									scorer = scorer.substring(0, scorer.length() - 1);
-									scorer = scorer + ", " + getMinute() + ")";
-									tottenhamScorers.set(i, scorer);
-									break;
-								}
-								
-							}
-							if (!tFound) {
-								tottenhamScorers.add(player.getName() + "(" + getMinute() + ")");
-							}
+							
 						}
-						
-						scoreUpdate(arsenal, arsenalScorers, tottenham, tottenhamScorers);
-						
-						this.startRun(player, enemies, arsenal, tottenham, arsenalScorers, tottenhamScorers);
-						return;
+						if (!aFound) {
+							this.homeScorers.add(player.getName() + "(" + getMinute() + ")");
+						}
+					} else {
+						setAwayScore(getAwayScore());
+						boolean tFound = false;
+						for (int i = 0;i<getAwayScorers().size();i++) {
+							String scorer = getAwayScorers().get(i);
+							
+							if (scorer.contains(player.getName()) ) {
+								tFound = true;
+								// Update scorer
+								String minutes = scorer.substring(0, scorer.length() - 1);
+								String updatedMinutes = minutes + ", " + getMinute() + ")";
+								this.awayScorers.set(i, updatedMinutes);
+								break;
+							}
+							
+						}
+						if (!tFound) {
+							this.awayScorers.add(player.getName() + "(" + getMinute() + ")");
+						}
 					}
-				} else {
-					addMinute();
-					if(fullTimeCheck(this.getMinute(),arsenal,arsenalScorers,tottenham,tottenhamScorers)) {return;};
-				    
-					System.out.println(player.getName() + " has conceded posession to " + enemy.getName());
-					startRun(enemy, enemies, arsenal, tottenham, arsenalScorers, tottenhamScorers);
+					
+					scoreUpdate();
+					
+					this.startRun(player);
 					return;
 				}
-			}				
+			} else {
+				addMinute();
+				if(fullTimeCheck()) {return;};
+			    
+				System.out.println(player.getName() + " has conceded posession to " + enemy.getName());
+				startRun(enemy);
+				return;
+			}			
 		}
 		
 		// Ensure that the method always returns.
@@ -174,52 +199,108 @@ public class Match {
 		System.out.println(player.getName() + " has run out of stamina");
 	}
 	
-	public void scoreUpdate(int arsenal, List<String> arsenalScorers, int tottenham, List<String> tottenhamScorers) {
+	public void scoreUpdate() {
 		// Score Update
-		System.out.print("The score is\nArsenal: " + arsenal + " ");
-		for (String score : arsenalScorers) {
+		System.out.print("The score is\nArsenal: " + getHomeScore() + " ");
+		for (String score : getHomeScorers()) {
 			System.out.print(score + " ");
 		}
-		System.out.print("\nTottenham: " + tottenham + " ");
+		System.out.print("\nTottenham: " + getAwayScore() + " ");
 				
-		for (String score : tottenhamScorers) {
+		for (String score : getAwayScorers()) {
 			System.out.print(score + " ");
 		};
 		System.out.println();
 	}
 	
-	public boolean fullTimeCheck(int minute,int arsenal, List<String> arsenalScorers,int tottenham,List<String> tottenhamScorers) {
-		if (minute >= 90) {
+	public boolean fullTimeCheck() {
+		if (this.getMinute() >= 90) {
 	        System.out.println("\nFull time!");
-	        scoreUpdate(arsenal, arsenalScorers, tottenham, tottenhamScorers);
+	        scoreUpdate();
 	        return true;
 	    } else {
 	    	return false;
 	    }
 	}
 
-	public int getScore() {
-		return score;
+	public int getHomeScore() {
+		return homeScore;
 	}
 
-	public void setScore(int score) {
-		this.score = score;
+	public void setHomeScore(int score) {
+		this.homeScore += 1;
+	}
+	
+	public int getAwayScore() {
+		return awayScore;
 	}
 
-	public String getHomeTeam() {
-		return homeTeam;
+	public void setAwayScore(int score) {
+		this.awayScore += 1;
 	}
 
-	public String getAwayTeam() {
-		return awayTeam;
+	public ArrayList<Footballer> getHomeTeam() {
+		return this.homeTeam;
+	}
+	
+	public ArrayList<Footballer> getAwayTeam() {
+		return this.awayTeam;
 	}
 
+	// Work on a function to return a striker once team is given
+	public ArrayList<Footballer> getRandomStriker(ArrayList<Footballer> team) {
+		Footballer striker;
+		for (Footballer player : getAwayTeam()) {
+			if (player.getPosition() == "Striker") {
+				strikers.add(player);
+			}
+		}
+		return strikers;
+	}
+	
+	public ArrayList<Footballer> getAwayMidfielders() {
+		ArrayList<Footballer> strikers = new ArrayList<Footballer>();
+		for (Footballer player : getAwayTeam()) {
+			if (player.getPosition() == "Striker") {
+				strikers.add(player);
+			}
+		}
+		return strikers;
+	}
+	
+	public ArrayList<Footballer> getAwayDefenders() {
+		ArrayList<Footballer> strikers = new ArrayList<Footballer>();
+		for (Footballer player : getAwayTeam()) {
+			if (player.getPosition() == "Striker") {
+				strikers.add(player);
+			}
+		}
+		return strikers;
+	}
+	
 	public int getMinute() {
 		return minute;
 	}
 
 	public void addMinute() {
 		this.minute += 1;
+	}
+	
+	
+	public ArrayList<String> getHomeScorers() {
+		return homeScorers;
+	}
+
+	public void setHomeScorers(ArrayList<String> homeScorers) {
+		this.homeScorers = homeScorers;
+	}
+
+	public ArrayList<String> getAwayScorers() {
+		return awayScorers;
+	}
+
+	public void setAwayScorers(ArrayList<String> awayScorers) {
+		this.awayScorers = awayScorers;
 	}
 	
 }
