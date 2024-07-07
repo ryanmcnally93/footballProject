@@ -2,6 +2,7 @@ package visuals;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import people.Footballer;
+import people.Goalkeeper;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Color;
@@ -72,7 +73,8 @@ public class GameWindow extends JPanel {
     	startMatch(getGraphics());
     }
     
-    public void displayGoal(String message, Graphics g) {
+    public void displayGoal(String message) {
+    	Graphics g = getGraphics();
     	g.setColor(Color.YELLOW);
 		g.drawString(message, messageIncOne, messageIncTwo);
 		messageIncTwo += 25;
@@ -80,6 +82,7 @@ public class GameWindow extends JPanel {
     
     private void startMatch(Graphics g) {
     	System.out.println("You are starting the match");
+    	Goalkeeper raya = new Goalkeeper("David Raya", 31, 30000, 150, "Arsenal", "Goalkeeper");
     	Footballer jesus = new Footballer("Gabriel Jesus", 31, 30000, 180, 30, 100, "Arsenal", "Striker");
 		Footballer trossard = new Footballer("Leandro Trossard", 31, 30000, 200, 40, 100, "Arsenal", "Winger");
 		Footballer saka = new Footballer("Bukayo Saka", 31, 30000, 180, 65, 100, "Arsenal", "Winger");
@@ -91,6 +94,7 @@ public class GameWindow extends JPanel {
 		Footballer gabriel = new Footballer("Gabriel Magalhaes", 31, 30000, 45, 245, 100, "Arsenal", "Defender");
 		Footballer white = new Footballer("Ben White", 31, 30000, 75, 215, 100, "Arsenal", "Defender");
 		
+    	Goalkeeper vicario = new Goalkeeper("Guglielmo Vicario", 31, 30000, 130, "Tottenham", "Goalkeeper");
 		Footballer johnson = new Footballer("Brennan Johnson", 31, 30000, 180, 30, 100, "Tottenham", "Striker");
 		Footballer son = new Footballer("Heung-Min Son", 31, 30000, 200, 40, 100, "Tottenham", "Winger");
 		Footballer kulusevski = new Footballer("Dejan Kulusevski", 31, 30000, 180, 65, 100, "Tottenham", "Winger");
@@ -125,7 +129,7 @@ public class GameWindow extends JPanel {
 		tottenham.add(romero);
 		tottenham.add(porro);
 		
-		Match match = new Match(arsenal, tottenham);
+		Match match = new Match(arsenal, tottenham, raya, vicario);
 		
 		match.startRun(jesus, g, this);
     }

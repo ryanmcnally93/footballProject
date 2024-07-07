@@ -8,7 +8,7 @@ import java.util.List;
 // Call more functions from other .java?
 
 // Players are called Characters, because that's how we started
-public class Footballer  extends Individual {
+public class Footballer extends Individual {
 	
 	public int attack;
 	public int defence;
@@ -20,6 +20,12 @@ public class Footballer  extends Individual {
 	
 	public Footballer(String name, int age, int wealth) {
 		super(name,age,wealth);
+	}
+	
+	public Footballer(String name, int age, int wealth, String team, String position) {
+		super(name, age, wealth);
+		this.team = team;
+		this.position = position;
 	}
 	
 	public Footballer(String name, int age, int wealth, int attack, int defence, int stamina, String team, String position) {
@@ -40,12 +46,20 @@ public class Footballer  extends Individual {
 		return this.team;
 	}
 	
+	public int getStamina() {
+		return this.stamina;
+	}
+	
 	public String getPosition() {
 		return this.position;
 	}
 
 	public void setPosition(String position) {
 		this.position = position;
+	}
+	
+	public void removeStamina(int number) {
+		this.stamina -= number;
 	}
 	
 }
