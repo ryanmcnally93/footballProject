@@ -5,10 +5,8 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
-
 import javax.sql.rowset.serial.SQLOutputImpl;
 import java.util.Timer;
-
 import people.Footballer;
 
 public class Match {
@@ -40,14 +38,20 @@ public class Match {
 	but whoever wins the ball continues a run of their own */
 	public void startRun(Footballer player, Graphics g, GameWindow gw) {
 		Graphics2D g2d = (Graphics2D) g;
-		
 		// Making sure the game is under 90 minutes.
 		// Inserted game time was 0
 		if(fullTimeCheck()) {return;};
 		int enemyCounter = 0;
 		
-		for (Footballer enemy : getAwayTeam()) {
-				
+		ArrayList<Footballer> thisPlayersEnemy;
+		
+		if(getAwayTeam().contains(player)) {
+			thisPlayersEnemy = getHomeTeam();
+		} else {
+			thisPlayersEnemy = getAwayTeam();
+		}
+		
+		for (Footballer enemy : thisPlayersEnemy) {
 			// Run the function to see if the dribble was successful
 			if (getPastPlayer(player, enemy) == true) {
 				enemyCounter++;

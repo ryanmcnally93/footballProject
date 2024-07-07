@@ -75,7 +75,7 @@ public class GameWindow extends JPanel {
     public void displayGoal(String message, Graphics g) {
     	g.setColor(Color.YELLOW);
 		g.drawString(message, messageIncOne, messageIncTwo);
-		messageIncTwo += 30;
+		messageIncTwo += 25;
     }
     
     private void startMatch(Graphics g) {
