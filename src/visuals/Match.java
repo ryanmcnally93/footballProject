@@ -22,6 +22,8 @@ public class Match {
 	private Goalkeeper homegk;
 	private Goalkeeper awaygk;
 	
+	public Match() {};
+	
 	public Match(ArrayList<Footballer> homeTeam, ArrayList<Footballer> awayTeam, Goalkeeper hgk, Goalkeeper agk) {
 		this.homeTeam = homeTeam;
 		this.awayTeam = awayTeam;
@@ -49,7 +51,7 @@ public class Match {
 	/* This is effectively a start game method,
 	first time round is run with Ryan
 	but whoever wins the ball continues a run of their own */
-	public void startRun(Footballer player, Graphics g, GameWindow gw) {
+	public void startRun(Footballer player, Graphics g, MainPage gw) {
 		// Making sure the game is under 90 minutes.
 		// Inserted game time was 0
 		if(fullTimeCheck(gw)) {return;};
@@ -82,7 +84,7 @@ public class Match {
 					
 					if(takeShot(player, thisFoeGk) == true) {
 						// Confirm goal
-						gw.displayGoal(player.getName() + " scores for " + player.getTeam() + " in the " + this.getMinute() + "th minute!");
+//						gw.displayGoal(player.getName() + " scores for " + player.getTeam() + " in the " + this.getMinute() + "th minute!");
 						System.out.println(player.getName() + " scores for " + player.getTeam() + " in the " + this.getMinute() + "th minute!");
 						
 						// Create the score card and print
@@ -230,7 +232,7 @@ public class Match {
 		System.out.println(player.getName() + " has run out of stamina");
 	}
 	
-	public void scoreUpdate(GameWindow gw) {
+	public void scoreUpdate(MainPage gw) {
 		// Score Update
 		System.out.print("The score is\nArsenal: " + getHomeScore() + " ");
 		for (String score : getHomeScorers()) {
@@ -244,7 +246,7 @@ public class Match {
 		System.out.println();
 	}
 	
-	public boolean fullTimeCheck(GameWindow gw) {
+	public boolean fullTimeCheck(MainPage gw) {
 		if (this.getMinute() >= 90) {
 	        System.out.println("\nFull time!");
 	        lastScoreUpdate(gw);
@@ -254,19 +256,19 @@ public class Match {
 	    }
 	}
 	
-	public void lastScoreUpdate(GameWindow gw) {
+	public void lastScoreUpdate(MainPage gw) {
 		// Score Update
 		System.out.print("The score is\nArsenal: " + getHomeScore() + " ");
-		gw.displayGoal("The score is\nArsenal: " + getHomeScore() + " ");
+//		gw.displayGoal("The score is\nArsenal: " + getHomeScore() + " ");
 		for (String score : getHomeScorers()) {
 			System.out.print(score + " ");
-			gw.displayGoal(score + " ");
+//			gw.displayGoal(score + " ");
 		}
 		System.out.print("\nTottenham: " + getAwayScore() + " ");
-		gw.displayGoal("\nTottenham: " + getAwayScore() + " ");
+//		gw.displayGoal("\nTottenham: " + getAwayScore() + " ");
 		for (String score : getAwayScorers()) {
 			System.out.print(score + " ");
-			gw.displayGoal(score + "");
+//			gw.displayGoal(score + "");
 		};
 		System.out.println();
 	}
@@ -334,7 +336,6 @@ public class Match {
 		this.minute += 1;
 	}
 	
-	
 	public ArrayList<String> getHomeScorers() {
 		return homeScorers;
 	}
@@ -350,5 +351,59 @@ public class Match {
 	public void setAwayScorers(ArrayList<String> awayScorers) {
 		this.awayScorers = awayScorers;
 	}
+	
+	public void startMatch(Graphics g, MainPage gw) {
+    	System.out.println("You are starting the match");
+    	Goalkeeper raya = new Goalkeeper("David Raya", 31, 30000, 150, "Arsenal", "Goalkeeper");
+    	Footballer jesus = new Footballer("Gabriel Jesus", 31, 30000, 180, 30, 100, "Arsenal", "Striker");
+		Footballer trossard = new Footballer("Leandro Trossard", 31, 30000, 200, 40, 100, "Arsenal", "Winger");
+		Footballer saka = new Footballer("Bukayo Saka", 31, 30000, 180, 65, 100, "Arsenal", "Winger");
+		Footballer partey = new Footballer("Thomas Partey", 31, 30000, 90, 180, 100, "Arsenal", "Midfielder");
+		Footballer odegaard = new Footballer("Martin Odegaard", 31, 30000, 180, 120, 100, "Arsenal", "Midfielder");
+		Footballer rice = new Footballer("Declan Rice", 31, 30000, 110, 190, 100, "Arsenal", "Midfielder");
+		Footballer tomiyasu = new Footballer("Takehiro Tomiyasu", 31, 30000, 45, 215, 100, "Arsenal", "Defender");
+		Footballer saliba = new Footballer("William Saliba", 31, 30000, 45, 260, 100, "Arsenal", "Defender");
+		Footballer gabriel = new Footballer("Gabriel Magalhaes", 31, 30000, 45, 245, 100, "Arsenal", "Defender");
+		Footballer white = new Footballer("Ben White", 31, 30000, 75, 215, 100, "Arsenal", "Defender");
+		
+    	Goalkeeper vicario = new Goalkeeper("Guglielmo Vicario", 31, 30000, 130, "Tottenham", "Goalkeeper");
+		Footballer johnson = new Footballer("Brennan Johnson", 31, 30000, 180, 30, 100, "Tottenham", "Striker");
+		Footballer son = new Footballer("Heung-Min Son", 31, 30000, 200, 40, 100, "Tottenham", "Winger");
+		Footballer kulusevski = new Footballer("Dejan Kulusevski", 31, 30000, 180, 65, 100, "Tottenham", "Winger");
+		Footballer maddison = new Footballer("James Maddison", 31, 30000, 90, 180, 100, "Tottenham", "Midfielder");
+		Footballer bissouma = new Footballer("Yves Bissouma", 31, 30000, 180, 120, 100, "Tottenham", "Midfielder");
+		Footballer sarr = new Footballer("Pape Matar Sarr", 31, 30000, 110, 190, 100, "Tottenham", "Midfielder");
+		Footballer udogie = new Footballer("Destiny Udogie", 31, 30000, 45, 215, 100, "Tottenham", "Defender");
+		Footballer vanDeVen = new Footballer("Micky van de Ven", 31, 30000, 45, 260, 100, "Tottenham", "Defender");
+		Footballer romero = new Footballer("Cristian Romero", 31, 30000, 45, 245, 100, "Tottenham", "Defender");
+		Footballer porro = new Footballer("Guglielmo Vicario", 31, 30000, 75, 215, 100, "Tottenham", "Defender");
+		
+		ArrayList<Footballer> arsenal = new ArrayList<Footballer>();
+		arsenal.add(jesus);
+		arsenal.add(trossard);
+		arsenal.add(saka);
+		arsenal.add(odegaard);
+		arsenal.add(partey);
+		arsenal.add(rice);
+		arsenal.add(tomiyasu);
+		arsenal.add(gabriel);
+		arsenal.add(saliba);
+		arsenal.add(white);
+		ArrayList<Footballer> tottenham = new ArrayList<Footballer>();
+		tottenham.add(johnson);
+		tottenham.add(son);
+		tottenham.add(kulusevski);
+		tottenham.add(maddison);
+		tottenham.add(bissouma);
+		tottenham.add(sarr);
+		tottenham.add(udogie);
+		tottenham.add(vanDeVen);
+		tottenham.add(romero);
+		tottenham.add(porro);
+		
+		Match match = new Match(arsenal, tottenham, raya, vicario);
+		
+		match.startRun(jesus, g, gw);
+    }
 	
 }
