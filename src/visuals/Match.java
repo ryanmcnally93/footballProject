@@ -51,10 +51,10 @@ public class Match {
 	/* This is effectively a start game method,
 	first time round is run with Ryan
 	but whoever wins the ball continues a run of their own */
-	public void startRun(Footballer player, Graphics g, MainPage gw) {
+	public void startRun(Footballer player, Graphics g, MatchEvents gp) {
 		// Making sure the game is under 90 minutes.
 		// Inserted game time was 0
-		if(fullTimeCheck(gw)) {return;};
+		if(fullTimeCheck(gp)) {return;};
 		int enemyCounter = 0;
 		
 		ArrayList<Footballer> thisPlayersEnemy;
@@ -74,7 +74,7 @@ public class Match {
 				enemyCounter++;
 				// Increment minute and do a full time check
 				addMinute();
-				if(fullTimeCheck(gw)) {return;};
+				if(fullTimeCheck(gp)) {return;};
 				// Print the successful dribble if not full time
 				System.out.println(player.getName() + " sprinted past " + enemy.getName());
 				
@@ -84,7 +84,7 @@ public class Match {
 					
 					if(takeShot(player, thisFoeGk) == true) {
 						// Confirm goal
-//						gw.displayGoal(player.getName() + " scores for " + player.getTeam() + " in the " + this.getMinute() + "th minute!");
+						gp.displayGoal(player.getName() + " scores for " + player.getTeam() + " in the " + this.getMinute() + "th minute!");
 						System.out.println(player.getName() + " scores for " + player.getTeam() + " in the " + this.getMinute() + "th minute!");
 						
 						// Create the score card and print
@@ -128,7 +128,7 @@ public class Match {
 							}
 						}
 						
-						scoreUpdate(gw);
+						scoreUpdate();
 						
 						// ******
 						
@@ -138,7 +138,7 @@ public class Match {
 						timer.schedule(new TimerTask() {
 						    @Override
 						    public void run() {
-						    	match.startRun(player, g, gw);
+						    	match.startRun(player, g, gp);
 						    }
 						}, delay);
 						
@@ -151,10 +151,10 @@ public class Match {
 				}
 			} else {
 				addMinute();
-				if(fullTimeCheck(gw)) {return;};
+				if(fullTimeCheck(gp)) {return;};
 			    
 				System.out.println(player.getName() + " has conceded posession to " + enemy.getName());
-				startRun(enemy, g, gw);
+				startRun(enemy, g, gp);
 				return;
 			}			
 		}
@@ -232,7 +232,7 @@ public class Match {
 		System.out.println(player.getName() + " has run out of stamina");
 	}
 	
-	public void scoreUpdate(MainPage gw) {
+	public void scoreUpdate() {
 		// Score Update
 		System.out.print("The score is\nArsenal: " + getHomeScore() + " ");
 		for (String score : getHomeScorers()) {
@@ -246,29 +246,29 @@ public class Match {
 		System.out.println();
 	}
 	
-	public boolean fullTimeCheck(MainPage gw) {
+	public boolean fullTimeCheck(MatchEvents gp) {
 		if (this.getMinute() >= 90) {
 	        System.out.println("\nFull time!");
-	        lastScoreUpdate(gw);
+	        lastScoreUpdate(gp);
 	        return true;
 	    } else {
 	    	return false;
 	    }
 	}
 	
-	public void lastScoreUpdate(MainPage gw) {
+	public void lastScoreUpdate(MatchEvents gp) {
 		// Score Update
 		System.out.print("The score is\nArsenal: " + getHomeScore() + " ");
-//		gw.displayGoal("The score is\nArsenal: " + getHomeScore() + " ");
+		gp.displayGoal("The score is\nArsenal: " + getHomeScore() + " ");
 		for (String score : getHomeScorers()) {
 			System.out.print(score + " ");
-//			gw.displayGoal(score + " ");
+			gp.displayGoal(score + " ");
 		}
 		System.out.print("\nTottenham: " + getAwayScore() + " ");
-//		gw.displayGoal("\nTottenham: " + getAwayScore() + " ");
+		gp.displayGoal("\nTottenham: " + getAwayScore() + " ");
 		for (String score : getAwayScorers()) {
 			System.out.print(score + " ");
-//			gw.displayGoal(score + "");
+			gp.displayGoal(score + "");
 		};
 		System.out.println();
 	}
@@ -352,7 +352,7 @@ public class Match {
 		this.awayScorers = awayScorers;
 	}
 	
-	public void startMatch(Graphics g, MainPage gw) {
+	public void startMatch(Graphics g, MatchEvents gp) {
     	System.out.println("You are starting the match");
     	Goalkeeper raya = new Goalkeeper("David Raya", 31, 30000, 150, "Arsenal", "Goalkeeper");
     	Footballer jesus = new Footballer("Gabriel Jesus", 31, 30000, 180, 30, 100, "Arsenal", "Striker");
@@ -403,7 +403,7 @@ public class Match {
 		
 		Match match = new Match(arsenal, tottenham, raya, vicario);
 		
-		match.startRun(jesus, g, gw);
+		match.startRun(jesus, g, gp);
     }
 	
 }
