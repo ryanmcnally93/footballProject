@@ -15,6 +15,7 @@ public class MatchWatch extends MatchFrames {
     private static final int SQUARE_SIZE = 50;
     private CardLayout layout;
     private JPanel pages;
+    private MatchEvents eventsPanel;
 
     public MatchWatch(CardLayout layout, JPanel pages) {
     	super(layout, pages);
@@ -40,6 +41,10 @@ public class MatchWatch extends MatchFrames {
     }
 
 	public void handleClick() {
-		match.startMatch(getGraphics(), new MatchEvents(layout, pages));
+		match.startMatch(getGraphics(), eventsPanel);
+	}
+	
+	public void setEventsPanel(MatchEvents me) {
+		this.eventsPanel = me;
 	}
 }

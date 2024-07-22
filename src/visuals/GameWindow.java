@@ -17,8 +17,8 @@ public class GameWindow extends JFrame {
         pages = new JPanel(layout);
 
         // Create instances of your panels
-        GamePanel eventsPanel = new MatchEvents(layout, pages);
-        GamePanel watchPanel = new MatchWatch(layout, pages);
+        MatchEvents eventsPanel = new MatchEvents(layout, pages);
+        MatchWatch watchPanel = new MatchWatch(layout, pages);
         JPanel otherPanel = new JPanel();  // Another panel without buttons
 
         // Set up otherPanel
@@ -29,6 +29,7 @@ public class GameWindow extends JFrame {
         pages.add(watchPanel, "Watch");
         pages.add(eventsPanel, "Events");
         pages.add(otherPanel, "OtherPanel");
+        watchPanel.setEventsPanel(eventsPanel);
 
         // Initialize with the main page
         add(pages);
