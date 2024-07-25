@@ -1,11 +1,15 @@
 package visuals;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.TimerTask;
 import javax.sql.rowset.serial.SQLOutputImpl;
+import javax.swing.JPanel;
+
 import java.util.Timer;
 import people.Footballer;
 import people.Goalkeeper;
@@ -51,10 +55,10 @@ public class Match {
 	/* This is effectively a start game method,
 	first time round is run with Ryan
 	but whoever wins the ball continues a run of their own */
-	public void startRun(Footballer player, Graphics g, MatchEvents gp) {
+	public void startRun(Footballer player, Graphics g, Map<String, JPanel> cardMap) {
 		// Making sure the game is under 90 minutes.
 		// Inserted game time was 0
-		if(fullTimeCheck(gp)) {return;};
+		if(fullTimeCheck(cardMap)) {return;};
 		int enemyCounter = 0;
 		
 		ArrayList<Footballer> thisPlayersEnemy;
@@ -74,7 +78,7 @@ public class Match {
 				enemyCounter++;
 				// Increment minute and do a full time check
 				addMinute();
-				if(fullTimeCheck(gp)) {return;};
+				if(fullTimeCheck(cardMap)) {return;};
 				// Print the successful dribble if not full time
 				System.out.println(player.getName() + " sprinted past " + enemy.getName());
 				
@@ -84,7 +88,12 @@ public class Match {
 					
 					if(takeShot(player, thisFoeGk) == true) {
 						// Confirm goal
-						gp.displayGoal(player.getName() + " scores for " + player.getTeam() + " in the " + this.getMinute() + "th minute!");
+						for (JPanel page : cardMap.values()) {
+				            if (page instanceof MatchFrames) {
+				                ((MatchFrames) page).goalAlert(player.getName(), this.getMinute());
+				            }
+				        }
+						((MatchEvents) cardMap.get("Events")).displayGoal(player.getName() + " scores for " + player.getTeam() + " in the " + this.getMinute() + "th minute!");
 						System.out.println(player.getName() + " scores for " + player.getTeam() + " in the " + this.getMinute() + "th minute!");
 						
 						// Create the score card and print
@@ -133,12 +142,12 @@ public class Match {
 						// ******
 						
 						Timer timer = new Timer();
-						int delay = 2000;
+						int delay = 5000;
 						Match match = this;
 						timer.schedule(new TimerTask() {
 						    @Override
 						    public void run() {
-						    	match.startRun(player, g, gp);
+						    	match.startRun(player, g, cardMap);
 						    }
 						}, delay);
 						
@@ -151,10 +160,10 @@ public class Match {
 				}
 			} else {
 				addMinute();
-				if(fullTimeCheck(gp)) {return;};
+				if(fullTimeCheck(cardMap)) {return;};
 			    
 				System.out.println(player.getName() + " has conceded posession to " + enemy.getName());
-				startRun(enemy, g, gp);
+				startRun(enemy, g, cardMap);
 				return;
 			}			
 		}
@@ -246,29 +255,29 @@ public class Match {
 		System.out.println();
 	}
 	
-	public boolean fullTimeCheck(MatchEvents gp) {
+	public boolean fullTimeCheck(Map<String, JPanel> cardMap) {
 		if (this.getMinute() >= 90) {
 	        System.out.println("\nFull time!");
-	        lastScoreUpdate(gp);
+	        lastScoreUpdate(cardMap);
 	        return true;
 	    } else {
 	    	return false;
 	    }
 	}
 	
-	public void lastScoreUpdate(MatchEvents gp) {
+	public void lastScoreUpdate(Map<String, JPanel> cardMap) {
 		// Score Update
 		System.out.print("The score is\nArsenal: " + getHomeScore() + " ");
-		gp.displayGoal("The score is\nArsenal: " + getHomeScore() + " ");
+		((MatchEvents) cardMap.get("Events")).displayGoal("The score is\nArsenal: " + getHomeScore() + " ");
 		for (String score : getHomeScorers()) {
 			System.out.print(score + " ");
-			gp.displayGoal(score + " ");
+			((MatchEvents) cardMap.get("Events")).displayGoal(score + " ");
 		}
 		System.out.print("\nTottenham: " + getAwayScore() + " ");
-		gp.displayGoal("\nTottenham: " + getAwayScore() + " ");
+		((MatchEvents) cardMap.get("Events")).displayGoal("\nTottenham: " + getAwayScore() + " ");
 		for (String score : getAwayScorers()) {
 			System.out.print(score + " ");
-			gp.displayGoal(score + "");
+			((MatchEvents) cardMap.get("Events")).displayGoal(score + "");
 		};
 		System.out.println();
 	}
@@ -352,7 +361,7 @@ public class Match {
 		this.awayScorers = awayScorers;
 	}
 	
-	public void startMatch(Graphics g, MatchEvents gp) {
+	public void startMatch(Graphics g, Map<String, JPanel> cardMap) {
     	System.out.println("You are starting the match");
     	Goalkeeper raya = new Goalkeeper("David Raya", 31, 30000, 150, "Arsenal", "Goalkeeper");
     	Footballer jesus = new Footballer("Gabriel Jesus", 31, 30000, 180, 30, 100, "Arsenal", "Striker");
@@ -403,7 +412,27 @@ public class Match {
 		
 		Match match = new Match(arsenal, tottenham, raya, vicario);
 		
-		match.startRun(jesus, g, gp);
+		match.startRun(jesus, g, cardMap);
     }
+
+	public void setHomeTeam(ArrayList<Footballer> homeTeam) {
+		this.homeTeam = homeTeam;
+	}
+
+	public void setAwayTeam(ArrayList<Footballer> awayTeam) {
+		this.awayTeam = awayTeam;
+	}
+
+	public void setMinute(int minute) {
+		this.minute = minute;
+	}
+
+	public void setHomegk(Goalkeeper homegk) {
+		this.homegk = homegk;
+	}
+
+	public void setAwaygk(Goalkeeper awaygk) {
+		this.awaygk = awaygk;
+	}
 	
 }

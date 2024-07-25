@@ -12,6 +12,7 @@ public abstract class GamePanel extends JPanel {
 
     public GamePanel() {
     	this.match = new Match();
+    	setPreferredSize(new Dimension(800, 600));
     };
     
     public GamePanel(Match match) {
@@ -22,5 +23,13 @@ public abstract class GamePanel extends JPanel {
     protected void addGameMouseListener(MouseAdapter mouseAdapter) {
         addMouseListener(mouseAdapter);
     }
+
+	public Match getMatch() {
+		return match;
+	}
+
+	public void setMatch(Match match) {
+		this.match = match;
+	}
 
 }
