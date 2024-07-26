@@ -8,7 +8,7 @@ import java.awt.image.ImageObserver;
 class SlidingPanel extends JPanel {
     private static final long serialVersionUID = 7790773713887698024L;
 	private int yPosition;
-    private final int panelHeight = 400;
+    private final int panelHeight = 300;
     private Timer slideUpTimer;
     private Timer slideDownTimer;
     private final int slideSpeed = 5;
@@ -40,10 +40,8 @@ class SlidingPanel extends JPanel {
             	}
             	System.out.println(yPosition);
                 yPosition -= slideSpeed;
-                System.out.println("yPosition after we take slidespeed off:" + yPosition);
-                if (yPosition <= getHeight() - panelHeight) {
-                	System.out.println("yPosition is smaller then getheight - panelheight" + yPosition + ", " + getHeight() + ", " + panelHeight);
-                    yPosition = getHeight() - panelHeight;
+                if (yPosition <= getHeight() - 500) {
+                    yPosition = getHeight() - 500;
                     slideUpTimer.stop();
                     Timer delayTimer = new Timer(delayBeforeSlideDown, ae -> slideDown());
                     delayTimer.setRepeats(false);
@@ -59,7 +57,6 @@ class SlidingPanel extends JPanel {
         slideDownTimer = new Timer(10, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	System.out.println("Starting slide down");
                 yPosition += slideSpeed;
                 if (yPosition >= getHeight()) {
                     yPosition = getHeight();
@@ -76,7 +73,7 @@ class SlidingPanel extends JPanel {
         super.paintComponent(g);
         g.setColor(Color.RED);
         int seventyfivepercent = (int )(getWidth()*0.75);
-        g.fillRect((int) ((getWidth()-seventyfivepercent)/2), yPosition, seventyfivepercent, panelHeight/2);
+        g.fillRect((int) ((getWidth()-seventyfivepercent)/2), yPosition, seventyfivepercent, panelHeight);
         g.setColor(Color.WHITE);
         FontMetrics metrics = g.getFontMetrics(g.getFont());
         String message = "GOAL!" + name + minute;

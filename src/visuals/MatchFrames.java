@@ -1,7 +1,5 @@
 package visuals;
 import java.awt.*;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -19,18 +17,28 @@ public class MatchFrames extends GamePanel {
 	private JPanel pages;
 	private Map<String, JPanel> cardMap;
 	private SlidingPanel slidingPanel;
+//	private JLayeredPane layeredPane;
 
     public MatchFrames(CardLayout cardLayout, JPanel mainPanel, Map<String, JPanel> cardMap) {
     	super();
+    	setLayout(new BorderLayout(5, 5));
     	this.layout = cardLayout;
         this.pages = mainPanel;
         this.cardMap = cardMap;
         
-        // Needs to be in frame not panel!
-        slidingPanel = new SlidingPanel();
+        // Change layout to border and instantiate JLayeredPane
+//        layeredPane = new JLayeredPane();
+//        layeredPane.setLayout(null);
         
         pages.setBounds(0, 0, 800, 600); // Adjust size as needed
+//        layeredPane.add(pages, JLayeredPane.DEFAULT_LAYER);
         
+        // Needs to be in frame not panel!
+        slidingPanel = new SlidingPanel();
+//        layeredPane.add(slidingPanel, JLayeredPane.PALETTE_LAYER);
+        
+//        add(layeredPane, BorderLayout.CENTER);
+//        add(pages);
         Initialize();
     }
     
@@ -39,26 +47,21 @@ public class MatchFrames extends GamePanel {
 		JButton prevButton = new JButton("Prev");
         JButton nextButton = new JButton("Next");
 
-        prevButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            	System.out.println("You clicked previous");
-                layout.previous(pages);
-            }
+        prevButton.addActionListener(e -> {
+            System.out.println("You clicked previous");
+            layout.previous(pages);
         });
 
-        nextButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            	System.out.println("You clicked next");
-                layout.next(pages);
-            }
+        nextButton.addActionListener(e -> {
+            System.out.println("You clicked next");
+            layout.next(pages);
         });
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(prevButton);
         buttonPanel.add(nextButton);
 
-        //BORDER LAYOUT CREATED
-        setLayout(new BorderLayout(5, 5));
+        //ADD A TIMER THEN ADD THIS TO CARDMAP.GET("WATCH")
         add(buttonPanel, BorderLayout.SOUTH);
     }
 	
@@ -69,7 +72,6 @@ public class MatchFrames extends GamePanel {
 
 	public JPanel getPages() {
 		return pages;
-
 	}
 
 	public void setPages(JPanel pages) {

@@ -137,12 +137,12 @@ public class Match {
 							}
 						}
 						
-						scoreUpdate();
+						scoreUpdate(cardMap);
 						
 						// ******
 						
 						Timer timer = new Timer();
-						int delay = 5000;
+						int delay = 6000;
 						Match match = this;
 						timer.schedule(new TimerTask() {
 						    @Override
@@ -241,7 +241,7 @@ public class Match {
 		System.out.println(player.getName() + " has run out of stamina");
 	}
 	
-	public void scoreUpdate() {
+	public void scoreUpdate(Map<String, JPanel> cardMap) {
 		// Score Update
 		System.out.print("The score is\nArsenal: " + getHomeScore() + " ");
 		for (String score : getHomeScorers()) {
@@ -253,6 +253,7 @@ public class Match {
 			System.out.print(score + " ");
 		};
 		System.out.println();
+		((MatchWatch) cardMap.get("Watch")).updateScoreBoard(getHomeScore(), getAwayScore());
 	}
 	
 	public boolean fullTimeCheck(Map<String, JPanel> cardMap) {
