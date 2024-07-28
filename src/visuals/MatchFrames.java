@@ -21,7 +21,7 @@ public class MatchFrames extends GamePanel {
 
     public MatchFrames(CardLayout cardLayout, JPanel mainPanel, Map<String, JPanel> cardMap) {
     	super();
-    	setLayout(new BorderLayout(5, 5));
+    	setLayout(new BorderLayout());
     	this.layout = cardLayout;
         this.pages = mainPanel;
         this.cardMap = cardMap;
@@ -30,21 +30,13 @@ public class MatchFrames extends GamePanel {
 //        layeredPane = new JLayeredPane();
 //        layeredPane.setLayout(null);
         
-        pages.setBounds(0, 0, 800, 600); // Adjust size as needed
 //        layeredPane.add(pages, JLayeredPane.DEFAULT_LAYER);
         
         // Needs to be in frame not panel!
         slidingPanel = new SlidingPanel();
 //        layeredPane.add(slidingPanel, JLayeredPane.PALETTE_LAYER);
         
-//        add(layeredPane, BorderLayout.CENTER);
-//        add(pages);
-        Initialize();
-    }
-    
-	public void Initialize() {
-		
-		JButton prevButton = new JButton("Prev");
+        JButton prevButton = new JButton("Prev");
         JButton nextButton = new JButton("Next");
 
         prevButton.addActionListener(e -> {
@@ -61,8 +53,8 @@ public class MatchFrames extends GamePanel {
         buttonPanel.add(prevButton);
         buttonPanel.add(nextButton);
 
-        //ADD A TIMER THEN ADD THIS TO CARDMAP.GET("WATCH")
         add(buttonPanel, BorderLayout.SOUTH);
+        
     }
 	
 	public void goalAlert(String name, int minute) {

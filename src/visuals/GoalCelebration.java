@@ -38,7 +38,6 @@ class SlidingPanel extends JPanel {
             	if(yPosition == 600) {
             		yPosition = getHeight();
             	}
-            	System.out.println(yPosition);
                 yPosition -= slideSpeed;
                 if (yPosition <= getHeight() - 500) {
                     yPosition = getHeight() - 500;

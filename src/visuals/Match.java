@@ -16,8 +16,8 @@ import people.Goalkeeper;
 
 public class Match {
 	
-	private int homeScore;
-	private int awayScore;
+	private static int homeScore = 0;
+	private static int awayScore = 0;
 	private ArrayList<Footballer> homeTeam;
 	private ArrayList<Footballer> awayTeam;
 	private int minute;
@@ -25,6 +25,10 @@ public class Match {
 	public ArrayList<String> awayScorers;
 	private Goalkeeper homegk;
 	private Goalkeeper awaygk;
+	private static int homeAllShots = 0;
+	private static int homeShotsOn = 0;
+	private static int awayAllShots = 0;
+	private static int awayShotsOn = 0;
 	
 	public Match() {};
 	
@@ -34,8 +38,6 @@ public class Match {
 		this.minute = 0;
 		this.homeScorers = new ArrayList<String>();
 		this.awayScorers = new ArrayList<String>();
-		this.homeScore = 0;
-		this.awayScore = 0;
 		this.homegk = hgk;
 		this.awaygk = agk;
 	}
@@ -86,7 +88,17 @@ public class Match {
 				// This is where the issue persists
 				if (enemyCounter == 3) {
 					
+					if(findTeam(player) == "Away") {
+						awayShotsOn++;
+						awayAllShots++;
+					} else {
+						homeShotsOn++;
+						homeAllShots++;
+					}
+					((MatchWatch) cardMap.get("Watch")).updateShotsOnBar(getHomeShotsOn(), getAwayShotsOn());
+					((MatchWatch) cardMap.get("Watch")).updateAllShotsBar(getHomeAllShots(), getAwayAllShots());
 					if(takeShot(player, thisFoeGk) == true) {
+						
 						// Confirm goal
 						for (JPanel page : cardMap.values()) {
 				            if (page instanceof MatchFrames) {
@@ -117,7 +129,7 @@ public class Match {
 								this.homeScorers.add(player.getName() + "(" + getMinute() + ")");
 							}
 						} else {
-							setAwayScore(getAwayScore());
+							awayScore++;
 							boolean tFound = false;
 							for (int i = 0;i<getAwayScorers().size();i++) {
 								String scorer = getAwayScorers().get(i);
@@ -236,6 +248,14 @@ public class Match {
 		}
 	}
 	
+	public String findTeam(Footballer player) {
+		if(getAwayTeam().contains(player)) {
+			return "Away";
+		} else {
+			return "Home";
+		}
+	}
+	
 	// Ran out of stamina message
 	public void outOfStamina(Footballer player) {
 		System.out.println(player.getName() + " has run out of stamina");
@@ -286,17 +306,9 @@ public class Match {
 	public int getHomeScore() {
 		return homeScore;
 	}
-
-	public void setHomeScore(int score) {
-		this.homeScore += 1;
-	}
 	
 	public int getAwayScore() {
 		return awayScore;
-	}
-
-	public void setAwayScore(int score) {
-		this.awayScore += 1;
 	}
 
 	public ArrayList<Footballer> getHomeTeam() {
@@ -434,6 +446,46 @@ public class Match {
 
 	public void setAwaygk(Goalkeeper awaygk) {
 		this.awaygk = awaygk;
+	}
+
+	public static int getHomeAllShots() {
+		return homeAllShots;
+	}
+
+	public static void setHomeAllShots(int homeAllShots) {
+		Match.homeAllShots = homeAllShots;
+	}
+
+	public static int getHomeShotsOn() {
+		return homeShotsOn;
+	}
+
+	public static void setHomeShotsOn(int homeShotsOn) {
+		Match.homeShotsOn = homeShotsOn;
+	}
+
+	public static int getAwayAllShots() {
+		return awayAllShots;
+	}
+
+	public static void setAwayAllShots(int awayAllShots) {
+		Match.awayAllShots = awayAllShots;
+	}
+
+	public static int getAwayShotsOn() {
+		return awayShotsOn;
+	}
+
+	public static void setAwayShotsOn(int awayShotsOn) {
+		Match.awayShotsOn = awayShotsOn;
+	}
+
+	public static void setHomeScore(int homeScore) {
+		Match.homeScore = homeScore;
+	}
+
+	public static void setAwayScore(int awayScore) {
+		Match.awayScore = awayScore;
 	}
 	
 }
