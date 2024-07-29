@@ -2,30 +2,19 @@ package visuals;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.ColorUIResource;
-
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.Component;
-import java.awt.Dimension;
+import java.awt.Font;
 
 public class GameWindow extends JFrame {
     private static final long serialVersionUID = 157462818597402652L;
 	private CardLayout layout;
     private JPanel pages;
-    private Map<String, JPanel> cardMap; // Map to store card names and their panels
+    private Map<String, JPanel> cardMap;
 
     public GameWindow() {
         setTitle("My Game");
@@ -36,33 +25,38 @@ public class GameWindow extends JFrame {
         layout = new CardLayout();
         pages = new JPanel(layout);
 
-        // Create instances of your panels
+        // Create MainFrame instances
+        
+        MatchScorers scorerPanel = new MatchScorers(layout, pages, cardMap);
         MatchEvents eventsPanel = new MatchEvents(layout, pages, cardMap);
         MatchWatch watchPanel = new MatchWatch(layout, pages, cardMap);
 
-        // Add panels to the main panel
+        // Add MatchFrame instances to the MatchFrames main panel
+        
+        pages.add(scorerPanel, "Scorers");
+        cardMap.put("Scorers", scorerPanel);
         pages.add(watchPanel, "Watch");
         cardMap.put("Watch", watchPanel);
         pages.add(eventsPanel, "Events");
         cardMap.put("Events", eventsPanel);
 
-        // Initialize with the main page
+        // Initialize with the main page, this will change multiple times
+        
         getContentPane().add(pages, BorderLayout.CENTER);
         layout.show(pages, "Watch");
 
-        JPanel otherPanel = new JPanel();  // Another panel without buttons
+        // A page not included in Match Frames
+        
+        JPanel otherPanel = new JPanel();
         otherPanel.setBorder(new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY));
-
-        // Set up otherPanel
         otherPanel.setBackground(Color.LIGHT_GRAY);
         otherPanel.setLayout(new BorderLayout(5, 5));
         pages.add(otherPanel, "OtherPanel");
         cardMap.put("Other Panel", otherPanel);
         
-        // Set the initial size for the frame
+        // Last page setups
+        
         setSize(800, 600);
-
-        // Set the frame to be visible after setting the size
         setVisible(true);
     }
 

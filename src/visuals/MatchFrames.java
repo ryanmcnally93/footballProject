@@ -2,14 +2,21 @@ package visuals;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EmptyBorder;
 
 public class MatchFrames extends GamePanel {
 	private static final long serialVersionUID = -7779250965738495855L;
@@ -17,24 +24,31 @@ public class MatchFrames extends GamePanel {
 	private JPanel pages;
 	private Map<String, JPanel> cardMap;
 	private SlidingPanel slidingPanel;
-//	private JLayeredPane layeredPane;
+	private Box headerBox;
+	private JLabel liveScore;
 
     public MatchFrames(CardLayout cardLayout, JPanel mainPanel, Map<String, JPanel> cardMap) {
     	super();
-    	setLayout(new BorderLayout());
     	this.layout = cardLayout;
         this.pages = mainPanel;
         this.cardMap = cardMap;
         
-        // Change layout to border and instantiate JLayeredPane
-//        layeredPane = new JLayeredPane();
-//        layeredPane.setLayout(null);
+        setBorder(new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY));
+        setBackground(Color.LIGHT_GRAY);
+        setLayout(new BorderLayout());
         
-//        layeredPane.add(pages, JLayeredPane.DEFAULT_LAYER);
+        headerBox = Box.createVerticalBox();
+        headerBox.setPreferredSize(new Dimension(headerBox.getWidth(), 80));
+        liveScore = new JLabel("ARSENAL 0 - 0 TOTTENHAM");
+        liveScore.setAlignmentX(Component.CENTER_ALIGNMENT);
+        liveScore.setHorizontalAlignment(SwingConstants.CENTER);
+        liveScore.setBorder(new EmptyBorder(10, 20, 10, 20));
+        liveScore.setForeground(new Color(0, 51, 204));
+        liveScore.setFont(new Font("Menlo", Font.BOLD, 30));
+        headerBox.add(liveScore);
+        add(headerBox, BorderLayout.NORTH);
         
-        // Needs to be in frame not panel!
         slidingPanel = new SlidingPanel();
-//        layeredPane.add(slidingPanel, JLayeredPane.PALETTE_LAYER);
         
         JButton prevButton = new JButton("Prev");
         JButton nextButton = new JButton("Next");
@@ -52,7 +66,8 @@ public class MatchFrames extends GamePanel {
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(prevButton);
         buttonPanel.add(nextButton);
-
+        buttonPanel.setBackground(Color.LIGHT_GRAY);
+        buttonPanel.setBorder(new EmptyBorder(20, 0, 20, 0));
         add(buttonPanel, BorderLayout.SOUTH);
         
     }
@@ -94,4 +109,22 @@ public class MatchFrames extends GamePanel {
 		this.slidingPanel = slidingPanel;
 	}
 
+	public JLabel getLiveScore() {
+		return liveScore;
+	}
+
+	public void setLiveScore(String score) {
+		this.liveScore.setText(score);
+	}
+
+	public void updateScoreBoard(int home, int away) {
+		System.out.println();
+		setLiveScore("ARSENAL " + home + " - " + away + " TOTTENHAM");
+		repaint();
+	}
+
+	public void setLiveScore(JLabel liveScore) {
+		this.liveScore = liveScore;
+	}
+	
 }

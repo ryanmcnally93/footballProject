@@ -105,9 +105,8 @@ public class Match {
 				                ((MatchFrames) page).goalAlert(player.getName(), this.getMinute());
 				            }
 				        }
-						((MatchEvents) cardMap.get("Events")).displayGoal(player.getName() + " scores for " + player.getTeam() + " in the " + this.getMinute() + "th minute!");
+//						((MatchEvents) cardMap.get("Events")).displayGoal(player.getName() + " scores for " + player.getTeam() + " in the " + this.getMinute() + "th minute!");
 						System.out.println(player.getName() + " scores for " + player.getTeam() + " in the " + this.getMinute() + "th minute!");
-						
 						// Create the score card and print
 						if (player.getTeam() == "Arsenal") {
 							homeScore++;
@@ -150,6 +149,7 @@ public class Match {
 						}
 						
 						scoreUpdate(cardMap);
+						updateScorerPage(cardMap);
 						
 						// ******
 						
@@ -279,28 +279,21 @@ public class Match {
 	public boolean fullTimeCheck(Map<String, JPanel> cardMap) {
 		if (this.getMinute() >= 90) {
 	        System.out.println("\nFull time!");
-	        lastScoreUpdate(cardMap);
+	        updateScorerPage(cardMap);
 	        return true;
 	    } else {
 	    	return false;
 	    }
 	}
 	
-	public void lastScoreUpdate(Map<String, JPanel> cardMap) {
+	public void updateScorerPage(Map<String, JPanel> cardMap) {
 		// Score Update
-		System.out.print("The score is\nArsenal: " + getHomeScore() + " ");
-		((MatchEvents) cardMap.get("Events")).displayGoal("The score is\nArsenal: " + getHomeScore() + " ");
 		for (String score : getHomeScorers()) {
-			System.out.print(score + " ");
-			((MatchEvents) cardMap.get("Events")).displayGoal(score + " ");
+			((MatchScorers) cardMap.get("Scorers")).displayLeftGoalScorers(score + " ");
 		}
-		System.out.print("\nTottenham: " + getAwayScore() + " ");
-		((MatchEvents) cardMap.get("Events")).displayGoal("\nTottenham: " + getAwayScore() + " ");
 		for (String score : getAwayScorers()) {
-			System.out.print(score + " ");
-			((MatchEvents) cardMap.get("Events")).displayGoal(score + "");
+			((MatchScorers) cardMap.get("Scorers")).displayRightGoalScorers(score + " ");
 		};
-		System.out.println();
 	}
 
 	public int getHomeScore() {

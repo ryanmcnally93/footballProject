@@ -12,12 +12,10 @@ public abstract class GamePanel extends JPanel {
 
     public GamePanel() {
     	this.match = new Match();
-    	setPreferredSize(new Dimension(800, 600));
     };
     
     public GamePanel(Match match) {
         this.match = match;
-        setPreferredSize(new Dimension(800, 600));
     }
 
     protected void addGameMouseListener(MouseAdapter mouseAdapter) {

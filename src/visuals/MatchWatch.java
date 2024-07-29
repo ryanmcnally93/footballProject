@@ -20,33 +20,25 @@ import javax.swing.border.EmptyBorder;
 
 public class MatchWatch extends MatchFrames {
     private static final long serialVersionUID = 5937268249853937276L;
-    private JLabel liveScore;
-    private JLabel homeShotsOn;
-    private JLabel awayShotsOn;
-    private JLabel homeAllShots;
-    private JLabel awayAllShots;
-    private CustomProgressBar shotsOnBar;
-    private CustomProgressBar allShotsBar;
-    private Box headerBox, centerBox;
+    private JLabel homeShotsOn, awayShotsOn, homeAllShots, awayAllShots, homeCorners, awayCorners, homeOffsides, awayOffsides, homeFouls, awayFouls;
+    private CustomProgressBar shotsOnBar, allShotsBar, cornerBar, offsideBar, foulsBar;
+    private Box centerBox;
 
     public MatchWatch(CardLayout layout, JPanel pages, Map<String, JPanel> cardMap) {
         super(layout, pages, cardMap);
         
-        setBorder(new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY));
-        setBackground(Color.LIGHT_GRAY);
-
-     // MATCHWATCH STARTS
-        // Header setup
-        headerBox = Box.createVerticalBox();
-        headerBox.setPreferredSize(new Dimension(headerBox.getWidth(), 150));
-        liveScore = new JLabel("Arsenal 0 : 0 Tottenham");
-        liveScore.setAlignmentX(Component.CENTER_ALIGNMENT);
-        liveScore.setHorizontalAlignment(SwingConstants.CENTER);
-        headerBox.add(liveScore);
-        add(headerBox, BorderLayout.NORTH);
-
-        // Center setup
+        // START OF MATCHWATCH
+        
         centerBox = Box.createVerticalBox();
+        Box west = Box.createHorizontalBox();
+        west.setPreferredSize(new Dimension(100,200));
+        add(west, BorderLayout.WEST);
+        Box east = Box.createHorizontalBox();
+        east.setPreferredSize(new Dimension(100,200));
+        add(east, BorderLayout.EAST); 
+        
+        // SHOTS ON TARGET
+        
         Box firstTitleBox = Box.createHorizontalBox();
 
         Box firstLeftBox = Box.createVerticalBox();
@@ -72,22 +64,14 @@ public class MatchWatch extends MatchFrames {
         firstTitleBox.add(firstLeftBox);
         firstTitleBox.add(firstMiddleBox);
         firstTitleBox.add(firstRightBox);
-        centerBox.add(firstTitleBox);
+        centerBox.add(firstTitleBox);      
         
-        Box west = Box.createHorizontalBox();
-        west.setPreferredSize(new Dimension(100,200));
-        add(west, BorderLayout.WEST);
-        
-        Box east = Box.createHorizontalBox();
-        east.setPreferredSize(new Dimension(100,200));
-        add(east, BorderLayout.EAST);       
-        
-        // Shots on target progress bar
         shotsOnBar = new CustomProgressBar();
         shotsOnBar.setBorder(new EmptyBorder(20, 20, 10, 20));
         shotsOnBar.setValue(50);
         centerBox.add(shotsOnBar);
 
+        // ALL SHOTS
         
         Box secondTitleBox = Box.createHorizontalBox();
 
@@ -100,7 +84,7 @@ public class MatchWatch extends MatchFrames {
         secondLeftBox.setBorder(new EmptyBorder(0, 20, 0, 20));
 
         Box secondMiddleBox = Box.createVerticalBox();
-        JLabel allShots = new JLabel("Shots");
+        JLabel allShots = new JLabel("All Shots");
         secondMiddleBox.add(allShots);
 
         Box secondRightBox = Box.createVerticalBox();
@@ -116,16 +100,114 @@ public class MatchWatch extends MatchFrames {
         secondTitleBox.add(secondRightBox);
         centerBox.add(secondTitleBox);
 
-        // All shots progress bar
         allShotsBar = new CustomProgressBar();
         allShotsBar.setBorder(new EmptyBorder(10, 20, 10, 20));
         allShotsBar.setValue(50);
         centerBox.add(allShotsBar);
+        
+        // CORNERS
+        
+        Box thirdTitleBox = Box.createHorizontalBox();
 
-        CustomProgressBar progressBar_2 = new CustomProgressBar();
-        progressBar_2.setBorder(new EmptyBorder(10, 20, 20, 20));
-        progressBar_2.setValue(50);
-        centerBox.add(progressBar_2);
+        Box thirdLeftBox = Box.createVerticalBox();
+        homeCorners = new JLabel("0");
+        homeCorners.setAlignmentX(Component.LEFT_ALIGNMENT);
+        homeCorners.setHorizontalAlignment(SwingConstants.LEFT);
+        thirdLeftBox.add(homeCorners);
+        thirdLeftBox.add(Box.createHorizontalGlue());
+        thirdLeftBox.setBorder(new EmptyBorder(0, 20, 0, 20));
+
+        Box thirdMiddleBox = Box.createVerticalBox();
+        JLabel corners = new JLabel("Corners");
+        thirdMiddleBox.add(corners);
+
+        Box thirdRightBox = Box.createVerticalBox();
+        awayCorners = new JLabel("0");
+        awayCorners.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        awayCorners.setHorizontalAlignment(SwingConstants.RIGHT);
+        thirdRightBox.add(awayCorners);
+        thirdRightBox.add(Box.createHorizontalGlue());
+        thirdRightBox.setBorder(new EmptyBorder(0, 20, 0, 20));
+        
+        thirdTitleBox.add(thirdLeftBox);
+        thirdTitleBox.add(thirdMiddleBox);
+        thirdTitleBox.add(thirdRightBox);
+        centerBox.add(thirdTitleBox);
+        
+        cornerBar = new CustomProgressBar();
+        cornerBar.setBorder(new EmptyBorder(10, 20, 10, 20));
+        cornerBar.setValue(50);
+        centerBox.add(cornerBar);
+        
+        // OFFSIDES
+        
+        Box fourthTitleBox = Box.createHorizontalBox();
+
+        Box fourthLeftBox = Box.createVerticalBox();
+        homeOffsides = new JLabel("0");
+        homeOffsides.setAlignmentX(Component.LEFT_ALIGNMENT);
+        homeOffsides.setHorizontalAlignment(SwingConstants.LEFT);
+        fourthLeftBox.add(homeOffsides);
+        fourthLeftBox.add(Box.createHorizontalGlue());
+        fourthLeftBox.setBorder(new EmptyBorder(0, 20, 0, 20));
+
+        Box fourthMiddleBox = Box.createVerticalBox();
+        JLabel offside = new JLabel("Offside");
+        fourthMiddleBox.add(offside);
+
+        Box fourthRightBox = Box.createVerticalBox();
+        awayOffsides = new JLabel("0");
+        awayOffsides.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        awayOffsides.setHorizontalAlignment(SwingConstants.RIGHT);
+        fourthRightBox.add(awayOffsides);
+        fourthRightBox.add(Box.createHorizontalGlue());
+        fourthRightBox.setBorder(new EmptyBorder(0, 20, 0, 20));
+        
+        fourthTitleBox.add(fourthLeftBox);
+        fourthTitleBox.add(fourthMiddleBox);
+        fourthTitleBox.add(fourthRightBox);
+        centerBox.add(fourthTitleBox);
+        
+        offsideBar = new CustomProgressBar();
+        offsideBar.setBorder(new EmptyBorder(10, 20, 10, 20));
+        offsideBar.setValue(50);
+        centerBox.add(offsideBar);
+        
+        // FOULS
+        
+        Box fifthTitleBox = Box.createHorizontalBox();
+
+        Box fifthLeftBox = Box.createVerticalBox();
+        homeFouls = new JLabel("0");
+        homeFouls.setAlignmentX(Component.LEFT_ALIGNMENT);
+        homeFouls.setHorizontalAlignment(SwingConstants.LEFT);
+        fifthLeftBox.add(homeFouls);
+        fifthLeftBox.add(Box.createHorizontalGlue());
+        fifthLeftBox.setBorder(new EmptyBorder(0, 20, 0, 20));
+
+        Box fifthMiddleBox = Box.createVerticalBox();
+        JLabel fouls = new JLabel("Fouls");
+        fifthMiddleBox.add(fouls);
+
+        Box fifthRightBox = Box.createVerticalBox();
+        awayFouls = new JLabel("0");
+        awayFouls.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        awayFouls.setHorizontalAlignment(SwingConstants.RIGHT);
+        fifthRightBox.add(awayFouls);
+        fifthRightBox.add(Box.createHorizontalGlue());
+        fifthRightBox.setBorder(new EmptyBorder(0, 20, 0, 20));
+        
+        fifthTitleBox.add(fifthLeftBox);
+        fifthTitleBox.add(fifthMiddleBox);
+        fifthTitleBox.add(fifthRightBox);
+        centerBox.add(fifthTitleBox);
+        
+        foulsBar = new CustomProgressBar();
+        foulsBar.setBorder(new EmptyBorder(10, 20, 10, 20));
+        foulsBar.setValue(50);
+        centerBox.add(foulsBar);
+        
+        // END OF MATCHWATCH
 
         JButton playButton = new JButton("Play");
         playButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -140,6 +222,7 @@ public class MatchWatch extends MatchFrames {
         add(centerBox, BorderLayout.CENTER);
 
         // Component listener to adjust sizes
+        
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -149,11 +232,16 @@ public class MatchWatch extends MatchFrames {
                 marginChange(firstRightBox);
                 marginChange(secondLeftBox);
                 marginChange(secondRightBox);
+                marginChange(thirdLeftBox);
+                marginChange(thirdRightBox);
+                marginChange(fourthLeftBox);
+                marginChange(fourthRightBox);
+                marginChange(fifthLeftBox);
+                marginChange(fifthRightBox);
             }
         });
         
-//      SlidingPanel slidingPanel = super.getSlidingPanel();
-//      slidingPanel.setBounds(0, 0, 800, 600);
+        setVisible(true);
     }
     
     private void adjustPanelSize(Box box) {
@@ -188,12 +276,6 @@ public class MatchWatch extends MatchFrames {
 		match.startMatch(getGraphics(), super.getCardMap());
 	}
 	
-	public void updateScoreBoard(int home, int away) {
-		System.out.println();
-		setLiveScore("Arsenal " + home + " : " + away + " Tottenham");
-		repaint();
-	}
-	
 	public void updateShotsOnBar(int home, int away) {
 		int total = home + away;
 		if(total != 0) {
@@ -223,14 +305,6 @@ public class MatchWatch extends MatchFrames {
 		setHomeAllShots(home);
 		setAwayAllShots(away);
 		repaint();
-	}
-
-	public JLabel getLiveScore() {
-		return liveScore;
-	}
-
-	public void setLiveScore(String score) {
-		this.liveScore.setText(score);
 	}
 
 	public CustomProgressBar getShotsOnBar() {
@@ -289,9 +363,5 @@ public class MatchWatch extends MatchFrames {
 		this.awayAllShots.setText(Integer.toString(num));
 	}
 
-	
-	public void setLiveScore(JLabel liveScore) {
-		this.liveScore = liveScore;
-	}
 
 }
