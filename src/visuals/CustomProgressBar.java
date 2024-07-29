@@ -26,11 +26,11 @@ public class CustomProgressBar extends JProgressBar {
         Graphics2D g2d = (Graphics2D) g.create();
         int width = getWidth();
         int height = getHeight();
-        int barWidth = (int) (width * 0.75); // 75% of the width of the container
-        int progressWidth = (int) (barWidth * ((double) getValue() / getMaximum()));
+//        int barWidth = (int) (width * 0.75); // 75% of the width of the container
+        int progressWidth = (int) (width * ((double) getValue() / getMaximum()));
         
         // Center the progress bar
-        int x = (width - barWidth) / 2;
+        int x = (width - width) / 2;
         int y = (height - CORNER_RADIUS * 2)/2;
         
      // Anti-aliasing for smoother corners
@@ -38,7 +38,7 @@ public class CustomProgressBar extends JProgressBar {
 
         // Draw the background with rounded corners
         g2d.setColor(Color.GRAY);
-        g2d.fillRoundRect(x, y, barWidth, CORNER_RADIUS * 2, CORNER_RADIUS, CORNER_RADIUS);
+        g2d.fillRoundRect(x, y, width, CORNER_RADIUS * 2, CORNER_RADIUS, CORNER_RADIUS);
 
         // Draw the progress with rounded corners
         g2d.setColor(Color.GREEN);
@@ -46,7 +46,7 @@ public class CustomProgressBar extends JProgressBar {
 
         // Optional: Draw the border around the progress bar
         g2d.setColor(Color.BLACK);
-        g2d.drawRoundRect(x, y, barWidth, CORNER_RADIUS * 2, CORNER_RADIUS, CORNER_RADIUS);
+        g2d.drawRoundRect(x, y, width, CORNER_RADIUS * 2, CORNER_RADIUS, CORNER_RADIUS);
 
         g2d.dispose();
     }
