@@ -1,14 +1,18 @@
 package visuals;
 import java.awt.BorderLayout;
+import java.awt.GridBagLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
 
 public class GameWindow extends JFrame {
     private static final long serialVersionUID = 157462818597402652L;
@@ -17,7 +21,7 @@ public class GameWindow extends JFrame {
     private Map<String, JPanel> cardMap;
 
     public GameWindow() {
-        setTitle("My Game");
+    	setTitle("My Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Center the window
 
@@ -53,6 +57,10 @@ public class GameWindow extends JFrame {
         otherPanel.setLayout(new BorderLayout(5, 5));
         pages.add(otherPanel, "OtherPanel");
         cardMap.put("Other Panel", otherPanel);
+        
+        // Test Area
+        
+        
         
         // Last page setups
         

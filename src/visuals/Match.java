@@ -21,8 +21,6 @@ public class Match {
 	private ArrayList<Footballer> homeTeam;
 	private ArrayList<Footballer> awayTeam;
 	private int minute;
-	public ArrayList<String> homeScorers;
-	public ArrayList<String> awayScorers;
 	private Goalkeeper homegk;
 	private Goalkeeper awaygk;
 	private static int homeAllShots = 0;
@@ -36,8 +34,6 @@ public class Match {
 		this.homeTeam = homeTeam;
 		this.awayTeam = awayTeam;
 		this.minute = 0;
-		this.homeScorers = new ArrayList<String>();
-		this.awayScorers = new ArrayList<String>();
 		this.homegk = hgk;
 		this.awaygk = agk;
 	}
@@ -99,57 +95,30 @@ public class Match {
 					((MatchWatch) cardMap.get("Watch")).updateAllShotsBar(getHomeAllShots(), getAwayAllShots());
 					if(takeShot(player, thisFoeGk) == true) {
 						
+						// SCORED
+						
 						// Confirm goal
 						for (JPanel page : cardMap.values()) {
 				            if (page instanceof MatchFrames) {
 				                ((MatchFrames) page).goalAlert(player.getName(), this.getMinute());
 				            }
 				        }
-//						((MatchEvents) cardMap.get("Events")).displayGoal(player.getName() + " scores for " + player.getTeam() + " in the " + this.getMinute() + "th minute!");
 						System.out.println(player.getName() + " scores for " + player.getTeam() + " in the " + this.getMinute() + "th minute!");
 						// Create the score card and print
 						if (player.getTeam() == "Arsenal") {
 							homeScore++;
-							boolean aFound = false;
-							for (int i = 0;i<getHomeScorers().size();i++) {
-								String scorer = getHomeScorers().get(i);
-								
-								if (scorer.contains(player.getName()) ) {
-									aFound = true;
-									// Update scorer
-									String minutes = scorer.substring(0, scorer.length() - 1);
-									String updatedMinutes = minutes + ", " + this.getMinute() + ")";
-									this.homeScorers.set(i, updatedMinutes);
-									break;
-								}
-								
-							}
-							if (!aFound) {
-								this.homeScorers.add(player.getName() + "(" + getMinute() + ")");
-							}
+							
+							// HEREE
+							((MatchScorers) cardMap.get("Scorers")).displayLeftGoalScorers(player, getMinute());
+							
 						} else {
 							awayScore++;
-							boolean tFound = false;
-							for (int i = 0;i<getAwayScorers().size();i++) {
-								String scorer = getAwayScorers().get(i);
-								
-								if (scorer.contains(player.getName()) ) {
-									tFound = true;
-									// Update scorer
-									String minutes = scorer.substring(0, scorer.length() - 1);
-									String updatedMinutes = minutes + ", " + getMinute() + ")";
-									this.awayScorers.set(i, updatedMinutes);
-									break;
-								}
-								
-							}
-							if (!tFound) {
-								this.awayScorers.add(player.getName() + "(" + getMinute() + ")");
-							}
+							
+							((MatchScorers) cardMap.get("Scorers")).displayRightGoalScorers(player, getMinute());
+							
 						}
 						
 						scoreUpdate(cardMap);
-						updateScorerPage(cardMap);
 						
 						// ******
 						
@@ -262,38 +231,16 @@ public class Match {
 	}
 	
 	public void scoreUpdate(Map<String, JPanel> cardMap) {
-		// Score Update
-		System.out.print("The score is\nArsenal: " + getHomeScore() + " ");
-		for (String score : getHomeScorers()) {
-			System.out.print(score + " ");
-		}
-		System.out.print("\nTottenham: " + getAwayScore() + " ");
-				
-		for (String score : getAwayScorers()) {
-			System.out.print(score + " ");
-		};
-		System.out.println();
 		((MatchWatch) cardMap.get("Watch")).updateScoreBoard(getHomeScore(), getAwayScore());
 	}
 	
 	public boolean fullTimeCheck(Map<String, JPanel> cardMap) {
 		if (this.getMinute() >= 90) {
 	        System.out.println("\nFull time!");
-	        updateScorerPage(cardMap);
 	        return true;
 	    } else {
 	    	return false;
 	    }
-	}
-	
-	public void updateScorerPage(Map<String, JPanel> cardMap) {
-		// Score Update
-		for (String score : getHomeScorers()) {
-			((MatchScorers) cardMap.get("Scorers")).displayLeftGoalScorers(score + " ");
-		}
-		for (String score : getAwayScorers()) {
-			((MatchScorers) cardMap.get("Scorers")).displayRightGoalScorers(score + " ");
-		};
 	}
 
 	public int getHomeScore() {
@@ -349,22 +296,6 @@ public class Match {
 
 	public void addMinute() {
 		this.minute += 1;
-	}
-	
-	public ArrayList<String> getHomeScorers() {
-		return homeScorers;
-	}
-
-	public void setHomeScorers(ArrayList<String> homeScorers) {
-		this.homeScorers = homeScorers;
-	}
-
-	public ArrayList<String> getAwayScorers() {
-		return awayScorers;
-	}
-
-	public void setAwayScorers(ArrayList<String> awayScorers) {
-		this.awayScorers = awayScorers;
 	}
 	
 	public void startMatch(Graphics g, Map<String, JPanel> cardMap) {
