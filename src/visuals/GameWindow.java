@@ -17,7 +17,7 @@ import java.awt.GridBagConstraints;
 public class GameWindow extends JFrame {
     private static final long serialVersionUID = 157462818597402652L;
 	private CardLayout layout;
-    private JPanel pages;
+    private JPanel matchPages;
     private Map<String, JPanel> cardMap;
 
     public GameWindow() {
@@ -27,27 +27,27 @@ public class GameWindow extends JFrame {
 
         cardMap = new HashMap<>();
         layout = new CardLayout();
-        pages = new JPanel(layout);
+        matchPages = new JPanel(layout);
 
         // Create MainFrame instances
         
-        MatchScorers scorerPanel = new MatchScorers(layout, pages, cardMap);
-        MatchEvents eventsPanel = new MatchEvents(layout, pages, cardMap);
-        MatchWatch watchPanel = new MatchWatch(layout, pages, cardMap);
+        MatchScorers scorerPanel = new MatchScorers(layout, matchPages, cardMap);
+        MatchEvents eventsPanel = new MatchEvents(layout, matchPages, cardMap);
+        MatchWatch watchPanel = new MatchWatch(layout, matchPages, cardMap);
 
         // Add MatchFrame instances to the MatchFrames main panel
         
-        pages.add(scorerPanel, "Scorers");
+        matchPages.add(scorerPanel, "Scorers");
         cardMap.put("Scorers", scorerPanel);
-        pages.add(watchPanel, "Watch");
+        matchPages.add(watchPanel, "Watch");
         cardMap.put("Watch", watchPanel);
-        pages.add(eventsPanel, "Events");
+        matchPages.add(eventsPanel, "Events");
         cardMap.put("Events", eventsPanel);
 
         // Initialize with the main page, this will change multiple times
         
-        getContentPane().add(pages, BorderLayout.CENTER);
-        layout.show(pages, "Watch");
+        getContentPane().add(matchPages, BorderLayout.CENTER);
+        layout.show(matchPages, "Watch");
 
         // A page not included in Match Frames
         
@@ -55,7 +55,6 @@ public class GameWindow extends JFrame {
         otherPanel.setBorder(new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY));
         otherPanel.setBackground(Color.LIGHT_GRAY);
         otherPanel.setLayout(new BorderLayout(5, 5));
-        pages.add(otherPanel, "OtherPanel");
         cardMap.put("Other Panel", otherPanel);
         
         // Test Area
@@ -69,11 +68,11 @@ public class GameWindow extends JFrame {
     }
 
     public void switchToPanel(GamePanel panel) {
-        if (pages != null) {
-            remove(pages);
+        if (matchPages != null) {
+            remove(matchPages);
         }
-        pages = panel;
-        getContentPane().add(pages);
+        matchPages = panel;
+        getContentPane().add(matchPages);
         revalidate();
         repaint();
     }
@@ -94,11 +93,11 @@ public class GameWindow extends JFrame {
 	}
 
 	public JPanel getPages() {
-		return pages;
+		return matchPages;
 	}
 
 	public void setPages(JPanel pages) {
-		this.pages = pages;
+		this.matchPages = pages;
 	}
 
 	public Map<String, JPanel> getCardMap() {

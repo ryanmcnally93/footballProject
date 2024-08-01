@@ -209,16 +209,7 @@ public class MatchWatch extends MatchFrames {
         
         // END OF MATCHWATCH
 
-        JButton playButton = new JButton("Play");
-        playButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        playButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-            	handleClick();
-                System.out.println("Play button clicked!");
-            }
-        });
-        centerBox.add(playButton);
+        
         add(centerBox, BorderLayout.CENTER);
 
         // Component listener to adjust sizes
@@ -271,10 +262,6 @@ public class MatchWatch extends MatchFrames {
 //        super.paintComponent(g);
 //        
 //    }
-
-	public void handleClick() {
-		match.startMatch(getGraphics(), super.getCardMap());
-	}
 	
 	public void updateShotsOnBar(int home, int away) {
 		int total = home + away;

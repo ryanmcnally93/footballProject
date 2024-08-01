@@ -100,7 +100,7 @@ public class Match {
 						// Confirm goal
 						for (JPanel page : cardMap.values()) {
 				            if (page instanceof MatchFrames) {
-				                ((MatchFrames) page).goalAlert(player.getName(), this.getMinute());
+				            	((MatchFrames) page).goalAlert(player.getName(), this.getMinute());
 				            }
 				        }
 						System.out.println(player.getName() + " scores for " + player.getTeam() + " in the " + this.getMinute() + "th minute!");
@@ -108,8 +108,8 @@ public class Match {
 						if (player.getTeam() == "Arsenal") {
 							homeScore++;
 							
-							// HEREE
 							((MatchScorers) cardMap.get("Scorers")).displayLeftGoalScorers(player, getMinute());
+							
 							
 						} else {
 							awayScore++;
@@ -118,7 +118,11 @@ public class Match {
 							
 						}
 						
-						scoreUpdate(cardMap);
+						for (JPanel page : cardMap.values()) {
+				            if (page instanceof MatchFrames) {
+				            	((MatchFrames) page).updateScoreBoard(getHomeScore(), getAwayScore());
+				            }
+				        }
 						
 						// ******
 						
@@ -228,10 +232,6 @@ public class Match {
 	// Ran out of stamina message
 	public void outOfStamina(Footballer player) {
 		System.out.println(player.getName() + " has run out of stamina");
-	}
-	
-	public void scoreUpdate(Map<String, JPanel> cardMap) {
-		((MatchWatch) cardMap.get("Watch")).updateScoreBoard(getHomeScore(), getAwayScore());
 	}
 	
 	public boolean fullTimeCheck(Map<String, JPanel> cardMap) {

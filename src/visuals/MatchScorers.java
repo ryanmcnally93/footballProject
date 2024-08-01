@@ -2,9 +2,12 @@ package visuals;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
@@ -12,8 +15,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import people.Footballer;
 
@@ -23,47 +28,38 @@ public class MatchScorers extends MatchFrames {
 	private Box centerBox;
 	private ArrayList<String> homeScorers;
 	private ArrayList<String> awayScorers;
-    private GridBagConstraints left;
     private JPanel leftBox;
-    private GridBagConstraints right;
     private JPanel rightBox;
+    private Box container;
 
 	public MatchScorers(CardLayout cardLayout, JPanel mainPanel, Map<String, JPanel> cardMap) {
 		super(cardLayout, mainPanel, cardMap);
 		homeScorers = new ArrayList<String>();
 		awayScorers = new ArrayList<String>();
 		
-		Box centerBox = Box.createVerticalBox();
+		centerBox = Box.createVerticalBox();
 		add(centerBox, BorderLayout.CENTER);
 		
-		Box container = Box.createHorizontalBox();
+		container = Box.createHorizontalBox();
 		
-		left = new GridBagConstraints();
-        left.gridx = 0;
-        left.gridy = 0;
-        left.gridwidth = 1; // Span all columns
-        left.gridheight = GridBagConstraints.REMAINDER; // Span all rows
-        left.weightx = 0.5;
-        left.weighty = 1.0;
-        left.fill = GridBagConstraints.BOTH;
+		leftBox = new JPanel();
+		leftBox.setBackground(Color.LIGHT_GRAY);
+        leftBox.setLayout(new BoxLayout(leftBox, BoxLayout.Y_AXIS));
         
-        right = new GridBagConstraints();
-        right.gridx = 1; // Position in the second column
-        right.gridy = 0; // Start at the top row
-        right.gridwidth = GridBagConstraints.REMAINDER; // Span all remaining columns
-        right.gridheight = GridBagConstraints.REMAINDER; // Span all rows
-        right.weightx = 0.5; // Take up the remaining width
-        right.weighty = 1.0; // Take up the full height
-        right.fill = GridBagConstraints.BOTH; // Resize both horizontally and vertical
-
-        leftBox = new JPanel();
-        leftBox.setBackground(Color.BLUE);
+        leftBox.setPreferredSize(new Dimension(600, 409));
+        leftBox.setMinimumSize(new Dimension(600, 409));
+        leftBox.setMaximumSize(new Dimension(600, 409));
         
         rightBox = new JPanel();
-        rightBox.setBackground(Color.GREEN);
+        rightBox.setBackground(Color.LIGHT_GRAY);
+        rightBox.setLayout(new BoxLayout(rightBox, BoxLayout.Y_AXIS));
+ 
+        rightBox.setPreferredSize(new Dimension(600, 409));
+        rightBox.setMinimumSize(new Dimension(600, 409));
+        rightBox.setMaximumSize(new Dimension(600, 409));
 
-        container.add(leftBox, left);
-        container.add(rightBox, right);
+        container.add(leftBox);
+        container.add(rightBox);
         centerBox.add(container);
 		
 		Box west = Box.createHorizontalBox();
@@ -83,15 +79,47 @@ public class MatchScorers extends MatchFrames {
 	}
 	
 	private void adjustPanelSize(Box box) {
-    	Dimension screenSize = getSize();
+		Dimension screenSize = getSize();
         int width = screenSize.width;
         int eighth = width/8;
         box.setPreferredSize(new Dimension(eighth, box.getPreferredSize().height));
         box.setMinimumSize(new Dimension(eighth, box.getMinimumSize().height));
         box.setMaximumSize(new Dimension(eighth, box.getMaximumSize().height));
-        // Revalidate and repaint to apply changes
-        box.revalidate();
-        box.repaint();
+        
+        // This isn't working
+        int seventyfive = (int) (width*0.75);
+        int half = (int) (seventyfive/2);
+        
+        container.setSize(new Dimension(seventyfive, container.getPreferredSize().height));
+        container.revalidate();
+        container.repaint();
+        
+        System.out.println("CONT"+container.getHeight());
+        
+        centerBox.setSize(new Dimension(seventyfive, container.getPreferredSize().height));
+        centerBox.revalidate();
+        centerBox.repaint();
+        
+        System.out.println("CENTER"+centerBox.getHeight());
+        int height = screenSize.height;
+        int newHeight = height-163;
+        
+        leftBox.setPreferredSize(new Dimension(half, newHeight));
+        leftBox.setMinimumSize(new Dimension(half, newHeight));
+        leftBox.setMaximumSize(new Dimension(half, newHeight));
+        rightBox.setPreferredSize(new Dimension(half, newHeight));
+        rightBox.setMinimumSize(new Dimension(half, newHeight));
+        rightBox.setMaximumSize(new Dimension(half, newHeight));
+        leftBox.revalidate();
+        leftBox.repaint();
+        rightBox.revalidate();
+        rightBox.repaint();
+        
+        System.out.println("LEFT"+leftBox.getHeight());
+        System.out.println("RIGHT"+rightBox.getHeight());
+        
+        revalidate();
+        repaint();
     }
 	
 	public void displayLeftGoalScorers(Footballer player, int minute) {
@@ -116,11 +144,37 @@ public class MatchScorers extends MatchFrames {
 			homeScorers.add(player.getName() + "(" + minute + ")");
 		}
 
+//		int gridy = 0;
 		for(String goal : homeScorers) {
 			JLabel result = new JLabel(goal);
-			leftBox.add(result);
+			if(hattrickCheck(goal)) {
+				result.setForeground(Color.decode("#A0830E"));
+				Font f = result.getFont();
+				result.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+			}
+			
+			result.setBorder(new EmptyBorder(2, 20, 2, 20));
+            result.setAlignmentX(Component.RIGHT_ALIGNMENT); // Align to the right
+            leftBox.add(result);
+	        containScorerSections();
 		}
 		
+	}
+	
+	public static boolean hattrickCheck(String input) {
+        if (input == null || input.isEmpty()) {
+            return false;
+        }
+
+        String[] values = input.split(",");
+        return values.length >= 3;
+    }
+	
+	public void containScorerSections() {
+		int seventyfive = (int) (getWidth()*0.75);
+        int half = (int) (seventyfive/2);
+        leftBox.setPreferredSize(new Dimension(half, getHeight()));
+        rightBox.setPreferredSize(new Dimension(half, getHeight()));
 	}
 	
 	public void displayRightGoalScorers(Footballer player, int minute) {
@@ -145,9 +199,20 @@ public class MatchScorers extends MatchFrames {
 			awayScorers.add(player.getName() + "(" + minute + ")");
 		}
 
+//		int gridy = 0;
 		for(String goal : awayScorers) {
 			JLabel result = new JLabel(goal);
-			rightBox.add(result);
+			if(hattrickCheck(goal)) {
+				result.setForeground(Color.decode("#A0830E"));
+				Font f = result.getFont();
+				result.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+			}
+			
+			result.setBorder(new EmptyBorder(2, 20, 2, 20));
+            result.setAlignmentX(Component.LEFT_ALIGNMENT); // Align to the right
+            rightBox.add(result);
+	        containScorerSections();
+
 		}
 		
 	}
