@@ -17,6 +17,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -32,14 +33,17 @@ public class MatchScorers extends MatchFrames {
     private JPanel rightBox;
     private Box container;
 
-	public MatchScorers(CardLayout cardLayout, JPanel mainPanel, Map<String, JPanel> cardMap) {
-		super(cardLayout, mainPanel, cardMap);
+	public MatchScorers(CardLayout cardLayout, JPanel pages, Map<String, JPanel> cardMap) {
+		super(cardLayout, pages, cardMap);
+		
+		JLayeredPane layeredPane = getLayeredPane();
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+		
 		homeScorers = new ArrayList<String>();
 		awayScorers = new ArrayList<String>();
 		
 		centerBox = Box.createVerticalBox();
-		add(centerBox, BorderLayout.CENTER);
-		
 		container = Box.createHorizontalBox();
 		
 		leftBox = new JPanel();
@@ -64,10 +68,16 @@ public class MatchScorers extends MatchFrames {
 		
 		Box west = Box.createHorizontalBox();
         west.setPreferredSize(new Dimension(100,200));
-        add(west, BorderLayout.WEST);
+        mainPanel.add(west, BorderLayout.WEST);
         Box east = Box.createHorizontalBox();
         east.setPreferredSize(new Dimension(100,200));
-        add(east, BorderLayout.EAST); 
+        mainPanel.add(east, BorderLayout.EAST); 
+        
+        mainPanel.add(centerBox, BorderLayout.CENTER);
+        
+        mainPanel.setBounds(0, 80, 800, 440);
+        mainPanel.setBackground(Color.LIGHT_GRAY);
+        layeredPane.add(mainPanel, JLayeredPane.DEFAULT_LAYER);
 		
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -76,6 +86,8 @@ public class MatchScorers extends MatchFrames {
                 adjustPanelSize(east);
             }
         });
+        
+        setVisible(true);
 	}
 	
 	private void adjustPanelSize(Box box) {
@@ -94,13 +106,11 @@ public class MatchScorers extends MatchFrames {
         container.revalidate();
         container.repaint();
         
-        System.out.println("CONT"+container.getHeight());
         
         centerBox.setSize(new Dimension(seventyfive, container.getPreferredSize().height));
         centerBox.revalidate();
         centerBox.repaint();
         
-        System.out.println("CENTER"+centerBox.getHeight());
         int height = screenSize.height;
         int newHeight = height-163;
         
@@ -114,9 +124,6 @@ public class MatchScorers extends MatchFrames {
         leftBox.repaint();
         rightBox.revalidate();
         rightBox.repaint();
-        
-        System.out.println("LEFT"+leftBox.getHeight());
-        System.out.println("RIGHT"+rightBox.getHeight());
         
         revalidate();
         repaint();

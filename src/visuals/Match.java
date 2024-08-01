@@ -120,7 +120,7 @@ public class Match {
 						
 						for (JPanel page : cardMap.values()) {
 				            if (page instanceof MatchFrames) {
-				            	((MatchFrames) page).updateScoreBoard(getHomeScore(), getAwayScore());
+				            	((MatchFrames) page).getHeaderPanel().updateScoreBoard(getHomeScore(), getAwayScore());
 				            }
 				        }
 						

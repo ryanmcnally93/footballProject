@@ -29,16 +29,20 @@ public class MatchWatch extends MatchFrames {
         
         // START OF MATCHWATCH
         
+        JLayeredPane layeredPane = getLayeredPane();
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+        
         centerBox = Box.createVerticalBox();
         Box west = Box.createHorizontalBox();
         west.setPreferredSize(new Dimension(100,200));
-        add(west, BorderLayout.WEST);
+        mainPanel.add(west, BorderLayout.WEST);
         Box east = Box.createHorizontalBox();
         east.setPreferredSize(new Dimension(100,200));
-        add(east, BorderLayout.EAST); 
+        mainPanel.add(east, BorderLayout.EAST); 
         
         // SHOTS ON TARGET
-        
+       
         Box firstTitleBox = Box.createHorizontalBox();
 
         Box firstLeftBox = Box.createVerticalBox();
@@ -207,10 +211,13 @@ public class MatchWatch extends MatchFrames {
         foulsBar.setValue(50);
         centerBox.add(foulsBar);
         
-        // END OF MATCHWATCH
-
+        mainPanel.add(centerBox, BorderLayout.CENTER);
         
-        add(centerBox, BorderLayout.CENTER);
+        mainPanel.setBounds(0, 80, 800, 440);
+        mainPanel.setBackground(Color.LIGHT_GRAY);
+        layeredPane.add(mainPanel, JLayeredPane.DEFAULT_LAYER);
+        
+        // END OF MATCHWATCH
 
         // Component listener to adjust sizes
         
@@ -256,12 +263,6 @@ public class MatchWatch extends MatchFrames {
         box.revalidate();
         box.repaint();
     }
-    
-//    @Override
-//    protected void paintComponent(Graphics g) {
-//        super.paintComponent(g);
-//        
-//    }
 	
 	public void updateShotsOnBar(int home, int away) {
 		int total = home + away;
