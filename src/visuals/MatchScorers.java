@@ -26,12 +26,9 @@ import people.Footballer;
 public class MatchScorers extends MatchFrames {
 
 	private static final long serialVersionUID = 1903388672588119012L;
-	private Box centerBox;
-	private ArrayList<String> homeScorers;
-	private ArrayList<String> awayScorers;
-    private JPanel leftBox;
-    private JPanel rightBox;
-    private Box container;
+	private ArrayList<String> homeScorers, awayScorers;
+    private JPanel leftBox, rightBox;
+    private Box centerBox, container;
 
 	public MatchScorers(CardLayout cardLayout, JPanel pages, Map<String, JPanel> cardMap) {
 		super(cardLayout, pages, cardMap);
@@ -50,24 +47,24 @@ public class MatchScorers extends MatchFrames {
 		leftBox.setBackground(Color.LIGHT_GRAY);
         leftBox.setLayout(new BoxLayout(leftBox, BoxLayout.Y_AXIS));
         
-        leftBox.setPreferredSize(new Dimension(600, 409));
-        leftBox.setMinimumSize(new Dimension(600, 409));
-        leftBox.setMaximumSize(new Dimension(600, 409));
+        leftBox.setPreferredSize(new Dimension(300, 409));
+        leftBox.setMinimumSize(new Dimension(300, 409));
+        leftBox.setMaximumSize(new Dimension(300, 409));
         
         rightBox = new JPanel();
         rightBox.setBackground(Color.LIGHT_GRAY);
         rightBox.setLayout(new BoxLayout(rightBox, BoxLayout.Y_AXIS));
  
-        rightBox.setPreferredSize(new Dimension(600, 409));
-        rightBox.setMinimumSize(new Dimension(600, 409));
-        rightBox.setMaximumSize(new Dimension(600, 409));
+        rightBox.setPreferredSize(new Dimension(300, 409));
+        rightBox.setMinimumSize(new Dimension(300, 409));
+        rightBox.setMaximumSize(new Dimension(300, 409));
 
         container.add(leftBox);
         container.add(rightBox);
         centerBox.add(container);
 		
-		Box west = Box.createHorizontalBox();
-        west.setPreferredSize(new Dimension(100,200));
+        Box west = Box.createHorizontalBox();
+		west.setPreferredSize(new Dimension(100,200));
         mainPanel.add(west, BorderLayout.WEST);
         Box east = Box.createHorizontalBox();
         east.setPreferredSize(new Dimension(100,200));

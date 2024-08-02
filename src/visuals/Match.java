@@ -91,8 +91,8 @@ public class Match {
 						homeShotsOn++;
 						homeAllShots++;
 					}
-					((MatchWatch) cardMap.get("Watch")).updateShotsOnBar(getHomeShotsOn(), getAwayShotsOn());
-					((MatchWatch) cardMap.get("Watch")).updateAllShotsBar(getHomeAllShots(), getAwayAllShots());
+					((MatchStats) cardMap.get("Stats")).updateShotsOnBar(getHomeShotsOn(), getAwayShotsOn());
+					((MatchStats) cardMap.get("Stats")).updateAllShotsBar(getHomeAllShots(), getAwayAllShots());
 					if(takeShot(player, thisFoeGk) == true) {
 						
 						// SCORED
@@ -107,15 +107,12 @@ public class Match {
 						// Create the score card and print
 						if (player.getTeam() == "Arsenal") {
 							homeScore++;
-							
+							((MatchEvents) cardMap.get("Events")).addHomeEvents(getMinute(), player, "goal");
 							((MatchScorers) cardMap.get("Scorers")).displayLeftGoalScorers(player, getMinute());
-							
-							
 						} else {
 							awayScore++;
-							
+							((MatchEvents) cardMap.get("Events")).addAwayEvents(getMinute(), player, "goal");
 							((MatchScorers) cardMap.get("Scorers")).displayRightGoalScorers(player, getMinute());
-							
 						}
 						
 						for (JPanel page : cardMap.values()) {
@@ -141,6 +138,11 @@ public class Match {
 						return;
 					} else {
 						System.out.println("Brilliant save by " + thisFoeGk.getName() + " to deny " + player.getName());
+						if(findTeam(player) == "Away") {
+							((MatchEvents) cardMap.get("Events")).addAwayEvents(getMinute(), player, "save");
+						} else {
+							((MatchEvents) cardMap.get("Events")).addHomeEvents(getMinute(), player, "save");
+						}
 					}
 				}
 			} else {

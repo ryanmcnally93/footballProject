@@ -18,13 +18,13 @@ import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
-public class MatchWatch extends MatchFrames {
+public class MatchStats extends MatchFrames {
     private static final long serialVersionUID = 5937268249853937276L;
     private JLabel homeShotsOn, awayShotsOn, homeAllShots, awayAllShots, homeCorners, awayCorners, homeOffsides, awayOffsides, homeFouls, awayFouls;
     private CustomProgressBar shotsOnBar, allShotsBar, cornerBar, offsideBar, foulsBar;
     private Box centerBox;
 
-    public MatchWatch(CardLayout layout, JPanel pages, Map<String, JPanel> cardMap) {
+    public MatchStats(CardLayout layout, JPanel pages, Map<String, JPanel> cardMap) {
         super(layout, pages, cardMap);
         
         // START OF MATCHWATCH

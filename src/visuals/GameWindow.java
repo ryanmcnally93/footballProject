@@ -32,22 +32,22 @@ public class GameWindow extends JFrame {
         // Create MainFrame instances
         
         MatchScorers scorerPanel = new MatchScorers(layout, matchPages, cardMap);
+        MatchStats watchPanel = new MatchStats(layout, matchPages, cardMap);
         MatchEvents eventsPanel = new MatchEvents(layout, matchPages, cardMap);
-        MatchWatch watchPanel = new MatchWatch(layout, matchPages, cardMap);
 
         // Add MatchFrame instances to the MatchFrames main panel
         
         matchPages.add(scorerPanel, "Scorers");
         cardMap.put("Scorers", scorerPanel);
-        matchPages.add(watchPanel, "Watch");
-        cardMap.put("Watch", watchPanel);
+        matchPages.add(watchPanel, "Stats");
+        cardMap.put("Stats", watchPanel);
         matchPages.add(eventsPanel, "Events");
         cardMap.put("Events", eventsPanel);
 
         // Initialize with the main page, this will change multiple times
         
         getContentPane().add(matchPages, BorderLayout.CENTER);
-        layout.show(matchPages, "Watch");
+        layout.show(matchPages, "Stats");
 
         // A page not included in Match Frames
         
