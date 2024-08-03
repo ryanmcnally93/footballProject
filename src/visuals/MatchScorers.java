@@ -155,6 +155,7 @@ public class MatchScorers extends MatchFrames {
 				result.setForeground(Color.decode("#A0830E"));
 				Font f = result.getFont();
 				result.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+//				((MatchEvents) super.getCardMap().get("Events")).addHomeEvents(getMinute(), player, "save");
 			}
 			
 			result.setBorder(new EmptyBorder(2, 20, 2, 20));
