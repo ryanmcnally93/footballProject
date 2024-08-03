@@ -1,4 +1,4 @@
-package visuals;
+package visuals.MatchFrames;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
@@ -12,10 +12,10 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
-
 import people.Footballer;
-import visuals.MatchFrames.leftClick;
-import visuals.MatchFrames.rightClick;
+import visuals.MatchFrames.MatchFrames;
+import visuals.MatchFrames.MatchFrames.leftClick;
+import visuals.MatchFrames.MatchFrames.rightClick;
 
 public class MatchEvents extends MatchFrames {
 	

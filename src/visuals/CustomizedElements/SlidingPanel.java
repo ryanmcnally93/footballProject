@@ -1,11 +1,11 @@
-package visuals;
+package visuals.CustomizedElements;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.ImageObserver;
 
-class SlidingPanel extends JPanel {
+public class SlidingPanel extends JPanel {
     private static final long serialVersionUID = 7790773713887698024L;
 	private int yPosition;
     private final int panelHeight = 300;

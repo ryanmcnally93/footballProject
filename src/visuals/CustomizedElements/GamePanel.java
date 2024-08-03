@@ -1,5 +1,7 @@
-package visuals;
+package visuals.CustomizedElements;
 import javax.swing.*;
+
+import main.Match;
 
 import java.awt.Color;
 import java.awt.Dimension;

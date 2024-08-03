@@ -1,4 +1,4 @@
-package visuals;
+package visuals.MatchFrames;
 import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
 import java.awt.CardLayout;
@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
+
+import visuals.CustomizedElements.GamePanel;
+
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 
@@ -31,18 +34,30 @@ public class GameWindow extends JFrame {
 
         // Create MainFrame instances
         
+        MatchWatch watchPanel = new MatchWatch(layout, matchPages, cardMap);
         MatchScorers scorerPanel = new MatchScorers(layout, matchPages, cardMap);
-        MatchStats watchPanel = new MatchStats(layout, matchPages, cardMap);
+        MatchStats statsPanel = new MatchStats(layout, matchPages, cardMap);
         MatchEvents eventsPanel = new MatchEvents(layout, matchPages, cardMap);
+        MatchAllMatches allMatchesPanel = new MatchAllMatches(layout, matchPages, cardMap);
+        MatchTable tablePanel = new MatchTable(layout, matchPages, cardMap);
+        MatchRatings ratingsPanel = new MatchRatings(layout, matchPages, cardMap);
 
         // Add MatchFrame instances to the MatchFrames main panel
         
+        matchPages.add(watchPanel, "Watch");
+        cardMap.put("Watch", watchPanel);
         matchPages.add(scorerPanel, "Scorers");
         cardMap.put("Scorers", scorerPanel);
-        matchPages.add(watchPanel, "Stats");
-        cardMap.put("Stats", watchPanel);
+        matchPages.add(statsPanel, "Stats");
+        cardMap.put("Stats", statsPanel);
         matchPages.add(eventsPanel, "Events");
         cardMap.put("Events", eventsPanel);
+        matchPages.add(allMatchesPanel, "All Matches");
+        cardMap.put("All Matches", allMatchesPanel);
+        matchPages.add(tablePanel, "Table");
+        cardMap.put("Table", tablePanel);
+        matchPages.add(ratingsPanel, "Ratings");
+        cardMap.put("Ratings", ratingsPanel);
 
         // Initialize with the main page, this will change multiple times
         
@@ -75,13 +90,6 @@ public class GameWindow extends JFrame {
         getContentPane().add(matchPages);
         revalidate();
         repaint();
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            GameWindow window = new GameWindow();
-            window.setVisible(true);
-        });
     }
 
 	public CardLayout getLayout() {

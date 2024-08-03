@@ -1,4 +1,4 @@
-package visuals;
+package visuals.MatchFrames;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -27,6 +26,9 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
+
+import visuals.CustomizedElements.GamePanel;
+import visuals.CustomizedElements.SlidingPanel;
 
 public class MatchFrames extends GamePanel {
 	private static final long serialVersionUID = -7779250965738495855L;

@@ -1,4 +1,4 @@
-package visuals;
+package main;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -13,6 +13,10 @@ import javax.swing.JPanel;
 import java.util.Timer;
 import people.Footballer;
 import people.Goalkeeper;
+import visuals.MatchFrames.MatchEvents;
+import visuals.MatchFrames.MatchFrames;
+import visuals.MatchFrames.MatchScorers;
+import visuals.MatchFrames.MatchStats;
 
 public class Match {
 	
@@ -129,7 +133,7 @@ public class Match {
 						timer.schedule(new TimerTask() {
 						    @Override
 						    public void run() {
-						    	match.startRun(player, g, cardMap);
+						    	match.startRun(enemy, g, cardMap);
 						    }
 						}, delay);
 						

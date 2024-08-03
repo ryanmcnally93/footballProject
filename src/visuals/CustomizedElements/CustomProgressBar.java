@@ -1,4 +1,4 @@
-package visuals;
+package visuals.CustomizedElements;
 
 import javax.swing.*;
 import java.awt.*;
