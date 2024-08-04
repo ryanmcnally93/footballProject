@@ -77,7 +77,7 @@ public class initialSetup {
 	GameWindow window = new GameWindow();
     window.setVisible(true);
 	
-    Match match = ((Match) PremierLeague.getFixtures().get("Arsenal vs Tottenham"));
+    Match match = ((Match) PremierLeague.getFixtures().get("Tottenham vs Arsenal"));
 	match.displayGame(window);
 	
 	}

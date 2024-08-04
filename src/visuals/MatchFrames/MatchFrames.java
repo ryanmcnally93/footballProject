@@ -79,14 +79,13 @@ public class MatchFrames extends GamePanel {
 	
 	public class HeaderPanel extends JPanel {
 		
+		private static final long serialVersionUID = -488591451686633686L;
 		private JLabel liveScore;
 		
 		public HeaderPanel() {
-			
 			setLayout(new BorderLayout());
 	        setBackground(Color.LIGHT_GRAY);
-
-	        liveScore = new JLabel("ARSENAL 0 - 0 TOTTENHAM", SwingConstants.CENTER);
+	        liveScore = new JLabel(match.getHome().getName() + " " + match.getHomeScore() + " - " + match.getAwayScore() + " " + match.getAway().getName(), SwingConstants.CENTER);
 	        liveScore.setFont(new Font("Menlo", Font.BOLD, 30));
 	        liveScore.setForeground(new Color(0, 51, 204));
 	        add(liveScore, BorderLayout.CENTER);
@@ -102,7 +101,7 @@ public class MatchFrames extends GamePanel {
 
 		public void updateScoreBoard(int home, int away) {
 			System.out.println();
-			setLiveScore("ARSENAL " + home + " - " + away + " TOTTENHAM");
+			setLiveScore(match.getHome().getName() + " " + home + " - " + away + " " + match.getAway().getName());
 			repaint();
 		}
 
@@ -115,6 +114,7 @@ public class MatchFrames extends GamePanel {
 	
 	public class FooterPanel extends JPanel {
 		
+		private static final long serialVersionUID = 2730359600520156788L;
 		private JButton prevButton;
 		private JButton playButton;
 		private JButton nextButton;
