@@ -4,13 +4,17 @@ public class Goalkeeper extends Footballer {
 
 	private int keeping;
 	
-	public Goalkeeper(String name, int age, int wealth, int keeping, String team, String position) {
-		super(name, age, wealth, team, position);
+	public Goalkeeper(String name, int age, int keeping) {
+		super(name, age);
 		this.keeping = keeping;
 	}
 
 	public int getKeeping() {
 		return keeping;
+	}
+
+	public void setKeeping(int keeping) {
+		this.keeping = keeping;
 	}
 	
 }

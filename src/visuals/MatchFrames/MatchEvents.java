@@ -12,6 +12,8 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
+
+import main.Match;
 import people.Footballer;
 import visuals.MatchFrames.MatchFrames;
 import visuals.MatchFrames.MatchFrames.leftClick;
@@ -31,8 +33,8 @@ public class MatchEvents extends MatchFrames {
 	private InputMap inputMap;
 	private ActionMap actionMap;
 
-    public MatchEvents(CardLayout layout, JPanel pages, Map<String, JPanel> cardMap) {
-    	super(layout, pages, cardMap);
+    public MatchEvents(CardLayout layout, JPanel pages, Map<String, JPanel> cardMap, Match match) {
+    	super(layout, pages, cardMap, match);
     	
     	JLayeredPane layeredPane = getLayeredPane();
         JPanel mainPanel = new JPanel();

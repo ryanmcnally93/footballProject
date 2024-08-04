@@ -27,6 +27,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
+import main.Match;
 import visuals.CustomizedElements.GamePanel;
 import visuals.CustomizedElements.SlidingPanel;
 
@@ -38,19 +39,18 @@ public class MatchFrames extends GamePanel {
 	private CardLayout layout;
 	private JPanel pages;
 	private Map<String, JPanel> cardMap;
-	
 	private SlidingPanel slidingPanel;
-	private JPanel modal;
-	
+	private Match match;
 	private JLayeredPane layeredPane;
 	private HeaderPanel headerPanel;
 	private FooterPanel footerPanel;
 
-	public MatchFrames(CardLayout cardLayout, JPanel mainPanel, Map<String, JPanel> cardMap) {
+	public MatchFrames(CardLayout cardLayout, JPanel mainPanel, Map<String, JPanel> cardMap, Match match) {
     	super();
     	this.layout = cardLayout;
         this.pages = mainPanel;
         this.cardMap = cardMap;
+        this.match = match;
         
         setBorder(new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY));
         setBackground(Color.LIGHT_GRAY);

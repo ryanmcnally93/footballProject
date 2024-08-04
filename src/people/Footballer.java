@@ -3,6 +3,8 @@ import java.lang.Math;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.Team;
+
 // Update Character like in vehicle speed
 // Make startrun smaller using more methods
 // Call more functions from other .java?
@@ -12,54 +14,53 @@ public class Footballer extends Individual {
 	
 	public int attack;
 	public int defence;
-	private String team;
 	public int stamina; 
-	private String position;
+	public String likedPosition;
 	
 	// Define Player Characteristics
 	
-	public Footballer(String name, int age, int wealth) {
-		super(name,age,wealth);
+	public Footballer(String name, int age) {
+		super(name,age);
 	}
 	
-	public Footballer(String name, int age, int wealth, String team, String position) {
-		super(name, age, wealth);
-		this.team = team;
-		this.position = position;
-	}
-	
-	public Footballer(String name, int age, int wealth, int attack, int defence, int stamina, String team, String position) {
-		super(name,age,wealth);
+	public Footballer(String name, int age, int attack, int defence, int stamina, String position) {
+		super(name,age);
 		this.attack = attack;
 		this.defence = defence;
-		this.team = team;
 		this.stamina = stamina;
-		this.position = position;
-		super.setName(name);
+		this.likedPosition = position;
 	}
 	
 	/* This method will determine whether or not a player
 	has successfully sprinted past his opponent, we are
 	going to use math random against the likelihood out of 100 */
-
-	public String getTeam() {
-		return this.team;
-	}
 	
 	public int getStamina() {
 		return this.stamina;
 	}
 	
-	public String getPosition() {
-		return this.position;
-	}
-
-	public void setPosition(String position) {
-		this.position = position;
-	}
-	
 	public void removeStamina(int number) {
 		this.stamina -= number;
+	}
+
+	public int getAttack() {
+		return attack;
+	}
+
+	public void setAttack(int attack) {
+		this.attack = attack;
+	}
+
+	public int getDefence() {
+		return defence;
+	}
+
+	public void setDefence(int defence) {
+		this.defence = defence;
+	}
+
+	public void setStamina(int stamina) {
+		this.stamina = stamina;
 	}
 	
 }

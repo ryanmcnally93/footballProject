@@ -18,6 +18,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
+import main.Match;
 import visuals.CustomizedElements.CustomProgressBar;
 
 public class MatchStats extends MatchFrames {
@@ -26,8 +27,8 @@ public class MatchStats extends MatchFrames {
     private CustomProgressBar shotsOnBar, allShotsBar, cornerBar, offsideBar, foulsBar;
     private Box centerBox;
 
-    public MatchStats(CardLayout layout, JPanel pages, Map<String, JPanel> cardMap) {
-        super(layout, pages, cardMap);
+    public MatchStats(CardLayout layout, JPanel pages, Map<String, JPanel> cardMap, Match match) {
+        super(layout, pages, cardMap, match);
         
         // START OF MATCHWATCH
         

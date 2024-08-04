@@ -7,6 +7,12 @@ public class Individual {
 	private int wealth;
 	private String[] trophiesWon;
 	
+	public Individual(String name, int age) {
+		setName(name);
+		setAge(age);
+		setWealth(0);
+	}
+	
 	public Individual(String name, int age, int wealth) {
 		setName(name);
 		setAge(age);

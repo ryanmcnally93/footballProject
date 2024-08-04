@@ -1,6 +1,8 @@
 package leagueSetup;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import main.Match;
 import main.Team;
@@ -22,27 +24,30 @@ public class League {
 		this.teams = teams;
 		this.tier = tier;
 		this.season++;
-		for(int i=0;i<numOfTeams;i++) {
-			Team current = teams.get(i);
+		this.fixtures = new HashMap<>();
+		for(Map.Entry<String, Team> each : teams.entrySet()) {
+			Team current = each.getValue();
 			// Setup home games
-			for(int j=0;j<numOfTeams;j++) {
-				Team opposition = teams.get(j);
+			for(Map.Entry<String, Team> otherEach : teams.entrySet()) {
+				Team opposition = otherEach.getValue();
 				
-				if(current.getName().equals(opposition.getName())) {
-					System.out.println("Cannot play yourself");
-				} else {
-					System.out.println("Match created: " + current.getName() + " vs " + opposition.getName());
+				if(!current.getName().equals(opposition.getName())) {
+					Match fixture = new Match(current, opposition);
+					if(!fixtures.containsKey(current.getName() + " vs " + opposition.getName())) {
+						fixtures.put(current.getName() + " vs " + opposition.getName(), fixture);
+					}
 				}
 				
 			}
 			// Setup away games
-			for(int k=0;k<numOfTeams;k++) {
-				Team opposition = teams.get(k);
+			for(Map.Entry<String, Team> otherEach : teams.entrySet()) {
+				Team opposition = otherEach.getValue();
 				
-				if(current.getName().equals(opposition.getName())) {
-					System.out.println("Cannot play yourself");
-				} else {
-					System.out.println("Match created: " + opposition.getName() + " vs " + current.getName());
+				if(!current.getName().equals(opposition.getName())) {
+					Match fixture = new Match(opposition, current);
+					if(!fixtures.containsKey(opposition.getName() + " vs " + current.getName())) {
+						fixtures.put(opposition.getName() + " vs " + current.getName(), fixture);
+					}
 				}
 				
 			}
@@ -87,6 +92,29 @@ public class League {
 
 	public void setTier(int tier) {
 		this.tier = tier;
+	}
+
+	public void getFixturesToString() {
+		for(Map.Entry<String, Match> each : fixtures.entrySet()) {
+			Match value = each.getValue();
+			System.out.println(value.toString());
+		}
+	}
+
+	public Map<String, Match> getFixtures() {
+		return fixtures;
+	}
+
+	public void setFixtures(Map<String, Match> fixtures) {
+		this.fixtures = fixtures;
+	}
+
+	public static int getSeason() {
+		return season;
+	}
+
+	public static void setSeason(int season) {
+		League.season = season;
 	}
 	
 }

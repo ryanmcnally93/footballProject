@@ -1,29 +1,33 @@
 package main;
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TimerTask;
-import javax.sql.rowset.serial.SQLOutputImpl;
 import javax.swing.JPanel;
-
 import java.util.Timer;
 import people.Footballer;
 import people.Goalkeeper;
+import visuals.MatchFrames.GameWindow;
+import visuals.MatchFrames.MatchAllMatches;
 import visuals.MatchFrames.MatchEvents;
 import visuals.MatchFrames.MatchFrames;
+import visuals.MatchFrames.MatchRatings;
 import visuals.MatchFrames.MatchScorers;
 import visuals.MatchFrames.MatchStats;
+import visuals.MatchFrames.MatchTable;
+import visuals.MatchFrames.MatchWatch;
 
 public class Match {
 	
+	private Team home;
+	private Team away;
+	private String stadium;
 	private static int homeScore = 0;
 	private static int awayScore = 0;
-	private ArrayList<Footballer> homeTeam;
-	private ArrayList<Footballer> awayTeam;
+	private Map<String, Footballer> homeTeam;
+	private Map<String, Footballer> awayTeam;
 	private int minute;
 	private Goalkeeper homegk;
 	private Goalkeeper awaygk;
@@ -31,15 +35,65 @@ public class Match {
 	private static int homeShotsOn = 0;
 	private static int awayAllShots = 0;
 	private static int awayShotsOn = 0;
+	private CardLayout layout;
+    private JPanel matchPages;
+    private Map<String, JPanel> cardMap;
+    private MatchWatch watchPanel;
+    private MatchScorers scorerPanel;
+    private MatchStats statsPanel;
+    private MatchEvents eventsPanel;
+    private MatchAllMatches allMatchesPanel;
+    private MatchTable tablePanel;
+    private MatchRatings ratingsPanel;
 	
 	public Match() {};
 	
-	public Match(ArrayList<Footballer> homeTeam, ArrayList<Footballer> awayTeam, Goalkeeper hgk, Goalkeeper agk) {
-		this.homeTeam = homeTeam;
-		this.awayTeam = awayTeam;
+	public Match(Team home, Team away) {
+		this.home = home;
+		this.away = away;
+		this.stadium = home.getStadium();
+		this.homeTeam = home.getFirstTeam();
+		this.awayTeam = away.getFirstTeam();
 		this.minute = 0;
-		this.homegk = hgk;
-		this.awaygk = agk;
+		this.homegk = home.getGoalkeeper();
+		this.awaygk = away.getGoalkeeper();
+		
+        cardMap = new HashMap<>();
+        layout = new CardLayout();
+        matchPages = new JPanel(layout);
+		
+        watchPanel = new MatchWatch(layout, matchPages, cardMap, this);
+        scorerPanel = new MatchScorers(layout, matchPages, cardMap, this);
+        statsPanel = new MatchStats(layout, matchPages, cardMap, this);
+        eventsPanel = new MatchEvents(layout, matchPages, cardMap, this);
+        allMatchesPanel = new MatchAllMatches(layout, matchPages, cardMap, this);
+        tablePanel = new MatchTable(layout, matchPages, cardMap, this);
+        ratingsPanel = new MatchRatings(layout, matchPages, cardMap, this);
+
+        // Add MatchFrame instances to the MatchFrames main panel
+        
+        matchPages.add(watchPanel, "Watch");
+        cardMap.put("Watch", watchPanel);
+        matchPages.add(scorerPanel, "Scorers");
+        cardMap.put("Scorers", scorerPanel);
+        matchPages.add(statsPanel, "Stats");
+        cardMap.put("Stats", statsPanel);
+        matchPages.add(eventsPanel, "Events");
+        cardMap.put("Events", eventsPanel);
+        matchPages.add(allMatchesPanel, "All Matches");
+        cardMap.put("All Matches", allMatchesPanel);
+        matchPages.add(tablePanel, "Table");
+        cardMap.put("Table", tablePanel);
+        matchPages.add(ratingsPanel, "Ratings");
+        cardMap.put("Ratings", ratingsPanel);
+
+        // Initialize with the main page, this will change multiple times
+		
+	}
+	
+	public void displayGame(GameWindow window) {
+		window.getContentPane().add(matchPages, BorderLayout.CENTER);
+        layout.show(matchPages, "Stats");
 	}
 
 	public Goalkeeper getHomegk() {
@@ -63,10 +117,10 @@ public class Match {
 		if(fullTimeCheck(cardMap)) {return;};
 		int enemyCounter = 0;
 		
-		ArrayList<Footballer> thisPlayersEnemy;
+		Map<String, Footballer> thisPlayersEnemy;
 		Goalkeeper thisFoeGk;
 		
-		if(getAwayTeam().contains(player)) {
+		if(getAwayTeam().containsValue(player)) {
 			thisPlayersEnemy = getHomeTeam();
 			thisFoeGk = getHomegk();
 		} else {
@@ -74,8 +128,9 @@ public class Match {
 			thisFoeGk = getAwaygk();
 		}
 		
-		for (Footballer enemy : thisPlayersEnemy) {
+		for (Map.Entry<String, Footballer> each : thisPlayersEnemy.entrySet()) {
 			// Run the function to see if the dribble was successful
+			Footballer enemy = each.getValue();
 			if (getPastPlayer(player, enemy) == true) {
 				enemyCounter++;
 				// Increment minute and do a full time check
@@ -107,9 +162,8 @@ public class Match {
 				            	((MatchFrames) page).goalAlert(player.getName(), this.getMinute());
 				            }
 				        }
-						System.out.println(player.getName() + " scores for " + player.getTeam() + " in the " + this.getMinute() + "th minute!");
 						// Create the score card and print
-						if (player.getTeam() == "Arsenal") {
+						if (findTeam(player) == "Home") {
 							homeScore++;
 							((MatchEvents) cardMap.get("Events")).addHomeEvents(getMinute(), player, "goal");
 							((MatchScorers) cardMap.get("Scorers")).displayLeftGoalScorers(player, getMinute());
@@ -228,7 +282,7 @@ public class Match {
 	}
 	
 	public String findTeam(Footballer player) {
-		if(getAwayTeam().contains(player)) {
+		if(getAwayTeam().containsValue(player)) {
 			return "Away";
 		} else {
 			return "Home";
@@ -257,43 +311,12 @@ public class Match {
 		return awayScore;
 	}
 
-	public ArrayList<Footballer> getHomeTeam() {
+	public Map<String, Footballer> getHomeTeam() {
 		return this.homeTeam;
 	}
 	
-	public ArrayList<Footballer> getAwayTeam() {
+	public Map<String, Footballer> getAwayTeam() {
 		return this.awayTeam;
-	}
-
-	// Work on a function to return a striker once team is given
-	public ArrayList<Footballer> getRandomStriker(ArrayList<Footballer> team) {
-		ArrayList<Footballer> strikers = new ArrayList<Footballer>();
-		for (Footballer player : getAwayTeam()) {
-			if (player.getPosition() == "Striker") {
-				strikers.add(player);
-			}
-		}
-		return strikers;
-	}
-	
-	public ArrayList<Footballer> getAwayMidfielders() {
-		ArrayList<Footballer> strikers = new ArrayList<Footballer>();
-		for (Footballer player : getAwayTeam()) {
-			if (player.getPosition() == "Striker") {
-				strikers.add(player);
-			}
-		}
-		return strikers;
-	}
-	
-	public ArrayList<Footballer> getAwayDefenders() {
-		ArrayList<Footballer> strikers = new ArrayList<Footballer>();
-		for (Footballer player : getAwayTeam()) {
-			if (player.getPosition() == "Striker") {
-				strikers.add(player);
-			}
-		}
-		return strikers;
 	}
 	
 	public int getMinute() {
@@ -306,63 +329,15 @@ public class Match {
 	
 	public void startMatch(Graphics g, Map<String, JPanel> cardMap) {
     	System.out.println("You are starting the match");
-    	Goalkeeper raya = new Goalkeeper("David Raya", 31, 30000, 150, "Arsenal", "Goalkeeper");
-    	Footballer jesus = new Footballer("Gabriel Jesus", 31, 30000, 180, 30, 100, "Arsenal", "Striker");
-		Footballer trossard = new Footballer("Leandro Trossard", 31, 30000, 200, 40, 100, "Arsenal", "Winger");
-		Footballer saka = new Footballer("Bukayo Saka", 31, 30000, 180, 65, 100, "Arsenal", "Winger");
-		Footballer partey = new Footballer("Thomas Partey", 31, 30000, 90, 180, 100, "Arsenal", "Midfielder");
-		Footballer odegaard = new Footballer("Martin Odegaard", 31, 30000, 180, 120, 100, "Arsenal", "Midfielder");
-		Footballer rice = new Footballer("Declan Rice", 31, 30000, 110, 190, 100, "Arsenal", "Midfielder");
-		Footballer tomiyasu = new Footballer("Takehiro Tomiyasu", 31, 30000, 45, 215, 100, "Arsenal", "Defender");
-		Footballer saliba = new Footballer("William Saliba", 31, 30000, 45, 260, 100, "Arsenal", "Defender");
-		Footballer gabriel = new Footballer("Gabriel Magalhaes", 31, 30000, 45, 245, 100, "Arsenal", "Defender");
-		Footballer white = new Footballer("Ben White", 31, 30000, 75, 215, 100, "Arsenal", "Defender");
-		
-    	Goalkeeper vicario = new Goalkeeper("Guglielmo Vicario", 31, 30000, 130, "Tottenham", "Goalkeeper");
-		Footballer johnson = new Footballer("Brennan Johnson", 31, 30000, 180, 30, 100, "Tottenham", "Striker");
-		Footballer son = new Footballer("Heung-Min Son", 31, 30000, 200, 40, 100, "Tottenham", "Winger");
-		Footballer kulusevski = new Footballer("Dejan Kulusevski", 31, 30000, 180, 65, 100, "Tottenham", "Winger");
-		Footballer maddison = new Footballer("James Maddison", 31, 30000, 90, 180, 100, "Tottenham", "Midfielder");
-		Footballer bissouma = new Footballer("Yves Bissouma", 31, 30000, 180, 120, 100, "Tottenham", "Midfielder");
-		Footballer sarr = new Footballer("Pape Matar Sarr", 31, 30000, 110, 190, 100, "Tottenham", "Midfielder");
-		Footballer udogie = new Footballer("Destiny Udogie", 31, 30000, 45, 215, 100, "Tottenham", "Defender");
-		Footballer vanDeVen = new Footballer("Micky van de Ven", 31, 30000, 45, 260, 100, "Tottenham", "Defender");
-		Footballer romero = new Footballer("Cristian Romero", 31, 30000, 45, 245, 100, "Tottenham", "Defender");
-		Footballer porro = new Footballer("Guglielmo Vicario", 31, 30000, 75, 215, 100, "Tottenham", "Defender");
-		
-		ArrayList<Footballer> arsenal = new ArrayList<Footballer>();
-		arsenal.add(jesus);
-		arsenal.add(trossard);
-		arsenal.add(saka);
-		arsenal.add(odegaard);
-		arsenal.add(partey);
-		arsenal.add(rice);
-		arsenal.add(tomiyasu);
-		arsenal.add(gabriel);
-		arsenal.add(saliba);
-		arsenal.add(white);
-		ArrayList<Footballer> tottenham = new ArrayList<Footballer>();
-		tottenham.add(johnson);
-		tottenham.add(son);
-		tottenham.add(kulusevski);
-		tottenham.add(maddison);
-		tottenham.add(bissouma);
-		tottenham.add(sarr);
-		tottenham.add(udogie);
-		tottenham.add(vanDeVen);
-		tottenham.add(romero);
-		tottenham.add(porro);
-		
-		Match match = new Match(arsenal, tottenham, raya, vicario);
-		
-		match.startRun(jesus, g, cardMap);
+    	Footballer homeStriker = ((Footballer) homeTeam.get("ST"));
+		startRun(homeStriker, g, cardMap);
     }
 
-	public void setHomeTeam(ArrayList<Footballer> homeTeam) {
+	public void setHomeTeam(Map<String, Footballer> homeTeam) {
 		this.homeTeam = homeTeam;
 	}
 
-	public void setAwayTeam(ArrayList<Footballer> awayTeam) {
+	public void setAwayTeam(Map<String, Footballer> awayTeam) {
 		this.awayTeam = awayTeam;
 	}
 
@@ -416,6 +391,114 @@ public class Match {
 
 	public static void setAwayScore(int awayScore) {
 		Match.awayScore = awayScore;
+	}
+
+	public Team getHome() {
+		return home;
+	}
+
+	public void setHome(Team home) {
+		this.home = home;
+	}
+
+	public Team getAway() {
+		return away;
+	}
+
+	public void setAway(Team away) {
+		this.away = away;
+	}
+	
+	public String toString() {
+		return home.getName() + " vs " + away.getName();
+	}
+
+	public String getStadium() {
+		return stadium;
+	}
+
+	public void setStadium(String stadium) {
+		this.stadium = stadium;
+	}
+
+	public CardLayout getLayout() {
+		return layout;
+	}
+
+	public void setLayout(CardLayout layout) {
+		this.layout = layout;
+	}
+
+	public JPanel getMatchPages() {
+		return matchPages;
+	}
+
+	public void setMatchPages(JPanel matchPages) {
+		this.matchPages = matchPages;
+	}
+
+	public Map<String, JPanel> getCardMap() {
+		return cardMap;
+	}
+
+	public void setCardMap(Map<String, JPanel> cardMap) {
+		this.cardMap = cardMap;
+	}
+
+	public MatchWatch getWatchPanel() {
+		return watchPanel;
+	}
+
+	public void setWatchPanel(MatchWatch watchPanel) {
+		this.watchPanel = watchPanel;
+	}
+
+	public MatchScorers getScorerPanel() {
+		return scorerPanel;
+	}
+
+	public void setScorerPanel(MatchScorers scorerPanel) {
+		this.scorerPanel = scorerPanel;
+	}
+
+	public MatchStats getStatsPanel() {
+		return statsPanel;
+	}
+
+	public void setStatsPanel(MatchStats statsPanel) {
+		this.statsPanel = statsPanel;
+	}
+
+	public MatchEvents getEventsPanel() {
+		return eventsPanel;
+	}
+
+	public void setEventsPanel(MatchEvents eventsPanel) {
+		this.eventsPanel = eventsPanel;
+	}
+
+	public MatchAllMatches getAllMatchesPanel() {
+		return allMatchesPanel;
+	}
+
+	public void setAllMatchesPanel(MatchAllMatches allMatchesPanel) {
+		this.allMatchesPanel = allMatchesPanel;
+	}
+
+	public MatchTable getTablePanel() {
+		return tablePanel;
+	}
+
+	public void setTablePanel(MatchTable tablePanel) {
+		this.tablePanel = tablePanel;
+	}
+
+	public MatchRatings getRatingsPanel() {
+		return ratingsPanel;
+	}
+
+	public void setRatingsPanel(MatchRatings ratingsPanel) {
+		this.ratingsPanel = ratingsPanel;
 	}
 	
 }

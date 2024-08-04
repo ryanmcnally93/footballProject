@@ -1,8 +1,11 @@
 package main;
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Map;
 import people.Footballer;
+import people.Goalkeeper;
 import people.Manager;
+import visuals.MatchFrames.MatchEvents;
 
 public class Team {
 
@@ -10,6 +13,7 @@ public class Team {
 	private Manager manager;
 	// Is this the best way to access all players?
 	private Map<String, Footballer> players;
+	private Map<String, Footballer> firstTeam;
 	private long budget;
 	// This will have to be a class eventually
 	private String stadium;
@@ -19,11 +23,15 @@ public class Team {
 	public Team(String name, Manager manager, Map<String, Footballer> players, long budget, String stadium, Color primaryColour, Color secondaryColour) {
 		this.name = name;
 		this.manager = manager;
-		this.players = players;
+		this.firstTeam = players;
 		this.budget = budget;
 		this.stadium = stadium;
 		this.primaryColour = primaryColour;
 		this.secondaryColour = secondaryColour;
+	}
+	
+	public Goalkeeper getGoalkeeper() {
+		return ((Goalkeeper) firstTeam.get("GK"));
 	}
 
 	public String getName() {
@@ -80,6 +88,14 @@ public class Team {
 
 	public void setSecondaryColour(Color secondaryColour) {
 		this.secondaryColour = secondaryColour;
+	}
+
+	public Map<String, Footballer> getFirstTeam() {
+		return firstTeam;
+	}
+
+	public void setFirstTeam(Map<String, Footballer> firstTeam) {
+		this.firstTeam = firstTeam;
 	}
 	
 }
