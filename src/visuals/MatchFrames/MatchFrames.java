@@ -72,7 +72,6 @@ public class MatchFrames extends GamePanel {
         layeredPane.add(footerPanel, JLayeredPane.PALETTE_LAYER);
         layeredPane.add(slidingPanel, JLayeredPane.MODAL_LAYER);
         
-        
         add(layeredPane, BorderLayout.CENTER);
         setVisible(true);
     }

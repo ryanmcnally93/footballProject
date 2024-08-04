@@ -1,7 +1,12 @@
 package main;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
+
 import leagueSetup.League;
 import people.Footballer;
 import people.Goalkeeper;
@@ -10,6 +15,9 @@ import visuals.MatchFrames.GameWindow;
 import visuals.MatchFrames.MatchStats;
 
 public class initialSetup {
+	
+	private League PremierLeague;
+	private GameWindow window;
 	
 	public initialSetup() {
 	Goalkeeper raya = new Goalkeeper("David Raya", 31, 150);
@@ -263,18 +271,33 @@ public class initialSetup {
 	premTeams.put("Aston Villa", AstonVilla);
 	premTeams.put("Chelsea", Chelsea);
 	
-	League PremierLeague = new League("Premier League", "England", 8, premTeams, 1);
-	PremierLeague.getFixturesToString();
+	PremierLeague = new League("Premier League", "England", 8, premTeams, 1);
     
-	GameWindow window = new GameWindow();
+	window = new GameWindow();
     window.setVisible(true);
 	
-    Match match = ((Match) PremierLeague.getFixtures().get("Liverpool vs Aston Villa"));
-	match.displayGame(window);
+//    Match match = ((Match) PremierLeague.getFixtures().get("Chelsea vs Manchester City"));
+//	match.displayGame(window);
 	
+	  StartPage startPage = new StartPage(this);
+	  startPage.displayPage();
 	}
 	
-	public void startSeason() {
-		
+	public void startSeason() {}
+
+	public League getPremierLeague() {
+		return PremierLeague;
+	}
+
+	public void setPremierLeague(League premierLeague) {
+		PremierLeague = premierLeague;
+	}
+
+	public GameWindow getWindow() {
+		return window;
+	}
+
+	public void setWindow(GameWindow window) {
+		this.window = window;
 	}
 }
