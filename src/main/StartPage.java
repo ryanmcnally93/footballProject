@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import general.Team;
+import general.User;
 import visuals.MatchFrames.MatchStats;
 
 import java.awt.event.ActionListener;

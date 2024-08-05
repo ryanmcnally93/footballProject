@@ -21,7 +21,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import main.Match;
+import general.Match;
 import people.Footballer;
 
 public class MatchScorers extends MatchFrames {

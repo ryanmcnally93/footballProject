@@ -1,12 +1,10 @@
-package leagueSetup;
+package general;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import main.Match;
-import main.Team;
 
 public class League {
 
@@ -48,8 +46,8 @@ public class League {
 			}
 		}
 		
-		// Example of how to retrieve a week's information
-		System.out.println(matchWeeks.get(2));
+//		Example of how to retrieve a week's information
+//		System.out.println(matchWeeks.get(2));
 		
 	}
 	

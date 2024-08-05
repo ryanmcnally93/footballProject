@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
-import main.Match;
+import general.Match;
 import people.Footballer;
 import visuals.MatchFrames.MatchFrames;
 import visuals.MatchFrames.MatchFrames.leftClick;

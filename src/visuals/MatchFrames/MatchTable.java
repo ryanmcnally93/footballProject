@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
-import main.Match;
+import general.Match;
 
 public class MatchTable extends MatchFrames {
 

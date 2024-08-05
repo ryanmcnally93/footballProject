@@ -1,4 +1,4 @@
-package main;
+package general;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Graphics;
@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimerTask;
 import javax.swing.JPanel;
+
 import java.util.Timer;
 import people.Footballer;
 import people.Goalkeeper;

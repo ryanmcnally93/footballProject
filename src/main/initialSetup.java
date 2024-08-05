@@ -7,7 +7,8 @@ import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
-import leagueSetup.League;
+import general.League;
+import general.Team;
 import people.Footballer;
 import people.Goalkeeper;
 import people.Manager;

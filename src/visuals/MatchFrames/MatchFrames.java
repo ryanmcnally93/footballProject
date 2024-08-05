@@ -27,7 +27,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
-import main.Match;
+import general.Match;
 import visuals.CustomizedElements.GamePanel;
 import visuals.CustomizedElements.SlidingPanel;
 

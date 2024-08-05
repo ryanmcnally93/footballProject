@@ -1,4 +1,4 @@
-package main;
+package general;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Map;

@@ -3,7 +3,7 @@ import java.lang.Math;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.Team;
+import general.Team;
 
 // Update Character like in vehicle speed
 // Make startrun smaller using more methods
