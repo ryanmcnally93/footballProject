@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimerTask;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import java.util.Timer;
 import people.Footballer;
@@ -93,7 +94,10 @@ public class Match {
 	}
 	
 	public void displayGame(GameWindow window) {
+		window.getContentPane().removeAll();
 		window.getContentPane().add(matchPages, BorderLayout.CENTER);
+		window.revalidate();
+		window.repaint();
         layout.show(matchPages, "Stats");
 	}
 

@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 import general.Team;
 import general.User;
 import visuals.MatchFrames.MatchStats;
+import visuals.ScheduleFrames.Scheduler;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -54,10 +55,6 @@ public class StartPage extends JPanel {
     	Box east = Box.createHorizontalBox();
         east.setPreferredSize(new Dimension(100,200));
         add(east, BorderLayout.EAST); 
-        
-        // Footer
-        
-        
         
         // Left Box
         
@@ -193,7 +190,7 @@ public class StartPage extends JPanel {
         teamsBox.setPreferredSize(new Dimension(600, 90));
 
         // Assuming setup.getPremierLeague().getTeams() returns a Map
-        Map<String, Team> teams = setup.getPremierLeague().getTeams();
+        Map<String, Team> teams = setup.getLeague().getTeams();
         for (Map.Entry<String, Team> each : teams.entrySet()) {
             Team current = each.getValue();
             JButton teamButton = new JButton(current.getName());
@@ -215,15 +212,112 @@ public class StartPage extends JPanel {
 
     public void teamPick(Team team) {
     	User user = new User(name, 18, 40000);
-    	Map<String, Team> cardMap = setup.getPremierLeague().getTeams();
+    	Map<String, Team> cardMap = setup.getLeague().getTeams();
     	((Team) cardMap.get(team.getName())).setManager(user);
     	System.out.println(user.getName() + " is the new manager of " + team.getName());
-    	setup.getPremierLeague().seasonSetup();
-//    	setup.getPremierLeague().getTeamFixturesToString(team);
+    	
+    	// Create Schedule
+    	Scheduler schedule = new Scheduler(user, team, setup.getLeague());
+    	setup.getWindow().getContentPane().remove(this);
+    	setup.getWindow().getContentPane().revalidate();
+    	setup.getWindow().getContentPane().repaint();
+    	schedule.displayPage(setup.getWindow());
     }
     
     public void displayPage() {
-		setup.getWindow().getContentPane().add(this, BorderLayout.CENTER);
+    	setup.getWindow().getContentPane().add(this, BorderLayout.CENTER);
     }
+
+	public JPanel getCenterBox() {
+		return centerBox;
+	}
+
+	public void setCenterBox(JPanel centerBox) {
+		this.centerBox = centerBox;
+	}
+
+	public JPanel getTeamsBox() {
+		return teamsBox;
+	}
+
+	public void setTeamsBox(JPanel teamsBox) {
+		this.teamsBox = teamsBox;
+	}
+
+	public JLabel getTitle() {
+		return title;
+	}
+
+	public void setTitle(JLabel title) {
+		this.title = title;
+	}
+
+	public initialSetup getSetup() {
+		return setup;
+	}
+
+	public void setSetup(initialSetup setup) {
+		this.setup = setup;
+	}
+
+	public Box getCountryBox() {
+		return countryBox;
+	}
+
+	public void setCountryBox(Box countryBox) {
+		this.countryBox = countryBox;
+	}
+
+	public Box getLeagueBox() {
+		return leagueBox;
+	}
+
+	public void setLeagueBox(Box leagueBox) {
+		this.leagueBox = leagueBox;
+	}
+
+	public Box getNameBox() {
+		return nameBox;
+	}
+
+	public void setNameBox(Box nameBox) {
+		this.nameBox = nameBox;
+	}
+
+	public JButton getCountry() {
+		return country;
+	}
+
+	public void setCountry(JButton country) {
+		this.country = country;
+	}
+
+	public JButton getEditButton() {
+		return editButton;
+	}
+
+	public void setEditButton(JButton editButton) {
+		this.editButton = editButton;
+	}
+
+	public JButton getSubmitButton() {
+		return submitButton;
+	}
+
+	public void setSubmitButton(JButton submitButton) {
+		this.submitButton = submitButton;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 	
 }

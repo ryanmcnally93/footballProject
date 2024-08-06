@@ -213,5 +213,29 @@ public class League {
 	public static void setSeason(int season) {
 		League.season = season;
 	}
+
+	public ArrayList<Match> getToLookThrough() {
+		return toLookThrough;
+	}
+
+	public void setToLookThrough(ArrayList<Match> toLookThrough) {
+		this.toLookThrough = toLookThrough;
+	}
+
+	public ArrayList<Match> getTemporary() {
+		return temporary;
+	}
+
+	public void setTemporary(ArrayList<Match> temporary) {
+		this.temporary = temporary;
+	}
+
+	public Map<Integer, Map<String, Match>> getMatchWeeks() {
+		return matchWeeks;
+	}
+
+	public void setMatchWeeks(Map<Integer, Map<String, Match>> matchWeeks) {
+		this.matchWeeks = matchWeeks;
+	}
 	
 }

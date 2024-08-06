@@ -17,7 +17,7 @@ import visuals.MatchFrames.MatchStats;
 
 public class initialSetup {
 	
-	private League PremierLeague;
+	private League league;
 	private GameWindow window;
 	
 	public initialSetup() {
@@ -272,7 +272,7 @@ public class initialSetup {
 	premTeams.put("Aston Villa", AstonVilla);
 	premTeams.put("Chelsea", Chelsea);
 	
-	PremierLeague = new League("Premier League", "England", 8, premTeams, 1);
+	league = new League("Premier League", "England", 8, premTeams, 1);
     
 	window = new GameWindow();
     window.setVisible(true);
@@ -286,12 +286,12 @@ public class initialSetup {
 	
 	public void startSeason() {}
 
-	public League getPremierLeague() {
-		return PremierLeague;
+	public League getLeague() {
+		return league;
 	}
 
-	public void setPremierLeague(League premierLeague) {
-		PremierLeague = premierLeague;
+	public void setLeague(League league) {
+		this.league = league;
 	}
 
 	public GameWindow getWindow() {

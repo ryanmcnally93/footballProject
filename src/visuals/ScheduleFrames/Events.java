@@ -19,7 +19,7 @@ public class Events {
 	private Match match;
 	
 	// The user has a match
-	private Events(Match match, LocalDate date) {
+	public Events(Match match, LocalDate date) {
 		this.date = date;
 		this.type = "Match";
 		this.title  = new JLabel();
