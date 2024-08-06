@@ -20,6 +20,7 @@ import visuals.MatchFrames.MatchScorers;
 import visuals.MatchFrames.MatchStats;
 import visuals.MatchFrames.MatchTable;
 import visuals.MatchFrames.MatchWatch;
+import visuals.ScheduleFrames.Scheduler;
 
 public class Match {
 	
@@ -47,6 +48,8 @@ public class Match {
     private MatchAllMatches allMatchesPanel;
     private MatchTable tablePanel;
     private MatchRatings ratingsPanel;
+    private GameWindow window;
+    private Scheduler schedule;
 	
 	public Match() {};
 	
@@ -93,12 +96,14 @@ public class Match {
 		
 	}
 	
-	public void displayGame(GameWindow window) {
+	public void displayGame(GameWindow window, Scheduler schedule) {
+		this.window = window;
+		this.schedule = schedule;
 		window.getContentPane().removeAll();
 		window.getContentPane().add(matchPages, BorderLayout.CENTER);
+        layout.show(matchPages, "Stats");
 		window.revalidate();
 		window.repaint();
-        layout.show(matchPages, "Stats");
 	}
 
 	public Goalkeeper getHomegk() {
@@ -187,7 +192,7 @@ public class Match {
 						// ******
 						
 						Timer timer = new Timer();
-						int delay = 6000;
+						int delay = 7000;
 						Match match = this;
 						timer.schedule(new TimerTask() {
 						    @Override
@@ -302,6 +307,11 @@ public class Match {
 	public boolean fullTimeCheck(Map<String, JPanel> cardMap) {
 		if (this.getMinute() >= 90) {
 	        System.out.println("\nFull time!");
+	        for (JPanel page : cardMap.values()) {
+	            if (page instanceof MatchFrames) {
+	            	((MatchFrames) page).createContinueButton();
+	            }
+	        }
 	        return true;
 	    } else {
 	    	return false;
@@ -504,6 +514,22 @@ public class Match {
 
 	public void setRatingsPanel(MatchRatings ratingsPanel) {
 		this.ratingsPanel = ratingsPanel;
+	}
+
+	public GameWindow getWindow() {
+		return window;
+	}
+
+	public void setWindow(GameWindow window) {
+		this.window = window;
+	}
+
+	public Scheduler getSchedule() {
+		return schedule;
+	}
+
+	public void setSchedule(Scheduler schedule) {
+		this.schedule = schedule;
 	}
 	
 }

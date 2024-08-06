@@ -17,6 +17,7 @@ public class League {
 	private static int season = 0;
 	private ArrayList<Match> toLookThrough, temporary;
 	private Map<Integer, Map<String, Match>> matchWeeks;
+	private boolean anotherTry = false;
 	
 	public League(String name, String country, int numOfTeams, Map<String, Team> teams, int tier) {
 		this.name = name;
@@ -37,12 +38,16 @@ public class League {
 		
 		int weeks = (teams.size()-1)*2;
 
-		for(int i=0; i<weeks; i++) {
+		for(int i = 0; i<weeks; i++) {
 			Map<String, Match> currentMW = createMatchWeek(toLookThrough);
 			matchWeeks.put(i + 1, currentMW);
 			for(Map.Entry<String, Match> each : currentMW.entrySet()) {
 				int j = i + 1;
 				System.out.println("Match Week " + j + " contains: " + each.getKey());
+				if(anotherTry==true) {
+					System.out.println("Decreasing 'I'");
+					i--;
+				}
 			}
 		}
 		
@@ -60,10 +65,24 @@ public class League {
 		do {
 			restart = false;
 			while(MW.size() < 4 && attempts < maxAttempts) {
-				attempts++;
-				
+				System.out.println("Running While again");
 				if(temporary.size() == 0) {
+					System.out.println("Temporary is 0 again");
 					temporary = new ArrayList<>(toLookThrough);
+					MW.clear();
+					
+					if(attempts == 10) {
+						//toLookThrough doesn't contain MW12 matches
+						// They need to be readded
+						System.out.println("Fixtures = " + tolook);
+						System.out.println("MW12 = " + matchWeeks.get(12));
+						System.out.println("Temporary = " + temporary);
+						
+						matchWeeks.remove(12);
+						anotherTry = true;
+					}
+					
+					attempts++;
 					restart = true;
 					continue;
 				} else {
@@ -75,22 +94,21 @@ public class League {
 					String team1 = two[0].trim();
 					String team2 = two[1].trim();
 					
-					// Set checker
-					Boolean checker = false;
+					Boolean conflicts = false;
 					
 					// Check to see if this team is already playing this week
-					
 					for(Map.Entry<String, Match> each : MW.entrySet()) {
 						if(each.getKey().contains(team1) || each.getKey().contains(team2)) {
+							// We are removing this match from temporary
+							// As we don't want to land on this match twice
 							temporary.remove(chosen);
-							MW.clear();
-							attempts = 0;
-							checker = true;
+							conflicts = true;
 							break;
 						}	
 					}
 					
-					if(!checker) {
+					// If the match doesn't contain conflicts, we can add
+					if(!conflicts) {
 						MW.put(chosen.toString(), chosen);
 						temporary.remove(chosen);
 					}

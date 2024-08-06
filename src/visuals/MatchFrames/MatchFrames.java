@@ -8,6 +8,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,7 @@ public class MatchFrames extends GamePanel {
 	private JLayeredPane layeredPane;
 	private HeaderPanel headerPanel;
 	private FooterPanel footerPanel;
+//	private MouseListener ml;
 
 	public MatchFrames(CardLayout cardLayout, JPanel mainPanel, Map<String, JPanel> cardMap, Match match) {
     	super();
@@ -110,13 +112,14 @@ public class MatchFrames extends GamePanel {
 		
 	}
 	
-	
 	public class FooterPanel extends JPanel {
 		
 		private static final long serialVersionUID = 2730359600520156788L;
 		private JButton prevButton;
 		private JButton playButton;
 		private JButton nextButton;
+		private JPanel buttonPanel;
+		private ActionMap actionMap;
 		
 		public FooterPanel() {
 			
@@ -144,7 +147,7 @@ public class MatchFrames extends GamePanel {
 	        });
 	        
 	
-	        JPanel buttonPanel = new JPanel();
+	        buttonPanel = new JPanel();
 	        buttonPanel.add(prevButton);
 	        buttonPanel.add(playButton);
 	        buttonPanel.add(nextButton);
@@ -153,7 +156,7 @@ public class MatchFrames extends GamePanel {
 	        add(buttonPanel, BorderLayout.CENTER);
 		
 	        InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-	        ActionMap actionMap = getActionMap();
+	        actionMap = getActionMap();
 	        
 	        inputMap.put(KeyStroke.getKeyStroke("LEFT"), LEFT);
 	        actionMap.put(LEFT, new leftClick());
@@ -165,6 +168,47 @@ public class MatchFrames extends GamePanel {
 	        actionMap.put(PLAY, new PlayGame());
 	        
 		}
+
+		public ActionMap getFooterActionMap() {
+			return actionMap;
+		}
+
+		public void setFooterActionMap(ActionMap actionMap) {
+			this.actionMap = actionMap;
+		}
+	}
+	
+	public void createContinueButton() {
+		footerPanel.buttonPanel.remove(footerPanel.nextButton);
+		footerPanel.buttonPanel.remove(footerPanel.playButton);
+		JButton cont = new JButton("Continue");
+		
+		cont.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            	match.getWindow().getContentPane().removeAll();
+            	match.getSchedule().displayPage(match.getWindow());
+            	match.getWindow().revalidate();
+            	match.getWindow().repaint();
+            }
+        });
+		
+		Action contAction = new AbstractAction() {
+		    private static final long serialVersionUID = -7844475567826191445L;
+			@Override
+		    public void actionPerformed(ActionEvent e) {
+		    	match.getWindow().getContentPane().removeAll();
+            	match.getSchedule().displayPage(match.getWindow());
+            	match.getWindow().revalidate();
+            	match.getWindow().repaint();
+		    }
+		};
+		footerPanel.getFooterActionMap().put(PLAY, contAction);
+		
+		footerPanel.buttonPanel.add(cont);
+		footerPanel.buttonPanel.add(footerPanel.nextButton);
+		footerPanel.buttonPanel.revalidate();
+		footerPanel.buttonPanel.repaint();
 	}
 	
     
@@ -252,6 +296,14 @@ public class MatchFrames extends GamePanel {
 
 	public void setLayeredPane(JLayeredPane layeredPane) {
 		this.layeredPane = layeredPane;
+	}
+
+	public FooterPanel getFooterPanel() {
+		return footerPanel;
+	}
+
+	public void setFooterPanel(FooterPanel footerPanel) {
+		this.footerPanel = footerPanel;
 	}
 	
 }

@@ -34,6 +34,8 @@ public class Scheduler extends JPanel {
 	private JLabel todaysDate;
 	private JPanel mainPanel;
 	private GameWindow window;
+	private Box eventContainer;
+	private Match match;
 	
 	// New Game Constructor
 	public Scheduler(User user, Team team, League league) {
@@ -91,6 +93,11 @@ public class Scheduler extends JPanel {
 		window.getContentPane().add(this, BorderLayout.CENTER);
 		window.revalidate();
 		window.repaint();
+		if(match != null) {
+			if(match.getMinute() == 90) {
+				eventContainer.removeAll();
+			}
+		}
 	}
 	
 	public void addDay() {
@@ -101,27 +108,26 @@ public class Scheduler extends JPanel {
 			setMatchdays();
 		}
 		for(Events each : events) {
-			System.out.println("Each: " + each.getDate() + ". Not Each: " + getDate());
 			if(each.getDate().equals(getDate())) {
-				System.out.println("ShowEvent Triggered");
 				showEvent(each);
+				if(each.getType().equals("Match")) {
+					this.match = each.getMatch();
+				}
 			}
 		}
-		System.out.println(date);
 	}
 	
 	public void showEvent(Events event) {
-		System.out.println("ShowEvent is triggered");
-		Box eventContainer = Box.createHorizontalBox();
+		eventContainer = Box.createHorizontalBox();
 		eventContainer.setPreferredSize(new Dimension(600,440));
 		JLabel matchTitle = new JLabel(event.getMatch().getHome().getName() + " vs " + event.getMatch().getAway().getName());
 		eventContainer.add(matchTitle);
 		JButton playGame = new JButton("Play");
-		
+		Scheduler sch = this;
 		playGame.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				event.getMatch().displayGame(window);
+				event.getMatch().displayGame(window, sch);
 			}
 		});
 		eventContainer.add(playGame);
@@ -135,7 +141,7 @@ public class Scheduler extends JPanel {
 		Map<String, Match> MW1 = league.getMatchWeeks().get(1);
 		for(Map.Entry<String, Match> each : MW1.entrySet()) {
 			if(each.getKey().contains(team.getName())) {
-				System.out.println("Found a match: " + each.getValue().getHome().getName() + " vs " + each.getValue().getHome().getName());
+				System.out.println("Found a match: " + each.getValue().getHome().getName() + " vs " + each.getValue().getAway().getName());
 				Match ourMatch = each.getValue();
 				Events matchOne = new Events(ourMatch, LocalDate.of(2024, 6, 10));
 				events.add(matchOne);
