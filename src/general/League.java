@@ -40,14 +40,15 @@ public class League {
 
 		for(int i = 0; i<weeks; i++) {
 			Map<String, Match> currentMW = createMatchWeek(toLookThrough);
+			if(anotherTry==true) {
+				System.out.println("Decreasing 'I'");
+				i--;
+				anotherTry = false;
+			}
 			matchWeeks.put(i + 1, currentMW);
 			for(Map.Entry<String, Match> each : currentMW.entrySet()) {
 				int j = i + 1;
 				System.out.println("Match Week " + j + " contains: " + each.getKey());
-				if(anotherTry==true) {
-					System.out.println("Decreasing 'I'");
-					i--;
-				}
 			}
 		}
 		
@@ -65,9 +66,13 @@ public class League {
 		do {
 			restart = false;
 			while(MW.size() < 4 && attempts < maxAttempts) {
+				
 				System.out.println("Running While again");
+				
 				if(temporary.size() == 0) {
+					
 					System.out.println("Temporary is 0 again");
+					
 					temporary = new ArrayList<>(toLookThrough);
 					MW.clear();
 					
@@ -78,11 +83,21 @@ public class League {
 						System.out.println("MW12 = " + matchWeeks.get(12));
 						System.out.println("Temporary = " + temporary);
 						
+						for(Map.Entry<String, Match> eachMatch : matchWeeks.get(12).entrySet()) {
+							System.out.println("Before: " + toLookThrough);
+							toLookThrough.add(eachMatch.getValue());
+							System.out.println("After" + toLookThrough);
+							temporary = new ArrayList<>(toLookThrough);
+						}
+						
 						matchWeeks.remove(12);
 						anotherTry = true;
+						attempts = 0;
+					} else {
+						attempts++;
 					}
 					
-					attempts++;
+					System.out.println(attempts);
 					restart = true;
 					continue;
 				} else {
@@ -109,6 +124,7 @@ public class League {
 					
 					// If the match doesn't contain conflicts, we can add
 					if(!conflicts) {
+						System.out.println("Match added: " + chosen.toString());
 						MW.put(chosen.toString(), chosen);
 						temporary.remove(chosen);
 					}
