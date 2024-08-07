@@ -18,6 +18,7 @@ import general.League;
 import general.Match;
 import general.Team;
 import general.User;
+import visuals.CustomizedElements.CustomizedButton;
 import visuals.MatchFrames.GameWindow;
 
 public class Scheduler extends JPanel {

@@ -19,6 +19,7 @@ public class SlidingPanel extends JPanel {
     public SlidingPanel() {
         yPosition = 600;
         setOpaque(false);
+        setDoubleBuffered(true);
     }
 
     public void startSliding(String name, int minute) {
@@ -69,7 +70,7 @@ public class SlidingPanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    	super.paintComponent(g);
         g.setColor(Color.RED);
         int seventyfivepercent = (int )(getWidth()*0.75);
         g.fillRect((int) ((getWidth()-seventyfivepercent)/2), yPosition, seventyfivepercent, panelHeight);

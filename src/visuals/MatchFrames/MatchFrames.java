@@ -29,6 +29,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
 import general.Match;
+import visuals.CustomizedElements.CustomizedButton;
 import visuals.CustomizedElements.GamePanel;
 import visuals.CustomizedElements.SlidingPanel;
 
@@ -115,9 +116,9 @@ public class MatchFrames extends GamePanel {
 	public class FooterPanel extends JPanel {
 		
 		private static final long serialVersionUID = 2730359600520156788L;
-		private JButton prevButton;
-		private JButton playButton;
-		private JButton nextButton;
+		private CustomizedButton prevButton;
+		private CustomizedButton playButton;
+		private CustomizedButton nextButton;
 		private JPanel buttonPanel;
 		private ActionMap actionMap;
 		
@@ -126,8 +127,8 @@ public class MatchFrames extends GamePanel {
 			setLayout(new BorderLayout());
 	        setBackground(Color.LIGHT_GRAY);
 			
-			prevButton = new JButton("Prev");
-	        nextButton = new JButton("Next");
+			prevButton = new CustomizedButton("Prev");
+	        nextButton = new CustomizedButton("Next");
 	
 	        prevButton.addActionListener(e -> {
 	        	layout.previous(pages);
@@ -137,7 +138,7 @@ public class MatchFrames extends GamePanel {
 	            layout.next(pages);
 	        });
 	        
-	        playButton = new JButton("Play");
+	        playButton = new CustomizedButton("Play");
 	        playButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 	        playButton.addMouseListener(new MouseAdapter() {
 	            @Override
@@ -181,7 +182,7 @@ public class MatchFrames extends GamePanel {
 	public void createContinueButton() {
 		footerPanel.buttonPanel.remove(footerPanel.nextButton);
 		footerPanel.buttonPanel.remove(footerPanel.playButton);
-		JButton cont = new JButton("Continue");
+		CustomizedButton cont = new CustomizedButton("Continue");
 		
 		cont.addMouseListener(new MouseAdapter() {
             @Override

@@ -3,5 +3,6 @@ Could we target the revalidate and repaints so they are doing less work?
 
 Match Scheduler sometimes gets stuck on creating Match Week 12.
 There will be 8 games left and we are unable to arrange 2 weeks where a team doesn't play twice..
+FIXED WITH REMOVING MATCH WEEK 12 AND ADDING FIXTURES BACK TO ARRAY
 
 Match Play button must replace advance button on scheduler

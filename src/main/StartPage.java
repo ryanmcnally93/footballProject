@@ -18,6 +18,7 @@ import javax.swing.SwingConstants;
 
 import general.Team;
 import general.User;
+import visuals.CustomizedElements.CustomizedButton;
 import visuals.MatchFrames.MatchStats;
 import visuals.ScheduleFrames.Scheduler;
 
@@ -31,7 +32,7 @@ public class StartPage extends JPanel {
     private JLabel title;
     private initialSetup setup;
     private Box countryBox, leagueBox, nameBox;
-    private JButton country, editButton, submitButton;
+    private CustomizedButton country, editButton, submitButton;
     private String name;
 
     public StartPage(initialSetup setup) {
@@ -71,7 +72,7 @@ public class StartPage extends JPanel {
         nameBox.setPreferredSize(new Dimension(600, 30));
         nameBox.add(Box.createHorizontalGlue());
         JTextField nameField = new JTextField(20);
-        submitButton = new JButton("Submit");
+        submitButton = new CustomizedButton("Submit");
         nameBox.add(nameField);
         nameBox.add(submitButton);
         nameBox.add(Box.createHorizontalGlue());
@@ -103,7 +104,7 @@ public class StartPage extends JPanel {
         nameBox.add(Box.createHorizontalGlue());
         JTextField nameField = new JTextField(20);
         nameField.setText(name);
-        submitButton = new JButton("Submit");
+        submitButton = new CustomizedButton("Submit");
         
         submitButton.addActionListener(new ActionListener() {
             @Override
@@ -127,7 +128,7 @@ public class StartPage extends JPanel {
         nameBox.add(Box.createHorizontalGlue());
         JLabel result = new JLabel(userInput);
         nameBox.add(result);
-        editButton = new JButton("Edit");
+        editButton = new CustomizedButton("Edit");
         nameBox.add(editButton);
         nameBox.add(Box.createHorizontalGlue());
         nameBox.revalidate();
@@ -143,7 +144,7 @@ public class StartPage extends JPanel {
         countryBox = Box.createHorizontalBox();
         countryBox.setPreferredSize(new Dimension(600, 30));
         countryBox.add(Box.createHorizontalGlue());
-        country = new JButton("England");
+        country = new CustomizedButton("England");
         
         country.addMouseListener(new MouseAdapter() {
         	@Override
@@ -284,27 +285,27 @@ public class StartPage extends JPanel {
 		this.nameBox = nameBox;
 	}
 
-	public JButton getCountry() {
+	public CustomizedButton getCountry() {
 		return country;
 	}
 
-	public void setCountry(JButton country) {
+	public void setCountry(CustomizedButton country) {
 		this.country = country;
 	}
 
-	public JButton getEditButton() {
+	public CustomizedButton getEditButton() {
 		return editButton;
 	}
 
-	public void setEditButton(JButton editButton) {
+	public void setEditButton(CustomizedButton editButton) {
 		this.editButton = editButton;
 	}
 
-	public JButton getSubmitButton() {
+	public CustomizedButton getSubmitButton() {
 		return submitButton;
 	}
 
-	public void setSubmitButton(JButton submitButton) {
+	public void setSubmitButton(CustomizedButton submitButton) {
 		this.submitButton = submitButton;
 	}
 

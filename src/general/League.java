@@ -17,7 +17,7 @@ public class League {
 	private static int season = 0;
 	private ArrayList<Match> toLookThrough, temporary;
 	private Map<Integer, Map<String, Match>> matchWeeks;
-	private boolean anotherTry = false;
+	private boolean restartWholeProcess = false;
 	
 	public League(String name, String country, int numOfTeams, Map<String, Team> teams, int tier) {
 		this.name = name;
@@ -40,35 +40,41 @@ public class League {
 
 		for(int i = 0; i<weeks; i++) {
 			Map<String, Match> currentMW = createMatchWeek(toLookThrough);
-			if(anotherTry==true) {
-				System.out.println("Decreasing 'I'");
-				i--;
-				anotherTry = false;
-			}
-			matchWeeks.put(i + 1, currentMW);
-			for(Map.Entry<String, Match> each : currentMW.entrySet()) {
-				int j = i + 1;
-				System.out.println("Match Week " + j + " contains: " + each.getKey());
+			if(restartWholeProcess  ==  true) {
+				
+				System.out.println("We are acting on the restart whole process!");
+				
+				for (Map<String, Match> eachWeek : matchWeeks.values()) {
+		            toLookThrough.addAll(eachWeek.values());
+		        }
+				
+				matchWeeks.clear();
+				i = -1;
+				restartWholeProcess = false;
+				
+			} else {
+				matchWeeks.put(i + 1, currentMW);
+				for(Map.Entry<String, Match> each : currentMW.entrySet()) {
+					int j = i + 1;
+					System.out.println("Match Week " + j + " contains: " + each.getKey());
+				}
 			}
 		}
-		
-//		Example of how to retrieve a week's information
-//		System.out.println(matchWeeks.get(2));
-		
 	}
 	
 	public Map<String, Match> createMatchWeek(ArrayList<Match> tolook){
 		Map<String, Match> MW = new HashMap<>();
+		temporary  = new ArrayList<>(toLookThrough);
 		
 		int attempts = 0;
-        int maxAttempts = 100;
         Boolean restart;
 		do {
 			restart = false;
-			while(MW.size() < 4 && attempts < maxAttempts) {
+			while(MW.size() < 4 && restartWholeProcess  == false) {
 				
 				System.out.println("Running While again");
-				
+				System.out.println("To Look Through Size:  "+toLookThrough.size());
+				System.out.println("Temporary Size:  "+temporary.size());
 				if(temporary.size() == 0) {
 					
 					System.out.println("Temporary is 0 again");
@@ -77,29 +83,15 @@ public class League {
 					MW.clear();
 					
 					if(attempts == 10) {
-						//toLookThrough doesn't contain MW12 matches
-						// They need to be readded
-						System.out.println("Fixtures = " + tolook);
-						System.out.println("MW12 = " + matchWeeks.get(12));
-						System.out.println("Temporary = " + temporary);
-						
-						for(Map.Entry<String, Match> eachMatch : matchWeeks.get(12).entrySet()) {
-							System.out.println("Before: " + toLookThrough);
-							toLookThrough.add(eachMatch.getValue());
-							System.out.println("After" + toLookThrough);
-							temporary = new ArrayList<>(toLookThrough);
-						}
-						
-						matchWeeks.remove(12);
-						anotherTry = true;
+						System.out.println("Restarting Whole Process!");
+						restartWholeProcess  = true;
 						attempts = 0;
+						break;
 					} else {
 						attempts++;
 					}
-					
 					System.out.println(attempts);
 					restart = true;
-					continue;
 				} else {
 					int randomInt = (int) (Math.random() * temporary.size());
 					Match chosen = temporary.get(randomInt);

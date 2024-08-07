@@ -8,14 +8,12 @@ import visuals.MatchFrames.GameWindow;
 public class StartGame {
 
 	public static void main(String[] args) {
-		try {
-            UIManager.setLookAndFeel(new NimbusLookAndFeel());
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
         SwingUtilities.invokeLater(() -> {
-            initialSetup start = new initialSetup();
+        	initialSetup start = new initialSetup();
         });
+        
+        
+        
     }
 
 }

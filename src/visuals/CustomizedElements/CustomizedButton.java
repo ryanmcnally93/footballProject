@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JButton;
+import javax.swing.LookAndFeel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.InsetsUIResource;
@@ -15,36 +17,23 @@ public class CustomizedButton extends JButton {
 
 	public CustomizedButton(String text) {
 		super(text);
-		
-	    setContentAreaFilled(false);
-	    setOpaque(false);
-	    setFocusPainted(false);
-	    setMargin(new InsetsUIResource(-3, 14, -3, 14));
-    	
-    	addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                setForeground(Color.WHITE);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                setForeground(Color.BLACK);
-            }
-        });
+		applyNimbus();
 	}
 	
-	@Override
-    protected void paintComponent(Graphics g) {
-        if (getModel().isRollover()) {
-            g.setColor(Color.LIGHT_GRAY.darker());
-        } else if (getModel().isRollover()) {
-            g.setColor(Color.LIGHT_GRAY.brighter());
-        } else {
-            g.setColor(Color.WHITE);
-        }
-        g.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
-        super.paintComponent(g);
-    }
+	public void applyNimbus() {
+//		try {
+//            // Save the current look and feel
+//            LookAndFeel currentLookAndFeel = UIManager.getLookAndFeel();
+//
+//            // Set Nimbus Look and Feel
+//            UIManager.setLookAndFeel(new NimbusLookAndFeel());
+//            SwingUtilities.updateComponentTreeUI(this);
+//
+//            // Restore the previous look and feel
+//            UIManager.setLookAndFeel(currentLookAndFeel);
+//        } catch (UnsupportedLookAndFeelException e) {
+//            e.printStackTrace();
+//        }
+	}
 	
 }
