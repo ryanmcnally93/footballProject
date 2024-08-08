@@ -2,6 +2,8 @@ package general;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Graphics;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimerTask;
@@ -50,6 +52,7 @@ public class Match {
     private MatchRatings ratingsPanel;
     private GameWindow window;
     private Scheduler schedule;
+    private LocalDateTime dateTime;
 	
 	public Match() {};
 	
@@ -118,6 +121,15 @@ public class Match {
 		
 	}
 	
+	public void setDateTime(LocalDateTime datetime) {
+		this.dateTime = datetime;
+	}
+	
+	public LocalDateTime getDateTime() {
+		return dateTime;
+	}
+
+
 	/* This is effectively a start game method,
 	first time round is run with Ryan
 	but whoever wins the ball continues a run of their own */

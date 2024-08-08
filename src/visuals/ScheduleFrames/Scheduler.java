@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Map;
 import javax.swing.Box;
@@ -24,7 +25,7 @@ import visuals.MatchFrames.GameWindow;
 public class Scheduler extends JPanel {
 
 	private static final long serialVersionUID = -949295084027854854L;
-	private LocalDate date;
+	private LocalDateTime date;
 	private Box header;
 	private JPanel eventsBox;
 	private JButton advance;
@@ -40,7 +41,7 @@ public class Scheduler extends JPanel {
 	
 	// New Game Constructor
 	public Scheduler(User user, Team team, League league) {
-		this.date = LocalDate.of(2024,  6, 1);
+		this.date = LocalDateTime.of(2024,  6, 1, 0, 0);
 		this.user = user;
 		this.team = team;
 		this.league = league;
@@ -104,12 +105,31 @@ public class Scheduler extends JPanel {
 	public void addDay() {
 		date = date.plusDays(1);
 		todaysDate.setText("Today's date is: " + getDate());
-		if(date.isEqual(LocalDate.of(2024, 06, 05))) {
-			league.seasonSetup();
+		
+		// WE NEED TO GIVE THIS YEAR THE VALUE OF SEASON
+		
+		// This will decide which matches are played on which week
+		if(date.toLocalDate().isEqual(LocalDate.of(2024, 06, 05))) {
+			league.assignFixturesToWeekNumber();
+		}
+		// This will set the dates for each match
+		if(date.toLocalDate().isEqual(LocalDate.of(2024, 06, 06))) {
+			league.assignDatetimesToWeekNumber();
+		}
+		if(date.toLocalDate().isEqual(LocalDate.of(2024, 06, 07))) {
+			league.assignSlotsToMatches();
+		}
+		if(date.toLocalDate().isEqual(LocalDate.of(2024, 06, 8))) {
+			
 			setMatchdays();
+			
+			// Do I need to make a list of absent matches so I can call
+			// match.playAbsently();?
+			
 		}
 		for(Events each : events) {
-			if(each.getDate().equals(getDate())) {
+			System.out.println(each);
+			if(each.getDate().toLocalDate().equals(getDate().toLocalDate())) {
 				showEvent(each);
 				if(each.getType().equals("Match")) {
 					this.match = each.getMatch();
@@ -139,23 +159,23 @@ public class Scheduler extends JPanel {
 	}
 	
 	public void setMatchdays() {
-		Map<String, Match> MW1 = league.getMatchWeeks().get(1);
-		for(Map.Entry<String, Match> each : MW1.entrySet()) {
+		// This is an event creator for each user fixture
+		for(Map.Entry<String, Match> each : league.getFixtures().entrySet()) {
 			if(each.getKey().contains(team.getName())) {
 				System.out.println("Found a match: " + each.getValue().getHome().getName() + " vs " + each.getValue().getAway().getName());
 				Match ourMatch = each.getValue();
-				Events matchOne = new Events(ourMatch, LocalDate.of(2024, 6, 10));
-				events.add(matchOne);
-				break;
+				Events matchEvent = new Events(ourMatch);
+				events.add(matchEvent);
 			}
 		}
+		System.out.println(events);
 	}
 
-	public LocalDate getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 

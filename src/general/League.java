@@ -1,4 +1,6 @@
 package general;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,7 +18,8 @@ public class League {
 	private Map<String, Match> fixtures;
 	private static int season = 0;
 	private ArrayList<Match> toLookThrough, temporary;
-	private Map<Integer, Map<String, Match>> matchWeeks;
+	private Map<Integer, Map<String, Match>> matchWeeksMatches;
+	private Map<Integer, Map<Integer, LocalDateTime>> matchWeeksSlots;
 	private boolean restartWholeProcess = false;
 	
 	public League(String name, String country, int numOfTeams, Map<String, Team> teams, int tier) {
@@ -25,13 +28,14 @@ public class League {
 		this.numOfTeams = numOfTeams;
 		this.teams = teams;
 		this.tier = tier;
-		this.season++;
 		this.fixtures = new HashMap<>();
-		this.matchWeeks = new HashMap<>();
+		this.matchWeeksMatches = new HashMap<>();
+		this.matchWeeksSlots = new HashMap<>();
 	}
 	
-	public void seasonSetup() {
+	public void assignFixturesToWeekNumber() {
 		createFixtures();
+		season++;
 		
 		toLookThrough = new ArrayList<Match>(getFixtures().values());
 		temporary = new ArrayList<>(toLookThrough);
@@ -44,16 +48,16 @@ public class League {
 				
 				System.out.println("We are acting on the restart whole process!");
 				
-				for (Map<String, Match> eachWeek : matchWeeks.values()) {
+				for (Map<String, Match> eachWeek : matchWeeksMatches.values()) {
 		            toLookThrough.addAll(eachWeek.values());
 		        }
 				
-				matchWeeks.clear();
+				matchWeeksMatches.clear();
 				i = -1;
 				restartWholeProcess = false;
 				
 			} else {
-				matchWeeks.put(i + 1, currentMW);
+				matchWeeksMatches.put(i + 1, currentMW);
 				for(Map.Entry<String, Match> each : currentMW.entrySet()) {
 					int j = i + 1;
 					System.out.println("Match Week " + j + " contains: " + each.getKey());
@@ -167,6 +171,136 @@ public class League {
 		}
 	}
 
+	public void assignSlotsToMatches() {
+		// STEP 1
+		for(int i = 1; i<=matchWeeksMatches.size() ; i++ ) {
+			
+			Map<String, Match> thisWeeksMatches = matchWeeksMatches.get(i);
+			Map<Integer, LocalDateTime> thisWeeksSlots = matchWeeksSlots.get(i);
+			Match match;
+			for(Map.Entry<String, Match> matches : thisWeeksMatches.entrySet()) {
+				match = matches.getValue();
+				int randomInt = 0;
+				LocalDateTime slot = null;
+				
+				while(slot == null) {
+					randomInt = 1 + (int) (Math.random() * (thisWeeksSlots.size() - 1));
+					slot = thisWeeksSlots.get(randomInt);
+				}
+				
+				match.setDateTime(slot);
+				
+				thisWeeksSlots.remove(randomInt);
+				
+				System.out.println(match.toString() + ": " + match.getDateTime());
+			}
+		}
+		
+		// For each of the 14 matchWeeks
+		
+		
+		
+		
+		// Look through matches
+		// Look through available slots
+		// Clear two Maps and create a third that contains 
+		// Map<Integer*(MW)*, Map<Match, DateTime>>
+		
+		// STEP 2
+		
+		// Create a class called absent matches that does the same thing as
+		// Match class but without talking to matchframes or responding to user.
+		// This class must be created and ran when the user leaves the day
+		// that that match is on, print to console, must excluse users game.
+	}
+	
+	public void assignDatetimesToWeekNumber() {
+		int startYear = 2023 + season;
+		LocalDateTime saturday = findFirstSaturday(startYear);
+		normalWeekend(1, saturday);
+		normalWeekend(2, saturday.plusWeeks(1));
+		normalWeekend(3, saturday.plusWeeks(2));
+		normalWeekend(4, saturday.plusWeeks(4));
+		normalWeekend(5, saturday.plusWeeks(5));
+		normalWeekend(6, saturday.plusWeeks(6));
+		normalWeekend(7, saturday.plusWeeks(7));
+		normalWeekend(8, saturday.plusWeeks(9));
+		normalWeekend(9, saturday.plusWeeks(10));
+		normalWeekend(10, saturday.plusWeeks(11));
+		normalWeekend(11, saturday.plusWeeks(12));
+		normalWeekend(12, saturday.plusWeeks(14));
+		normalWeekend(13, saturday.plusWeeks(15));
+		// This needs to be changed
+		normalWeekend(14, saturday.plusWeeks(16)); // First Tuesday Fixtures
+		System.out.println("Match Week 1 slots: " + matchWeeksSlots.get(1));
+		System.out.println("Match Weel 2 slots: " + matchWeeksSlots.get(2));
+		System.out.println("Match Weel 3 slots: " + matchWeeksSlots.get(3));
+		System.out.println("Match Weel 4 slots: " + matchWeeksSlots.get(4));
+		System.out.println("Match Weel 5 slots: " + matchWeeksSlots.get(5));
+		System.out.println("Match Weel 6 slots: " + matchWeeksSlots.get(6));
+		System.out.println("Match Weel 7 slots: " + matchWeeksSlots.get(7));
+		System.out.println("Match Weel 8 slots: " + matchWeeksSlots.get(8));
+		System.out.println("Match Weel 9 slots: " + matchWeeksSlots.get(9));
+		System.out.println("Match Weel 10 slots: " + matchWeeksSlots.get(10));
+		System.out.println("Match Weel 11 slots: " + matchWeeksSlots.get(11));
+		System.out.println("Match Weel 12 slots: " + matchWeeksSlots.get(12));
+		System.out.println("Match Weel 13 slots: " + matchWeeksSlots.get(13));
+		System.out.println("Match Weel 14 slots: " + matchWeeksSlots.get(14));
+	}
+	
+	public void normalWeekend(int matchWeek, LocalDateTime saturday){
+		// This needs to be a separate method, somewhere else preferrably
+		// We will use this to enter a matchweek and this will generate
+		// times for a normal weekend
+		Map<Integer, LocalDateTime> thisWeek = new HashMap<>();
+		
+		LocalDateTime eight = saturday.minusDays(1).withHour(20).withMinute(0).withSecond(0).withNano(0);
+		
+		thisWeek.put(1, eight);
+		
+		LocalDateTime twelveThirty = saturday.withHour(12).withMinute(30).withSecond(0).withNano(0);
+		LocalDateTime three = saturday.withHour(15).withMinute(0).withSecond(0).withNano(0);
+		LocalDateTime fiveThirty = saturday.withHour(17).withMinute(30).withSecond(0).withNano(0);
+		
+		thisWeek.put(2, twelveThirty);
+		thisWeek.put(3, three);
+		thisWeek.put(4, three);
+		thisWeek.put(5, three);
+		thisWeek.put(6, three);
+		thisWeek.put(7, fiveThirty);
+		
+		LocalDateTime two = saturday.plusDays(1).withHour(14).withMinute(0).withSecond(0).withNano(0);
+		LocalDateTime fourThirty = saturday.plusDays(1).withHour(16).withMinute(30).withSecond(0).withNano(0);
+		LocalDateTime sundayEight = saturday.plusDays(1).withHour(20).withMinute(0).withSecond(0).withNano(0);
+		
+		thisWeek.put(8, two);
+		thisWeek.put(9, fourThirty);
+		thisWeek.put(10, sundayEight);
+		
+		matchWeeksSlots.put(matchWeek, thisWeek);
+	}
+	
+	public LocalDateTime findFirstSaturday(int year) {
+		LocalDateTime firstGameDay = LocalDateTime.of(year, 8, 15, 0, 0);
+        DayOfWeek dayOfWeek = firstGameDay.getDayOfWeek();
+        // Find the closest saturday to that
+        int daysUntilSaturday = DayOfWeek.SATURDAY.getValue() - dayOfWeek.getValue();
+		LocalDateTime closestSaturday;
+		if (daysUntilSaturday == 0) {
+            // It's already Saturday
+            closestSaturday = firstGameDay;
+        } else if (daysUntilSaturday > 0) {
+            // Saturday is within the same week
+            closestSaturday = firstGameDay.plusDays(daysUntilSaturday);
+        } else {
+            // Saturday was in the previous week
+            closestSaturday = firstGameDay.minusDays(Math.abs(daysUntilSaturday));
+        }
+		
+		System.out.println("Our first date is: " + closestSaturday);
+		return closestSaturday;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -256,12 +390,12 @@ public class League {
 		this.temporary = temporary;
 	}
 
-	public Map<Integer, Map<String, Match>> getMatchWeeks() {
-		return matchWeeks;
+	public Map<Integer, Map<String, Match>> getMatchWeeksMatches() {
+		return matchWeeksMatches;
 	}
 
-	public void setMatchWeeks(Map<Integer, Map<String, Match>> matchWeeks) {
-		this.matchWeeks = matchWeeks;
+	public void setMatchWeeksMatches(Map<Integer, Map<String, Match>> matchWeeksMatches) {
+		this.matchWeeksMatches = matchWeeksMatches;
 	}
 	
 }

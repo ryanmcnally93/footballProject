@@ -17,3 +17,4 @@ public class StartGame {
     }
 
 }
+// only 52 games are receiving datetimes, skipping first week

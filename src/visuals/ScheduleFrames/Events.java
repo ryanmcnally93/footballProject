@@ -1,16 +1,13 @@
 package visuals.ScheduleFrames;
-import java.time.LocalDate;
-
-import javax.swing.JButton;
+import java.time.LocalDateTime;
 import javax.swing.JLabel;
-
 import general.Match;
 import general.Team;
 import people.Footballer;
 
 public class Events {
 
-	private LocalDate date;
+	private LocalDateTime date;
 	private String type;
 	private Team team;
 	private Footballer player;
@@ -19,18 +16,18 @@ public class Events {
 	private Match match;
 	
 	// The user has a match
-	public Events(Match match, LocalDate date) {
-		this.date = date;
+	public Events(Match match) {
+		this.date = match.getDateTime();
 		this.type = "Match";
 		this.title  = new JLabel();
 		this.match = match;
 	}
 
-	public LocalDate getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 
@@ -80,6 +77,11 @@ public class Events {
 
 	public void setMatch(Match match) {
 		this.match = match;
+	}
+
+	@Override
+	public String toString() {
+		return "Events [date=" + date + ", type=" + type + ", title=" + ", match=" + match + "]";
 	}
 	
 }
