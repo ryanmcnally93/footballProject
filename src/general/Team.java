@@ -1,11 +1,9 @@
 package general;
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Map;
 import people.Footballer;
 import people.Goalkeeper;
 import people.Manager;
-import visuals.MatchFrames.MatchEvents;
 
 public class Team {
 

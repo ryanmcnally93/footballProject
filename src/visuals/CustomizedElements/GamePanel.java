@@ -1,7 +1,7 @@
 package visuals.CustomizedElements;
 import javax.swing.*;
 
-import general.Match;
+import general.UsersMatch;
 
 import java.awt.Color;
 import java.awt.Dimension;

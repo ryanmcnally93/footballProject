@@ -21,7 +21,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import general.Match;
+import general.UsersMatch;
 import people.Footballer;
 
 public class MatchScorers extends MatchFrames {
@@ -31,7 +31,7 @@ public class MatchScorers extends MatchFrames {
     private JPanel leftBox, rightBox;
     private Box centerBox, container;
 
-	public MatchScorers(CardLayout cardLayout, JPanel pages, Map<String, JPanel> cardMap, Match match) {
+	public MatchScorers(CardLayout cardLayout, JPanel pages, Map<String, JPanel> cardMap, UsersMatch match) {
 		super(cardLayout, pages, cardMap, match);
 		
 		JLayeredPane layeredPane = getLayeredPane();

@@ -10,14 +10,14 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
-import general.Match;
+import general.UsersMatch;
 
 public class MatchTable extends MatchFrames {
 
 	private static final long serialVersionUID = -37261786755290081L;
 	private Box centerBox;
 
-	public MatchTable(CardLayout layout, JPanel pages, Map<String, JPanel> cardMap, Match match) {
+	public MatchTable(CardLayout layout, JPanel pages, Map<String, JPanel> cardMap, UsersMatch match) {
 		super(layout, pages, cardMap, match);
 		
 		JLayeredPane layeredPane = getLayeredPane();

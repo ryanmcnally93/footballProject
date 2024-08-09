@@ -1,7 +1,7 @@
 package visuals.ScheduleFrames;
 import java.time.LocalDateTime;
 import javax.swing.JLabel;
-import general.Match;
+import general.UsersMatch;
 import general.Team;
 import people.Footballer;
 
@@ -13,10 +13,10 @@ public class Events {
 	private Footballer player;
 	private JLabel title;
 	private JLabel description;
-	private Match match;
+	private UsersMatch match;
 	
 	// The user has a match
-	public Events(Match match) {
+	public Events(UsersMatch match) {
 		this.date = match.getDateTime();
 		this.type = "Match";
 		this.title  = new JLabel();
@@ -71,11 +71,11 @@ public class Events {
 		this.description = description;
 	}
 
-	public Match getMatch() {
+	public UsersMatch getMatch() {
 		return match;
 	}
 
-	public void setMatch(Match match) {
+	public void setMatch(UsersMatch match) {
 		this.match = match;
 	}
 

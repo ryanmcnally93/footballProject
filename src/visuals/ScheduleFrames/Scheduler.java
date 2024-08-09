@@ -16,7 +16,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import general.League;
-import general.Match;
+import general.UsersMatch;
 import general.Team;
 import general.User;
 import visuals.CustomizedElements.CustomizedButton;
@@ -37,7 +37,7 @@ public class Scheduler extends JPanel {
 	private JPanel mainPanel;
 	private GameWindow window;
 	private Box eventContainer;
-	private Match match;
+	private UsersMatch match;
 	
 	// New Game Constructor
 	public Scheduler(User user, Team team, League league) {
@@ -128,7 +128,6 @@ public class Scheduler extends JPanel {
 			
 		}
 		for(Events each : events) {
-			System.out.println(each);
 			if(each.getDate().toLocalDate().equals(getDate().toLocalDate())) {
 				showEvent(each);
 				if(each.getType().equals("Match")) {
@@ -160,10 +159,9 @@ public class Scheduler extends JPanel {
 	
 	public void setMatchdays() {
 		// This is an event creator for each user fixture
-		for(Map.Entry<String, Match> each : league.getFixtures().entrySet()) {
+		for(Map.Entry<String, UsersMatch> each : league.getFixtures().entrySet()) {
 			if(each.getKey().contains(team.getName())) {
-				System.out.println("Found a match: " + each.getValue().getHome().getName() + " vs " + each.getValue().getAway().getName());
-				Match ourMatch = each.getValue();
+				UsersMatch ourMatch = each.getValue();
 				Events matchEvent = new Events(ourMatch);
 				events.add(matchEvent);
 			}

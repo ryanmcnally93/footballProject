@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
-import general.Match;
+import general.UsersMatch;
 import people.Footballer;
 import visuals.MatchFrames.MatchFrames;
 import visuals.MatchFrames.MatchFrames.leftClick;
@@ -25,16 +25,19 @@ public class MatchEvents extends MatchFrames {
     private Box container;
     private JPanel leftIconBox, leftBox, middleBox, rightBox, rightIconBox;
     private ArrayList<JLabel> leftIcons, leftLabels, middleLabels, rightLabels, rightIcons;
-    private static int events = 0;
+    private int events;
     private JScrollPane scroller;
 	private static final String UP = "up";
 	private static final String DOWN = "down";
-	private static int button = 0;
+	private int button;
 	private InputMap inputMap;
 	private ActionMap actionMap;
 
-    public MatchEvents(CardLayout layout, JPanel pages, Map<String, JPanel> cardMap, Match match) {
+    public MatchEvents(CardLayout layout, JPanel pages, Map<String, JPanel> cardMap, UsersMatch match) {
     	super(layout, pages, cardMap, match);
+    	
+    	this.events = 0;
+    	this.button = 0;
     	
     	JLayeredPane layeredPane = getLayeredPane();
         JPanel mainPanel = new JPanel();
@@ -492,12 +495,12 @@ public class MatchEvents extends MatchFrames {
 		this.rightIcons = rightIcons;
 	}
 
-	public static int getEvents() {
+	public int getEvents() {
 		return events;
 	}
 
-	public static void setEvents(int events) {
-		MatchEvents.events = events;
+	public void setEvents(int events) {
+		this.events = events;
 	}
 
 	public JScrollPane getScroller() {
@@ -506,6 +509,14 @@ public class MatchEvents extends MatchFrames {
 
 	public void setScroller(JScrollPane scroller) {
 		this.scroller = scroller;
+	}
+
+	public int getButton() {
+		return button;
+	}
+
+	public void setButton(int button) {
+		this.button = button;
 	}
 
 }

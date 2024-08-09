@@ -1,57 +1,21 @@
 package general;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Graphics;
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.TimerTask;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
-import java.util.Timer;
 import people.Footballer;
 import people.Goalkeeper;
-import visuals.MatchFrames.GameWindow;
-import visuals.MatchFrames.MatchAllMatches;
-import visuals.MatchFrames.MatchEvents;
-import visuals.MatchFrames.MatchFrames;
-import visuals.MatchFrames.MatchRatings;
-import visuals.MatchFrames.MatchScorers;
-import visuals.MatchFrames.MatchStats;
-import visuals.MatchFrames.MatchTable;
-import visuals.MatchFrames.MatchWatch;
-import visuals.ScheduleFrames.Scheduler;
 
 public class Match {
 	
 	private Team home;
 	private Team away;
 	private String stadium;
-	private static int homeScore = 0;
-	private static int awayScore = 0;
+	private int homeScore;
+	private int awayScore;
 	private Map<String, Footballer> homeTeam;
 	private Map<String, Footballer> awayTeam;
 	private int minute;
 	private Goalkeeper homegk;
 	private Goalkeeper awaygk;
-	private static int homeAllShots = 0;
-	private static int homeShotsOn = 0;
-	private static int awayAllShots = 0;
-	private static int awayShotsOn = 0;
-	private CardLayout layout;
-    private JPanel matchPages;
-    private Map<String, JPanel> cardMap;
-    private MatchWatch watchPanel;
-    private MatchScorers scorerPanel;
-    private MatchStats statsPanel;
-    private MatchEvents eventsPanel;
-    private MatchAllMatches allMatchesPanel;
-    private MatchTable tablePanel;
-    private MatchRatings ratingsPanel;
-    private GameWindow window;
-    private Scheduler schedule;
     private LocalDateTime dateTime;
 	
 	public Match() {};
@@ -65,78 +29,17 @@ public class Match {
 		this.minute = 0;
 		this.homegk = home.getGoalkeeper();
 		this.awaygk = away.getGoalkeeper();
-		
-        cardMap = new HashMap<>();
-        layout = new CardLayout();
-        matchPages = new JPanel(layout);
-		
-        watchPanel = new MatchWatch(layout, matchPages, cardMap, this);
-        scorerPanel = new MatchScorers(layout, matchPages, cardMap, this);
-        statsPanel = new MatchStats(layout, matchPages, cardMap, this);
-        eventsPanel = new MatchEvents(layout, matchPages, cardMap, this);
-        allMatchesPanel = new MatchAllMatches(layout, matchPages, cardMap, this);
-        tablePanel = new MatchTable(layout, matchPages, cardMap, this);
-        ratingsPanel = new MatchRatings(layout, matchPages, cardMap, this);
-
-        // Add MatchFrame instances to the MatchFrames main panel
-        
-        matchPages.add(watchPanel, "Watch");
-        cardMap.put("Watch", watchPanel);
-        matchPages.add(scorerPanel, "Scorers");
-        cardMap.put("Scorers", scorerPanel);
-        matchPages.add(statsPanel, "Stats");
-        cardMap.put("Stats", statsPanel);
-        matchPages.add(eventsPanel, "Events");
-        cardMap.put("Events", eventsPanel);
-        matchPages.add(allMatchesPanel, "All Matches");
-        cardMap.put("All Matches", allMatchesPanel);
-        matchPages.add(tablePanel, "Table");
-        cardMap.put("Table", tablePanel);
-        matchPages.add(ratingsPanel, "Ratings");
-        cardMap.put("Ratings", ratingsPanel);
-
-        // Initialize with the main page, this will change multiple times
-		
+		this.awayScore = 0;
+		this.homeScore = 0;
 	}
-	
-	public void displayGame(GameWindow window, Scheduler schedule) {
-		this.window = window;
-		this.schedule = schedule;
-		window.getContentPane().removeAll();
-		window.getContentPane().add(matchPages, BorderLayout.CENTER);
-        layout.show(matchPages, "Stats");
-		window.revalidate();
-		window.repaint();
-	}
-
-	public Goalkeeper getHomegk() {
-		return homegk;
-	}
-
-	public Goalkeeper getAwaygk() {
-		return awaygk;
-	}
-
-	public static void main(String[] args) {
-		
-	}
-	
-	public void setDateTime(LocalDateTime datetime) {
-		this.dateTime = datetime;
-	}
-	
-	public LocalDateTime getDateTime() {
-		return dateTime;
-	}
-
 
 	/* This is effectively a start game method,
 	first time round is run with Ryan
 	but whoever wins the ball continues a run of their own */
-	public void startRun(Footballer player, Graphics g, Map<String, JPanel> cardMap) {
+	public void startRun(Footballer player) {
 		// Making sure the game is under 90 minutes.
 		// Inserted game time was 0
-		if(fullTimeCheck(cardMap)) {return;};
+		if(fullTimeCheck()) {return;};
 		int enemyCounter = 0;
 		
 		Map<String, Footballer> thisPlayersEnemy;
@@ -157,80 +60,40 @@ public class Match {
 				enemyCounter++;
 				// Increment minute and do a full time check
 				addMinute();
-				if(fullTimeCheck(cardMap)) {return;};
-				// Print the successful dribble if not full time
-				System.out.println(player.getName() + " sprinted past " + enemy.getName());
-				
-				// Check to see if this is the last defender
-				// This is where the issue persists
+				if(fullTimeCheck()) {return;};
+
 				if (enemyCounter == 3) {
 					
-					if(findTeam(player) == "Away") {
-						awayShotsOn++;
-						awayAllShots++;
-					} else {
-						homeShotsOn++;
-						homeAllShots++;
-					}
-					((MatchStats) cardMap.get("Stats")).updateShotsOnBar(getHomeShotsOn(), getAwayShotsOn());
-					((MatchStats) cardMap.get("Stats")).updateAllShotsBar(getHomeAllShots(), getAwayAllShots());
+					updateShotsOnScreen(player);
+					
 					if(takeShot(player, thisFoeGk) == true) {
 						
 						// SCORED
+
+						goalAlertOnScreen(player);
 						
-						// Confirm goal
-						for (JPanel page : cardMap.values()) {
-				            if (page instanceof MatchFrames) {
-				            	((MatchFrames) page).goalAlert(player.getName(), this.getMinute());
-				            }
-				        }
 						// Create the score card and print
 						if (findTeam(player) == "Home") {
-							homeScore++;
-							((MatchEvents) cardMap.get("Events")).addHomeEvents(getMinute(), player, "goal");
-							((MatchScorers) cardMap.get("Scorers")).displayLeftGoalScorers(player, getMinute());
+							this.homeScore++;
+							displayHomeGoalOnScreen(player);
 						} else {
-							awayScore++;
-							((MatchEvents) cardMap.get("Events")).addAwayEvents(getMinute(), player, "goal");
-							((MatchScorers) cardMap.get("Scorers")).displayRightGoalScorers(player, getMinute());
+							this.awayScore++;
+							displayAwayGoalOnScreen(player);
 						}
 						
-						for (JPanel page : cardMap.values()) {
-				            if (page instanceof MatchFrames) {
-				            	((MatchFrames) page).getHeaderPanel().updateScoreBoard(getHomeScore(), getAwayScore());
-				            }
-				        }
-						
-						// ******
-						
-						Timer timer = new Timer();
-						int delay = 7000;
-						Match match = this;
-						timer.schedule(new TimerTask() {
-						    @Override
-						    public void run() {
-						    	match.startRun(enemy, g, cardMap);
-						    }
-						}, delay);
-						
-						// ******
+						updateScoreOnScreen();
 
+						addTimerForScreen(enemy);
+						
 						return;
 					} else {
-						System.out.println("Brilliant save by " + thisFoeGk.getName() + " to deny " + player.getName());
-						if(findTeam(player) == "Away") {
-							((MatchEvents) cardMap.get("Events")).addAwayEvents(getMinute(), player, "save");
-						} else {
-							((MatchEvents) cardMap.get("Events")).addHomeEvents(getMinute(), player, "save");
-						}
+						displaySavesToScreen(player, thisFoeGk);
 					}
 				}
 			} else {
 				addMinute();
-				if(fullTimeCheck(cardMap)) {return;};
-			    
-				System.out.println(player.getName() + " has conceded posession to " + enemy.getName());
-				startRun(enemy, g, cardMap);
+				if(fullTimeCheck()) {return;};
+				startRun(enemy);
 				return;
 			}			
 		}
@@ -239,10 +102,23 @@ public class Match {
 	    return;
 	}
 
+	public void displaySavesToScreen(Footballer player, Goalkeeper thisFoeGk) {}
+
+	public void addTimerForScreen(Footballer enemy) {}
+
+	public void updateScoreOnScreen() {}
+
+	public void displayAwayGoalOnScreen(Footballer player) {}
+
+	public void displayHomeGoalOnScreen(Footballer player) {}
+
+	public void goalAlertOnScreen(Footballer player) {}
+
+	public void updateShotsOnScreen(Footballer player) {}
+
 	public boolean getPastPlayer(Footballer player, Footballer otherPlayer) {
 		
 		if (player.stamina <= 0) {
-			outOfStamina(player);
 			return false;
 		}
 		
@@ -252,7 +128,6 @@ public class Match {
 			player.removeStamina(10);
 			// Check to see we haven't run out of stamina
 			if (player.stamina <= 0) {
-				outOfStamina(player);
 				return false;
 			}
 			// Successful run past
@@ -275,7 +150,6 @@ public class Match {
 				player.removeStamina(10);
 				// Check to see we haven't run out of stamina
 				if (player.stamina <= 0) {
-					outOfStamina(player);
 					return false;
 				}
 				// Successful run past
@@ -311,25 +185,37 @@ public class Match {
 		}
 	}
 	
-	// Ran out of stamina message
-	public void outOfStamina(Footballer player) {
-		System.out.println(player.getName() + " has run out of stamina");
-	}
-	
-	public boolean fullTimeCheck(Map<String, JPanel> cardMap) {
+	public boolean fullTimeCheck() {
 		if (this.getMinute() >= 90) {
-	        System.out.println("\nFull time!");
-	        for (JPanel page : cardMap.values()) {
-	            if (page instanceof MatchFrames) {
-	            	((MatchFrames) page).createContinueButton();
-	            }
-	        }
-	        return true;
+			System.out.println(getHome().getName() + " " + getHomeScore() + " - " + getAwayScore() + " " + getAway().getName());
+	        continueButtonOnScreen();
+			return true;
 	    } else {
 	    	return false;
 	    }
 	}
+	
+	public void continueButtonOnScreen() {};
 
+	public void startMatch() {
+    	for(Map.Entry<String, Footballer> each : getHomeTeam().entrySet()) {
+			Footballer player = each.getValue();
+			player.setStamina(100);
+			getHomegk().setStamina(100);
+		}
+		
+		for(Map.Entry<String, Footballer> each : getAwayTeam().entrySet()) {
+			Footballer player = each.getValue();
+			player.setStamina(100);
+			getAwaygk().setStamina(100);
+		}
+		
+    	Footballer homeStriker = ((Footballer) homeTeam.get("ST"));
+		startRun(homeStriker);
+    }
+	
+	// Getters & Setters
+	
 	public int getHomeScore() {
 		return homeScore;
 	}
@@ -354,12 +240,6 @@ public class Match {
 		this.minute += 1;
 	}
 	
-	public void startMatch(Graphics g, Map<String, JPanel> cardMap) {
-    	System.out.println("You are starting the match");
-    	Footballer homeStriker = ((Footballer) homeTeam.get("ST"));
-		startRun(homeStriker, g, cardMap);
-    }
-
 	public void setHomeTeam(Map<String, Footballer> homeTeam) {
 		this.homeTeam = homeTeam;
 	}
@@ -380,44 +260,12 @@ public class Match {
 		this.awaygk = awaygk;
 	}
 
-	public static int getHomeAllShots() {
-		return homeAllShots;
+	public void setHomeScore(int homeScore) {
+		this.homeScore = homeScore;
 	}
 
-	public static void setHomeAllShots(int homeAllShots) {
-		Match.homeAllShots = homeAllShots;
-	}
-
-	public static int getHomeShotsOn() {
-		return homeShotsOn;
-	}
-
-	public static void setHomeShotsOn(int homeShotsOn) {
-		Match.homeShotsOn = homeShotsOn;
-	}
-
-	public static int getAwayAllShots() {
-		return awayAllShots;
-	}
-
-	public static void setAwayAllShots(int awayAllShots) {
-		Match.awayAllShots = awayAllShots;
-	}
-
-	public static int getAwayShotsOn() {
-		return awayShotsOn;
-	}
-
-	public static void setAwayShotsOn(int awayShotsOn) {
-		Match.awayShotsOn = awayShotsOn;
-	}
-
-	public static void setHomeScore(int homeScore) {
-		Match.homeScore = homeScore;
-	}
-
-	public static void setAwayScore(int awayScore) {
-		Match.awayScore = awayScore;
+	public  void setAwayScore(int awayScore) {
+		this.awayScore = awayScore;
 	}
 
 	public Team getHome() {
@@ -447,101 +295,25 @@ public class Match {
 	public void setStadium(String stadium) {
 		this.stadium = stadium;
 	}
-
-	public CardLayout getLayout() {
-		return layout;
+	
+	public Goalkeeper getHomegk() {
+		return homegk;
 	}
 
-	public void setLayout(CardLayout layout) {
-		this.layout = layout;
+	public Goalkeeper getAwaygk() {
+		return awaygk;
 	}
 
-	public JPanel getMatchPages() {
-		return matchPages;
+	public static void main(String[] args) {
+		
 	}
-
-	public void setMatchPages(JPanel matchPages) {
-		this.matchPages = matchPages;
+	
+	public void setDateTime(LocalDateTime datetime) {
+		this.dateTime = datetime;
 	}
-
-	public Map<String, JPanel> getCardMap() {
-		return cardMap;
-	}
-
-	public void setCardMap(Map<String, JPanel> cardMap) {
-		this.cardMap = cardMap;
-	}
-
-	public MatchWatch getWatchPanel() {
-		return watchPanel;
-	}
-
-	public void setWatchPanel(MatchWatch watchPanel) {
-		this.watchPanel = watchPanel;
-	}
-
-	public MatchScorers getScorerPanel() {
-		return scorerPanel;
-	}
-
-	public void setScorerPanel(MatchScorers scorerPanel) {
-		this.scorerPanel = scorerPanel;
-	}
-
-	public MatchStats getStatsPanel() {
-		return statsPanel;
-	}
-
-	public void setStatsPanel(MatchStats statsPanel) {
-		this.statsPanel = statsPanel;
-	}
-
-	public MatchEvents getEventsPanel() {
-		return eventsPanel;
-	}
-
-	public void setEventsPanel(MatchEvents eventsPanel) {
-		this.eventsPanel = eventsPanel;
-	}
-
-	public MatchAllMatches getAllMatchesPanel() {
-		return allMatchesPanel;
-	}
-
-	public void setAllMatchesPanel(MatchAllMatches allMatchesPanel) {
-		this.allMatchesPanel = allMatchesPanel;
-	}
-
-	public MatchTable getTablePanel() {
-		return tablePanel;
-	}
-
-	public void setTablePanel(MatchTable tablePanel) {
-		this.tablePanel = tablePanel;
-	}
-
-	public MatchRatings getRatingsPanel() {
-		return ratingsPanel;
-	}
-
-	public void setRatingsPanel(MatchRatings ratingsPanel) {
-		this.ratingsPanel = ratingsPanel;
-	}
-
-	public GameWindow getWindow() {
-		return window;
-	}
-
-	public void setWindow(GameWindow window) {
-		this.window = window;
-	}
-
-	public Scheduler getSchedule() {
-		return schedule;
-	}
-
-	public void setSchedule(Scheduler schedule) {
-		this.schedule = schedule;
+	
+	public LocalDateTime getDateTime() {
+		return dateTime;
 	}
 	
 }

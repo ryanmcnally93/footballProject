@@ -28,7 +28,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
-import general.Match;
+import general.UsersMatch;
 import visuals.CustomizedElements.CustomizedButton;
 import visuals.CustomizedElements.GamePanel;
 import visuals.CustomizedElements.SlidingPanel;
@@ -42,13 +42,13 @@ public class MatchFrames extends GamePanel {
 	private JPanel pages;
 	private Map<String, JPanel> cardMap;
 	private SlidingPanel slidingPanel;
-	private Match match;
+	private UsersMatch match;
 	private JLayeredPane layeredPane;
 	private HeaderPanel headerPanel;
 	private FooterPanel footerPanel;
 //	private MouseListener ml;
 
-	public MatchFrames(CardLayout cardLayout, JPanel mainPanel, Map<String, JPanel> cardMap, Match match) {
+	public MatchFrames(CardLayout cardLayout, JPanel mainPanel, Map<String, JPanel> cardMap, UsersMatch match) {
     	super();
     	this.layout = cardLayout;
         this.pages = mainPanel;
@@ -102,7 +102,6 @@ public class MatchFrames extends GamePanel {
 		}
 
 		public void updateScoreBoard(int home, int away) {
-			System.out.println();
 			setLiveScore(match.getHome().getName() + " " + home + " - " + away + " " + match.getAway().getName());
 			repaint();
 		}
