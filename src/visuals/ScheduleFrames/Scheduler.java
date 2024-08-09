@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -16,11 +17,13 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import general.League;
+import general.Match;
 import general.UsersMatch;
 import general.Team;
 import general.User;
 import visuals.CustomizedElements.CustomizedButton;
 import visuals.MatchFrames.GameWindow;
+import visuals.MatchFrames.MatchFrames;
 
 public class Scheduler extends JPanel {
 
@@ -123,9 +126,6 @@ public class Scheduler extends JPanel {
 			
 			setMatchdays();
 			
-			// Do I need to make a list of absent matches so I can call
-			// match.playAbsently();?
-			
 		}
 		for(Events each : events) {
 			if(each.getDate().toLocalDate().equals(getDate().toLocalDate())) {
@@ -158,14 +158,38 @@ public class Scheduler extends JPanel {
 	}
 	
 	public void setMatchdays() {
-		// This is an event creator for each user fixture
-		for(Map.Entry<String, UsersMatch> each : league.getFixtures().entrySet()) {
+
+		List<String> keysToReplace = new ArrayList<>();
+		
+		// This makes a note of which matches need to be changed, and puts to array
+		for(Map.Entry<String, Match> each : league.getFixtures().entrySet()) {
 			if(each.getKey().contains(team.getName())) {
-				UsersMatch ourMatch = each.getValue();
-				Events matchEvent = new Events(ourMatch);
+				keysToReplace.add(each.getKey());
+			}
+		}
+		
+		// This overwrites each entry with a child UsersMatch
+		for (String key : keysToReplace) {
+            Match adult = league.getFixtures().get(key);
+            if (adult != null) {
+                UsersMatch child = new UsersMatch(adult.getHome(), adult.getAway()); // Create ChildClass instance
+                child.setDateTime(adult.getDateTime());
+                league.getFixtures().put(key, child); // Replace the entry in the map
+            }
+        }
+		
+		// This looks for UsersMatches and creates an event from it
+		for(Map.Entry<String, Match> each : league.getFixtures().entrySet()) {
+			Match eachMatch = each.getValue();
+			if (eachMatch instanceof UsersMatch) {
+				Events matchEvent = new Events((UsersMatch) eachMatch);
 				events.add(matchEvent);
 			}
 		}
+		
+		
+		
+		
 		System.out.println(events);
 	}
 

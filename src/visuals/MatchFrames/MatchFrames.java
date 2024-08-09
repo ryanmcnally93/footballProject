@@ -251,7 +251,7 @@ public class MatchFrames extends GamePanel {
     }
     
 	public void handleClick() {
-		match.startMatch(getGraphics(), getCardMap());
+		match.startMatch();
 	}
 	
 	public void goalAlert(String name, int minute) {

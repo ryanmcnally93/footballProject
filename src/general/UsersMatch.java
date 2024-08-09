@@ -17,6 +17,7 @@ import visuals.MatchFrames.MatchScorers;
 import visuals.MatchFrames.MatchStats;
 import visuals.MatchFrames.MatchTable;
 import visuals.MatchFrames.MatchWatch;
+import visuals.ScheduleFrames.Scheduler;
 
 public class UsersMatch extends Match {
 	
@@ -35,6 +36,7 @@ public class UsersMatch extends Match {
     private MatchTable tablePanel;
     private MatchRatings ratingsPanel;
     private GameWindow window;
+    private Scheduler schedule;
 	
 	public UsersMatch() {};
 	
@@ -78,8 +80,9 @@ public class UsersMatch extends Match {
 		
 	}
 	
-	public void displayGame(GameWindow window) {
+	public void displayGame(GameWindow window, Scheduler schedule) {
 		this.window = window;
+		this.schedule = schedule;
 		window.getContentPane().removeAll();
 		window.getContentPane().add(matchPages, BorderLayout.CENTER);
         layout.show(matchPages, "Stats");
@@ -103,7 +106,7 @@ public class UsersMatch extends Match {
 	@Override
 	public void goalAlertOnScreen(Footballer player) {
 		for (JPanel page : cardMap.values()) {
-            if (page instanceof MatchFrames) {
+			if (page instanceof MatchFrames) {
             	((MatchFrames) page).goalAlert(player.getName(), this.getMinute());
             }
         }
@@ -145,7 +148,6 @@ public class UsersMatch extends Match {
 	
 	@Override
 	public void displaySavesToScreen(Footballer player, Goalkeeper thisFoeGk) {
-		System.out.println("Brilliant save by " + thisFoeGk.getName() + " to deny " + player.getName());
 		if(findTeam(player) == "Away") {
 			((MatchEvents) cardMap.get("Events")).addAwayEvents(getMinute(), player, "save");
 		} else {
@@ -282,5 +284,13 @@ public class UsersMatch extends Match {
 
 	public void setWindow(GameWindow window) {
 		this.window = window;
+	}
+
+	public Scheduler getSchedule() {
+		return schedule;
+	}
+
+	public void setSchedule(Scheduler schedule) {
+		this.schedule = schedule;
 	}
 }

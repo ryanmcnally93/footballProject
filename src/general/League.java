@@ -15,10 +15,10 @@ public class League {
 	private int numOfTeams;
 	private Map<String, Team> teams;
 	private int tier;
-	private Map<String, UsersMatch> fixtures;
+	private Map<String, Match> fixtures;
 	private static int season = 0;
-	private ArrayList<UsersMatch> toLookThrough, temporary;
-	private Map<Integer, Map<String, UsersMatch>> matchWeeksMatches;
+	private ArrayList<Match> toLookThrough, temporary;
+	private Map<Integer, Map<String, Match>> matchWeeksMatches;
 	private Map<Integer, Map<Integer, LocalDateTime>> matchWeeksSlots;
 	private boolean restartWholeProcess = false;
 	
@@ -37,18 +37,18 @@ public class League {
 		createFixtures();
 		season++;
 		
-		toLookThrough = new ArrayList<UsersMatch>(getFixtures().values());
+		toLookThrough = new ArrayList<Match>(getFixtures().values());
 		temporary = new ArrayList<>(toLookThrough);
 		
 		int weeks = (teams.size()-1)*2;
 
 		for(int i = 0; i<weeks; i++) {
-			Map<String, UsersMatch> currentMW = createMatchWeek(toLookThrough);
+			Map<String, Match> currentMW = createMatchWeek(toLookThrough);
 			if(restartWholeProcess  ==  true) {
 				
 				System.out.println("We are acting on the restart whole process!");
 				
-				for (Map<String, UsersMatch> eachWeek : matchWeeksMatches.values()) {
+				for (Map<String, Match> eachWeek : matchWeeksMatches.values()) {
 		            toLookThrough.addAll(eachWeek.values());
 		        }
 				
@@ -58,7 +58,7 @@ public class League {
 				
 			} else {
 				matchWeeksMatches.put(i + 1, currentMW);
-				for(Map.Entry<String, UsersMatch> each : currentMW.entrySet()) {
+				for(Map.Entry<String, Match> each : currentMW.entrySet()) {
 					int j = i + 1;
 					System.out.println("Match Week " + j + " contains: " + each.getKey());
 				}
@@ -66,8 +66,8 @@ public class League {
 		}
 	}
 	
-	public Map<String, UsersMatch> createMatchWeek(ArrayList<UsersMatch> tolook){
-		Map<String, UsersMatch> MW = new HashMap<>();
+	public Map<String, Match> createMatchWeek(ArrayList<Match> tolook){
+		Map<String, Match> MW = new HashMap<>();
 		temporary  = new ArrayList<>(toLookThrough);
 		
 		int attempts = 0;
@@ -98,7 +98,7 @@ public class League {
 					restart = true;
 				} else {
 					int randomInt = (int) (Math.random() * temporary.size());
-					UsersMatch chosen = temporary.get(randomInt);
+					Match chosen = temporary.get(randomInt);
 					
 					// Split this match into two teams by String
 					String[] two = chosen.toString().split(" vs ");
@@ -108,7 +108,7 @@ public class League {
 					Boolean conflicts = false;
 					
 					// Check to see if this team is already playing this week
-					for(Map.Entry<String, UsersMatch> each : MW.entrySet()) {
+					for(Map.Entry<String, Match> each : MW.entrySet()) {
 						if(each.getKey().contains(team1) || each.getKey().contains(team2)) {
 							// We are removing this match from temporary
 							// As we don't want to land on this match twice
@@ -129,9 +129,9 @@ public class League {
 		} while (restart);
 		
 		// Removing from the temporary fixtures list
-		Iterator<UsersMatch> iterator = tolook.iterator();
+		Iterator<Match> iterator = tolook.iterator();
         while (iterator.hasNext()) {
-            UsersMatch item = iterator.next();
+            Match item = iterator.next();
             // Check if the item exists as a key in the Map
             if (MW.containsValue(item)) {
                 iterator.remove(); // Remove the item from the list
@@ -149,7 +149,7 @@ public class League {
 				Team opposition = otherEach.getValue();
 				
 				if(!current.getName().equals(opposition.getName())) {
-					UsersMatch fixture = new UsersMatch(current, opposition);
+					Match fixture = new Match(current, opposition);
 					if(!fixtures.containsKey(current.getName() + " vs " + opposition.getName())) {
 						fixtures.put(current.getName() + " vs " + opposition.getName(), fixture);
 					}
@@ -161,7 +161,7 @@ public class League {
 				Team opposition = otherEach.getValue();
 				
 				if(!current.getName().equals(opposition.getName())) {
-					UsersMatch fixture = new UsersMatch(opposition, current);
+					Match fixture = new Match(opposition, current);
 					if(!fixtures.containsKey(opposition.getName() + " vs " + current.getName())) {
 						fixtures.put(opposition.getName() + " vs " + current.getName(), fixture);
 					}
@@ -175,10 +175,10 @@ public class League {
 		// STEP 1
 		for(int i = 1; i<=matchWeeksMatches.size() ; i++ ) {
 			
-			Map<String, UsersMatch> thisWeeksMatches = matchWeeksMatches.get(i);
+			Map<String, Match> thisWeeksMatches = matchWeeksMatches.get(i);
 			Map<Integer, LocalDateTime> thisWeeksSlots = matchWeeksSlots.get(i);
-			UsersMatch match;
-			for(Map.Entry<String, UsersMatch> matches : thisWeeksMatches.entrySet()) {
+			Match match;
+			for(Map.Entry<String, Match> matches : thisWeeksMatches.entrySet()) {
 				match = matches.getValue();
 				int randomInt = 0;
 				LocalDateTime slot = null;
@@ -342,15 +342,15 @@ public class League {
 	}
 
 	public void getFixturesToString() {
-		for(Map.Entry<String, UsersMatch> each : fixtures.entrySet()) {
-			UsersMatch value = each.getValue();
+		for(Map.Entry<String, Match> each : fixtures.entrySet()) {
+			Match value = each.getValue();
 			System.out.println(value.toString());
 		}
 	}
 	
 	public void getTeamFixturesToString(Team team) {
-		for(Map.Entry<String, UsersMatch> each : fixtures.entrySet()) {
-			UsersMatch value = each.getValue();
+		for(Map.Entry<String, Match> each : fixtures.entrySet()) {
+			Match value = each.getValue();
 			String key = each.getKey();
 			if(key.contains(team.getName())) {
 				System.out.println(value.toString());
@@ -358,11 +358,11 @@ public class League {
 		}
 	}
 
-	public Map<String, UsersMatch> getFixtures() {
+	public Map<String, Match> getFixtures() {
 		return fixtures;
 	}
 
-	public void setFixtures(Map<String, UsersMatch> fixtures) {
+	public void setFixtures(Map<String, Match> fixtures) {
 		this.fixtures = fixtures;
 	}
 
@@ -374,27 +374,27 @@ public class League {
 		League.season = season;
 	}
 
-	public ArrayList<UsersMatch> getToLookThrough() {
+	public ArrayList<Match> getToLookThrough() {
 		return toLookThrough;
 	}
 
-	public void setToLookThrough(ArrayList<UsersMatch> toLookThrough) {
+	public void setToLookThrough(ArrayList<Match> toLookThrough) {
 		this.toLookThrough = toLookThrough;
 	}
 
-	public ArrayList<UsersMatch> getTemporary() {
+	public ArrayList<Match> getTemporary() {
 		return temporary;
 	}
 
-	public void setTemporary(ArrayList<UsersMatch> temporary) {
+	public void setTemporary(ArrayList<Match> temporary) {
 		this.temporary = temporary;
 	}
 
-	public Map<Integer, Map<String, UsersMatch>> getMatchWeeksMatches() {
+	public Map<Integer, Map<String, Match>> getMatchWeeksMatches() {
 		return matchWeeksMatches;
 	}
 
-	public void setMatchWeeksMatches(Map<Integer, Map<String, UsersMatch>> matchWeeksMatches) {
+	public void setMatchWeeksMatches(Map<Integer, Map<String, Match>> matchWeeksMatches) {
 		this.matchWeeksMatches = matchWeeksMatches;
 	}
 	
