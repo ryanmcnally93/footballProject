@@ -218,22 +218,6 @@ public class League {
 			}
 		}
 		
-		// For each of the 14 matchWeeks
-		
-		
-		
-		
-		// Look through matches
-		// Look through available slots
-		// Clear two Maps and create a third that contains 
-		// Map<Integer*(MW)*, Map<Match, DateTime>>
-		
-		// STEP 2
-		
-		// Create a class called absent matches that does the same thing as
-		// Match class but without talking to matchframes or responding to user.
-		// This class must be created and ran when the user leaves the day
-		// that that match is on, print to console, must excluse users game.
 	}
 	
 	public void assignDatetimesToWeekNumber() {

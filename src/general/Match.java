@@ -93,9 +93,13 @@ public class Match {
 						if (findTeam(player) == "Home") {
 							this.homeScore++;
 							displayHomeGoalOnScreen(player);
+							league.getLeagueTable().getLine(getHome()).addGoalsScored();
+							league.getLeagueTable().getLine(getAway()).addGoalsConceded();
 						} else {
 							this.awayScore++;
 							displayAwayGoalOnScreen(player);
+							league.getLeagueTable().getLine(getAway()).addGoalsScored();
+							league.getLeagueTable().getLine(getHome()).addGoalsConceded();
 						}
 						
 						updateScoreOnScreen();

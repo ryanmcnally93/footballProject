@@ -4,10 +4,11 @@ public class TableLine {
 
 	private Team team;
 	private int position;
+	private int gamesPlayed;
 	private int wins;
 	private int draws;
 	private int losses;
-	private int goalDifference;
+	private Integer goalDifference;
 	private int goalsScored;
 	private int goalsConceded;
 	private Integer points;
@@ -24,6 +25,7 @@ public class TableLine {
 		this.points = 0;
 		initialPos++;
 		this.position = initialPos;
+		this.gamesPlayed = 0;
 	}
 
 	public Team getTeam() {
@@ -53,6 +55,7 @@ public class TableLine {
 	public void addWin() {
 		this.wins += 1;
 		this.points +=3;
+		this.gamesPlayed += 1;
 	}
 
 	public int getDraws() {
@@ -62,6 +65,7 @@ public class TableLine {
 	public void addDraw() {
 		this.draws += 1;
 		this.points +=1;
+		this.gamesPlayed += 1;
 	}
 
 	public int getLosses() {
@@ -70,13 +74,14 @@ public class TableLine {
 
 	public void addLoss() {
 		this.losses += 1;
+		this.gamesPlayed += 1;
 	}
 
-	public int getGoalDifference() {
+	public Integer getGoalDifference() {
 		return goalDifference;
 	}
 
-	public void setGoalDifference(int goalDifference) {
+	public void setGoalDifference(Integer goalDifference) {
 		this.goalDifference = goalDifference;
 	}
 
@@ -86,6 +91,16 @@ public class TableLine {
 
 	public void setGoalsScored(int goalsScored) {
 		this.goalsScored = goalsScored;
+	}
+	
+	public void addGoalsScored() {
+		this.goalsScored += 1;
+		this.goalDifference +=1;
+	}
+	
+	public void addGoalsConceded() {
+		this.goalsConceded += 1;
+		this.goalDifference -=1;
 	}
 
 	public int getGoalsConceded() {
@@ -125,6 +140,14 @@ public class TableLine {
 
 	public void setPoints(Integer points) {
 		this.points = points;
+	}
+
+	public int getGamesPlayed() {
+		return gamesPlayed;
+	}
+
+	public void setGamesPlayed(int gamesPlayed) {
+		this.gamesPlayed = gamesPlayed;
 	}
 	
 }
