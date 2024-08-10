@@ -305,5 +305,14 @@ public class MatchFrames extends GamePanel {
 	public void setFooterPanel(FooterPanel footerPanel) {
 		this.footerPanel = footerPanel;
 	}
+
+	public UsersMatch getMatch() {
+		return match;
+	}
+
+
+	public void setMatch(UsersMatch match) {
+		this.match = match;
+	}
 	
 }

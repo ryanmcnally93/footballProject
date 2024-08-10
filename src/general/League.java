@@ -3,8 +3,10 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,6 +23,7 @@ public class League {
 	private Map<Integer, Map<String, Match>> matchWeeksMatches;
 	private Map<Integer, Map<Integer, LocalDateTime>> matchWeeksSlots;
 	private boolean restartWholeProcess = false;
+	private LeagueTable leagueTable;
 	
 	public League(String name, String country, int numOfTeams, Map<String, Team> teams, int tier) {
 		this.name = name;
@@ -31,6 +34,25 @@ public class League {
 		this.fixtures = new HashMap<>();
 		this.matchWeeksMatches = new HashMap<>();
 		this.matchWeeksSlots = new HashMap<>();
+		this.leagueTable = new LeagueTable(this);
+		
+		List<Team> teamNamesInOrder = new ArrayList<>();
+		for(Map.Entry<String, Team> eachTeam : teams.entrySet()) {
+			Team team = eachTeam.getValue();
+			teamNamesInOrder.add(team);
+		}
+		Collections.sort(teamNamesInOrder, new Comparator<Team>() {
+            @Override
+            public int compare(Team t1, Team t2) {
+                return t1.getName().compareTo(t2.getName());
+            }
+        });
+		for(int i=1;i<teamNamesInOrder.size()+1;i++){
+			TableLine line = new TableLine(teamNamesInOrder.get(i-1));
+			getLeagueTable().getAllLines().add(line);
+		}
+		
+		getLeagueTable().updateLinesInTableLogic();
 	}
 	
 	public void assignFixturesToWeekNumber() {
@@ -149,7 +171,7 @@ public class League {
 				Team opposition = otherEach.getValue();
 				
 				if(!current.getName().equals(opposition.getName())) {
-					Match fixture = new Match(current, opposition);
+					Match fixture = new Match(current, opposition, this);
 					if(!fixtures.containsKey(current.getName() + " vs " + opposition.getName())) {
 						fixtures.put(current.getName() + " vs " + opposition.getName(), fixture);
 					}
@@ -161,7 +183,7 @@ public class League {
 				Team opposition = otherEach.getValue();
 				
 				if(!current.getName().equals(opposition.getName())) {
-					Match fixture = new Match(opposition, current);
+					Match fixture = new Match(opposition, current, this);
 					if(!fixtures.containsKey(opposition.getName() + " vs " + current.getName())) {
 						fixtures.put(opposition.getName() + " vs " + current.getName(), fixture);
 					}
@@ -396,6 +418,14 @@ public class League {
 
 	public void setMatchWeeksMatches(Map<Integer, Map<String, Match>> matchWeeksMatches) {
 		this.matchWeeksMatches = matchWeeksMatches;
+	}
+
+	public LeagueTable getLeagueTable() {
+		return leagueTable;
+	}
+
+	public void setLeagueTable(LeagueTable leagueTable) {
+		this.leagueTable = leagueTable;
 	}
 	
 }

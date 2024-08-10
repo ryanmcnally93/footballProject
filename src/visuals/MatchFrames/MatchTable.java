@@ -10,18 +10,20 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
+import general.LeagueTable;
 import general.UsersMatch;
 
 public class MatchTable extends MatchFrames {
 
 	private static final long serialVersionUID = -37261786755290081L;
 	private Box centerBox;
+	private LeagueTable table;
 
 	public MatchTable(CardLayout layout, JPanel pages, Map<String, JPanel> cardMap, UsersMatch match) {
 		super(layout, pages, cardMap, match);
 		
 		JLayeredPane layeredPane = getLayeredPane();
-        JPanel mainPanel = new JPanel();
+		JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         
         Box west = Box.createHorizontalBox();
@@ -32,8 +34,7 @@ public class MatchTable extends MatchFrames {
         mainPanel.add(east, BorderLayout.EAST); 
 		
         centerBox = Box.createVerticalBox();
-        JLabel title = new JLabel("Live Table Page");
-        centerBox.add(title);
+        
         mainPanel.add(centerBox, BorderLayout.CENTER);
         
         mainPanel.setBounds(0, 80, 800, 440);
@@ -42,6 +43,28 @@ public class MatchTable extends MatchFrames {
         
         setVisible(true);
 		
+	}
+	
+	public void updateTableVisually() {
+		centerBox.removeAll();
+		table = getMatch().getLeague().getLeagueTable();
+        centerBox.add(table);
+	}
+
+	public Box getCenterBox() {
+		return centerBox;
+	}
+
+	public void setCenterBox(Box centerBox) {
+		this.centerBox = centerBox;
+	}
+
+	public LeagueTable getTable() {
+		return table;
+	}
+
+	public void setTable(LeagueTable table) {
+		this.table = table;
 	}
 	
 }

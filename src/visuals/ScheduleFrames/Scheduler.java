@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -135,7 +138,29 @@ public class Scheduler extends JPanel {
 				}
 			}
 		}
+		if(getDate().toLocalDate().isAfter(LocalDate.of(2024, 06, 8))) {
+			for(Map.Entry<String, Match> each : league.getFixtures().entrySet()) {
+				Match match = each.getValue();
+				if (!(match instanceof UsersMatch)) {
+					
+					// This will eventually need to look at match time
+					// And only play the matches before this fixture
+					
+					if(match.getDateTime().toLocalDate().equals(getDate().toLocalDate())) {
+						match.startMatch();
+						
+						try {
+							Thread.sleep(50);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						
+					}
+				}
+			}
+		}
 	}
+		
 	
 	public void showEvent(Events event) {
 		eventContainer = Box.createHorizontalBox();
@@ -172,7 +197,7 @@ public class Scheduler extends JPanel {
 		for (String key : keysToReplace) {
             Match adult = league.getFixtures().get(key);
             if (adult != null) {
-                UsersMatch child = new UsersMatch(adult.getHome(), adult.getAway()); // Create ChildClass instance
+                UsersMatch child = new UsersMatch(adult.getHome(), adult.getAway(), league); // Create ChildClass instance
                 child.setDateTime(adult.getDateTime());
                 league.getFixtures().put(key, child); // Replace the entry in the map
             }
@@ -186,10 +211,7 @@ public class Scheduler extends JPanel {
 				events.add(matchEvent);
 			}
 		}
-		
-		
-		
-		
+
 		System.out.println(events);
 	}
 

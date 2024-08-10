@@ -1,6 +1,9 @@
 package general;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import people.Footballer;
 import people.Goalkeeper;
 
@@ -17,6 +20,7 @@ public class Match {
 	private Goalkeeper homegk;
 	private Goalkeeper awaygk;
     private LocalDateTime dateTime;
+    private League league;
 	
 	public Match() {};
 	
@@ -31,6 +35,20 @@ public class Match {
 		this.awaygk = away.getGoalkeeper();
 		this.awayScore = 0;
 		this.homeScore = 0;
+	}
+	
+	public Match(Team home, Team away, League league) {
+		this.home = home;
+		this.away = away;
+		this.stadium = home.getStadium();
+		this.homeTeam = home.getFirstTeam();
+		this.awayTeam = away.getFirstTeam();
+		this.minute = 0;
+		this.homegk = home.getGoalkeeper();
+		this.awaygk = away.getGoalkeeper();
+		this.awayScore = 0;
+		this.homeScore = 0;
+		this.league = league;
 	}
 
 	/* This is effectively a start game method,
@@ -71,7 +89,6 @@ public class Match {
 						// SCORED
 
 						goalAlertOnScreen(player);
-						
 						// Create the score card and print
 						if (findTeam(player) == "Home") {
 							this.homeScore++;
@@ -104,7 +121,17 @@ public class Match {
 
 	public void displaySavesToScreen(Footballer player, Goalkeeper thisFoeGk) {}
 
-	public void addTimerForScreen(Footballer enemy) {}
+	public void addTimerForScreen(Footballer enemy) {
+		Timer timer = new Timer();
+		int delay = 0;
+		Match match = this;
+		timer.schedule(new TimerTask() {
+		    @Override
+		    public void run() {
+		    	match.startRun(enemy);
+		    }
+		}, delay);
+	}
 
 	public void updateScoreOnScreen() {}
 
@@ -188,12 +215,29 @@ public class Match {
 	public boolean fullTimeCheck() {
 		if (this.getMinute() >= 90) {
 			System.out.println(getHome().getName() + " " + getHomeScore() + " - " + getAwayScore() + " " + getAway().getName());
-	        continueButtonOnScreen();
+			if(league != null) {
+				if(getHomeScore() > getAwayScore()) {
+					league.getLeagueTable().getLine(getHome()).addWin();
+					league.getLeagueTable().getLine(getAway()).addLoss();
+				} else if (getAwayScore() > getHomeScore()) {
+					league.getLeagueTable().getLine(getHome()).addLoss();
+					league.getLeagueTable().getLine(getAway()).addWin();
+				} else {
+					league.getLeagueTable().getLine(getHome()).addDraw();
+					league.getLeagueTable().getLine(getAway()).addDraw();
+				}
+				league.getLeagueTable().updateLinesInTableLogic();
+				callUpdateTableVisually();
+			}
+			
+			continueButtonOnScreen();
 			return true;
 	    } else {
 	    	return false;
 	    }
 	}
+	
+	public void callUpdateTableVisually() {};
 	
 	public void continueButtonOnScreen() {};
 
@@ -314,6 +358,14 @@ public class Match {
 	
 	public LocalDateTime getDateTime() {
 		return dateTime;
+	}
+
+	public League getLeague() {
+		return league;
+	}
+
+	public void setLeague(League league) {
+		this.league = league;
 	}
 	
 }

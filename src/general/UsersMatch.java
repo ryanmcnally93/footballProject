@@ -47,6 +47,20 @@ public class UsersMatch extends Match {
 		this.awayAllShots = 0;
 		this.awayShotsOn = 0;
 		
+		initialize();
+	}
+	
+	public UsersMatch(Team home, Team away, League league) {
+		super(home, away, league);
+		this.homeAllShots = 0;
+		this.homeShotsOn = 0;
+		this.awayAllShots = 0;
+		this.awayShotsOn = 0;
+		
+		initialize();
+	}
+	
+	public void initialize() {
         cardMap = new HashMap<>();
         layout = new CardLayout();
         matchPages = new JPanel(layout);
@@ -77,7 +91,6 @@ public class UsersMatch extends Match {
         cardMap.put("Ratings", ratingsPanel);
 
         // Initialize with the main page, this will change multiple times
-		
 	}
 	
 	public void displayGame(GameWindow window, Scheduler schedule) {
@@ -86,9 +99,15 @@ public class UsersMatch extends Match {
 		window.getContentPane().removeAll();
 		window.getContentPane().add(matchPages, BorderLayout.CENTER);
         layout.show(matchPages, "Stats");
+        tablePanel.updateTableVisually();
 		window.revalidate();
 		window.repaint();
 	}
+	
+	@Override
+	public void callUpdateTableVisually() {
+		tablePanel.updateTableVisually();
+	};
 
 	@Override
 	public void updateShotsOnScreen(Footballer player) {
