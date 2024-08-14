@@ -277,7 +277,7 @@ public class initialSetup {
 	window = new GameWindow();
     window.setVisible(true);
 	
-//    Match match = ((Match) PremierLeague.getFixtures().get("Chelsea vs Manchester City"));
+//    Match match = ((Match) league.getFixtures().get("Chelsea vs Manchester City"));
 //	match.displayGame(window);
 	
 	  StartPage startPage = new StartPage(this);

@@ -1,6 +1,7 @@
 package visuals.ScheduleFrames;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
@@ -33,8 +34,8 @@ public class Scheduler extends JPanel {
 	private static final long serialVersionUID = -949295084027854854L;
 	private LocalDateTime date;
 	private Box header;
-	private JPanel eventsBox;
-	private JButton advance;
+	private JPanel eventsBox, south;
+	private JButton advance, playGame;
 	private Team team;
 	private User user;
 	private League league;
@@ -67,19 +68,19 @@ public class Scheduler extends JPanel {
         mainPanel.add(header, BorderLayout.NORTH);
         
         Box east = Box.createHorizontalBox();
-        east.setPreferredSize(new Dimension(20,200));
+        east.setPreferredSize(new Dimension(100,200));
         mainPanel.add(east, BorderLayout.EAST); 
         
         Box west = Box.createHorizontalBox();
-		west.setPreferredSize(new Dimension(20,200));
+		west.setPreferredSize(new Dimension(100,200));
         mainPanel.add(west, BorderLayout.WEST);
         
-		JPanel center = new JPanel();
+		south = new JPanel();
 		todaysDate = new JLabel("Today's date is: " + getDate());
 		advance = new JButton("Advance");
-		center.add(todaysDate);
-		center.add(advance);
-		mainPanel.add(center, BorderLayout.SOUTH);
+		south.add(todaysDate);
+		south.add(advance);
+		mainPanel.add(south, BorderLayout.SOUTH);
 		
 		advance.addMouseListener(new MouseAdapter() {
 			@Override
@@ -104,6 +105,8 @@ public class Scheduler extends JPanel {
 		if(match != null) {
 			if(match.getMinute() == 90) {
 				eventContainer.removeAll();
+				south.remove(playGame);
+				south.add(advance);
 			}
 		}
 	}
@@ -130,6 +133,11 @@ public class Scheduler extends JPanel {
 			setMatchdays();
 			
 		}
+		
+		// Here we are looking through the events
+		// Looking for todays events
+		// Displaying them on the front screen
+		// WHY DO WE NEED TO HAVE A MATCH BELONGING TO SCHEDULE?
 		for(Events each : events) {
 			if(each.getDate().toLocalDate().equals(getDate().toLocalDate())) {
 				showEvent(each);
@@ -138,6 +146,11 @@ public class Scheduler extends JPanel {
 				}
 			}
 		}
+		
+		// For each fixture (after populated)
+		// If they're not my usermatch
+		// And if they have the same date as today
+		// the match plays (Or doesn't)
 		if(getDate().toLocalDate().isAfter(LocalDate.of(2024, 06, 8))) {
 			for(Map.Entry<String, Match> each : league.getFixtures().entrySet()) {
 				Match match = each.getValue();
@@ -147,6 +160,9 @@ public class Scheduler extends JPanel {
 					// And only play the matches before this fixture
 					
 					if(match.getDateTime().toLocalDate().equals(getDate().toLocalDate())) {
+						
+						System.out.println("A match should play now *************************");
+						
 						match.startMatch();
 						
 						try {
@@ -161,13 +177,20 @@ public class Scheduler extends JPanel {
 		}
 	}
 		
-	
 	public void showEvent(Events event) {
 		eventContainer = Box.createHorizontalBox();
 		eventContainer.setPreferredSize(new Dimension(600,440));
 		JLabel matchTitle = new JLabel(event.getMatch().getHome().getName() + " vs " + event.getMatch().getAway().getName());
+		
+		// THIS POSITIONS THE MATCH TITLE AT TOP
+//		matchTitle.setAlignmentY(Component.TOP_ALIGNMENT);
+		
+		eventContainer.add(Box.createHorizontalGlue());
 		eventContainer.add(matchTitle);
-		JButton playGame = new JButton("Play");
+		eventContainer.add(Box.createHorizontalGlue());
+		
+		south.remove(advance);
+		playGame = new JButton("Play");
 		Scheduler sch = this;
 		playGame.addMouseListener(new MouseAdapter() {
 			@Override
@@ -175,7 +198,7 @@ public class Scheduler extends JPanel {
 				event.getMatch().displayGame(window, sch);
 			}
 		});
-		eventContainer.add(playGame);
+		south.add(playGame);
 		
 		mainPanel.add(eventContainer, BorderLayout.CENTER);
 		mainPanel.revalidate();

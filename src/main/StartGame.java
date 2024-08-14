@@ -11,9 +11,5 @@ public class StartGame {
         SwingUtilities.invokeLater(() -> {
         	initialSetup start = new initialSetup();
         });
-        
-        
-        
     }
-
 }

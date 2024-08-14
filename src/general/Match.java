@@ -57,11 +57,14 @@ public class Match {
 	public void startRun(Footballer player) {
 		// Making sure the game is under 90 minutes.
 		// Inserted game time was 0
-		if(fullTimeCheck()) {return;};
+		System.out.println("Started run with " + player.getName());
+		
 		int enemyCounter = 0;
 		
 		Map<String, Footballer> thisPlayersEnemy;
 		Goalkeeper thisFoeGk;
+		
+		System.out.println("Get's to team setters");
 		
 		if(getAwayTeam().containsValue(player)) {
 			thisPlayersEnemy = getHomeTeam();
@@ -71,23 +74,36 @@ public class Match {
 			thisFoeGk = getAwaygk();
 		}
 		
+		System.out.println("Get's to the enemies team");
+		
 		for (Map.Entry<String, Footballer> each : thisPlayersEnemy.entrySet()) {
 			// Run the function to see if the dribble was successful
 			Footballer enemy = each.getValue();
+			
+			System.out.println("Trying to run past player");
+			
 			if (getPastPlayer(player, enemy) == true) {
 				enemyCounter++;
 				// Increment minute and do a full time check
+				
+				System.out.println(enemyCounter);
+				
 				addMinute();
+				System.out.println("First Fulltime check");
 				if(fullTimeCheck()) {return;};
 
+				System.out.println("Checking number of player ran past");
+				
 				if (enemyCounter == 3) {
-					
+					enemyCounter = 0;
 					updateShotsOnScreen(player);
+					
+					System.out.println("About to take shot");
 					
 					if(takeShot(player, thisFoeGk) == true) {
 						
 						// SCORED
-
+						System.out.println("There's been a goal");
 						goalAlertOnScreen(player);
 						// Create the score card and print
 						if (findTeam(player) == "Home") {
@@ -104,15 +120,37 @@ public class Match {
 						
 						updateScoreOnScreen();
 
-						addTimerForScreen(enemy);
+						if (findTeam(player) == "Home") {
+							Footballer awayStriker = ((Footballer) awayTeam.get("ST"));
+							addTimerForScreen(awayStriker);
+						} else {
+							Footballer homeStriker = ((Footballer) homeTeam.get("ST"));
+							addTimerForScreen(homeStriker);
+						}
+						
 						
 						return;
 					} else {
+						
+						System.out.println("Keeper saved the shot");
+						
 						displaySavesToScreen(player, thisFoeGk);
+						if (findTeam(player) == "Home") {
+							Footballer awayStriker = ((Footballer) awayTeam.get("ST"));
+							startRun(awayStriker);
+						} else {
+							Footballer homeStriker = ((Footballer) homeTeam.get("ST"));
+							startRun(homeStriker);
+						}
+						return;
 					}
 				}
 			} else {
+				
+				System.out.println("Defender won the ball");
+				
 				addMinute();
+				System.out.println("Second Fulltime check");
 				if(fullTimeCheck()) {return;};
 				startRun(enemy);
 				return;
@@ -217,8 +255,9 @@ public class Match {
 	}
 	
 	public boolean fullTimeCheck() {
+		System.out.println("Checking full time, current minute = " + this.getMinute());
 		if (this.getMinute() >= 90) {
-			System.out.println(getHome().getName() + " " + getHomeScore() + " - " + getAwayScore() + " " + getAway().getName());
+			System.out.println("*****" + getHome().getName() + " " + getHomeScore() + " - " + getAwayScore() + " " + getAway().getName() + "*****");
 			if(league != null) {
 				if(getHomeScore() > getAwayScore()) {
 					league.getLeagueTable().getLine(getHome()).addWin();
@@ -258,7 +297,7 @@ public class Match {
 			getAwaygk().setStamina(100);
 		}
 		
-    	Footballer homeStriker = ((Footballer) homeTeam.get("ST"));
+		Footballer homeStriker = ((Footballer) homeTeam.get("ST"));
 		startRun(homeStriker);
     }
 	
