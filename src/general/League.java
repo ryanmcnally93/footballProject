@@ -91,17 +91,20 @@ public class League {
 	public Map<String, Match> createMatchWeek(ArrayList<Match> tolook){
 		Map<String, Match> MW = new HashMap<>();
 		temporary  = new ArrayList<>(toLookThrough);
-		
+
+		int matchesNeededPerWeek = getTeams().size()/2;
+		System.out.println(matchesNeededPerWeek);
+
 		int attempts = 0;
         Boolean restart;
 		do {
 			restart = false;
-			while(MW.size() < 4 && restartWholeProcess  == false) {
+			while(MW.size() < matchesNeededPerWeek && !restartWholeProcess) {
 				
 				System.out.println("Running While again");
 				System.out.println("To Look Through Size:  "+toLookThrough.size());
 				System.out.println("Temporary Size:  "+temporary.size());
-				if(temporary.size() == 0) {
+				if(temporary.isEmpty()) {
 					
 					System.out.println("Temporary is 0 again");
 					
@@ -194,26 +197,29 @@ public class League {
 	}
 
 	public void assignSlotsToMatches() {
-		// STEP 1
+
 		for(int i = 1; i<=matchWeeksMatches.size() ; i++ ) {
 			
 			Map<String, Match> thisWeeksMatches = matchWeeksMatches.get(i);
 			Map<Integer, LocalDateTime> thisWeeksSlots = matchWeeksSlots.get(i);
 			Match match;
+			int originalSize = thisWeeksSlots.size();
+
+			LocalDateTime slot;
 			for(Map.Entry<String, Match> matches : thisWeeksMatches.entrySet()) {
+
 				match = matches.getValue();
 				int randomInt = 0;
-				LocalDateTime slot = null;
-				
+				slot = null;
+
 				while(slot == null) {
-					randomInt = 1 + (int) (Math.random() * (thisWeeksSlots.size() - 1));
+					randomInt = 1 + (int) (Math.random() * originalSize);
 					slot = thisWeeksSlots.get(randomInt);
 				}
 				
 				match.setDateTime(slot);
-				
 				thisWeeksSlots.remove(randomInt);
-				
+
 				System.out.println(match.toString() + ": " + match.getDateTime());
 			}
 		}
@@ -238,20 +244,37 @@ public class League {
 		normalWeekend(13, saturday.plusWeeks(15));
 		// This needs to be changed
 		normalWeekend(14, saturday.plusWeeks(16)); // First Tuesday Fixtures
-		System.out.println("Match Week 1 slots: " + matchWeeksSlots.get(1));
-		System.out.println("Match Weel 2 slots: " + matchWeeksSlots.get(2));
-		System.out.println("Match Weel 3 slots: " + matchWeeksSlots.get(3));
-		System.out.println("Match Weel 4 slots: " + matchWeeksSlots.get(4));
-		System.out.println("Match Weel 5 slots: " + matchWeeksSlots.get(5));
-		System.out.println("Match Weel 6 slots: " + matchWeeksSlots.get(6));
-		System.out.println("Match Weel 7 slots: " + matchWeeksSlots.get(7));
-		System.out.println("Match Weel 8 slots: " + matchWeeksSlots.get(8));
-		System.out.println("Match Weel 9 slots: " + matchWeeksSlots.get(9));
-		System.out.println("Match Weel 10 slots: " + matchWeeksSlots.get(10));
-		System.out.println("Match Weel 11 slots: " + matchWeeksSlots.get(11));
-		System.out.println("Match Weel 12 slots: " + matchWeeksSlots.get(12));
-		System.out.println("Match Weel 13 slots: " + matchWeeksSlots.get(13));
-		System.out.println("Match Weel 14 slots: " + matchWeeksSlots.get(14));
+		normalWeekend(15, saturday.plusWeeks(17));
+		normalWeekend(16, saturday.plusWeeks(18));
+		normalWeekend(17, saturday.plusWeeks(19));
+		normalWeekend(18, saturday.plusWeeks(20));
+		normalWeekend(19, saturday.plusWeeks(21));
+		normalWeekend(20, saturday.plusWeeks(23));
+		normalWeekend(21, saturday.plusWeeks(24));
+		normalWeekend(22, saturday.plusWeeks(25));
+		normalWeekend(23, saturday.plusWeeks(26));
+		normalWeekend(24, saturday.plusWeeks(27));
+		normalWeekend(25, saturday.plusWeeks(28));
+		normalWeekend(26, saturday.plusWeeks(29));
+		normalWeekend(27, saturday.plusWeeks(30));
+		normalWeekend(28, saturday.plusWeeks(32));
+		normalWeekend(29, saturday.plusWeeks(33));
+		normalWeekend(30, saturday.plusWeeks(34));
+		normalWeekend(31, saturday.plusWeeks(35));
+		normalWeekend(32, saturday.plusWeeks(36));
+		normalWeekend(33, saturday.plusWeeks(37));
+		normalWeekend(34, saturday.plusWeeks(38));
+		normalWeekend(35, saturday.plusWeeks(39));
+		normalWeekend(36, saturday.plusWeeks(40));
+		normalWeekend(37, saturday.plusWeeks(41));
+		normalWeekend(38, saturday.plusWeeks(43));
+
+		for(Map.Entry<Integer,
+				Map<Integer, LocalDateTime>> matches : matchWeeksSlots.entrySet()){
+			Map<Integer, LocalDateTime> thisWeek = matches.getValue();
+			Integer thisWeekNumber = matches.getKey();
+			System.out.println("Match Week " + thisWeekNumber + " slots: " + thisWeek);
+		}
 	}
 	
 	public void normalWeekend(int matchWeek, LocalDateTime saturday){

@@ -9,6 +9,7 @@ import people.Goalkeeper;
 import people.Manager;
 import visuals.MatchFrames.GameWindow;
 
+@SuppressWarnings("TextBlockMigration")
 public class initialSetup {
 	
 	private League league;
@@ -123,302 +124,280 @@ public class initialSetup {
 	Footballer aguerb = new Footballer("Nayef Aguerb", 27, 55, 230, 100, "CB");
 	Footballer coufalr = new Footballer("Vladimir Coufalr", 31, 80, 200, 100, "RB");
 
-	// Leicester
-	Goalkeeper hermansen = new Goalkeeper("Mads Hermansan", 23, 130);
-	Footballer vardy = new Footballer("Jamie Vardy", 36, 180, 50, 100, "ST");
-	Footballer iheanacho = new Footballer("Kelechi Iheanacno", 26, 175, 55, 100, "RW");
-	Footballer madison = new Footballer("James Madisen", 27, 185, 60, 100, "LW");
-	Footballer ndidi = new Footballer("Wilfred Ndidr", 26, 165, 70, 100, "CM");
-	Footballer soumare = new Footballer("Boubakary Soumara", 24, 160, 80, 100, "CM");
-	Footballer dewburyHall = new Footballer("Kiernan Dewsbury-Hall", 25, 150, 85, 100, "CAM");
-	Footballer castagne = new Footballer("Timothy Castanre", 28, 70, 190, 100, "LB");
-	Footballer faes = new Footballer("Wout Fas", 25, 55, 220, 100, "CB");
-	Footballer souttar = new Footballer("Harry Souttqr", 24, 50, 230, 100, "CB");
-	Footballer ricardo = new Footballer("Ricardo Pereirz", 29, 80, 195, 100, "RB");
-	
-	// Ipswich
-	Goalkeeper walton = new Goalkeeper("Christian Waltom", 28, 140);
-	Footballer broadhead = new Footballer("Ellis Broadhed", 25, 175, 50, 100, "ST");
-	Footballer burns = new Footballer("Janoi Burnz", 26, 180, 55, 100, "RW");
-	Footballer clarke = new Footballer("Conor Clark", 24, 170, 60, 100, "LW");
-	Footballer evans = new Footballer("Lee Evens", 28, 160, 65, 100, "CM");
-	Footballer morsey = new Footballer("Sam Morsy", 31, 150, 80, 100, "CM");
+	Goalkeeper hermanson = new Goalkeeper("Mads Hermansan", 23, 130);
+	Footballer vardi = new Footballer("Jamie Vardy", 36, 180, 50, 100, "ST");
+	Footballer iheanachos = new Footballer("Kelechi Iheanacno", 26, 175, 55, 100, "RW");
+	Footballer madisonn = new Footballer("James Madisen", 27, 185, 60, 100, "LW");
+	Footballer ndidy = new Footballer("Wilfred Ndidr", 26, 165, 70, 100, "CM");
+	Footballer soumara = new Footballer("Boubakary Soumara", 24, 160, 80, 100, "CM");
+	Footballer dewburyHull = new Footballer("Kiernan Dewsbury-Hall", 25, 150, 85, 100, "CAM");
+	Footballer castagna = new Footballer("Timothy Castanre", 28, 70, 190, 100, "LB");
+	Footballer fase = new Footballer("Wout Fas", 25, 55, 220, 100, "CB");
+	Footballer soutar = new Footballer("Harry Souttqr", 24, 50, 230, 100, "CB");
+	Footballer riccardo = new Footballer("Ricardo Pereirz", 29, 80, 195, 100, "RB");
+
+	Goalkeeper waltom = new Goalkeeper("Christian Waltom", 28, 140);
+	Footballer broadhed = new Footballer("Ellis Broadhed", 25, 175, 50, 100, "ST");
+	Footballer burnz = new Footballer("Janoi Burnz", 26, 180, 55, 100, "RW");
+	Footballer clark = new Footballer("Conor Clark", 24, 170, 60, 100, "LW");
+	Footballer evens = new Footballer("Lee Evens", 28, 160, 65, 100, "CM");
+	Footballer morsy = new Footballer("Sam Morsy", 31, 150, 80, 100, "CM");
 	Footballer luongo = new Footballer("Massimo Luongo", 30, 140, 85, 100, "CAM");
-	Footballer kenlock = new Footballer("Myles Kenlocke", 25, 75, 185, 100, "LB");
+	Footballer kenlocke = new Footballer("Myles Kenlocke", 25, 75, 185, 100, "LB");
 	Footballer wolfenden = new Footballer("Luke Wolfenden", 24, 60, 220, 100, "CB");
 	Footballer donacien = new Footballer("Toto Donacien", 29, 55, 225, 100, "CB");
 	Footballer leigh = new Footballer("Greg Leigh", 30, 85, 195, 100, "RB");
-	  
-//    fulham
-	Goalkeeper ramsdale = new Goalkeeper("Aaron Ramsdake", 26, 140);
-	Footballer mitrovic = new Footballer("Aleksandar Mitrovich", 29, 190, 55, 100, "ST");
+
+	Goalkeeper ramsdake = new Goalkeeper("Aaron Ramsdake", 26, 140);
+	Footballer mitrovich = new Footballer("Aleksandar Mitrovich", 29, 190, 55, 100, "ST");
 	Footballer wilson = new Footballer("Harry Wilson", 27, 175, 60, 100, "RW");
-	Footballer perreira = new Footballer("Andreas Perreir", 28, 180, 65, 100, "LW");
-	Footballer palhinha = new Footballer("Joao Palhinh", 28, 170, 80, 100, "CM");
-	Footballer reed = new Footballer("Harrison Reen", 28, 155, 85, 100, "CM");
+	Footballer perreir = new Footballer("Andreas Perreir", 28, 180, 65, 100, "LW");
+	Footballer palhinh = new Footballer("Joao Palhinh", 28, 170, 80, 100, "CM");
+	Footballer reen = new Footballer("Harrison Reen", 28, 155, 85, 100, "CM");
 	Footballer lukic = new Footballer("Sasa Lukic", 27, 140, 90, 100, "CAM");
-	Footballer roberts = new Footballer("Antonee Robertz", 25, 70, 185, 100, "LB");
-	Footballer diop = new Footballer("Issa Diob", 26, 60, 220, 100, "CB");
-	Footballer adarabioyo = new Footballer("Tosin Adarabioyu", 25, 55, 230, 100, "CB");
+	Footballer robertz = new Footballer("Antonee Robertz", 25, 70, 185, 100, "LB");
+	Footballer diob = new Footballer("Issa Diob", 26, 60, 220, 100, "CB");
+	Footballer adarabioyu = new Footballer("Tosin Adarabioyu", 25, 55, 230, 100, "CB");
 	Footballer tete = new Footballer("Sergi Tete", 26, 80, 195, 100, "RB");
-	
-//    everton
-	Goalkeeper pickford = new Goalkeeper("Jordan Pickfard", 30, 145);
+
+	Goalkeeper pickfard = new Goalkeeper("Jordan Pickfard", 30, 145);
 	Footballer calvertlewin = new Footballer("Dominic Calvert-Lewin", 26, 190, 55, 100, "ST");
-	Footballer gray = new Footballer("Demarai Grary", 27, 180, 50, 100, "RW");
+	Footballer grary = new Footballer("Demarai Grary", 27, 180, 50, 100, "RW");
 	Footballer mcneil = new Footballer("Dwight Mcneil", 24, 175, 55, 100, "LW");
 	Footballer gueye = new Footballer("Idrissa Gueye", 34, 165, 75, 100, "CM");
-	Footballer onana = new Footballer("Amadou Onan", 22, 160, 80, 100, "CM");
-	Footballer wobi = new Footballer("Alex Iwobi", 27, 140, 85, 100, "CAM");
-	Footballer mykolenko = new Footballer("Vitaliy Mykalenko", 24, 70, 180, 100, "LB");
-	Footballer tarkowski = new Footballer("James Tarkowsky", 31, 65, 225, 100, "CB");
-	Footballer coady = new Footballer("Conor Coad", 30, 55, 235, 100, "CB");
+	Footballer onan = new Footballer("Amadou Onan", 22, 160, 80, 100, "CM");
+	Footballer iwobi = new Footballer("Alex Iwobi", 27, 140, 85, 100, "CAM");
+	Footballer mykalenko = new Footballer("Vitaliy Mykalenko", 24, 70, 180, 100, "LB");
+	Footballer tarkowsky = new Footballer("James Tarkowsky", 31, 65, 225, 100, "CB");
+	Footballer coad = new Footballer("Conor Coad", 30, 55, 235, 100, "CB");
 	Footballer patterson = new Footballer("Nathan Patterson", 22, 85, 200, 100, "RB");
-	
-//    brighton
-	Goalkeeper steel = new Goalkeeper("Jason Steell", 27, 130);
-	Footballer mitoma = new Footballer("Kaoru Mitom", 26, 180, 55, 100, "ST");
-	Footballer march = new Footballer("Solly Marc", 29, 175, 60, 100, "RW");
-	Footballer estupinan = new Footballer("Pervis Estupinaz", 25, 185, 65, 100, "LW");
-	Footballer macallister = new Footballer("Alexis Macalliste", 25, 170, 80, 100, "CM");
+
+	Goalkeeper steell = new Goalkeeper("Jason Steell", 27, 130);
+	Footballer mitom = new Footballer("Kaoru Mitom", 26, 180, 55, 100, "ST");
+	Footballer marc = new Footballer("Solly Marc", 29, 175, 60, 100, "RW");
+	Footballer estupinaz = new Footballer("Pervis Estupinaz", 25, 185, 65, 100, "LW");
+	Footballer macalliste = new Footballer("Alexis Macalliste", 25, 170, 80, 100, "CM");
 	Footballer caicedo = new Footballer("Moises Caicedo", 22, 155, 85, 100, "CM");
 	Footballer gilmore = new Footballer("Billy Gilmore", 22, 145, 90, 100, "CAM");
-	Footballer veltman = new Footballer("Joel Veltma", 32, 75, 180, 100, "LB");
+	Footballer veltma = new Footballer("Joel Veltma", 32, 75, 180, 100, "LB");
 	Footballer dunk = new Footballer("Lewis Dunk", 31, 60, 230, 100, "CB");
-	Footballer webster = new Footballer("Adam Webste", 24, 55, 220, 100, "CB");
+	Footballer webste = new Footballer("Adam Webste", 24, 55, 220, 100, "CB");
 	Footballer lamptey = new Footballer("Tariq Lamptey", 23, 85, 195, 100, "RB");
-	
-//    forest
-	Goalkeeper hennessey = new Goalkeeper("Wayne Hennessex", 36, 140);
-	Footballer awoniyi = new Footballer("Taiwo Awoniy", 25, 185, 55, 100, "ST");
-	Footballer lingard = new Footballer("Jesse Lingrd", 31, 175, 60, 100, "RW");
-	Footballer johnson = new Footballer("Brennan Johnsn", 22, 180, 65, 100, "LW");
+
+	Goalkeeper hennessex = new Goalkeeper("Wayne Hennessex", 36, 140);
+	Footballer awoniy = new Footballer("Taiwo Awoniy", 25, 185, 55, 100, "ST");
+	Footballer lingrd = new Footballer("Jesse Lingrd", 31, 175, 60, 100, "RW");
+	Footballer johnsn = new Footballer("Brennan Johnsn", 22, 180, 65, 100, "LW");
 	Footballer yates = new Footballer("Ryan Yates", 26, 170, 70, 100, "CM");
 	Footballer freuler = new Footballer("Remo Freuler", 31, 155, 80, 100, "CM");
-	Footballer danilo = new Footballer("Danilo Pereira", 22, 140, 85, 100, "CAM");
+	Footballer pereira = new Footballer("Danilo Pereira", 22, 140, 85, 100, "CAM");
 	Footballer lodi = new Footballer("Renan Lodi", 25, 75, 185, 100, "LB");
 	Footballer mckenna = new Footballer("Scott Mckenna", 26, 60, 220, 100, "CB");
-	Footballer worrall = new Footballer("Joe Worrll", 26, 55, 230, 100, "CB");
+	Footballer worrll = new Footballer("Joe Worrll", 26, 55, 230, 100, "CB");
 	Footballer nico = new Footballer("Neco Williams", 23, 80, 195, 100, "RB");
-	
-//    bournemouth
+
 	Goalkeeper ramstale = new Goalkeeper("Aaron Ramstale", 25, 135);
-	Footballer solanke = new Footballer("Dominic Solankc", 25, 185, 55, 100, "ST");
+	Footballer solankc = new Footballer("Dominic Solankc", 25, 185, 55, 100, "ST");
 	Footballer antony = new Footballer("Ryan Antony", 23, 175, 60, 100, "RW");
-	Footballer billing = new Footballer("David Billong", 22, 180, 65, 100, "LW");
-	Footballer lerma = new Footballer("Jefferson Lerme", 28, 170, 80, 100, "CM");
+	Footballer billong = new Footballer("David Billong", 22, 180, 65, 100, "LW");
+	Footballer lerme = new Footballer("Jefferson Lerme", 28, 170, 80, 100, "CM");
 	Footballer ramsay = new Footballer("Maxime Ramsay", 22, 155, 85, 100, "CM");
-	Footballer cook = new Footballer("Lewis Cooke", 26, 140, 90, 100, "CAM");
-	Footballer zamora = new Footballer("Jordan Zamor", 24, 75, 185, 100, "LB");
+	Footballer cooke = new Footballer("Lewis Cooke", 26, 140, 90, 100, "CAM");
+	Footballer zamor = new Footballer("Jordan Zamor", 24, 75, 185, 100, "LB");
 	Footballer mepham = new Footballer("Chris Mepham", 26, 60, 220, 100, "CB");
-	Footballer smith = new Footballer("Adam Smiths", 32, 55, 230, 100, "CB");
+	Footballer smiths = new Footballer("Adam Smiths", 32, 55, 230, 100, "CB");
 	Footballer travers = new Footballer("Mark Travers", 23, 80, 195, 100, "RB");
-	
-//    brentford
+
 	Goalkeeper rayz = new Goalkeeper("David Rayz", 31, 150);
 	Footballer toney = new Footballer("Ivan Toney", 28, 190, 60, 100, "ST");
-	Footballer bretton = new Footballer("Bryan Breetton", 26, 180, 55, 100, "RW");
+	Footballer breetton = new Footballer("Bryan Breetton", 26, 180, 55, 100, "RW");
 	Footballer dasilva = new Footballer("Josh DaSilva", 24, 175, 60, 100, "LW");
 	Footballer janelt = new Footballer("Vitaly Janelt", 25, 170, 70, 100, "CM");
 	Footballer norgaard = new Footballer("Christian Norgaard", 29, 155, 80, 100, "CM");
-	Footballer hickey = new Footballer("Aaron Hicksy", 22, 140, 85, 100, "CAM");
-	Footballer henry = new Footballer("Rico Henrey", 26, 75, 180, 100, "LB");
-	Footballer pinnock = new Footballer("Ethan Pinnok", 27, 60, 220, 100, "CB");
+	Footballer hicksy = new Footballer("Aaron Hicksy", 22, 140, 85, 100, "CAM");
+	Footballer henrey = new Footballer("Rico Henrey", 26, 75, 180, 100, "LB");
+	Footballer pinnok = new Footballer("Ethan Pinnok", 27, 60, 220, 100, "CB");
 	Footballer mee = new Footballer("Ben Mee", 34, 55, 230, 100, "CB");
 	Footballer canos = new Footballer("Sergi Canos", 26, 80, 195, 100, "RB");
-	
-//    crystal palace
+
 	Goalkeeper johnstone = new Goalkeeper("Sam Johnstone", 30, 140);
 	Footballer eze = new Footballer("Eberechi Eze", 25, 180, 55, 100, "ST");
-	Footballer zaha = new Footballer("Wilfried Zah", 31, 175, 60, 100, "RW");
+	Footballer zah = new Footballer("Wilfried Zah", 31, 175, 60, 100, "RW");
 	Footballer olise = new Footballer("Michael Olise", 22, 185, 65, 100, "LW");
 	Footballer doucoure = new Footballer("Cheick Doucoure", 24, 170, 70, 100, "CM");
 	Footballer lurie = new Footballer("Jeffrey Lurie", 26, 155, 80, 100, "CM");
 	Footballer hughes = new Footballer("Will Hughes", 28, 140, 85, 100, "CAM");
 	Footballer mitchell = new Footballer("Tyrick Mitchell", 24, 75, 185, 100, "LB");
-	Footballer guehi = new Footballer("Marc Gueh", 23, 60, 220, 100, "CB");
-	Footballer andersen = new Footballer("Jannik Andersn", 27, 55, 230, 100, "CB");
-	Footballer ward = new Footballer("Joel Wrad", 30, 80, 195, 100, "RB");
-	
-//    southampton
+	Footballer gueh = new Footballer("Marc Gueh", 23, 60, 220, 100, "CB");
+	Footballer andersn = new Footballer("Jannik Andersn", 27, 55, 230, 100, "CB");
+	Footballer wrad = new Footballer("Joel Wrad", 30, 80, 195, 100, "RB");
+
 	Goalkeeper bazunu = new Goalkeeper("Gavin Bazunu", 22, 135);
-	Footballer alcaraz = new Footballer("Carlos Alcarrz", 21, 175, 50, 100, "ST");
-	Footballer wardprowse = new Footballer("James Wardprose", 29, 180, 60, 100, "RW");
-	Footballer perraud = new Footballer("Romain Perraud", 26, 170, 65, 100, "LW");
-	Footballer lavia = new Footballer("Romeo Lavia", 20, 160, 70, 100, "CM");
-	Footballer arreola = new Footballer("Nicolas Arreola", 24, 150, 80, 100, "CM");
-	Footballer jankewitz = new Footballer("James Jankewitz", 23, 140, 85, 100, "CAM");
-	Footballer karlson = new Footballer("Lianco Karlson", 24, 75, 185, 100, "LB");
+	Footballer alcarrz = new Footballer("Carlos Alcarrz", 21, 175, 50, 100, "ST");
+	Footballer wardprose = new Footballer("James Wardprose", 29, 180, 60, 100, "RW");
+	Footballer peraud = new Footballer("Romain Peraud", 26, 170, 65, 100, "LW");
+	Footballer lavie = new Footballer("Romeo Lavie", 20, 160, 70, 100, "CM");
+	Footballer arreole = new Footballer("Nicolas Arreole", 24, 150, 80, 100, "CM");
+	Footballer jankwitz = new Footballer("James Jankwitz", 23, 140, 85, 100, "CAM");
+	Footballer karlsen = new Footballer("Lianco Karlsen", 24, 75, 185, 100, "LB");
 	Footballer salisu = new Footballer("Mohammed Salisu", 24, 60, 220, 100, "CB");
 	Footballer bednarek = new Footballer("Jan Bednarek", 27, 55, 230, 100, "CB");
-	Footballer walker = new Footballer("Kyle Walkr", 32, 80, 195, 100, "RB");
-	
-//    wolves
+	Footballer walkr = new Footballer("Kyle Walkr", 32, 80, 195, 100, "RB");
+
 	Goalkeeper sarr = new Goalkeeper("José Sárr", 30, 140);
-	Footballer cunha = new Footballer("Matheus Cuhna", 24, 185, 55, 100, "ST");
-	Footballer podence = new Footballer("Daniel Podenc", 28, 175, 60, 100, "RW");
-	Footballer netto = new Footballer("Pedro Nett", 23, 180, 65, 100, "LW");
+	Footballer cuhna = new Footballer("Matheus Cuhna", 24, 185, 55, 100, "ST");
+	Footballer podenc = new Footballer("Daniel Podenc", 28, 175, 60, 100, "RW");
+	Footballer nett = new Footballer("Pedro Nett", 23, 180, 65, 100, "LW");
 	Footballer neves = new Footballer("Rúben Neves", 27, 170, 75, 100, "CM");
 	Footballer lobato = new Footballer("Mateus Lobato", 20, 155, 80, 100, "CM");
 	Footballer nunes = new Footballer("Matheus Nunes", 25, 140, 85, 100, "CAM");
 	Footballer marcal = new Footballer("Marçal", 34, 75, 180, 100, "LB");
 	Footballer kilman = new Footballer("Max Kilman", 26, 60, 220, 100, "CB");
 	Footballer collins = new Footballer("Hugo Collins", 26, 55, 230, 100, "CB");
-	Footballer jonny = new Footballer("Jonny Casto", 30, 80, 195, 100, "RB");
-	
-	// Fulham
-//	Map<String, Footballer> eastHamFirst = new HashMap<>();
-//	eastHamFirst.put("GK", areole);
-//	eastHamFirst.put("ST", antonia);
-//	eastHamFirst.put("RW", bowem);
-//	eastHamFirst.put("LW", benrahme);
-//	eastHamFirst.put("CAM", paquetn);
-//	eastHamFirst.put("CM", wardPrewse);
-//	eastHamFirst.put("CM", soucik);
-//	eastHamFirst.put("LB", emerson);
-//	eastHamFirst.put("CB", zoumx);
-//	eastHamFirst.put("CB", aguerb);
-//	eastHamFirst.put("RB", coufalr);
-	
-	// Ipswitch
-//	Map<String, Footballer> eastHamFirst = new HashMap<>();
-//	eastHamFirst.put("GK", areole);
-//	eastHamFirst.put("ST", antonia);
-//	eastHamFirst.put("RW", bowem);
-//	eastHamFirst.put("LW", benrahme);
-//	eastHamFirst.put("CAM", paquetn);
-//	eastHamFirst.put("CM", wardPrewse);
-//	eastHamFirst.put("CM", soucik);
-//	eastHamFirst.put("LB", emerson);
-//	eastHamFirst.put("CB", zoumx);
-//	eastHamFirst.put("CB", aguerb);
-//	eastHamFirst.put("RB", coufalr);
-	
-	// Everton
-//	Map<String, Footballer> eastHamFirst = new HashMap<>();
-//	eastHamFirst.put("GK", areole);
-//	eastHamFirst.put("ST", antonia);
-//	eastHamFirst.put("RW", bowem);
-//	eastHamFirst.put("LW", benrahme);
-//	eastHamFirst.put("CAM", paquetn);
-//	eastHamFirst.put("CM", wardPrewse);
-//	eastHamFirst.put("CM", soucik);
-//	eastHamFirst.put("LB", emerson);
-//	eastHamFirst.put("CB", zoumx);
-//	eastHamFirst.put("CB", aguerb);
-//	eastHamFirst.put("RB", coufalr);
-	
-	// Brighton
-//	Map<String, Footballer> eastHamFirst = new HashMap<>();
-//	eastHamFirst.put("GK", areole);
-//	eastHamFirst.put("ST", antonia);
-//	eastHamFirst.put("RW", bowem);
-//	eastHamFirst.put("LW", benrahme);
-//	eastHamFirst.put("CAM", paquetn);
-//	eastHamFirst.put("CM", wardPrewse);
-//	eastHamFirst.put("CM", soucik);
-//	eastHamFirst.put("LB", emerson);
-//	eastHamFirst.put("CB", zoumx);
-//	eastHamFirst.put("CB", aguerb);
-//	eastHamFirst.put("RB", coufalr);
-	
-	// Forest
-//	Map<String, Footballer> eastHamFirst = new HashMap<>();
-//	eastHamFirst.put("GK", areole);
-//	eastHamFirst.put("ST", antonia);
-//	eastHamFirst.put("RW", bowem);
-//	eastHamFirst.put("LW", benrahme);
-//	eastHamFirst.put("CAM", paquetn);
-//	eastHamFirst.put("CM", wardPrewse);
-//	eastHamFirst.put("CM", soucik);
-//	eastHamFirst.put("LB", emerson);
-//	eastHamFirst.put("CB", zoumx);
-//	eastHamFirst.put("CB", aguerb);
-//	eastHamFirst.put("RB", coufalr);
-	
-	// Palace
-//	Map<String, Footballer> eastHamFirst = new HashMap<>();
-//	eastHamFirst.put("GK", areole);
-//	eastHamFirst.put("ST", antonia);
-//	eastHamFirst.put("RW", bowem);
-//	eastHamFirst.put("LW", benrahme);
-//	eastHamFirst.put("CAM", paquetn);
-//	eastHamFirst.put("CM", wardPrewse);
-//	eastHamFirst.put("CM", soucik);
-//	eastHamFirst.put("LB", emerson);
-//	eastHamFirst.put("CB", zoumx);
-//	eastHamFirst.put("CB", aguerb);
-//	eastHamFirst.put("RB", coufalr);
-	
-	// Southampton
-//	Map<String, Footballer> eastHamFirst = new HashMap<>();
-//	eastHamFirst.put("GK", areole);
-//	eastHamFirst.put("ST", antonia);
-//	eastHamFirst.put("RW", bowem);
-//	eastHamFirst.put("LW", benrahme);
-//	eastHamFirst.put("CAM", paquetn);
-//	eastHamFirst.put("CM", wardPrewse);
-//	eastHamFirst.put("CM", soucik);
-//	eastHamFirst.put("LB", emerson);
-//	eastHamFirst.put("CB", zoumx);
-//	eastHamFirst.put("CB", aguerb);
-//	eastHamFirst.put("RB", coufalr);
-	
-	// Bournemouth
-//	Map<String, Footballer> eastHamFirst = new HashMap<>();
-//	eastHamFirst.put("GK", areole);
-//	eastHamFirst.put("ST", antonia);
-//	eastHamFirst.put("RW", bowem);
-//	eastHamFirst.put("LW", benrahme);
-//	eastHamFirst.put("CAM", paquetn);
-//	eastHamFirst.put("CM", wardPrewse);
-//	eastHamFirst.put("CM", soucik);
-//	eastHamFirst.put("LB", emerson);
-//	eastHamFirst.put("CB", zoumx);
-//	eastHamFirst.put("CB", aguerb);
-//	eastHamFirst.put("RB", coufalr);
-	
-	// Brentford
-//	Map<String, Footballer> eastHamFirst = new HashMap<>();
-//	eastHamFirst.put("GK", areole);
-//	eastHamFirst.put("ST", antonia);
-//	eastHamFirst.put("RW", bowem);
-//	eastHamFirst.put("LW", benrahme);
-//	eastHamFirst.put("CAM", paquetn);
-//	eastHamFirst.put("CM", wardPrewse);
-//	eastHamFirst.put("CM", soucik);
-//	eastHamFirst.put("LB", emerson);
-//	eastHamFirst.put("CB", zoumx);
-//	eastHamFirst.put("CB", aguerb);
-//	eastHamFirst.put("RB", coufalr);
-	
-	// Wolves
-//	Map<String, Footballer> eastHamFirst = new HashMap<>();
-//	eastHamFirst.put("GK", areole);
-//	eastHamFirst.put("ST", antonia);
-//	eastHamFirst.put("RW", bowem);
-//	eastHamFirst.put("LW", benrahme);
-//	eastHamFirst.put("CAM", paquetn);
-//	eastHamFirst.put("CM", wardPrewse);
-//	eastHamFirst.put("CM", soucik);
-//	eastHamFirst.put("LB", emerson);
-//	eastHamFirst.put("CB", zoumx);
-//	eastHamFirst.put("CB", aguerb);
-//	eastHamFirst.put("RB", coufalr);
-	
-	// Leicester
-//	Map<String, Footballer> eastHamFirst = new HashMap<>();
-//	eastHamFirst.put("GK", areole);
-//	eastHamFirst.put("ST", antonia);
-//	eastHamFirst.put("RW", bowem);
-//	eastHamFirst.put("LW", benrahme);
-//	eastHamFirst.put("CAM", paquetn);
-//	eastHamFirst.put("CM", wardPrewse);
-//	eastHamFirst.put("CM", soucik);
-//	eastHamFirst.put("LB", emerson);
-//	eastHamFirst.put("CB", zoumx);
-//	eastHamFirst.put("CB", aguerb);
-//	eastHamFirst.put("RB", coufalr);
+	Footballer casto = new Footballer("Jonny Casto", 30, 80, 195, 100, "RB");
+
+	Map<String, Footballer> fullhamFirst = new HashMap<>();
+	fullhamFirst.put("GK", ramsdake);
+	fullhamFirst.put("ST", mitrovich);
+	fullhamFirst.put("RW", wilson);
+	fullhamFirst.put("LW", perreir);
+	fullhamFirst.put("CAM", palhinh);
+	fullhamFirst.put("CM", reen);
+	fullhamFirst.put("CM", lukic);
+	fullhamFirst.put("LB", robertz);
+	fullhamFirst.put("CB", diob);
+	fullhamFirst.put("CB", adarabioyu);
+	fullhamFirst.put("RB", tete);
+
+	Map<String, Footballer> upswitchFirst = new HashMap<>();
+	upswitchFirst.put("GK", waltom);
+	upswitchFirst.put("ST", broadhed);
+	upswitchFirst.put("RW", burnz);
+	upswitchFirst.put("LW", clark);
+	upswitchFirst.put("CAM", evens);
+	upswitchFirst.put("CM", morsy);
+	upswitchFirst.put("CM", luongo);
+	upswitchFirst.put("LB", kenlocke);
+	upswitchFirst.put("CB", wolfenden);
+	upswitchFirst.put("CB", donacien);
+	upswitchFirst.put("RB", leigh);
+
+	Map<String, Footballer> evertunFirst = new HashMap<>();
+	evertunFirst.put("GK", pickfard);
+	evertunFirst.put("ST", calvertlewin);
+	evertunFirst.put("RW", grary);
+	evertunFirst.put("LW", mcneil);
+	evertunFirst.put("CAM", gueye);
+	evertunFirst.put("CM", onan);
+	evertunFirst.put("CM", iwobi);
+	evertunFirst.put("LB", mykalenko);
+	evertunFirst.put("CB", tarkowsky);
+	evertunFirst.put("CB", coad);
+	evertunFirst.put("RB", patterson);
+
+	Map<String, Footballer> brightenFirst = new HashMap<>();
+	brightenFirst.put("GK", steell);
+	brightenFirst.put("ST", mitom);
+	brightenFirst.put("RW", marc);
+	brightenFirst.put("LW", estupinaz);
+	brightenFirst.put("CAM", macalliste);
+	brightenFirst.put("CM", caicedo);
+	brightenFirst.put("CM", gilmore);
+	brightenFirst.put("LB", veltma);
+	brightenFirst.put("CB", dunk);
+	brightenFirst.put("CB", webste);
+	brightenFirst.put("RB", lamptey);
+
+	Map<String, Footballer> nottinghamWoodsFirst = new HashMap<>();
+	nottinghamWoodsFirst.put("GK", hennessex);
+	nottinghamWoodsFirst.put("ST", awoniy);
+	nottinghamWoodsFirst.put("RW", lingrd);
+	nottinghamWoodsFirst.put("LW", johnsn);
+	nottinghamWoodsFirst.put("CAM", yates);
+	nottinghamWoodsFirst.put("CM", freuler);
+	nottinghamWoodsFirst.put("CM", pereira);
+	nottinghamWoodsFirst.put("LB", lodi);
+	nottinghamWoodsFirst.put("CB", mckenna);
+	nottinghamWoodsFirst.put("CB", worrll);
+	nottinghamWoodsFirst.put("RB", nico);
+
+	Map<String, Footballer> palaceFirst = new HashMap<>();
+	palaceFirst.put("GK", johnstone);
+	palaceFirst.put("ST", eze);
+	palaceFirst.put("RW", zah);
+	palaceFirst.put("LW", olise);
+	palaceFirst.put("CAM", doucoure);
+	palaceFirst.put("CM", lurie);
+	palaceFirst.put("CM", hughes);
+	palaceFirst.put("LB", mitchell);
+	palaceFirst.put("CB", gueh);
+	palaceFirst.put("CB", andersn);
+	palaceFirst.put("RB", wrad);
+
+	Map<String, Footballer> southamtonFirst = new HashMap<>();
+	southamtonFirst.put("GK", bazunu);
+	southamtonFirst.put("ST", alcarrz);
+	southamtonFirst.put("RW", wardprose);
+	southamtonFirst.put("LW", peraud);
+	southamtonFirst.put("CAM", lavie);
+	southamtonFirst.put("CM", arreole);
+	southamtonFirst.put("CM", jankwitz);
+	southamtonFirst.put("LB", karlsen);
+	southamtonFirst.put("CB", salisu);
+	southamtonFirst.put("CB", bednarek);
+	southamtonFirst.put("RB", walkr);
+
+	Map<String, Footballer> bornmouthFirst = new HashMap<>();
+	bornmouthFirst.put("GK", ramstale);
+	bornmouthFirst.put("ST", solankc);
+	bornmouthFirst.put("RW", antony);
+	bornmouthFirst.put("LW", billong);
+	bornmouthFirst.put("CAM", lerme);
+	bornmouthFirst.put("CM", ramsay);
+	bornmouthFirst.put("CM", cooke);
+	bornmouthFirst.put("LB", zamor);
+	bornmouthFirst.put("CB", mepham);
+	bornmouthFirst.put("CB", smiths);
+	bornmouthFirst.put("RB", travers);
+
+	Map<String, Footballer> burntfordFirst = new HashMap<>();
+	burntfordFirst.put("GK", rayz);
+	burntfordFirst.put("ST", toney);
+	burntfordFirst.put("RW", breetton);
+	burntfordFirst.put("LW", dasilva);
+	burntfordFirst.put("CAM", janelt);
+	burntfordFirst.put("CM", norgaard);
+	burntfordFirst.put("CM", hicksy);
+	burntfordFirst.put("LB", henrey);
+	burntfordFirst.put("CB", pinnok);
+	burntfordFirst.put("CB", mee);
+	burntfordFirst.put("RB", canos);
+
+	Map<String, Footballer> wolvesFirst = new HashMap<>();
+	wolvesFirst.put("GK", sarr);
+	wolvesFirst.put("ST", cuhna);
+	wolvesFirst.put("RW", podenc);
+	wolvesFirst.put("LW", nett);
+	wolvesFirst.put("CAM", neves);
+	wolvesFirst.put("CM", lobato);
+	wolvesFirst.put("CM", nunes);
+	wolvesFirst.put("LB", marcal);
+	wolvesFirst.put("CB", kilman);
+	wolvesFirst.put("CB", collins);
+	wolvesFirst.put("RB", casto);
+
+	Map<String, Footballer> leicestorFirst = new HashMap<>();
+	leicestorFirst.put("GK", hermanson);
+	leicestorFirst.put("ST", vardi);
+	leicestorFirst.put("RW", iheanachos);
+	leicestorFirst.put("LW", madisonn);
+	leicestorFirst.put("CAM", ndidy);
+	leicestorFirst.put("CM", soumara);
+	leicestorFirst.put("CM", dewburyHull);
+	leicestorFirst.put("LB", castagna);
+	leicestorFirst.put("CB", fase);
+	leicestorFirst.put("CB", soutar);
+	leicestorFirst.put("RB", riccardo);
 	
 	Map<String, Footballer> eastHamFirst = new HashMap<>();
 	eastHamFirst.put("GK", areole);
@@ -523,6 +502,7 @@ public class initialSetup {
 	arsenolFirst.put("CB", gabriel);
 	arsenolFirst.put("CB", salima);
 	arsenolFirst.put("RB", whites);
+
 	Map<String, Footballer> totenhamFirst = new HashMap<>();
 	totenhamFirst.put("GK", vicarios);
 	totenhamFirst.put("ST", johnsun);
@@ -552,9 +532,9 @@ public class initialSetup {
 	Manager edwards = new Manager("Rob Edwards", 40, 300000);
 	Manager oneil = new Manager("Gary O'Neil", 41, 300000);
 	Manager moyes = new Manager("David Moyes", 61, 300000);
-	Manager Msilva = new Manager("Marco Silva", 46, 300000);
+	Manager mcnally = new Manager("Ryan McNally", 31, 300000);
 	Manager hodgson = new Manager("Roy Hodgson", 76, 300000);
-	Manager other1 = new Manager("Marco Silva", 46, 300000);
+	Manager gibbs = new Manager("Mark Gibbs", 33, 300000);
 	Manager emery = new Manager("Unai Emery", 76, 300000);
 
 	Team Arsenol = new Team("Arsenol", Arteta, arsenolFirst, 45000000, "Arsenol Stadium", Color.RED, Color.WHITE);
@@ -565,18 +545,18 @@ public class initialSetup {
 	Team ActonVilla = new Team("Acton Villa", emery, actonVillaFirst, 45000000, "Acton Park", Color.MAGENTA, Color.BLUE);
 	Team TanUtd = new Team("Tan United", tenHag, tanUtdFirst, 45000000, "New Trafford Stadium", Color.RED, Color.WHITE);
 	Team Liverpule = new Team("Liverpule", klopp, liverpuleFirst, 45000000, "Liverpule Stadium", Color.RED, Color.YELLOW);
-	Team EastHam = new Team("EastHam", moyes, eastHamFirst, 45000000, "East Ham Stadium", Color.MAGENTA, Color.WHITE);
-//	Team Tottenham = new Team("Tottenham", Mourinho, tottenhamFirst, 45000000, "Scummy Stadium", Color.WHITE, Color.BLUE);
-//	Team Arsenal = new Team("Arsenal", Arteta, arsenalFirst, 45000000, "Emirates Stadium", Color.RED, Color.WHITE);
-//	Team Tottenham = new Team("Tottenham", Mourinho, tottenhamFirst, 45000000, "Scummy Stadium", Color.WHITE, Color.BLUE);
-//	Team Arsenal = new Team("Arsenal", Arteta, arsenalFirst, 45000000, "Emirates Stadium", Color.RED, Color.WHITE);
-//	Team Tottenham = new Team("Tottenham", Mourinho, tottenhamFirst, 45000000, "Scummy Stadium", Color.WHITE, Color.BLUE);
-//	Team Arsenal = new Team("Arsenal", Arteta, arsenalFirst, 45000000, "Emirates Stadium", Color.RED, Color.WHITE);
-//	Team Tottenham = new Team("Tottenham", Mourinho, tottenhamFirst, 45000000, "Scummy Stadium", Color.WHITE, Color.BLUE);
-//	Team Arsenal = new Team("Arsenal", Arteta, arsenalFirst, 45000000, "Emirates Stadium", Color.RED, Color.WHITE);
-//	Team Tottenham = new Team("Tottenham", Mourinho, tottenhamFirst, 45000000, "Scummy Stadium", Color.WHITE, Color.BLUE);
-//	Team Arsenal = new Team("Arsenal", Arteta, arsenalFirst, 45000000, "Emirates Stadium", Color.RED, Color.WHITE);
-//	Team Tottenham = new Team("Tottenham", Mourinho, tottenhamFirst, 45000000, "Scummy Stadium", Color.WHITE, Color.BLUE);
+	Team EastHam = new Team("East Ham", moyes, eastHamFirst, 45000000, "East Ham Stadium", Color.MAGENTA, Color.WHITE);
+	Team Leicestor = new Team("Leicestor", viera, leicestorFirst, 45000000, "Leicestor Stadium", Color.BLUE, Color.WHITE);
+	Team Wolves = new Team("Wolves", hodgson, wolvesFirst, 45000000, "Wolves Stadium", Color.ORANGE, Color.WHITE);
+	Team Upswitch = new Team("Upswitch", smithe, upswitchFirst, 45000000, "Upswitch Stadium", Color.BLUE, Color.WHITE);
+	Team Fullham = new Team("Fullham", dyche, fullhamFirst, 45000000, "Fullham Stadium", Color.WHITE, Color.BLACK);
+	Team Evertun = new Team("Evertun", pochettino, evertunFirst, 45000000, "Evertun Stadium", Color.BLUE, Color.BLUE);
+	Team Brighten = new Team("Brighten", Ehowe, brightenFirst, 45000000, "Brighten Stadium", Color.BLUE, Color.BLACK);
+	Team NottinghamWoods = new Team("Nottingham Woods", cooper, nottinghamWoodsFirst, 45000000, "Woods Stadium", Color.RED, Color.WHITE);
+	Team Palace = new Team("Palace", edwards, palaceFirst, 45000000, "Palace Stadium", Color.BLUE, Color.RED);
+	Team Bornmouth = new Team("Bornmouth", oneil, bornmouthFirst, 45000000, "Bornmouth Stadium", Color.RED, Color.BLACK);
+	Team Burntford = new Team("Burntford", mcnally, burntfordFirst, 45000000, "Burntford Stadium", Color.RED, Color.WHITE);
+	Team Southamton = new Team("Southamton", gibbs, southamtonFirst, 45000000, "Southamton Stadium", Color.RED, Color.WHITE);
 	
 	Map<String, Team> preTeams = new HashMap<>();
 	preTeams.put("Arsenol", Arsenol);
@@ -587,8 +567,20 @@ public class initialSetup {
 	preTeams.put("Van City", VanCity);
 	preTeams.put("Acton Villa", ActonVilla);
 	preTeams.put("Chelsee", Chelsee);
+	preTeams.put("East Ham", EastHam);
+	preTeams.put("Leicestor", Leicestor);
+	preTeams.put("Wolves", Wolves);
+	preTeams.put("Upswitch", Upswitch);
+	preTeams.put("Fullham", Fullham);
+	preTeams.put("Evertun", Evertun);
+	preTeams.put("Brighten", Brighten);
+	preTeams.put("Nottingham Woods", NottinghamWoods);
+	preTeams.put("Palace", Palace);
+	preTeams.put("Bornmouth", Bornmouth);
+	preTeams.put("Burntford", Burntford);
+	preTeams.put("Southamton", Southamton);
 	
-	league = new League("Premia League", "England", 8, preTeams, 1);
+	league = new League("Premia League", "England", 20, preTeams, 1);
     
 	window = new GameWindow();
     window.setVisible(true);
