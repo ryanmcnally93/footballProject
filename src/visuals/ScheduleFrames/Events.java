@@ -23,6 +23,15 @@ public class Events {
 		this.match = match;
 	}
 
+	public Events(String person, String message, LocalDateTime dateTime){
+		if(person.equals("Chairman")){
+			this.date = dateTime;
+			this.type = "Chairman Message";
+			this.title = new JLabel("Chairman");
+			this.description = new JLabel(message);
+		}
+	}
+
 	public LocalDateTime getDate() {
 		return date;
 	}

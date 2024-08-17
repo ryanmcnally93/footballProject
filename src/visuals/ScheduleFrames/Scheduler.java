@@ -33,9 +33,9 @@ public class Scheduler extends JPanel {
 
 	private static final long serialVersionUID = -949295084027854854L;
 	private LocalDateTime date;
-	private Box header;
+	private JPanel header;
 	private JPanel eventsBox, south;
-	private JButton advance, playGame;
+	private JButton advance, playGame, advanceToGame;
 	private Team team;
 	private User user;
 	private League league;
@@ -60,7 +60,7 @@ public class Scheduler extends JPanel {
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         
-        header = Box.createHorizontalBox();
+        header = new JPanel();
         header.setPreferredSize(new Dimension(800, 80));
         JLabel title = new JLabel(team.getName() + " - " + user.getName() + " season " + league.getSeason(), SwingConstants.CENTER);
         title.setFont(new Font("Menlo", Font.BOLD, 30));
@@ -107,8 +107,38 @@ public class Scheduler extends JPanel {
 				eventContainer.removeAll();
 				south.remove(playGame);
 				south.add(advance);
+				if(league.getLeagueTable().getLine(team).getPosition() == 1){
+					System.out.println("You are top of the league FUCK YEAH!");
+					Events chairmanMessage = new Events("Chairman", "This is absolutely incredible! We are top of the league! From all of the staff and players, we thank you for your hard work!", getDate());
+					events.add(chairmanMessage);
+					refreshMessages();
+				}
 			}
 		}
+	}
+
+	public void refreshMessages(){
+		for(Events each : events) {
+			if(each.getDate().toLocalDate().equals(getDate().toLocalDate())) {
+				if(!each.getType().equals("Match")) {
+					showEvent(each);
+				}
+			}
+		}
+	}
+
+	public void showEvent(Events event) {
+		eventContainer = Box.createHorizontalBox();
+		eventContainer.setPreferredSize(new Dimension(600,40));
+		JLabel description = event.getDescription();
+
+		eventContainer.add(Box.createHorizontalGlue());
+		eventContainer.add(description);
+		eventContainer.add(Box.createHorizontalGlue());
+
+		mainPanel.add(eventContainer, BorderLayout.CENTER);
+		mainPanel.revalidate();
+		mainPanel.repaint();
 	}
 	
 	public void addDay() {
@@ -118,20 +148,38 @@ public class Scheduler extends JPanel {
 		// WE NEED TO GIVE THIS YEAR THE VALUE OF SEASON
 		
 		// This will decide which matches are played on which week
-		if(date.toLocalDate().isEqual(LocalDate.of(2024, 06, 05))) {
+		int year = 2023 + league.getSeason();
+		if(date.toLocalDate().isEqual(LocalDate.of(year, 06, 05))) {
 			league.assignFixturesToWeekNumber();
 		}
 		// This will set the dates for each match
-		if(date.toLocalDate().isEqual(LocalDate.of(2024, 06, 06))) {
+		if(date.toLocalDate().isEqual(LocalDate.of(year, 06, 06))) {
 			league.assignDatetimesToWeekNumber();
 		}
-		if(date.toLocalDate().isEqual(LocalDate.of(2024, 06, 07))) {
+		if(date.toLocalDate().isEqual(LocalDate.of(year, 06, 07))) {
 			league.assignSlotsToMatches();
 		}
-		if(date.toLocalDate().isEqual(LocalDate.of(2024, 06, 8))) {
-			
+		if(date.toLocalDate().isEqual(LocalDate.of(year, 06, 8))) {
 			setMatchdays();
-			
+		}
+		if(date.toLocalDate().isEqual(LocalDate.of(year,06,9))){
+			advanceToGame = new JButton("Skip to Matchday");
+			advanceToGame.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					int counter = 0;
+					while(counter == 0){
+						addDay();
+						for(Events each : events) {
+							if (each.getDate().toLocalDate().equals(getDate().toLocalDate())) {
+								counter++;
+							}
+						}
+					}
+					south.remove(advanceToGame);
+				}
+			});
+			south.add(advanceToGame);
 		}
 		
 		// Here we are looking through the events
@@ -140,9 +188,11 @@ public class Scheduler extends JPanel {
 		// WHY DO WE NEED TO HAVE A MATCH BELONGING TO SCHEDULE?
 		for(Events each : events) {
 			if(each.getDate().toLocalDate().equals(getDate().toLocalDate())) {
-				showEvent(each);
 				if(each.getType().equals("Match")) {
+					showMatch(each);
 					this.match = each.getMatch();
+				} else {
+					showEvent(each);
 				}
 			}
 		}
@@ -151,7 +201,7 @@ public class Scheduler extends JPanel {
 		// If they're not my usermatch
 		// And if they have the same date as today
 		// the match plays (Or doesn't)
-		if(getDate().toLocalDate().isAfter(LocalDate.of(2024, 06, 8))) {
+		if(getDate().toLocalDate().isAfter(LocalDate.of(year, 06, 8))) {
 			for(Map.Entry<String, Match> each : league.getFixtures().entrySet()) {
 				Match match = each.getValue();
 				if (!(match instanceof UsersMatch)) {
@@ -162,7 +212,6 @@ public class Scheduler extends JPanel {
 					if(match.getDateTime().toLocalDate().equals(getDate().toLocalDate())) {
 						
 						System.out.println("A match should play now *************************");
-						
 						match.startMatch();
 						
 						try {
@@ -177,13 +226,10 @@ public class Scheduler extends JPanel {
 		}
 	}
 		
-	public void showEvent(Events event) {
+	public void showMatch(Events event) {
 		eventContainer = Box.createHorizontalBox();
 		eventContainer.setPreferredSize(new Dimension(600,440));
 		JLabel matchTitle = new JLabel(event.getMatch().getHome().getName() + " vs " + event.getMatch().getAway().getName());
-		
-		// THIS POSITIONS THE MATCH TITLE AT TOP
-//		matchTitle.setAlignmentY(Component.TOP_ALIGNMENT);
 		
 		eventContainer.add(Box.createHorizontalGlue());
 		eventContainer.add(matchTitle);
@@ -246,11 +292,11 @@ public class Scheduler extends JPanel {
 		this.date = date;
 	}
 
-	public Box getHeader() {
+	public JPanel getHeader() {
 		return header;
 	}
 
-	public void setHeader(Box header) {
+	public void setHeader(JPanel header) {
 		this.header = header;
 	}
 

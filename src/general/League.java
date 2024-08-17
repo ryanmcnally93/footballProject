@@ -18,7 +18,7 @@ public class League {
 	private Map<String, Team> teams;
 	private int tier;
 	private Map<String, Match> fixtures;
-	private static int season = 0;
+	private int season = 0;
 	private ArrayList<Match> toLookThrough, temporary;
 	private Map<Integer, Map<String, Match>> matchWeeksMatches;
 	private Map<Integer, Map<Integer, LocalDateTime>> matchWeeksSlots;
@@ -35,6 +35,7 @@ public class League {
 		this.matchWeeksMatches = new HashMap<>();
 		this.matchWeeksSlots = new HashMap<>();
 		this.leagueTable = new LeagueTable(this);
+		this.season += 1;
 		
 		List<Team> teamNamesInOrder = new ArrayList<>();
 		for(Map.Entry<String, Team> eachTeam : teams.entrySet()) {
@@ -57,7 +58,9 @@ public class League {
 	
 	public void assignFixturesToWeekNumber() {
 		createFixtures();
-		season++;
+		if(getSeason() != 1) {
+			this.season += 1;
+		}
 		
 		toLookThrough = new ArrayList<Match>(getFixtures().values());
 		temporary = new ArrayList<>(toLookThrough);
@@ -66,7 +69,7 @@ public class League {
 
 		for(int i = 0; i<weeks; i++) {
 			Map<String, Match> currentMW = createMatchWeek(toLookThrough);
-			if(restartWholeProcess  ==  true) {
+			if(restartWholeProcess) {
 				
 				System.out.println("We are acting on the restart whole process!");
 				
@@ -395,12 +398,12 @@ public class League {
 		this.fixtures = fixtures;
 	}
 
-	public static int getSeason() {
+	public int getSeason() {
 		return season;
 	}
 
-	public static void setSeason(int season) {
-		League.season = season;
+	public void setSeason(int season) {
+		this.season = season;
 	}
 
 	public ArrayList<Match> getToLookThrough() {
