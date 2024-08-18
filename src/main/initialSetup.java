@@ -537,15 +537,18 @@ public class initialSetup {
 	Manager gibbs = new Manager("Mark Gibbs", 33, 300000);
 	Manager emery = new Manager("Unai Emery", 76, 300000);
 
+	Color CLARET = new Color(129, 19, 49);
+	Color LIGHT_BLUE = new Color(173, 216, 230);
+
 	Team Arsenol = new Team("Arsenol", Arteta, arsenolFirst, 45000000, "Arsenol Stadium", Color.RED, Color.WHITE);
 	Team Totenham = new Team("Totenham", Mourinho, totenhamFirst, 45000000, "Totenham Stadium", Color.WHITE, Color.BLUE);
 	Team Newcostle = new Team("Newcostle", howe, newcostleFirst, 45000000, "Newcostle Stadium", Color.BLACK, Color.WHITE);
-	Team VanCity = new Team("Van City", guardiola, vanCityFirst, 45000000, "Van City Stadium", Color.BLUE, Color.BLUE);
-	Team Chelsee = new Team("Chelsee", lampard, chelseeFirst, 45000000, "Scum Stadium", Color.BLUE, Color.WHITE);
-	Team ActonVilla = new Team("Acton Villa", emery, actonVillaFirst, 45000000, "Acton Park", Color.MAGENTA, Color.BLUE);
+	Team VanCity = new Team("Van City", guardiola, vanCityFirst, 45000000, "Van City Stadium", LIGHT_BLUE, Color.WHITE);
+	Team Chelsee = new Team("Chelsee", lampard, chelseeFirst, 45000000, "Chelsee Stadium", Color.BLUE, Color.WHITE);
+	Team ActonVilla = new Team("Acton Villa", emery, actonVillaFirst, 45000000, "Acton Park", CLARET, Color.BLUE);
 	Team TanUtd = new Team("Tan United", tenHag, tanUtdFirst, 45000000, "New Trafford Stadium", Color.RED, Color.WHITE);
 	Team Liverpule = new Team("Liverpule", klopp, liverpuleFirst, 45000000, "Liverpule Stadium", Color.RED, Color.YELLOW);
-	Team EastHam = new Team("East Ham", moyes, eastHamFirst, 45000000, "East Ham Stadium", Color.MAGENTA, Color.WHITE);
+	Team EastHam = new Team("East Ham", moyes, eastHamFirst, 45000000, "East Ham Stadium", CLARET, Color.WHITE);
 	Team Leicestor = new Team("Leicestor", viera, leicestorFirst, 45000000, "Leicestor Stadium", Color.BLUE, Color.WHITE);
 	Team Wolves = new Team("Wolves", hodgson, wolvesFirst, 45000000, "Wolves Stadium", Color.ORANGE, Color.WHITE);
 	Team Upswitch = new Team("Upswitch", smithe, upswitchFirst, 45000000, "Upswitch Stadium", Color.BLUE, Color.WHITE);

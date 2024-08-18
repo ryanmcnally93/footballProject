@@ -29,7 +29,13 @@ public class MatchStats extends MatchFrames {
 
     public MatchStats(CardLayout layout, JPanel pages, Map<String, JPanel> cardMap, UsersMatch match) {
         super(layout, pages, cardMap, match);
-        
+
+        Color homeColor = getMatch().getHome().getPrimaryColour();
+        Color awayColor = getMatch().getAway().getPrimaryColour();
+        if(homeColor == awayColor){
+            awayColor = getMatch().getAway().getSecondaryColour();
+        }
+
         // START OF MATCHWATCH
         
         JLayeredPane layeredPane = getLayeredPane();
@@ -73,7 +79,7 @@ public class MatchStats extends MatchFrames {
         firstTitleBox.add(firstRightBox);
         centerBox.add(firstTitleBox);      
         
-        shotsOnBar = new CustomProgressBar();
+        shotsOnBar = new CustomProgressBar(homeColor, awayColor);
         shotsOnBar.setBorder(new EmptyBorder(20, 20, 10, 20));
         shotsOnBar.setValue(50);
         centerBox.add(shotsOnBar);
@@ -107,7 +113,7 @@ public class MatchStats extends MatchFrames {
         secondTitleBox.add(secondRightBox);
         centerBox.add(secondTitleBox);
 
-        allShotsBar = new CustomProgressBar();
+        allShotsBar = new CustomProgressBar(homeColor, awayColor);
         allShotsBar.setBorder(new EmptyBorder(10, 20, 10, 20));
         allShotsBar.setValue(50);
         centerBox.add(allShotsBar);
@@ -141,7 +147,7 @@ public class MatchStats extends MatchFrames {
         thirdTitleBox.add(thirdRightBox);
         centerBox.add(thirdTitleBox);
         
-        cornerBar = new CustomProgressBar();
+        cornerBar = new CustomProgressBar(homeColor, awayColor);
         cornerBar.setBorder(new EmptyBorder(10, 20, 10, 20));
         cornerBar.setValue(50);
         centerBox.add(cornerBar);
@@ -175,7 +181,7 @@ public class MatchStats extends MatchFrames {
         fourthTitleBox.add(fourthRightBox);
         centerBox.add(fourthTitleBox);
         
-        offsideBar = new CustomProgressBar();
+        offsideBar = new CustomProgressBar(homeColor, awayColor);
         offsideBar.setBorder(new EmptyBorder(10, 20, 10, 20));
         offsideBar.setValue(50);
         centerBox.add(offsideBar);
@@ -209,7 +215,7 @@ public class MatchStats extends MatchFrames {
         fifthTitleBox.add(fifthRightBox);
         centerBox.add(fifthTitleBox);
         
-        foulsBar = new CustomProgressBar();
+        foulsBar = new CustomProgressBar(homeColor, awayColor);
         foulsBar.setBorder(new EmptyBorder(10, 20, 10, 20));
         foulsBar.setValue(50);
         centerBox.add(foulsBar);

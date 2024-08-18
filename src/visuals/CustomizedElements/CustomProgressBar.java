@@ -6,9 +6,13 @@ import java.awt.*;
 public class CustomProgressBar extends JProgressBar {
     private static final long serialVersionUID = -9140075168622999308L;
     private static final int CORNER_RADIUS = 8;
+    private Color one;
+    private Color two;
 
-	public CustomProgressBar() {
+	public CustomProgressBar(Color one, Color two) {
         super();
+        this.one = one;
+        this.two = two;
         setOpaque(false);
         setBorderPainted(false);
     }
@@ -37,11 +41,11 @@ public class CustomProgressBar extends JProgressBar {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Draw the background with rounded corners
-        g2d.setColor(Color.GRAY);
+        g2d.setColor(two);
         g2d.fillRoundRect(x, y, width, CORNER_RADIUS * 2, CORNER_RADIUS, CORNER_RADIUS);
 
         // Draw the progress with rounded corners
-        g2d.setColor(Color.GREEN);
+        g2d.setColor(one);
         g2d.fillRoundRect(x, y, progressWidth, CORNER_RADIUS * 2, CORNER_RADIUS, CORNER_RADIUS);
 
         // Optional: Draw the border around the progress bar
