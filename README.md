@@ -28,8 +28,8 @@ This is a non-profit, just for fun game.
     * [Design Choices](#design-choices)
     * [Wireframes](#wireframes)
     * [Java Swing](#java-swing)
-    * [Cards & Navigation](#cards-&-navigation)
-    * [Q & A of Consumers](#q-&-a-of-consumers)
+    * [Cards & Navigation](#cards--navigation)
+    * [Q & A of Consumers](#q--a-of-consumers)
     * [Roadmap](#roadmap)
     * [Existing Features](#existing-features)
     * [Features Left to Implement](#features-left-to-implement)
@@ -39,7 +39,7 @@ This is a non-profit, just for fun game.
     * [Responsive Design](#responsive-design)
 - [Credits](#credits)
     * [Code](#code)
-    * [Tools Used](#web-tools)
+    * [Tools Used](#tools-used)
     * [Media](#media)
     * [Acknowledgements](#acknowledgements)
 
@@ -298,23 +298,39 @@ You can view all testing in [this document.](https://github.com/ryanmcnally93/fo
 
 ### Fixed Bugs
 
-1. Bug 1
+1. I struggled with splitting the screen in half on the 'MatchScorers' page, the preferredsize wasn't working.
 
-2. Bug 2
+>I managed to find a fix and it has worked for future implementations. If setting preferredsize alone doesn't work, setting it alongside setMinimumSize and setMaximumSize does work.
 
-3. Bug 3
+2. The next big issue I came across was the sliding panel, which enters the frame when a goal is scored, and lowers after a few seconds.
+The frame was acting as required, but the 'z-index' was behind other components, and it needed to appear on top of everything else.
+ChatGPT recommended using JLayeredPane, but attempting to implement it was messing things up furthur, as I needed to make every other element a 'DEFAULT_LAYER' item, so I had to re-arrange all of my elements within the Match Frames cardMap.
 
-4. Bug 4
+>In the end I realized I had to add it to the contentPane and add things to that. The sliding panel was then passed to a stronger 'layer', and this worked.
 
-5. Bug 5
+3. Another issue I had was when I updated the play button in match frames to a continue button, I needed it to take the user back to the scheduler.
+This meant updating the mouse and keystroke event listeners. 
 
-6. Bug 6
+>I fixed this by removing the button from the parent element, along with the next button that was before it, and adding a new button 'continue' and putting the next button back.
+I initially tried to update the actionMap but this proved a more difficult to fix to removing and adding the buttons was the cleaner fix.
+
+4. The goal slider started slowing down during gameplay. The whole match wasn't flowing as nicely graphically.
+
+> The issue turned out to be caused by nemesislookandfeel, which I added to make customize my buttons easier. I intend to use it on individual elements in the future but for now this isn't needed.
+
+5. On a few occasions, Match Week 12 would be created but week 13 couldn't be created due to conflictions with the 8 matches left.
+My first attempt of a fix was to remove game week 12 and return the fixtures from that week to the available fixtures, and re-create the last 3 weeks, to give the method a better chance of completing.
+This worked on occasion, but also failed from time to time.
+
+>In the end I decided to make the whole process restart if we hit this endless loop, removing the original matchweeks and restarting the process. Excessive use of print logs massively helped with breaking down the process logic and the fix works 100% of the time now.
+
+6. The first time I managed to get a whole season of matches playing, I noticed after the first match I lost every other match spectacularly, until I reached a team I had already played, and then it was a 0-0 draw.
+
+>This turned out to be because the players stamina was reaching 0 in the first game, and never being reset! As a temporary measure, I have made a method that sets the stamina of all players back to 100 at the end of a match.
 
 ### Unfixed Bugs
 
-1. Bug 1
-
-2. Bug 2
+1. Mouse clicks are not very sensitive. I have to click several times if using the mouse in order to trigger a method.
 
 ### Responsive Design
 
