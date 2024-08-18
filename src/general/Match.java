@@ -36,7 +36,7 @@ public class Match {
 		this.awayScore = 0;
 		this.homeScore = 0;
 	}
-	
+
 	public Match(Team home, Team away, League league) {
 		this.home = home;
 		this.away = away;
@@ -49,6 +49,21 @@ public class Match {
 		this.awayScore = 0;
 		this.homeScore = 0;
 		this.league = league;
+	}
+	
+	public Match(Team home, Team away, League league, LocalDateTime dateTime) {
+		this.home = home;
+		this.away = away;
+		this.stadium = home.getStadium();
+		this.homeTeam = home.getFirstTeam();
+		this.awayTeam = away.getFirstTeam();
+		this.minute = 0;
+		this.homegk = home.getGoalkeeper();
+		this.awaygk = away.getGoalkeeper();
+		this.awayScore = 0;
+		this.homeScore = 0;
+		this.league = league;
+		this.dateTime = dateTime;
 	}
 
 	/* This is effectively a start game method,

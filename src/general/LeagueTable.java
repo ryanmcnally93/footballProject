@@ -7,10 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import javax.swing.Box;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 import visuals.CustomizedElements.GamePanel;
 
@@ -24,12 +21,14 @@ public class LeagueTable extends GamePanel {
 	private JPanel teamBox;
 	private JLabel title;
 	private JPanel tableContainer;
+	private Box titleRow;
 	
 	public LeagueTable(League league) {
 		this.lines = new ArrayList<>();
 		this.league = league;
-		
+
 		setBackground(Color.LIGHT_GRAY);
+		setLayout(new BorderLayout());
 		
 		JPanel titleBox = new JPanel();
 		titleBox.setPreferredSize(new Dimension(600,30));
@@ -39,11 +38,17 @@ public class LeagueTable extends GamePanel {
         title.setFont(new Font("Menlo", Font.BOLD, 16));
         title.setForeground(new Color(0, 51, 204));
         titleBox.add(title, BorderLayout.CENTER);
-        add(titleBox);
-        
-        Box row = Box.createHorizontalBox();
-    	row.setPreferredSize(new Dimension(600,20));
-    	JLabel position = new JLabel("Pos.");
+        add(titleBox, BorderLayout.NORTH);
+
+		tableContainer = new JPanel();
+		tableContainer.setPreferredSize(new Dimension(600,100));
+		tableContainer.setMinimumSize(new Dimension(600,100));
+		tableContainer.setMaximumSize(new Dimension(600,100));
+		tableContainer.setBackground(Color.LIGHT_GRAY);
+
+        titleRow = Box.createHorizontalBox();
+		titleRow.setPreferredSize(new Dimension(600,20));
+		JLabel position = new JLabel("Pos.");
     	position.setPreferredSize(new Dimension(30,20));
         position.setMinimumSize(new Dimension(30,20));
         position.setMaximumSize(new Dimension(30,20));
@@ -80,32 +85,25 @@ public class LeagueTable extends GamePanel {
         goalDifference.setMinimumSize(new Dimension(30,20));
         goalDifference.setMaximumSize(new Dimension(30,20));
         
-//    	JLabel position = new JLabel(String.valueOf(eachLine.getPosition()));
-//    	JLabel position = new JLabel(String.valueOf(eachLine.getPosition()));
-//    	JLabel position = new JLabel(String.valueOf(eachLine.getPosition()));
-        
     	JLabel points = new JLabel("Pts");
     	Font newFont = new Font(points.getFont().getName(), Font.BOLD, points.getFont().getSize());
     	points.setFont(newFont);
     	points.setPreferredSize(new Dimension(30,20));
         points.setMinimumSize(new Dimension(30,20));
         points.setMaximumSize(new Dimension(30,20));
-        row.add(position);
-    	row.add(clubName);
-    	row.add(matchesPlayed);
-    	row.add(wins);
-    	row.add(draws);
-    	row.add(losses);
-    	row.add(goalsFor);
-    	row.add(goalsAgainst);
-    	row.add(goalDifference);
-    	row.add(points);
-    	add(row);
-    	
-        tableContainer = new JPanel();
-        tableContainer.setPreferredSize(new Dimension(600,390));
-        tableContainer.setBackground(Color.LIGHT_GRAY);
-    	add(tableContainer);
+		titleRow.add(position);
+		titleRow.add(clubName);
+		titleRow.add(matchesPlayed);
+		titleRow.add(wins);
+		titleRow.add(draws);
+		titleRow.add(losses);
+		titleRow.add(goalsFor);
+		titleRow.add(goalsAgainst);
+		titleRow.add(goalDifference);
+		titleRow.add(points);
+    	tableContainer.add(titleRow);
+
+    	add(tableContainer, BorderLayout.CENTER);
         
 		setVisible(true);
 	}
@@ -145,6 +143,7 @@ public class LeagueTable extends GamePanel {
 		}
 		
 		tableContainer.removeAll();
+		tableContainer.add(titleRow);
 		for(TableLine eachLine : lines) {
 			Box row = Box.createHorizontalBox();
 			row.setPreferredSize(new Dimension(600,20));

@@ -5,10 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.Map;
 
-import javax.swing.Box;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import general.LeagueTable;
 import general.UsersMatch;
@@ -18,12 +15,13 @@ public class MatchTable extends MatchFrames {
 	private static final long serialVersionUID = -37261786755290081L;
 	private Box centerBox;
 	private LeagueTable table;
+	private JPanel mainPanel;
 
 	public MatchTable(CardLayout layout, JPanel pages, Map<String, JPanel> cardMap, UsersMatch match) {
 		super(layout, pages, cardMap, match);
 		
 		JLayeredPane layeredPane = getLayeredPane();
-		JPanel mainPanel = new JPanel();
+		mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         
         Box west = Box.createHorizontalBox();
@@ -34,8 +32,14 @@ public class MatchTable extends MatchFrames {
         mainPanel.add(east, BorderLayout.EAST); 
 		
         centerBox = Box.createVerticalBox();
-        
-        mainPanel.add(centerBox, BorderLayout.CENTER);
+
+		JScrollPane scroller = new JScrollPane(centerBox);
+		scroller.getViewport().setBackground(Color.LIGHT_GRAY);
+		scroller.setBorder(null);
+		scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        mainPanel.add(scroller, BorderLayout.CENTER);
         
         mainPanel.setBounds(0, 80, 800, 440);
         mainPanel.setBackground(Color.LIGHT_GRAY);
@@ -49,6 +53,8 @@ public class MatchTable extends MatchFrames {
 		centerBox.removeAll();
 		table = getMatch().getLeague().getLeagueTable();
         centerBox.add(table);
+		centerBox.revalidate();
+		centerBox.repaint();
 	}
 
 	public Box getCenterBox() {

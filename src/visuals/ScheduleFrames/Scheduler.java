@@ -204,24 +204,30 @@ public class Scheduler extends JPanel {
 		mainPanel.repaint();
 		date = date.plusDays(1);
 		todaysDate.setText("Today's date is: " + getDate());
-		
-		// WE NEED TO GIVE THIS YEAR THE VALUE OF SEASON
-		
-		// This will decide which matches are played on which week
+
 		int year = 2023 + league.getSeason();
+
+		// This will decide which matches are played on which week
 		if(date.toLocalDate().isEqual(LocalDate.of(year, 06, 05))) {
 			league.assignFixturesToWeekNumber();
 		}
-		// This will set the dates for each match
+
+		// This will assign times to matchweeks
 		if(date.toLocalDate().isEqual(LocalDate.of(year, 06, 06))) {
 			league.assignDatetimesToWeekNumber();
 		}
+
+		// This will assign times to matches
 		if(date.toLocalDate().isEqual(LocalDate.of(year, 06, 07))) {
 			league.assignSlotsToMatches();
 		}
+
+		// This will create Events for each match, by turning this teams matches to UserMatch's
 		if(date.toLocalDate().isEqual(LocalDate.of(year, 06, 8))) {
 			setMatchdays();
 		}
+
+		// This will produce a skip to first match button when on 9th June
 		if(date.toLocalDate().isEqual(LocalDate.of(year,06,9))){
 			advanceToGame = new JButton("Skip to Matchday");
 			advanceToGame.addMouseListener(new MouseAdapter() {
@@ -244,29 +250,18 @@ public class Scheduler extends JPanel {
 
 		refreshMessages();
 		
-		// For each fixture (after populated)
-		// If they're not my usermatch
-		// And if they have the same date as today
-		// the match plays (Or doesn't)
+		// This will 'play' the background matches
 		if(getDate().toLocalDate().isAfter(LocalDate.of(year, 06, 8))) {
 			for(Map.Entry<String, Match> each : league.getFixtures().entrySet()) {
 				Match match = each.getValue();
 				if (!(match instanceof UsersMatch)) {
-					
-					// This will eventually need to look at match time
-					// And only play the matches before this fixture
-					
 					if(match.getDateTime().toLocalDate().equals(getDate().toLocalDate())) {
-						
-						System.out.println("A match should play now *************************");
 						match.startMatch();
-						
 						try {
 							Thread.sleep(50);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
-						
 					}
 				}
 			}
@@ -288,8 +283,7 @@ public class Scheduler extends JPanel {
 		for (String key : keysToReplace) {
             Match adult = league.getFixtures().get(key);
             if (adult != null) {
-                UsersMatch child = new UsersMatch(adult.getHome(), adult.getAway(), league); // Create ChildClass instance
-                child.setDateTime(adult.getDateTime());
+                UsersMatch child = new UsersMatch(adult.getHome(), adult.getAway(), league, adult.getDateTime()); // Create ChildClass instance
                 league.getFixtures().put(key, child); // Replace the entry in the map
             }
         }

@@ -1,24 +1,15 @@
 package visuals.MatchFrames;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.HashMap;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.Box;
 import javax.swing.InputMap;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -27,7 +18,6 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
-
 import general.UsersMatch;
 import visuals.CustomizedElements.CustomizedButton;
 import visuals.CustomizedElements.GamePanel;
@@ -46,7 +36,6 @@ public class MatchFrames extends GamePanel {
 	private JLayeredPane layeredPane;
 	private HeaderPanel headerPanel;
 	private FooterPanel footerPanel;
-//	private MouseListener ml;
 
 	public MatchFrames(CardLayout cardLayout, JPanel mainPanel, Map<String, JPanel> cardMap, UsersMatch match) {
     	super();
@@ -69,7 +58,7 @@ public class MatchFrames extends GamePanel {
         headerPanel.setBounds(0, 0, 800, 80);
 
         footerPanel = new FooterPanel();
-        footerPanel.setBounds(0, 520, 800, 80);
+        footerPanel.setBounds(0, 500, 800, 100);
         
         layeredPane.add(headerPanel, JLayeredPane.PALETTE_LAYER);
         layeredPane.add(footerPanel, JLayeredPane.PALETTE_LAYER);
@@ -120,11 +109,41 @@ public class MatchFrames extends GamePanel {
 		private CustomizedButton nextButton;
 		private JPanel buttonPanel;
 		private ActionMap actionMap;
+		private Box line;
 		
 		public FooterPanel() {
-			
+
 			setLayout(new BorderLayout());
 	        setBackground(Color.LIGHT_GRAY);
+
+			int day = match.getDateTime().getDayOfMonth();
+			String dayWithSuffix = day + getDayOfMonthSuffix(day);
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy HH:mm");
+			String formattedDate = dayWithSuffix + " " + match.getDateTime().format(formatter);
+
+			JLabel dateAndTime = new JLabel(formattedDate);
+			dateAndTime.setPreferredSize(new Dimension(200,30));
+			dateAndTime.setMaximumSize(new Dimension(200,30));
+			dateAndTime.setMinimumSize(new Dimension(200,30));
+			dateAndTime.setBorder(new EmptyBorder(0, 15, 0, 0));
+			JLabel stadium = new JLabel(match.getStadium(), SwingConstants.CENTER);
+			stadium.setPreferredSize(new Dimension(200,30));
+			stadium.setMaximumSize(new Dimension(200,30));
+			stadium.setMinimumSize(new Dimension(200,30));
+			JLabel attendance = new JLabel("60000", SwingConstants.RIGHT);
+			attendance.setPreferredSize(new Dimension(200,30));
+			attendance.setMaximumSize(new Dimension(200,30));
+			attendance.setMinimumSize(new Dimension(200,30));
+			attendance.setBorder(new EmptyBorder(0, 0, 0, 20));
+
+			line = Box.createHorizontalBox();
+			line.add(dateAndTime);
+			line.add(Box.createHorizontalStrut(100));
+			line.add(stadium);
+			line.add(Box.createHorizontalStrut(100));
+			line.add(attendance);
+
+			add(line, BorderLayout.NORTH);
 			
 			prevButton = new CustomizedButton("Prev");
 	        nextButton = new CustomizedButton("Next");
@@ -169,8 +188,24 @@ public class MatchFrames extends GamePanel {
 	        
 		}
 
+		private static String getDayOfMonthSuffix(int day) {
+			if (day >= 11 && day <= 13) {
+				return "th";
+			}
+			switch (day % 10) {
+				case 1:  return "st";
+				case 2:  return "nd";
+				case 3:  return "rd";
+				default: return "th";
+			}
+		}
+
 		public ActionMap getFooterActionMap() {
 			return actionMap;
+		}
+
+		public Box getLine(){
+			return this.line;
 		}
 
 		public void setFooterActionMap(ActionMap actionMap) {
@@ -182,7 +217,9 @@ public class MatchFrames extends GamePanel {
 		footerPanel.buttonPanel.remove(footerPanel.nextButton);
 		footerPanel.buttonPanel.remove(footerPanel.playButton);
 		CustomizedButton cont = new CustomizedButton("Continue");
-		
+		System.out.println(getWidth());
+		System.out.println(footerPanel.getLine().getWidth());
+
 		cont.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -309,7 +346,6 @@ public class MatchFrames extends GamePanel {
 	public UsersMatch getMatch() {
 		return match;
 	}
-
 
 	public void setMatch(UsersMatch match) {
 		this.match = match;

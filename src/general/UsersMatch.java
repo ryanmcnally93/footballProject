@@ -1,4 +1,5 @@
 package general;
+import java.time.LocalDateTime;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.util.HashMap;
@@ -50,8 +51,8 @@ public class UsersMatch extends Match {
 		initialize();
 	}
 	
-	public UsersMatch(Team home, Team away, League league) {
-		super(home, away, league);
+	public UsersMatch(Team home, Team away, League league, LocalDateTime dateTime) {
+		super(home, away, league, dateTime);
 		this.homeAllShots = 0;
 		this.homeShotsOn = 0;
 		this.awayAllShots = 0;
