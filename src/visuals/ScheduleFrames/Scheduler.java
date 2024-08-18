@@ -90,7 +90,14 @@ public class Scheduler extends JPanel {
 		});
 		
 		add(mainPanel, BorderLayout.CENTER);
-		
+
+		Events chairmanMessage = new Events("Chairman", "Welcome to " + team.getName() + " FC! We've been preparing for your arrival for some time and wish you the best of luck for the season ahead.", getDate());
+		events.add(chairmanMessage);
+		Events youthCoachMessage = new Events("Youth Coach", "Welcome boss, I've put together a list of the top players in the academy for you to take a look at.", getDate());
+		events.add(youthCoachMessage);
+
+		refreshMessages();
+
 		revalidate();
 		repaint();
         
@@ -108,7 +115,6 @@ public class Scheduler extends JPanel {
 				south.remove(playGame);
 				south.add(advance);
 				if(league.getLeagueTable().getLine(team).getPosition() == 1){
-					System.out.println("You are top of the league FUCK YEAH!");
 					Events chairmanMessage = new Events("Chairman", "This is absolutely incredible! We are top of the league! From all of the staff and players, we thank you for your hard work!", getDate());
 					events.add(chairmanMessage);
 					refreshMessages();
@@ -118,16 +124,68 @@ public class Scheduler extends JPanel {
 	}
 
 	public void refreshMessages(){
+		ArrayList<Events> todaysEvents  = new ArrayList<>();
 		for(Events each : events) {
 			if(each.getDate().toLocalDate().equals(getDate().toLocalDate())) {
-				if(!each.getType().equals("Match")) {
-					showEvent(each);
-				}
+				todaysEvents.add(each);
+			}
+		}
+
+		// This ensures match is the last event today
+		Events matchEvent = null;
+		for(Events each : todaysEvents){
+			if(each.getType().equals("Match")) {
+				this.match = each.getMatch();
+				matchEvent = each;
+				todaysEvents.remove(each);
+			}
+		}
+		if(matchEvent != null){
+			todaysEvents.add(matchEvent);
+		}
+
+		showTodaysEvents(todaysEvents);
+	}
+
+	public void showTodaysEvents(ArrayList<Events> todaysEvents){
+		// And now we will show todays events
+		for(Events event : todaysEvents){
+			showEventsDescription(event);
+			south.remove(advance);
+			if (event.getType().equals("Match")){
+				playGame = new JButton("Play");
+				Scheduler sch = this;
+				playGame.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						event.getMatch().displayGame(window, sch);
+					}
+				});
+				south.add(playGame);
+			} else {
+				JButton dismiss = new JButton("Dismiss");
+				dismiss.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						eventContainer.removeAll();
+						south.remove(dismiss);
+						south.add(advance);
+						todaysEvents.remove(event);
+						events.remove(event);
+						showTodaysEvents(todaysEvents);
+						eventContainer.repaint();
+						south.revalidate();
+						south.repaint();
+					}
+				});
+				south.add(dismiss);
+				break;
 			}
 		}
 	}
 
-	public void showEvent(Events event) {
+	public void showEventsDescription(Events event) {
+		System.out.println("This is that event's stuff");
 		eventContainer = Box.createHorizontalBox();
 		eventContainer.setPreferredSize(new Dimension(600,40));
 		JLabel description = event.getDescription();
@@ -142,6 +200,8 @@ public class Scheduler extends JPanel {
 	}
 	
 	public void addDay() {
+		eventContainer.removeAll();
+		mainPanel.repaint();
 		date = date.plusDays(1);
 		todaysDate.setText("Today's date is: " + getDate());
 		
@@ -181,21 +241,8 @@ public class Scheduler extends JPanel {
 			});
 			south.add(advanceToGame);
 		}
-		
-		// Here we are looking through the events
-		// Looking for todays events
-		// Displaying them on the front screen
-		// WHY DO WE NEED TO HAVE A MATCH BELONGING TO SCHEDULE?
-		for(Events each : events) {
-			if(each.getDate().toLocalDate().equals(getDate().toLocalDate())) {
-				if(each.getType().equals("Match")) {
-					showMatch(each);
-					this.match = each.getMatch();
-				} else {
-					showEvent(each);
-				}
-			}
-		}
+
+		refreshMessages();
 		
 		// For each fixture (after populated)
 		// If they're not my usermatch
@@ -225,31 +272,6 @@ public class Scheduler extends JPanel {
 			}
 		}
 	}
-		
-	public void showMatch(Events event) {
-		eventContainer = Box.createHorizontalBox();
-		eventContainer.setPreferredSize(new Dimension(600,440));
-		JLabel matchTitle = new JLabel(event.getMatch().getHome().getName() + " vs " + event.getMatch().getAway().getName());
-		
-		eventContainer.add(Box.createHorizontalGlue());
-		eventContainer.add(matchTitle);
-		eventContainer.add(Box.createHorizontalGlue());
-		
-		south.remove(advance);
-		playGame = new JButton("Play");
-		Scheduler sch = this;
-		playGame.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				event.getMatch().displayGame(window, sch);
-			}
-		});
-		south.add(playGame);
-		
-		mainPanel.add(eventContainer, BorderLayout.CENTER);
-		mainPanel.revalidate();
-		mainPanel.repaint();
-	}
 	
 	public void setMatchdays() {
 
@@ -278,6 +300,17 @@ public class Scheduler extends JPanel {
 			if (eachMatch instanceof UsersMatch) {
 				Events matchEvent = new Events((UsersMatch) eachMatch);
 				events.add(matchEvent);
+				Team enemyTeam;
+				String homeOrNot;
+				if(eachMatch.getHome() == team){
+					enemyTeam = eachMatch.getAway();
+					homeOrNot = "home";
+				} else {
+					enemyTeam = eachMatch.getHome();
+					homeOrNot = "away";
+				}
+				Events chairmanMessage = new Events("Chairman", "Good luck in your " + homeOrNot + " game today against " + enemyTeam.getName() + ".", eachMatch.getDateTime());
+				events.add(chairmanMessage);
 			}
 		}
 

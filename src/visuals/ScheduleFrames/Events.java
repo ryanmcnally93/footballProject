@@ -1,6 +1,7 @@
 package visuals.ScheduleFrames;
 import java.time.LocalDateTime;
-import javax.swing.JLabel;
+import javax.swing.*;
+
 import general.UsersMatch;
 import general.Team;
 import people.Footballer;
@@ -14,21 +15,28 @@ public class Events {
 	private JLabel title;
 	private JLabel description;
 	private UsersMatch match;
-	
+
+	public Events(){};
+
 	// The user has a match
 	public Events(UsersMatch match) {
 		this.date = match.getDateTime();
+		this.description = new JLabel(match.getHome().getName() + " vs " + match.getAway().getName());
 		this.type = "Match";
 		this.title  = new JLabel();
 		this.match = match;
 	}
 
 	public Events(String person, String message, LocalDateTime dateTime){
+		this.date = dateTime;
+		String text = "<html><body style='width: %1spx'>" + message + "</body></html>";
+		this.description = new JLabel(String.format(text, 400), SwingConstants.CENTER);
 		if(person.equals("Chairman")){
-			this.date = dateTime;
 			this.type = "Chairman Message";
 			this.title = new JLabel("Chairman");
-			this.description = new JLabel(message);
+		} else if (person.equals("Youth Coach")){
+			this.type = ("Youth Coach Message");
+			this.title = new JLabel("Youth Coach");
 		}
 	}
 
