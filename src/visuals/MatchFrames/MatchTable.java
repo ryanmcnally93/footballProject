@@ -1,4 +1,5 @@
 package visuals.MatchFrames;
+import java.awt.Graphics;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -16,6 +17,7 @@ public class MatchTable extends MatchFrames {
 	private Box centerBox;
 	private LeagueTable table;
 	private JPanel mainPanel;
+	private JScrollPane scroller;
 
 	public MatchTable(CardLayout layout, JPanel pages, Map<String, JPanel> cardMap, UsersMatch match) {
 		super(layout, pages, cardMap, match);
@@ -27,32 +29,37 @@ public class MatchTable extends MatchFrames {
         Box west = Box.createHorizontalBox();
         west.setPreferredSize(new Dimension(100,200));
         mainPanel.add(west, BorderLayout.WEST);
+
         Box east = Box.createHorizontalBox();
         east.setPreferredSize(new Dimension(100,200));
         mainPanel.add(east, BorderLayout.EAST); 
 		
         centerBox = Box.createVerticalBox();
+		centerBox.setBackground(Color.LIGHT_GRAY);
 
-		JScrollPane scroller = new JScrollPane(centerBox);
-		scroller.getViewport().setBackground(Color.LIGHT_GRAY);
+		scroller = new JScrollPane(centerBox);
 		scroller.setBorder(null);
-		scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scroller.getViewport().setBackground(Color.LIGHT_GRAY);
+		scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 
-        mainPanel.add(scroller, BorderLayout.CENTER);
-        
-        mainPanel.setBounds(0, 80, 800, 440);
+		mainPanel.add(scroller, BorderLayout.CENTER);
+
+        mainPanel.setBounds(0, 80, 800, 420);
         mainPanel.setBackground(Color.LIGHT_GRAY);
         layeredPane.add(mainPanel, JLayeredPane.DEFAULT_LAYER);
         
         setVisible(true);
-		
 	}
 	
 	public void updateTableVisually() {
 		centerBox.removeAll();
 		table = getMatch().getLeague().getLeagueTable();
         centerBox.add(table);
+		Box padding = Box.createVerticalBox();
+		padding.add(Box.createVerticalStrut(20));  // 20 pixels of padding, adjust as needed
+		centerBox.add(padding);
+
 		centerBox.revalidate();
 		centerBox.repaint();
 	}

@@ -41,9 +41,7 @@ public class LeagueTable extends GamePanel {
         add(titleBox, BorderLayout.NORTH);
 
 		tableContainer = new JPanel();
-		tableContainer.setPreferredSize(new Dimension(600,100));
-		tableContainer.setMinimumSize(new Dimension(600,100));
-		tableContainer.setMaximumSize(new Dimension(600,100));
+		tableContainer.setLayout(new BoxLayout(tableContainer, BoxLayout.Y_AXIS)); // Vertical layout
 		tableContainer.setBackground(Color.LIGHT_GRAY);
 
         titleRow = Box.createHorizontalBox();
@@ -104,8 +102,7 @@ public class LeagueTable extends GamePanel {
     	tableContainer.add(titleRow);
 
     	add(tableContainer, BorderLayout.CENTER);
-        
-		setVisible(true);
+//		setVisible(true);
 	}
 
 	public TableLine getLine(Team team) {
@@ -124,16 +121,15 @@ public class LeagueTable extends GamePanel {
 	public void updateLinesInTableLogic() {
 
 		// Implement logic to 'sort' your array list by points and GD
-		Collections.sort(lines, new Comparator<TableLine>() {
+		lines.sort(new Comparator<TableLine>() {
             @Override
             public int compare(TableLine t1, TableLine t2) {
-            	int pointComparison = t2.getPoints().compareTo(t1.getPoints());
-                
+                int pointComparison = t2.getPoints().compareTo(t1.getPoints());
+
                 // If points are the same, compare by goal difference
                 if (pointComparison == 0) {
                     return t2.getGoalDifference().compareTo(t1.getGoalDifference());
                 }
-                
                 return pointComparison;
             }
         });
