@@ -21,7 +21,7 @@ public class Events {
 	// The user has a match
 	public Events(UsersMatch match) {
 		this.date = match.getDateTime();
-		this.description = new JLabel(match.getHome().getName() + " vs " + match.getAway().getName());
+		this.description = new JLabel(match.getHome().getName() + " vs " + match.getAway().getName(), SwingConstants.CENTER);
 		this.type = "Match";
 		this.title  = new JLabel();
 		this.match = match;
@@ -29,7 +29,7 @@ public class Events {
 
 	public Events(String person, String message, LocalDateTime dateTime){
 		this.date = dateTime;
-		String text = "<html><body style='width: %1spx'>" + message + "</body></html>";
+		String text = "<html><body style='width: %1spx; text-align: center;'>" + message + "</body></html>";
 		this.description = new JLabel(String.format(text, 400), SwingConstants.CENTER);
 		if(person.equals("Chairman")){
 			this.type = "Chairman Message";

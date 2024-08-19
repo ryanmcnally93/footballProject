@@ -20,6 +20,8 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+
 import general.League;
 import general.Match;
 import general.UsersMatch;
@@ -186,13 +188,29 @@ public class Scheduler extends JPanel {
 
 	public void showEventsDescription(Events event) {
 		System.out.println("This is that event's stuff");
-		eventContainer = Box.createHorizontalBox();
+		eventContainer = Box.createVerticalBox();
 		eventContainer.setPreferredSize(new Dimension(600,40));
-		JLabel description = event.getDescription();
 
-		eventContainer.add(Box.createHorizontalGlue());
-		eventContainer.add(description);
-		eventContainer.add(Box.createHorizontalGlue());
+		// Add margin bottom
+		eventContainer.setBorder(new EmptyBorder(0,0,20,0));
+
+		// This pushes everything to the bottom
+		eventContainer.add(Box.createVerticalGlue());
+
+		Box titleBox = Box.createHorizontalBox();
+		titleBox.add(Box.createHorizontalGlue());
+		JLabel title = event.getTitle();
+		titleBox.add(title);
+		titleBox.add(Box.createHorizontalGlue());
+		titleBox.setBorder(new EmptyBorder(0,0,10,0));
+		eventContainer.add(titleBox);
+
+		Box descriptionBox = Box.createHorizontalBox();
+		descriptionBox.add(Box.createHorizontalGlue());
+		JLabel description = event.getDescription();
+		descriptionBox.add(description);
+		descriptionBox.add(Box.createHorizontalGlue());
+		eventContainer.add(descriptionBox);
 
 		mainPanel.add(eventContainer, BorderLayout.CENTER);
 		mainPanel.revalidate();
