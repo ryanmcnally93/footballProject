@@ -37,6 +37,9 @@ public class Events {
 		} else if (person.equals("Youth Coach")){
 			this.type = ("Youth Coach Message");
 			this.title = new JLabel("Youth Coach");
+		} else if (person.equals("Result")) {
+			this.type = ("Result");
+			this.title = new JLabel("Result");
 		}
 	}
 

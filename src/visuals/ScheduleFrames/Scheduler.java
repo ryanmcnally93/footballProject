@@ -37,7 +37,7 @@ public class Scheduler extends JPanel {
 	private LocalDateTime date;
 	private JPanel header;
 	private JPanel eventsBox, south;
-	private JButton advance, playGame, advanceToGame;
+	private JButton advance, playGame, advanceToGame, simGame;
 	private Team team;
 	private User user;
 	private League league;
@@ -126,13 +126,14 @@ public class Scheduler extends JPanel {
 	}
 
 	public void refreshMessages(){
+		System.out.println("Match has ended, lets refresh messages");
 		ArrayList<Events> todaysEvents  = new ArrayList<>();
 		for(Events each : events) {
 			if(each.getDate().toLocalDate().equals(getDate().toLocalDate())) {
 				todaysEvents.add(each);
 			}
 		}
-
+		System.out.println("Weve gotten this far 2nd");
 		// This ensures match is the last event today
 		Events matchEvent = null;
 		for(Events each : todaysEvents){
@@ -145,7 +146,7 @@ public class Scheduler extends JPanel {
 		if(matchEvent != null){
 			todaysEvents.add(matchEvent);
 		}
-
+		System.out.println("We are running showtodaysevents, which means event hasn't successfully been added to todays events if that message doesn't show after this");
 		showTodaysEvents(todaysEvents);
 	}
 
@@ -153,8 +154,12 @@ public class Scheduler extends JPanel {
 		// And now we will show todays events
 		for(Events event : todaysEvents){
 			showEventsDescription(event);
+			// Remove advance button
 			south.remove(advance);
+			System.out.println("Checking if this is a match or not");
 			if (event.getType().equals("Match")){
+				// This is a match event
+				// This is the play button and its functionality
 				playGame = new JButton("Play");
 				Scheduler sch = this;
 				playGame.addMouseListener(new MouseAdapter() {
@@ -164,7 +169,28 @@ public class Scheduler extends JPanel {
 					}
 				});
 				south.add(playGame);
+				// This is the simulate match button and its functionality
+				simGame = new JButton("Simulate");
+				Scheduler thissch = this;
+				simGame.addMouseListener(new MouseAdapter(){
+					@Override
+					public void mouseClicked(MouseEvent e){
+						south.remove(simGame);
+						south.remove(playGame);
+						eventContainer.removeAll();
+						// Run as normal match method
+						UsersMatch todaysMatch = ((UsersMatch) league.getFixtures().get(event.getMatch().toString()));
+						if(todaysMatch != null){
+							Match child = new Match(todaysMatch.getHome(), todaysMatch.getAway(), league, todaysMatch.getDateTime());
+							league.getFixtures().put(todaysMatch.toString(), child);
+							child.startMatch(thissch);
+						}
+						events.remove(event);
+					}
+				});
+				south.add(simGame);
 			} else {
+				System.out.println("This is not a match event");
 				JButton dismiss = new JButton("Dismiss");
 				dismiss.addMouseListener(new MouseAdapter() {
 					@Override
@@ -376,5 +402,28 @@ public class Scheduler extends JPanel {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
+
+	public Box getEventContainer() {
+		return eventContainer;
+	}
+
+	public void setEventContainer(Box eventContainer) {
+		this.eventContainer = eventContainer;
+	}
+
+	public ArrayList<Events> getEvents() {
+		return events;
+	}
+
+	public void setEvents(ArrayList<Events> events) {
+		this.events = events;
+	}
+
+	public JPanel getSouth() {
+		return south;
+	}
+
+	public void setSouth(JPanel south) {
+		this.south = south;
+	}
 }

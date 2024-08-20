@@ -95,5 +95,9 @@ public class Team {
 	public void setFirstTeam(Map<String, Footballer> firstTeam) {
 		this.firstTeam = firstTeam;
 	}
-	
+
+	@Override
+	public String toString() {
+		return getName();
+	}
 }

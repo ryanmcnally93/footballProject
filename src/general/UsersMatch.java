@@ -112,7 +112,7 @@ public class UsersMatch extends Match {
 
 	@Override
 	public void updateShotsOnScreen(Footballer player) {
-		if(findTeam(player) == "Away") {
+		if(findTeam(player).equals("Away")) {
 			this.awayShotsOn++;
 			this.awayAllShots++;
 		} else {

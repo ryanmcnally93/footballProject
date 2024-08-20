@@ -3,9 +3,10 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import people.Footballer;
 import people.Goalkeeper;
+import visuals.ScheduleFrames.Events;
+import visuals.ScheduleFrames.Scheduler;
 
 public class Match {
 	
@@ -21,6 +22,7 @@ public class Match {
 	private Goalkeeper awaygk;
     private LocalDateTime dateTime;
     private League league;
+	private Scheduler scheduler;
 	
 	public Match() {};
 	
@@ -287,6 +289,18 @@ public class Match {
 				league.getLeagueTable().updateLinesInTableLogic();
 				callUpdateTableVisually();
 			}
+			System.out.println("Running Check");
+			if(scheduler != null){
+				scheduler.getEventContainer().removeAll();
+				scheduler.getEvents().remove(this);
+				Events simulatedResult = new Events("Result", getScore(), getDateTime().plusHours(2));
+				scheduler.getEvents().add(simulatedResult);
+				scheduler.refreshMessages();
+				scheduler.getEventContainer().repaint();
+				scheduler.getSouth().revalidate();
+				scheduler.getSouth().repaint();
+				System.out.println("I've tried!");
+			}
 			
 			continueButtonOnScreen();
 			return true;
@@ -300,21 +314,30 @@ public class Match {
 	public void continueButtonOnScreen() {};
 
 	public void startMatch() {
-    	for(Map.Entry<String, Footballer> each : getHomeTeam().entrySet()) {
+		initialSetup();
+    }
+
+	public void startMatch(Scheduler scheduler) {
+		this.scheduler = scheduler;
+		initialSetup();
+	}
+
+	public void initialSetup(){
+		for(Map.Entry<String, Footballer> each : getHomeTeam().entrySet()) {
 			Footballer player = each.getValue();
 			player.setStamina(100);
 			getHomegk().setStamina(100);
 		}
-		
+
 		for(Map.Entry<String, Footballer> each : getAwayTeam().entrySet()) {
 			Footballer player = each.getValue();
 			player.setStamina(100);
 			getAwaygk().setStamina(100);
 		}
-		
+
 		Footballer homeStriker = ((Footballer) homeTeam.get("ST"));
 		startRun(homeStriker);
-    }
+	}
 	
 	// Getters & Setters
 	
@@ -408,6 +431,10 @@ public class Match {
 
 	public static void main(String[] args) {
 		
+	}
+
+	public String getScore(){
+		return getHome() + " " + getHomeScore() + " - " + getAwayScore() + " " + getAway();
 	}
 	
 	public void setDateTime(LocalDateTime datetime) {
