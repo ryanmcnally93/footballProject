@@ -24,12 +24,7 @@ public class MatchWatch extends MatchFrames {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         
-        Box west = Box.createHorizontalBox();
-        west.setPreferredSize(new Dimension(100,200));
-        mainPanel.add(west, BorderLayout.WEST);
-        Box east = Box.createHorizontalBox();
-        east.setPreferredSize(new Dimension(100,200));
-        mainPanel.add(east, BorderLayout.EAST); 
+        appendEastAndWest(mainPanel);
 		
         centerBox = Box.createVerticalBox();
         JLabel title = new JLabel("Watch Match Page");

@@ -43,14 +43,8 @@ public class MatchStats extends MatchFrames {
         mainPanel.setLayout(new BorderLayout());
         
         centerBox = Box.createVerticalBox();
-        Box west = Box.createHorizontalBox();
-        west.setPreferredSize(new Dimension(100,200));
-        mainPanel.add(west, BorderLayout.WEST);
-        Box east = Box.createHorizontalBox();
-        east.setPreferredSize(new Dimension(100,200));
-        mainPanel.add(east, BorderLayout.EAST); 
-        
-        // SHOTS ON TARGET
+
+        appendEastAndWest(mainPanel);
        
         Box firstTitleBox = Box.createHorizontalBox();
 
@@ -233,8 +227,8 @@ mainPanel.add(centerBox, BorderLayout.CENTER);
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                adjustPanelSize(west);
-                adjustPanelSize(east);
+                adjustPanelSize(getWest());
+                adjustPanelSize(getEast());
                 marginChange(firstLeftBox);
                 marginChange(firstRightBox);
                 marginChange(secondLeftBox);

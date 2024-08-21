@@ -595,11 +595,11 @@ public class initialSetup {
 	
 	public void startSeason() {}
 
-	public League getLeague() {
+	public League getTopEnglishLeague() {
 		return league;
 	}
 
-	public void setLeague(League league) {
+	public void setTopEnglishLeague(League league) {
 		this.league = league;
 	}
 

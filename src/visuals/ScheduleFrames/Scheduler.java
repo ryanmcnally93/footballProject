@@ -28,10 +28,11 @@ import general.UsersMatch;
 import general.Team;
 import general.User;
 import visuals.CustomizedElements.CustomizedButton;
+import visuals.CustomizedElements.GamePanel;
 import visuals.MatchFrames.GameWindow;
 import visuals.MatchFrames.MatchFrames;
 
-public class Scheduler extends JPanel {
+public class Scheduler extends GamePanel {
 
 	private static final long serialVersionUID = -949295084027854854L;
 	private LocalDateTime date;
@@ -69,13 +70,7 @@ public class Scheduler extends JPanel {
         header.add(title);
         mainPanel.add(header, BorderLayout.NORTH);
         
-        Box east = Box.createHorizontalBox();
-        east.setPreferredSize(new Dimension(100,200));
-        mainPanel.add(east, BorderLayout.EAST); 
-        
-        Box west = Box.createHorizontalBox();
-		west.setPreferredSize(new Dimension(100,200));
-        mainPanel.add(west, BorderLayout.WEST);
+        appendEastAndWest(mainPanel);
         
 		south = new JPanel();
 		todaysDate = new JLabel("Today's date is: " + getDate());
@@ -115,6 +110,7 @@ public class Scheduler extends JPanel {
 			if(match.getMinute() == 90) {
 				eventContainer.removeAll();
 				south.remove(playGame);
+				south.remove(simGame);
 				south.add(advance);
 				if(league.getLeagueTable().getLine(team).getPosition() == 1){
 					Events chairmanMessage = new Events("Chairman", "This is absolutely incredible! We are top of the league! From all of the staff and players, we thank you for your hard work!", getDate());
@@ -183,6 +179,8 @@ public class Scheduler extends JPanel {
 						if(todaysMatch != null){
 							Match child = new Match(todaysMatch.getHome(), todaysMatch.getAway(), league, todaysMatch.getDateTime());
 							league.getFixtures().put(todaysMatch.toString(), child);
+							// This is the only time a scheduler is passed to a match
+							// So on at fulltime check, will run some tasks on this scheduler
 							child.startMatch(thissch);
 						}
 						events.remove(event);

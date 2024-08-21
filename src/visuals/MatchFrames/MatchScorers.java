@@ -64,12 +64,7 @@ public class MatchScorers extends MatchFrames {
         container.add(rightBox);
         centerBox.add(container);
 		
-        Box west = Box.createHorizontalBox();
-		west.setPreferredSize(new Dimension(100,200));
-        mainPanel.add(west, BorderLayout.WEST);
-        Box east = Box.createHorizontalBox();
-        east.setPreferredSize(new Dimension(100,200));
-        mainPanel.add(east, BorderLayout.EAST); 
+        appendEastAndWest(mainPanel);
         
         mainPanel.add(centerBox, BorderLayout.CENTER);
         
@@ -80,8 +75,8 @@ public class MatchScorers extends MatchFrames {
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                adjustPanelSize(west);
-                adjustPanelSize(east);
+                adjustPanelSize(getWest());
+                adjustPanelSize(getEast());
             }
         });
         

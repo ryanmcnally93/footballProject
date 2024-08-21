@@ -16,11 +16,12 @@ import javax.swing.SwingConstants;
 import general.Team;
 import general.User;
 import visuals.CustomizedElements.CustomizedButton;
+import visuals.CustomizedElements.GamePanel;
 import visuals.ScheduleFrames.Scheduler;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class StartPage extends JPanel {
+public class StartPage extends GamePanel {
 
     private static final long serialVersionUID = 4432562427445474607L;
     private JPanel centerBox, teamsBox;
@@ -46,17 +47,7 @@ public class StartPage extends JPanel {
         north.add(title, BorderLayout.CENTER);
         add(north, BorderLayout.NORTH);
     	
-    	// Right Box
-    	
-    	Box east = Box.createHorizontalBox();
-        east.setPreferredSize(new Dimension(100,200));
-        add(east, BorderLayout.EAST); 
-        
-        // Left Box
-        
-        Box west = Box.createHorizontalBox();
-        west.setPreferredSize(new Dimension(100,200));
-        add(west, BorderLayout.WEST);
+    	appendEastAndWest(this);
         
         // Center Box
         
@@ -186,7 +177,7 @@ public class StartPage extends JPanel {
         teamsBox.setPreferredSize(new Dimension(600, 90));
 
         // Assuming setup.getPremierLeague().getTeams() returns a Map
-        Map<String, Team> teams = setup.getLeague().getTeams();
+        Map<String, Team> teams = setup.getTopEnglishLeague().getTeams();
         for (Map.Entry<String, Team> each : teams.entrySet()) {
             Team current = each.getValue();
             JButton teamButton = new JButton(current.getName());
@@ -208,13 +199,13 @@ public class StartPage extends JPanel {
 
     public void teamPick(Team team) {
     	User user = new User(name, 18, 40000);
-    	Map<String, Team> cardMap = setup.getLeague().getTeams();
+    	Map<String, Team> cardMap = setup.getTopEnglishLeague().getTeams();
 		System.out.println(cardMap);
     	((Team) cardMap.get(team.getName())).setManager(user);
     	System.out.println(user.getName() + " is the new manager of " + team.getName());
     	
     	// Create Schedule
-    	Scheduler schedule = new Scheduler(user, team, setup.getLeague());
+    	Scheduler schedule = new Scheduler(user, team, setup.getTopEnglishLeague());
     	setup.getWindow().getContentPane().remove(this);
     	setup.getWindow().getContentPane().revalidate();
     	setup.getWindow().getContentPane().repaint();
