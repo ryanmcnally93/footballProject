@@ -38,6 +38,12 @@ public abstract class GamePanel extends JPanel {
         return scroller;
     }
 
+    public void setPermanentWidthAndHeight(JPanel box, int width, int height){
+        box.setPreferredSize(new Dimension(width, height));
+        box.setMinimumSize(new Dimension(width, height));
+        box.setMaximumSize(new Dimension(width, height));
+    }
+
     public void setPermanentWidth(JPanel box, int width){
         box.setPreferredSize(new Dimension(width, box.getPreferredSize().height));
         box.setMinimumSize(new Dimension(width, box.getMinimumSize().height));

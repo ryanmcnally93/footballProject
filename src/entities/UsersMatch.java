@@ -135,13 +135,13 @@ public class UsersMatch extends Match {
 	@Override
 	public void displayHomeGoalOnScreen(Footballer player) {
 		((MatchEvents) cardMap.get("Events")).addHomeEvents(getMinute(), player, "goal");
-		((MatchScorers) cardMap.get("Scorers")).displayLeftGoalScorers(player, getMinute());
+		((MatchScorers) cardMap.get("Scorers")).displayGoalScorers(player, getMinute(), "Home");
 	}
 	
 	@Override
 	public void displayAwayGoalOnScreen(Footballer player) {
 		((MatchEvents) cardMap.get("Events")).addAwayEvents(getMinute(), player, "goal");
-		((MatchScorers) cardMap.get("Scorers")).displayRightGoalScorers(player, getMinute());
+		((MatchScorers) cardMap.get("Scorers")).displayGoalScorers(player, getMinute(), "Away");
 	}
 	
 	@Override

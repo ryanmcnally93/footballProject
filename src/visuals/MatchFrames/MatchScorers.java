@@ -33,8 +33,8 @@ public class MatchScorers extends MatchFrames {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
 		
-		homeScorers = new ArrayList<String>();
-		awayScorers = new ArrayList<String>();
+		homeScorers = new ArrayList<>();
+		awayScorers = new ArrayList<>();
 		
 		centerBox = Box.createVerticalBox();
 		container = Box.createHorizontalBox();
@@ -42,18 +42,14 @@ public class MatchScorers extends MatchFrames {
 		leftBox = new JPanel();
 		leftBox.setBackground(Color.LIGHT_GRAY);
         leftBox.setLayout(new BoxLayout(leftBox, BoxLayout.Y_AXIS));
-        
-        leftBox.setPreferredSize(new Dimension(300, 409));
-        leftBox.setMinimumSize(new Dimension(300, 409));
-        leftBox.setMaximumSize(new Dimension(300, 409));
+
+		setPermanentWidthAndHeight(leftBox, 300, 409);
         
         rightBox = new JPanel();
         rightBox.setBackground(Color.LIGHT_GRAY);
         rightBox.setLayout(new BoxLayout(rightBox, BoxLayout.Y_AXIS));
  
-        rightBox.setPreferredSize(new Dimension(300, 409));
-        rightBox.setMinimumSize(new Dimension(300, 409));
-        rightBox.setMaximumSize(new Dimension(300, 409));
+        setPermanentWidthAndHeight(rightBox, 300, 409);
 
         container.add(leftBox);
         container.add(rightBox);
@@ -82,9 +78,7 @@ public class MatchScorers extends MatchFrames {
 		Dimension screenSize = getSize();
         int width = screenSize.width;
         int eighth = width/8;
-        box.setPreferredSize(new Dimension(eighth, box.getPreferredSize().height));
-        box.setMinimumSize(new Dimension(eighth, box.getMinimumSize().height));
-        box.setMaximumSize(new Dimension(eighth, box.getMaximumSize().height));
+        setPermanentWidth(box, eighth);
         
         // This isn't working
         int seventyfive = (int) (width*0.75);
@@ -93,69 +87,21 @@ public class MatchScorers extends MatchFrames {
         container.setSize(new Dimension(seventyfive, container.getPreferredSize().height));
         container.revalidate();
         container.repaint();
-        
-        
+
         centerBox.setSize(new Dimension(seventyfive, container.getPreferredSize().height));
         centerBox.revalidate();
         centerBox.repaint();
         
         int height = screenSize.height;
         int newHeight = height-163;
-        
-        leftBox.setPreferredSize(new Dimension(half, newHeight));
-        leftBox.setMinimumSize(new Dimension(half, newHeight));
-        leftBox.setMaximumSize(new Dimension(half, newHeight));
-        rightBox.setPreferredSize(new Dimension(half, newHeight));
-        rightBox.setMinimumSize(new Dimension(half, newHeight));
-        rightBox.setMaximumSize(new Dimension(half, newHeight));
+
+		setPermanentWidthAndHeight(leftBox, half, newHeight);
+		setPermanentWidthAndHeight(rightBox, half, newHeight);
         leftBox.revalidate();
         leftBox.repaint();
         rightBox.revalidate();
         rightBox.repaint();
-        
-        revalidate();
-        repaint();
     }
-	
-	public void displayLeftGoalScorers(Footballer player, int minute) {
-		if(leftBox != null) {
-			leftBox.removeAll();
-		}
-		
-		boolean aFound = false;
-		for (int i = 0;i<getHomeScorers().size();i++) {
-			String scorer = homeScorers.get(i);
-			
-			if (scorer.contains(player.getName()) ) {
-				aFound = true;
-				String minutes = scorer.substring(0, scorer.length() - 1);
-				String updatedMinutes = minutes + ", " + minute + ")";
-				homeScorers.set(i, updatedMinutes);
-				break;
-			}
-		}
-		
-		if (!aFound) {
-			homeScorers.add(player.getName() + "(" + minute + ")");
-		}
-
-//		int gridy = 0;
-		for(String goal : homeScorers) {
-			JLabel result = new JLabel(goal);
-			if(hattrickCheck(goal)) {
-				result.setForeground(Color.decode("#A0830E"));
-				Font f = result.getFont();
-				result.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
-//				((MatchEvents) super.getCardMap().get("Events")).addHomeEvents(getMinute(), player, "save");
-			}
-			
-			result.setBorder(new EmptyBorder(2, 20, 2, 20));
-            result.setAlignmentX(Component.RIGHT_ALIGNMENT); // Align to the right
-            leftBox.add(result);
-	        containScorerSections();
-		}
-		
-	}
 	
 	public static boolean hattrickCheck(String input) {
         if (input == null || input.isEmpty()) {
@@ -173,30 +119,39 @@ public class MatchScorers extends MatchFrames {
         rightBox.setPreferredSize(new Dimension(half, getHeight()));
 	}
 	
-	public void displayRightGoalScorers(Footballer player, int minute) {
-		if(rightBox != null) {
-			rightBox.removeAll();
+	public void displayGoalScorers(Footballer player, int minute, String side) {
+		JPanel box;
+		ArrayList<String> scorers;
+		if(side.equals("Home")){
+			box = leftBox;
+			scorers = getHomeScorers();
+		} else{
+			box = rightBox;
+			scorers = getAwayScorers();
+		}
+
+		if(box != null) {
+			box.removeAll();
 		}
 		
 		boolean bFound = false;
-		for (int i = 0;i<getAwayScorers().size();i++) {
-			String scorer = awayScorers.get(i);
+		for (int i = 0;i<scorers.size();i++) {
+			String scorer = scorers.get(i);
 			
 			if (scorer.contains(player.getName()) ) {
 				bFound = true;
 				String minutes = scorer.substring(0, scorer.length() - 1);
 				String updatedMinutes = minutes + ", " + minute + ")";
-				awayScorers.set(i, updatedMinutes);
+				scorers.set(i, updatedMinutes);
 				break;
 			}
 		}
 		
 		if (!bFound) {
-			awayScorers.add(player.getName() + "(" + minute + ")");
+			scorers.add(player.getName() + "(" + minute + ")");
 		}
 
-//		int gridy = 0;
-		for(String goal : awayScorers) {
+		for(String goal : scorers) {
 			JLabel result = new JLabel(goal);
 			if(hattrickCheck(goal)) {
 				result.setForeground(Color.decode("#A0830E"));
@@ -205,20 +160,20 @@ public class MatchScorers extends MatchFrames {
 			}
 			
 			result.setBorder(new EmptyBorder(2, 20, 2, 20));
-            result.setAlignmentX(Component.LEFT_ALIGNMENT); // Align to the right
-            rightBox.add(result);
+			if(side.equals("Home")) {
+				result.setAlignmentX(Component.RIGHT_ALIGNMENT); // Align to the right
+			} else {
+				result.setAlignmentX(Component.LEFT_ALIGNMENT); // Align to the right
+			}
+            box.add(result);
 	        containScorerSections();
-
 		}
-		
 	}
-	
 
 	public ArrayList<String> getHomeScorers() {
 		return homeScorers;
 	}
 
-	
 	public void setHomeScorers(ArrayList<String> homeScorers) {
 		this.homeScorers = homeScorers;
 	}
