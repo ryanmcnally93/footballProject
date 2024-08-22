@@ -1,4 +1,4 @@
-package general;
+package entities;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Timer;

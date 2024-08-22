@@ -1,9 +1,4 @@
 package people;
-import java.lang.Math;
-import java.util.ArrayList;
-import java.util.List;
-
-import general.Team;
 
 // Update Character like in vehicle speed
 // Make startrun smaller using more methods

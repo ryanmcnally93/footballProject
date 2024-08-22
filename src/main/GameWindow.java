@@ -1,6 +1,4 @@
-package visuals.MatchFrames;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+package main;
 import java.awt.Dimension;
 import javax.swing.*;
 

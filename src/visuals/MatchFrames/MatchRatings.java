@@ -2,7 +2,6 @@ package visuals.MatchFrames;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.Map;
 
 import javax.swing.Box;
@@ -10,7 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
-import general.UsersMatch;
+import entities.UsersMatch;
 
 public class MatchRatings extends MatchFrames {
 

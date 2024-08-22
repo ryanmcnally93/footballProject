@@ -18,7 +18,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
-import general.UsersMatch;
+import entities.UsersMatch;
 import visuals.CustomizedElements.CustomizedButton;
 import visuals.CustomizedElements.GamePanel;
 import visuals.CustomizedElements.SlidingPanel;

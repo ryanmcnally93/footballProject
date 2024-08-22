@@ -1,8 +1,6 @@
 package visuals.CustomizedElements;
 import javax.swing.*;
 
-import general.UsersMatch;
-
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 
@@ -29,6 +27,27 @@ public abstract class GamePanel extends JPanel {
         east = Box.createHorizontalBox();
         east.setPreferredSize(new Dimension(width,200));
         mainPanel.add(east, BorderLayout.EAST);
+    }
+
+    public JScrollPane makeScroller(Box container){
+        JScrollPane scroller = new JScrollPane(container);
+        scroller.getViewport().setBackground(Color.LIGHT_GRAY);
+        scroller.setBorder(null);
+        scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        return scroller;
+    }
+
+    public void setPermanentWidth(JPanel box, int width){
+        box.setPreferredSize(new Dimension(width, box.getPreferredSize().height));
+        box.setMinimumSize(new Dimension(width, box.getMinimumSize().height));
+        box.setMaximumSize(new Dimension(width, box.getMaximumSize().height));
+    }
+
+    public void setPermanentWidth(Box box, int width){
+        box.setPreferredSize(new Dimension(width, box.getPreferredSize().height));
+        box.setMinimumSize(new Dimension(width, box.getMinimumSize().height));
+        box.setMaximumSize(new Dimension(width, box.getMaximumSize().height));
     }
 
     public Box getWest() {

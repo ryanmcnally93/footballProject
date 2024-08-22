@@ -1,4 +1,4 @@
-package general;
+package entities;
 import java.time.LocalDateTime;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import java.util.Timer;
 import people.Footballer;
 import people.Goalkeeper;
-import visuals.MatchFrames.GameWindow;
+import main.GameWindow;
 import visuals.MatchFrames.MatchAllMatches;
 import visuals.MatchFrames.MatchEvents;
 import visuals.MatchFrames.MatchFrames;

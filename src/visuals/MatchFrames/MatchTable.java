@@ -1,15 +1,13 @@
 package visuals.MatchFrames;
-import java.awt.Graphics;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.Map;
 
 import javax.swing.*;
 
-import general.LeagueTable;
-import general.UsersMatch;
+import entities.LeagueTable;
+import entities.UsersMatch;
 
 public class MatchTable extends MatchFrames {
 
@@ -31,11 +29,7 @@ public class MatchTable extends MatchFrames {
         centerBox = Box.createVerticalBox();
 		centerBox.setBackground(Color.LIGHT_GRAY);
 
-		scroller = new JScrollPane(centerBox);
-		scroller.setBorder(null);
-		scroller.getViewport().setBackground(Color.LIGHT_GRAY);
-		scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		scroller = makeScroller(centerBox);
 
 		mainPanel.add(scroller, BorderLayout.CENTER);
 
@@ -53,7 +47,6 @@ public class MatchTable extends MatchFrames {
 		Box padding = Box.createVerticalBox();
 		padding.add(Box.createVerticalStrut(20));  // 20 pixels of padding, adjust as needed
 		centerBox.add(padding);
-
 		centerBox.revalidate();
 		centerBox.repaint();
 	}

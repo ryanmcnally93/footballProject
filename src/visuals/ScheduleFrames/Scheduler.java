@@ -1,7 +1,6 @@
 package visuals.ScheduleFrames;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
@@ -11,26 +10,21 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import general.League;
-import general.Match;
-import general.UsersMatch;
-import general.Team;
-import general.User;
-import visuals.CustomizedElements.CustomizedButton;
+import entities.League;
+import entities.Match;
+import entities.UsersMatch;
+import entities.Team;
+import entities.User;
 import visuals.CustomizedElements.GamePanel;
-import visuals.MatchFrames.GameWindow;
-import visuals.MatchFrames.MatchFrames;
+import main.GameWindow;
 
 public class Scheduler extends GamePanel {
 

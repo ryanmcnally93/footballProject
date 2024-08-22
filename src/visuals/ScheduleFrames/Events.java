@@ -2,8 +2,8 @@ package visuals.ScheduleFrames;
 import java.time.LocalDateTime;
 import javax.swing.*;
 
-import general.UsersMatch;
-import general.Team;
+import entities.UsersMatch;
+import entities.Team;
 import people.Footballer;
 
 public class Events {

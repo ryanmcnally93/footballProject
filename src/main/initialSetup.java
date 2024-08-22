@@ -2,12 +2,11 @@ package main;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
-import general.League;
-import general.Team;
+import entities.League;
+import entities.Team;
 import people.Footballer;
 import people.Goalkeeper;
 import people.Manager;
-import visuals.MatchFrames.GameWindow;
 
 @SuppressWarnings("TextBlockMigration")
 public class initialSetup {

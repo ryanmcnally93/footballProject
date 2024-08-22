@@ -1,4 +1,4 @@
-package general;
+package entities;
 import java.awt.Color;
 import java.util.Map;
 import people.Footballer;

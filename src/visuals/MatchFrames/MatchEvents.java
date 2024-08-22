@@ -1,23 +1,14 @@
 package visuals.MatchFrames;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
-import general.UsersMatch;
+import entities.UsersMatch;
 import people.Footballer;
-import visuals.MatchFrames.MatchFrames;
-import visuals.MatchFrames.MatchFrames.leftClick;
-import visuals.MatchFrames.MatchFrames.rightClick;
 
 public class MatchEvents extends MatchFrames {
 	
@@ -32,6 +23,7 @@ public class MatchEvents extends MatchFrames {
 	private int button;
 	private InputMap inputMap;
 	private ActionMap actionMap;
+	private int rows = 14;
 
     public MatchEvents(CardLayout layout, JPanel pages, Map<String, JPanel> cardMap, UsersMatch match) {
     	super(layout, pages, cardMap, match);
@@ -45,104 +37,24 @@ public class MatchEvents extends MatchFrames {
     	
         container = Box.createHorizontalBox();
         
-        leftIconBox = new JPanel();
-		leftIconBox.setBackground(Color.LIGHT_GRAY);
-        leftIconBox.setLayout(new BoxLayout(leftIconBox, BoxLayout.Y_AXIS));
+        leftIconBox = newBox();
+        leftBox = newBox();
+        middleBox = newBox();
+        rightBox = newBox();
+        rightIconBox = newBox();
         
-        leftBox = new JPanel();
-		leftBox.setBackground(Color.LIGHT_GRAY);
-        leftBox.setLayout(new BoxLayout(leftBox, BoxLayout.Y_AXIS));
-        
-        middleBox = new JPanel();
-        middleBox.setBackground(Color.LIGHT_GRAY);
-        middleBox.setLayout(new BoxLayout(middleBox, BoxLayout.Y_AXIS));
-        
-        rightBox = new JPanel();
-        rightBox.setBackground(Color.LIGHT_GRAY);
-        rightBox.setLayout(new BoxLayout(rightBox, BoxLayout.Y_AXIS));
-        
-        rightIconBox = new JPanel();
-        rightIconBox.setBackground(Color.LIGHT_GRAY);
-        rightIconBox.setLayout(new BoxLayout(rightIconBox, BoxLayout.Y_AXIS));
-        
-        int rows = 14;
-        
-        leftIcons = new ArrayList<JLabel>();
-        leftLabels = new ArrayList<JLabel>();
-        middleLabels = new ArrayList<JLabel>();
-        rightLabels = new ArrayList<JLabel>();
-        rightIcons = new ArrayList<JLabel>();
+        leftIcons = new ArrayList<>();
+        leftLabels = new ArrayList<>();
+        middleLabels = new ArrayList<>();
+        rightLabels = new ArrayList<>();
+        rightIcons = new ArrayList<>();
 
-        for(int i=0;i<rows;i++) {
-        	JLabel result = new JLabel();
-        	result.setBorder(new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY));
-        	result.setPreferredSize(new Dimension(70, 30));
-            result.setMinimumSize(new Dimension(70, 30));
-            result.setMaximumSize(new Dimension(70, 30));
-        	leftIcons.add(result);
-        	leftIconBox.add(result);
-        }
-        
-        leftIconBox.setPreferredSize(new Dimension(70, leftIconBox.getPreferredSize().height));
-        leftIconBox.setMinimumSize(new Dimension(70, leftIconBox.getMinimumSize().height));
-        leftIconBox.setMaximumSize(new Dimension(70, leftIconBox.getMaximumSize().height));
-        
-        for(int i=0;i<rows;i++) {
-        	JLabel result = new JLabel();
-        	result.setBorder(new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY));
-        	result.setPreferredSize(new Dimension(275, 30));
-            result.setMinimumSize(new Dimension(275, 30));
-            result.setMaximumSize(new Dimension(275, 30));
-        	leftLabels.add(result);
-        	leftBox.add(result);
-        }
-        
-        leftBox.setPreferredSize(new Dimension(275, leftBox.getPreferredSize().height));
-        leftBox.setMinimumSize(new Dimension(275, leftBox.getMinimumSize().height));
-        leftBox.setMaximumSize(new Dimension(275, leftBox.getMaximumSize().height));
-        
-        for(int i=0;i<rows;i++) {
-        	JLabel result = new JLabel();
-        	result.setBorder(new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY));
-        	result.setPreferredSize(new Dimension(50, 30));
-            result.setMinimumSize(new Dimension(50, 30));
-            result.setMaximumSize(new Dimension(50, 30));
-        	middleLabels.add(result);
-        	middleBox.add(result);
-        }
-        
-        middleBox.setPreferredSize(new Dimension(50, middleBox.getPreferredSize().height));
-        middleBox.setMinimumSize(new Dimension(50, middleBox.getMinimumSize().height));
-        middleBox.setMaximumSize(new Dimension(50, middleBox.getMaximumSize().height));
-        
-        for(int i=0;i<rows;i++) {
-        	JLabel result = new JLabel();
-        	result.setBorder(new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY));
-        	result.setPreferredSize(new Dimension(275, 30));
-            result.setMinimumSize(new Dimension(275, 30));
-            result.setMaximumSize(new Dimension(275, 30));
-        	rightLabels.add(result);
-        	rightBox.add(result);
-        }
-        
-        rightBox.setPreferredSize(new Dimension(275, rightBox.getPreferredSize().height));
-        rightBox.setMinimumSize(new Dimension(275, rightBox.getMinimumSize().height));
-        rightBox.setMaximumSize(new Dimension(275, rightBox.getMaximumSize().height));
-        
-        for(int i=0;i<rows;i++) {
-        	JLabel result = new JLabel();
-        	result.setBorder(new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY));
-        	result.setPreferredSize(new Dimension(70, 30));
-            result.setMinimumSize(new Dimension(70, 30));
-            result.setMaximumSize(new Dimension(70, 30));
-        	rightIcons.add(result);
-        	rightIconBox.add(result);
-        }
-        
-        rightIconBox.setPreferredSize(new Dimension(70, rightIconBox.getPreferredSize().height));
-        rightIconBox.setMinimumSize(new Dimension(70, rightIconBox.getMinimumSize().height));
-        rightIconBox.setMaximumSize(new Dimension(70, rightIconBox.getMaximumSize().height));
-        
+		makeRows(leftIcons, leftIconBox, 70);
+		makeRows(leftLabels, leftBox, 275);
+		makeRows(middleLabels, middleBox, 50);
+		makeRows(rightLabels, rightBox, 275);
+		makeRows(rightIcons, rightIconBox, 70);
+
         container.add(Box.createHorizontalGlue());
         container.add(leftIconBox);
         container.add(leftBox);
@@ -152,11 +64,7 @@ public class MatchEvents extends MatchFrames {
         container.add(Box.createHorizontalGlue());
         container.setBorder(null);
         
-        scroller = new JScrollPane(container);
-        scroller.getViewport().setBackground(Color.LIGHT_GRAY);
-        scroller.setBorder(null);
-        scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        scroller = makeScroller(container);
 
 		appendEastAndWest(mainPanel, 20);
         
@@ -174,8 +82,6 @@ public class MatchEvents extends MatchFrames {
         label.setOpaque(true);
         
         Action upAction = new AbstractAction() {
-            private static final long serialVersionUID = -6458605443681379830L;
-
 			@Override
             public void actionPerformed(ActionEvent e) {
 				if (button > 0) {
@@ -186,8 +92,6 @@ public class MatchEvents extends MatchFrames {
         };
         
         Action downAction = new AbstractAction() {
-			private static final long serialVersionUID = 5205426896438320609L;
-
 			@Override
             public void actionPerformed(ActionEvent e) {
 				if (button < middleBox.getComponentCount() - 1) {
@@ -401,6 +305,26 @@ public class MatchEvents extends MatchFrames {
             scroller.getViewport().scrollRectToVisible(rect);
         });
     }
+
+	public void makeRows(ArrayList<JLabel> list, JPanel box, int width){
+		for(int i=0;i<rows;i++) {
+			JLabel result = new JLabel();
+			result.setBorder(new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY));
+			result.setPreferredSize(new Dimension(width, 30));
+			result.setMinimumSize(new Dimension(width, 30));
+			result.setMaximumSize(new Dimension(width, 30));
+			list.add(result);
+			box.add(result);
+		}
+		setPermanentWidth(box, width);
+	}
+
+	public JPanel newBox(){
+		JPanel newBox = new JPanel();
+		newBox.setBackground(Color.LIGHT_GRAY);
+		newBox.setLayout(new BoxLayout(newBox, BoxLayout.Y_AXIS));
+		return newBox;
+	}
 
 	public Box getContainer() {
 		return container;
