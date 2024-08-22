@@ -19,11 +19,15 @@ public abstract class GamePanel extends JPanel {
     }
 
     public void appendEastAndWest(JPanel mainPanel){
+        appendEastAndWest(mainPanel, 100);
+    }
+
+    public void appendEastAndWest(JPanel mainPanel, int width){
         west = Box.createHorizontalBox();
-        west.setPreferredSize(new Dimension(100,200));
+        west.setPreferredSize(new Dimension(width,200));
         mainPanel.add(west, BorderLayout.WEST);
         east = Box.createHorizontalBox();
-        east.setPreferredSize(new Dimension(100,200));
+        east.setPreferredSize(new Dimension(width,200));
         mainPanel.add(east, BorderLayout.EAST);
     }
 

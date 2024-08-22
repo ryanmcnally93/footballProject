@@ -157,13 +157,8 @@ public class MatchEvents extends MatchFrames {
         scroller.setBorder(null);
         scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        
-        Box west = Box.createHorizontalBox();
-		west.setPreferredSize(new Dimension(20,200));
-        mainPanel.add(west, BorderLayout.WEST);
-        Box east = Box.createHorizontalBox();
-        east.setPreferredSize(new Dimension(20,200));
-        mainPanel.add(east, BorderLayout.EAST); 
+
+		appendEastAndWest(mainPanel, 20);
         
         mainPanel.setBounds(0, 80, 800, 440);
         mainPanel.setBackground(Color.LIGHT_GRAY);

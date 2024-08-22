@@ -214,7 +214,7 @@ public class MatchStats extends MatchFrames {
         foulsBar.setValue(50);
         centerBox.add(foulsBar);
         
-mainPanel.add(centerBox, BorderLayout.CENTER);
+        mainPanel.add(centerBox, BorderLayout.CENTER);
         
         mainPanel.setBounds(0, 80, 800, 440);
         mainPanel.setBackground(Color.LIGHT_GRAY);
