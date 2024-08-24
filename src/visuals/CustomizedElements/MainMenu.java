@@ -1,6 +1,8 @@
 package visuals.CustomizedElements;
 import main.GameWindow;
 import visuals.MainMenuPages.*;
+import visuals.ScheduleFrames.Scheduler;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -9,11 +11,13 @@ import java.util.ArrayList;
 
 public class MainMenu extends GamePanel {
 
+    private Scheduler scheduler;
     private GameWindow window;
     private JButton leagueTableButton, goalscorersButton, assistsButton, allFixturesButton, myFixturesButton, resultsButton, firstTeamButton, formationButton, matchRolesButton;
 
-    public MainMenu(GameWindow newWindow) {
+    public MainMenu(GameWindow newWindow, Scheduler scheduler) {
         window = newWindow;
+        this.scheduler = scheduler;
         setLayout(new BorderLayout());
 
         JPanel mainPanel = new JPanel();
@@ -36,9 +40,9 @@ public class MainMenu extends GamePanel {
         // Make the card layout for the pages of these buttons
         CardLayout firstRowLayout = new CardLayout();
         JPanel firstPages = new JPanel(firstRowLayout);
-        LeagueTablePage league = new LeagueTablePage(firstRowLayout, firstPages);
-        TopGoalscorersPage goals = new TopGoalscorersPage(firstRowLayout, firstPages);
-        TopAssistsPage assists = new TopAssistsPage(firstRowLayout, firstPages);
+        LeagueTablePage league = new LeagueTablePage(firstRowLayout, firstPages, scheduler);
+        TopGoalscorersPage goals = new TopGoalscorersPage(firstRowLayout, firstPages, scheduler);
+        TopAssistsPage assists = new TopAssistsPage(firstRowLayout, firstPages, scheduler);
         firstPages.add(league, "League Table");
         firstPages.add(goals, "Top Goals");
         firstPages.add(assists, "Top Assists");
@@ -57,9 +61,9 @@ public class MainMenu extends GamePanel {
         // Make the card layout for the pages of these buttons
         CardLayout secondRowLayout = new CardLayout();
         JPanel secondPages = new JPanel(secondRowLayout);
-        AllFixturesPage allFixtures = new AllFixturesPage(secondRowLayout, secondPages);
-        MyFixturesPage myFixtures = new MyFixturesPage(secondRowLayout, secondPages);
-        ResultsPage results = new ResultsPage(secondRowLayout, secondPages);
+        AllFixturesPage allFixtures = new AllFixturesPage(secondRowLayout, secondPages, scheduler);
+        MyFixturesPage myFixtures = new MyFixturesPage(secondRowLayout, secondPages, scheduler);
+        ResultsPage results = new ResultsPage(secondRowLayout, secondPages, scheduler);
         secondPages.add(allFixtures, "All Fixtures");
         secondPages.add(myFixtures, "My Fixtures");
         secondPages.add(results, "Results");
@@ -78,9 +82,9 @@ public class MainMenu extends GamePanel {
         // Make the card layout for the pages of these buttons
         CardLayout thirdRowLayout = new CardLayout();
         JPanel thirdPages = new JPanel(thirdRowLayout);
-        FirstTeamPage firstTeam = new FirstTeamPage(thirdRowLayout, thirdPages);
-        FormationPage formation = new FormationPage(thirdRowLayout, thirdPages);
-        MatchRolesPage matchRoles = new MatchRolesPage(thirdRowLayout, thirdPages);
+        FirstTeamPage firstTeam = new FirstTeamPage(thirdRowLayout, thirdPages, scheduler);
+        FormationPage formation = new FormationPage(thirdRowLayout, thirdPages, scheduler);
+        MatchRolesPage matchRoles = new MatchRolesPage(thirdRowLayout, thirdPages, scheduler);
         thirdPages.add(firstTeam, "First Team");
         thirdPages.add(formation, "Formation");
         thirdPages.add(matchRoles, "Match Roles");

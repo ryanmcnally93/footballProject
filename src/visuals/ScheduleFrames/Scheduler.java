@@ -145,6 +145,7 @@ public class Scheduler extends GamePanel {
 			layeredPane.remove(main);
 			menuBox.remove(closeButton);
 			menuBox.add(menu);
+			layeredPane.revalidate();
 			layeredPane.repaint();
 		} else{
 			System.out.println("Menu isn't open?");
@@ -153,12 +154,13 @@ public class Scheduler extends GamePanel {
 	
 	public void displayPage(GameWindow window) {
 		this.window= window;
+		closeMenu();
 		window.getContentPane().removeAll();
 		window.getContentPane().add(this, BorderLayout.CENTER);
 		window.revalidate();
 		window.repaint();
 
-		main = new MainMenu(window);
+		main = new MainMenu(window, this);
 		main.setBounds(600, 70, 200,400); // Set bounds of MainMenu
 		main.setVisible(true);
 
@@ -168,7 +170,6 @@ public class Scheduler extends GamePanel {
 				southMiddle.remove(playGame);
 				southMiddle.remove(simGame);
 				southMiddle.add(advance);
-				closeMenu();
 				if(league.getLeagueTable().getLine(team).getPosition() == 1){
 					Events chairmanMessage = new Events("Chairman", "This is absolutely incredible! We are top of the league! From all of the staff and players, we thank you for your hard work!", getDate());
 					events.add(chairmanMessage);
@@ -480,5 +481,117 @@ public class Scheduler extends GamePanel {
 
 	public void setSouth(JPanel south) {
 		this.southMiddle = south;
+	}
+
+	public JPanel getSouthMiddle() {
+		return southMiddle;
+	}
+
+	public void setSouthMiddle(JPanel southMiddle) {
+		this.southMiddle = southMiddle;
+	}
+
+	public JPanel getMenuBox() {
+		return menuBox;
+	}
+
+	public void setMenuBox(JPanel menuBox) {
+		this.menuBox = menuBox;
+	}
+
+	public JButton getPlayGame() {
+		return playGame;
+	}
+
+	public void setPlayGame(JButton playGame) {
+		this.playGame = playGame;
+	}
+
+	public JButton getAdvanceToGame() {
+		return advanceToGame;
+	}
+
+	public void setAdvanceToGame(JButton advanceToGame) {
+		this.advanceToGame = advanceToGame;
+	}
+
+	public JButton getSimGame() {
+		return simGame;
+	}
+
+	public void setSimGame(JButton simGame) {
+		this.simGame = simGame;
+	}
+
+	public JButton getMenu() {
+		return menu;
+	}
+
+	public void setMenu(JButton menu) {
+		this.menu = menu;
+	}
+
+	public JButton getCloseButton() {
+		return closeButton;
+	}
+
+	public void setCloseButton(JButton closeButton) {
+		this.closeButton = closeButton;
+	}
+
+	public League getLeague() {
+		return league;
+	}
+
+	public void setLeague(League league) {
+		this.league = league;
+	}
+
+	public JPanel getMainPanel() {
+		return mainPanel;
+	}
+
+	public void setMainPanel(JPanel mainPanel) {
+		this.mainPanel = mainPanel;
+	}
+
+	public JLabel getTodaysDate() {
+		return todaysDate;
+	}
+
+	public void setTodaysDate(JLabel todaysDate) {
+		this.todaysDate = todaysDate;
+	}
+
+	public GameWindow getWindow() {
+		return window;
+	}
+
+	public void setWindow(GameWindow window) {
+		this.window = window;
+	}
+
+	public UsersMatch getMatch() {
+		return match;
+	}
+
+	public void setMatch(UsersMatch match) {
+		this.match = match;
+	}
+
+	public JLayeredPane getLayeredPane() {
+		return layeredPane;
+	}
+
+	public void setLayeredPane(JLayeredPane layeredPane) {
+		this.layeredPane = layeredPane;
+	}
+
+	public MainMenu getMain() {
+		return main;
+	}
+
+	public void setMain(MainMenu main) {
+		this.main = main;
 	}
 }

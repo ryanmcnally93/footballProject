@@ -164,8 +164,7 @@ public class MatchFrames extends GamePanel {
 	            	handleClick();
 	            }
 	        });
-	        
-	
+
 	        buttonPanel = new JPanel();
 	        buttonPanel.add(prevButton);
 	        buttonPanel.add(playButton);
