@@ -24,9 +24,8 @@ public class Scheduler extends GamePanel {
 
 	private static final long serialVersionUID = -949295084027854854L;
 	private LocalDateTime date;
-	private JPanel header;
-	private JPanel eventsBox, southMiddle;
-	private JButton advance, playGame, advanceToGame, simGame, menu;
+	private JPanel eventsBox, southMiddle, menuBox, header;
+	private JButton advance, playGame, advanceToGame, simGame, menu, closeButton;
 	private Team team;
 	private User user;
 	private League league;
@@ -37,6 +36,7 @@ public class Scheduler extends GamePanel {
 	private Box eventContainer;
 	private UsersMatch match;
 	private JLayeredPane layeredPane;
+	private MainMenu main;
 	
 	// New Game Constructor
 	public Scheduler(User user, Team team, League league) {
@@ -52,7 +52,11 @@ public class Scheduler extends GamePanel {
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
 		mainPanel.setBounds(0, 0, 800, 600);
-        
+
+		main = new MainMenu();
+		main.setBounds(600, 70, 200,400); // Set bounds of MainMenu
+		main.setVisible(true);
+
         header = new JPanel();
         header.setPreferredSize(new Dimension(800, 80));
         JLabel title = new JLabel(team.getName() + " - " + user.getName() + " season " + league.getSeason(), SwingConstants.CENTER);
@@ -71,7 +75,7 @@ public class Scheduler extends GamePanel {
 		southMiddle.add(todaysDate);
 		southMiddle.add(advance);
 
-		JPanel menuBox = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		menuBox = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		setPermanentWidth(menuBox, 115);
 		// Makes the southMiddle central
 		JPanel leftBlankBox = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -113,20 +117,42 @@ public class Scheduler extends GamePanel {
 		repaint();
 	}
 
-	// Check to see if the menu is open, if so:
-	// closeMenu();
-	// if not:
-	// openMenu();
 	public void triggerMenu(){
-
-		MainMenu main = new MainMenu();
-		main.setBounds(600, 70, 200,400); // Set bounds of MainMenu
-		main.setVisible(true);
+		menuBox.remove(menu);
+		closeButton = new JButton("Close Menu");
+		menuBox.add(closeButton);
 		setPermanentWidthAndHeight(main, layeredPane.getWidth(), layeredPane.getHeight());
 		layeredPane.add(main, JLayeredPane.PALETTE_LAYER);
 		layeredPane.revalidate();
 		layeredPane.repaint();
 
+		layeredPane.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (!main.getBounds().contains(e.getPoint())) {
+					closeMenu();
+				}
+			}
+		});
+
+		closeButton.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseClicked(MouseEvent e){
+				closeMenu();
+			}
+		});
+
+	}
+
+	public void closeMenu(){
+		if(layeredPane.isAncestorOf(main)){
+			layeredPane.remove(main);
+			menuBox.remove(closeButton);
+			menuBox.add(menu);
+			layeredPane.repaint();
+		} else{
+			System.out.println("Menu isn't open?");
+		}
 	}
 	
 	public void displayPage(GameWindow window) {
@@ -141,6 +167,7 @@ public class Scheduler extends GamePanel {
 				southMiddle.remove(playGame);
 				southMiddle.remove(simGame);
 				southMiddle.add(advance);
+				closeMenu();
 				if(league.getLeagueTable().getLine(team).getPosition() == 1){
 					Events chairmanMessage = new Events("Chairman", "This is absolutely incredible! We are top of the league! From all of the staff and players, we thank you for your hard work!", getDate());
 					events.add(chairmanMessage);
