@@ -101,7 +101,6 @@ public class LeagueTable extends GamePanel {
     	tableContainer.add(titleRow);
 
     	add(tableContainer, BorderLayout.CENTER);
-//		setVisible(true);
 	}
 
 	public TableLine getLine(Team team) {

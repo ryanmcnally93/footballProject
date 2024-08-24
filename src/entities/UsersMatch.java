@@ -91,7 +91,6 @@ public class UsersMatch extends Match {
         matchPages.add(ratingsPanel, "Ratings");
         cardMap.put("Ratings", ratingsPanel);
 
-        // Initialize with the main page, this will change multiple times
 	}
 	
 	public void displayGame(GameWindow window, Scheduler schedule) {

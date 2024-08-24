@@ -1,8 +1,5 @@
 package visuals.ScheduleFrames;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
@@ -11,11 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import entities.League;
@@ -25,14 +18,15 @@ import entities.Team;
 import entities.User;
 import visuals.CustomizedElements.GamePanel;
 import main.GameWindow;
+import visuals.CustomizedElements.MainMenu;
 
 public class Scheduler extends GamePanel {
 
 	private static final long serialVersionUID = -949295084027854854L;
 	private LocalDateTime date;
 	private JPanel header;
-	private JPanel eventsBox, south;
-	private JButton advance, playGame, advanceToGame, simGame;
+	private JPanel eventsBox, southMiddle;
+	private JButton advance, playGame, advanceToGame, simGame, menu;
 	private Team team;
 	private User user;
 	private League league;
@@ -42,6 +36,7 @@ public class Scheduler extends GamePanel {
 	private GameWindow window;
 	private Box eventContainer;
 	private UsersMatch match;
+	private JLayeredPane layeredPane;
 	
 	// New Game Constructor
 	public Scheduler(User user, Team team, League league) {
@@ -50,12 +45,13 @@ public class Scheduler extends GamePanel {
 		this.team = team;
 		this.league = league;
 		this.events = new ArrayList<Events>();
-		
-		setLayout(new BorderLayout());
-        setBackground(Color.LIGHT_GRAY);
+
+		layeredPane = new JLayeredPane();
+		setPermanentWidthAndHeight(layeredPane, 800, 600);
 		
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
+		mainPanel.setBounds(0, 0, 800, 600);
         
         header = new JPanel();
         header.setPreferredSize(new Dimension(800, 80));
@@ -65,12 +61,27 @@ public class Scheduler extends GamePanel {
         mainPanel.add(header, BorderLayout.NORTH);
         
         appendEastAndWest(mainPanel);
-        
-		south = new JPanel();
+
+		JPanel south = new JPanel(new BorderLayout());
+		south.setPreferredSize(new Dimension(800, 80));
+		southMiddle = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
 		todaysDate = new JLabel("Today's date is: " + getDate());
 		advance = new JButton("Advance");
-		south.add(todaysDate);
-		south.add(advance);
+		southMiddle.add(todaysDate);
+		southMiddle.add(advance);
+
+		JPanel menuBox = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		setPermanentWidth(menuBox, 115);
+		// Makes the southMiddle central
+		JPanel leftBlankBox = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		setPermanentWidth(leftBlankBox, 115);
+		menu = new JButton("Main Menu");
+		menuBox.add(menu);
+
+		south.add(menuBox, BorderLayout.EAST);
+		south.add(southMiddle, BorderLayout.CENTER);
+		south.add(leftBlankBox, BorderLayout.WEST);
 		mainPanel.add(south, BorderLayout.SOUTH);
 		
 		advance.addMouseListener(new MouseAdapter() {
@@ -79,8 +90,17 @@ public class Scheduler extends GamePanel {
 				addDay();
 			}
 		});
-		
-		add(mainPanel, BorderLayout.CENTER);
+
+		// JLAYEREDPANE IS NOT ADDED TO ANYTHING!
+		layeredPane.add(mainPanel, JLayeredPane.DEFAULT_LAYER);
+		add(layeredPane, BorderLayout.CENTER);
+
+		menu.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				triggerMenu();
+			}
+		});
 
 		Events chairmanMessage = new Events("Chairman", "Welcome to " + team.getName() + " FC! We've been preparing for your arrival for some time and wish you the best of luck for the season ahead.", getDate());
 		events.add(chairmanMessage);
@@ -91,7 +111,22 @@ public class Scheduler extends GamePanel {
 
 		revalidate();
 		repaint();
-        
+	}
+
+	// Check to see if the menu is open, if so:
+	// closeMenu();
+	// if not:
+	// openMenu();
+	public void triggerMenu(){
+
+		MainMenu main = new MainMenu();
+		main.setBounds(600, 70, 200,400); // Set bounds of MainMenu
+		main.setVisible(true);
+		setPermanentWidthAndHeight(main, layeredPane.getWidth(), layeredPane.getHeight());
+		layeredPane.add(main, JLayeredPane.PALETTE_LAYER);
+		layeredPane.revalidate();
+		layeredPane.repaint();
+
 	}
 	
 	public void displayPage(GameWindow window) {
@@ -103,9 +138,9 @@ public class Scheduler extends GamePanel {
 		if(match != null) {
 			if(match.getMinute() == 90) {
 				eventContainer.removeAll();
-				south.remove(playGame);
-				south.remove(simGame);
-				south.add(advance);
+				southMiddle.remove(playGame);
+				southMiddle.remove(simGame);
+				southMiddle.add(advance);
 				if(league.getLeagueTable().getLine(team).getPosition() == 1){
 					Events chairmanMessage = new Events("Chairman", "This is absolutely incredible! We are top of the league! From all of the staff and players, we thank you for your hard work!", getDate());
 					events.add(chairmanMessage);
@@ -145,7 +180,7 @@ public class Scheduler extends GamePanel {
 		for(Events event : todaysEvents){
 			showEventsDescription(event);
 			// Remove advance button
-			south.remove(advance);
+			southMiddle.remove(advance);
 			System.out.println("Checking if this is a match or not");
 			if (event.getType().equals("Match")){
 				// This is a match event
@@ -158,15 +193,15 @@ public class Scheduler extends GamePanel {
 						event.getMatch().displayGame(window, sch);
 					}
 				});
-				south.add(playGame);
+				southMiddle.add(playGame);
 				// This is the simulate match button and its functionality
 				simGame = new JButton("Simulate");
 				Scheduler thissch = this;
 				simGame.addMouseListener(new MouseAdapter(){
 					@Override
 					public void mouseClicked(MouseEvent e){
-						south.remove(simGame);
-						south.remove(playGame);
+						southMiddle.remove(simGame);
+						southMiddle.remove(playGame);
 						eventContainer.removeAll();
 						// Run as normal match method
 						UsersMatch todaysMatch = ((UsersMatch) league.getFixtures().get(event.getMatch().toString()));
@@ -180,7 +215,7 @@ public class Scheduler extends GamePanel {
 						events.remove(event);
 					}
 				});
-				south.add(simGame);
+				southMiddle.add(simGame);
 			} else {
 				System.out.println("This is not a match event");
 				JButton dismiss = new JButton("Dismiss");
@@ -188,17 +223,17 @@ public class Scheduler extends GamePanel {
 					@Override
 					public void mouseClicked(MouseEvent e) {
 						eventContainer.removeAll();
-						south.remove(dismiss);
-						south.add(advance);
+						southMiddle.remove(dismiss);
+						southMiddle.add(advance);
 						todaysEvents.remove(event);
 						events.remove(event);
 						showTodaysEvents(todaysEvents);
 						eventContainer.repaint();
-						south.revalidate();
-						south.repaint();
+						southMiddle.revalidate();
+						southMiddle.repaint();
 					}
 				});
-				south.add(dismiss);
+				southMiddle.add(dismiss);
 				break;
 			}
 		}
@@ -278,10 +313,10 @@ public class Scheduler extends GamePanel {
 							}
 						}
 					}
-					south.remove(advanceToGame);
+					southMiddle.remove(advanceToGame);
 				}
 			});
-			south.add(advanceToGame);
+			southMiddle.add(advanceToGame);
 		}
 
 		refreshMessages();
@@ -412,10 +447,10 @@ public class Scheduler extends GamePanel {
 	}
 
 	public JPanel getSouth() {
-		return south;
+		return southMiddle;
 	}
 
 	public void setSouth(JPanel south) {
-		this.south = south;
+		this.southMiddle = south;
 	}
 }

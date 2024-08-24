@@ -9,8 +9,7 @@ public abstract class GamePanel extends JPanel {
     private Box east;
     private Box west;
 
-    public GamePanel() {
-    };
+    public GamePanel() {};
 
     protected void addGameMouseListener(MouseAdapter mouseAdapter) {
         addMouseListener(mouseAdapter);
@@ -42,6 +41,24 @@ public abstract class GamePanel extends JPanel {
         box.setPreferredSize(new Dimension(width, height));
         box.setMinimumSize(new Dimension(width, height));
         box.setMaximumSize(new Dimension(width, height));
+    }
+
+    public void setPermanentWidthAndHeight(Box box, int width, int height){
+        box.setPreferredSize(new Dimension(width, height));
+        box.setMinimumSize(new Dimension(width, height));
+        box.setMaximumSize(new Dimension(width, height));
+    }
+
+    public void setPermanentWidthAndHeight(JLayeredPane box, int width, int height){
+        box.setPreferredSize(new Dimension(width, height));
+        box.setMinimumSize(new Dimension(width, height));
+        box.setMaximumSize(new Dimension(width, height));
+    }
+
+    public void setPermanentWidth(JButton box, int width){
+        box.setPreferredSize(new Dimension(width, box.getPreferredSize().height));
+        box.setMinimumSize(new Dimension(width, box.getMinimumSize().height));
+        box.setMaximumSize(new Dimension(width, box.getMaximumSize().height));
     }
 
     public void setPermanentWidth(JPanel box, int width){

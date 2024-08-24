@@ -30,14 +30,14 @@ public class CustomProgressBar extends JProgressBar {
         Graphics2D g2d = (Graphics2D) g.create();
         int width = getWidth();
         int height = getHeight();
-//        int barWidth = (int) (width * 0.75); // 75% of the width of the container
+        // int barWidth = (int) (width * 0.75); // 75% of the width of the container
         int progressWidth = (int) (width * ((double) getValue() / getMaximum()));
         
         // Center the progress bar
         int x = (width - width) / 2;
         int y = (height - CORNER_RADIUS * 2)/2;
         
-     // Anti-aliasing for smoother corners
+        // Anti-aliasing for smoother corners
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Draw the background with rounded corners
