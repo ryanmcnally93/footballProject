@@ -1,4 +1,6 @@
-package entities;
+package visuals.CustomizedElements;
+
+import entities.Team;
 
 public class TableLine {
 

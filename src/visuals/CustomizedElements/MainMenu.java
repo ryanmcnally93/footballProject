@@ -1,14 +1,19 @@
 package visuals.CustomizedElements;
 import main.GameWindow;
-
+import visuals.MainMenuPages.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public class MainMenu extends GamePanel {
 
+    private GameWindow window;
     private JButton leagueTableButton, goalscorersButton, assistsButton, allFixturesButton, myFixturesButton, resultsButton, firstTeamButton, formationButton, matchRolesButton;
 
-    public MainMenu() {
+    public MainMenu(GameWindow newWindow) {
+        window = newWindow;
         setLayout(new BorderLayout());
 
         JPanel mainPanel = new JPanel();
@@ -17,25 +22,69 @@ public class MainMenu extends GamePanel {
 
         Box container = Box.createVerticalBox();
 
+        // Make the row of buttons
         Box firstRow = Box.createHorizontalBox();
         leagueTableButton = new JButton("League Table");
         goalscorersButton = new JButton("Top Goals");
         assistsButton = new JButton("Top Assists");
         makeMenuRow(firstRow, leagueTableButton, goalscorersButton, assistsButton);
+        ArrayList<JButton> firstButtons = new ArrayList<>();
+        firstButtons.add(leagueTableButton);
+        firstButtons.add(goalscorersButton);
+        firstButtons.add(assistsButton);
+
+        // Make the card layout for the pages of these buttons
+        CardLayout firstRowLayout = new CardLayout();
+        JPanel firstPages = new JPanel(firstRowLayout);
+        LeagueTablePage league = new LeagueTablePage(firstRowLayout, firstPages);
+        TopGoalscorersPage goals = new TopGoalscorersPage(firstRowLayout, firstPages);
+        TopAssistsPage assists = new TopAssistsPage(firstRowLayout, firstPages);
+        firstPages.add(league, "League Table");
+        firstPages.add(goals, "Top Goals");
+        firstPages.add(assists, "Top Assists");
+        addListeners(firstButtons, firstPages, firstRowLayout);
 
         Box secondRow = Box.createHorizontalBox();
-        // Add filters per competition
         allFixturesButton = new JButton("All Fixtures");
-        // Add filters per competition
         myFixturesButton = new JButton("My Fixtures");
         resultsButton = new JButton("Results");
         makeMenuRow(secondRow, allFixturesButton, myFixturesButton, resultsButton);
+        ArrayList<JButton> secondButtons = new ArrayList<>();
+        secondButtons.add(allFixturesButton);
+        secondButtons.add(myFixturesButton);
+        secondButtons.add(resultsButton);
+
+        // Make the card layout for the pages of these buttons
+        CardLayout secondRowLayout = new CardLayout();
+        JPanel secondPages = new JPanel(secondRowLayout);
+        AllFixturesPage allFixtures = new AllFixturesPage(secondRowLayout, secondPages);
+        MyFixturesPage myFixtures = new MyFixturesPage(secondRowLayout, secondPages);
+        ResultsPage results = new ResultsPage(secondRowLayout, secondPages);
+        secondPages.add(allFixtures, "All Fixtures");
+        secondPages.add(myFixtures, "My Fixtures");
+        secondPages.add(results, "Results");
+        addListeners(secondButtons, secondPages, secondRowLayout);
 
         Box thirdRow = Box.createHorizontalBox();
         firstTeamButton = new JButton("First Team");
         formationButton = new JButton("Formation");
         matchRolesButton = new JButton("Match Roles");
         makeMenuRow(thirdRow, firstTeamButton, formationButton, matchRolesButton);
+        ArrayList<JButton> thirdButtons = new ArrayList<>();
+        thirdButtons.add(firstTeamButton);
+        thirdButtons.add(formationButton);
+        thirdButtons.add(matchRolesButton);
+
+        // Make the card layout for the pages of these buttons
+        CardLayout thirdRowLayout = new CardLayout();
+        JPanel thirdPages = new JPanel(thirdRowLayout);
+        FirstTeamPage firstTeam = new FirstTeamPage(thirdRowLayout, thirdPages);
+        FormationPage formation = new FormationPage(thirdRowLayout, thirdPages);
+        MatchRolesPage matchRoles = new MatchRolesPage(thirdRowLayout, thirdPages);
+        thirdPages.add(firstTeam, "First Team");
+        thirdPages.add(formation, "Formation");
+        thirdPages.add(matchRoles, "Match Roles");
+        addListeners(thirdButtons, thirdPages, thirdRowLayout);
 
         setPermanentWidthAndHeight(firstRow, 200, 40);
         setPermanentWidthAndHeight(secondRow, 200, 40);
@@ -50,6 +99,21 @@ public class MainMenu extends GamePanel {
         mainPanel.add(container);
         add(mainPanel, BorderLayout.CENTER);
         repaint();
+    }
+
+    public void addListeners(ArrayList<JButton> buttons, JPanel pages, CardLayout thisLayout){
+        for(JButton button : buttons){
+            button.addMouseListener(new MouseAdapter(){
+                @Override
+                public void mouseClicked(MouseEvent e){
+                    window.getContentPane().removeAll();
+                    window.getContentPane().add(pages, BorderLayout.CENTER);
+                    thisLayout.show(pages, button.getText());
+                    window.revalidate();
+                    window.repaint();
+                }
+            });
+        }
     }
 
     public void makeMenuRow(Box row, JButton buttonOne, JButton buttonTwo, JButton buttonThree){

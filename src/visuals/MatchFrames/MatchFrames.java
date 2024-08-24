@@ -247,8 +247,7 @@ public class MatchFrames extends GamePanel {
 		footerPanel.buttonPanel.revalidate();
 		footerPanel.buttonPanel.repaint();
 	}
-	
-    
+
     public HeaderPanel getHeaderPanel() {
 		return headerPanel;
 	}

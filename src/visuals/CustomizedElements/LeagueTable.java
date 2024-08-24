@@ -1,4 +1,4 @@
-package entities;
+package visuals.CustomizedElements;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -8,7 +8,8 @@ import java.util.Comparator;
 
 import javax.swing.*;
 
-import visuals.CustomizedElements.GamePanel;
+import entities.League;
+import entities.Team;
 
 public class LeagueTable extends GamePanel {
 

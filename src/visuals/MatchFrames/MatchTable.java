@@ -6,7 +6,7 @@ import java.util.Map;
 
 import javax.swing.*;
 
-import entities.LeagueTable;
+import visuals.CustomizedElements.LeagueTable;
 import entities.UsersMatch;
 
 public class MatchTable extends MatchFrames {

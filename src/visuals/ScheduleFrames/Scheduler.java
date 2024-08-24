@@ -53,10 +53,6 @@ public class Scheduler extends GamePanel {
         mainPanel.setLayout(new BorderLayout());
 		mainPanel.setBounds(0, 0, 800, 600);
 
-		main = new MainMenu();
-		main.setBounds(600, 70, 200,400); // Set bounds of MainMenu
-		main.setVisible(true);
-
         header = new JPanel();
         header.setPreferredSize(new Dimension(800, 80));
         JLabel title = new JLabel(team.getName() + " - " + user.getName() + " season " + league.getSeason(), SwingConstants.CENTER);
@@ -161,6 +157,11 @@ public class Scheduler extends GamePanel {
 		window.getContentPane().add(this, BorderLayout.CENTER);
 		window.revalidate();
 		window.repaint();
+
+		main = new MainMenu(window);
+		main.setBounds(600, 70, 200,400); // Set bounds of MainMenu
+		main.setVisible(true);
+
 		if(match != null) {
 			if(match.getMinute() == 90) {
 				eventContainer.removeAll();

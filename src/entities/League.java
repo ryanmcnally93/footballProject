@@ -1,4 +1,7 @@
 package entities;
+import visuals.CustomizedElements.LeagueTable;
+import visuals.CustomizedElements.TableLine;
+
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
