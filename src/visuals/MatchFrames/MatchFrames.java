@@ -30,18 +30,16 @@ public class MatchFrames extends GamePanel {
 	private static final String PLAY = "Play Game";
 	private CardLayout layout;
 	private JPanel pages;
-	private Map<String, JPanel> cardMap;
 	private SlidingPanel slidingPanel;
 	private UsersMatch match;
 	private JLayeredPane layeredPane;
 	private HeaderPanel headerPanel;
 	private FooterPanel footerPanel;
 
-	public MatchFrames(CardLayout cardLayout, JPanel mainPanel, Map<String, JPanel> cardMap, UsersMatch match) {
+	public MatchFrames(CardLayout cardLayout, JPanel mainPanel, UsersMatch match) {
     	super();
     	this.layout = cardLayout;
         this.pages = mainPanel;
-        this.cardMap = cardMap;
         this.match = match;
         
         setBorder(new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY));
@@ -306,14 +304,6 @@ public class MatchFrames extends GamePanel {
 
 	public void setLayout(CardLayout layout) {
 		this.layout = layout;
-	}
-
-	public Map<String, JPanel> getCardMap() {
-		return cardMap;
-	}
-
-	public void setCardMap(Map<String, JPanel> cardMap) {
-		this.cardMap = cardMap;
 	}
 
 	public SlidingPanel getSlidingPanel() {

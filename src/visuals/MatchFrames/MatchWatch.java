@@ -16,8 +16,8 @@ public class MatchWatch extends MatchFrames {
 	private static final long serialVersionUID = -3730364980616724000L;
 	private Box centerBox;
 
-	public MatchWatch(CardLayout layout, JPanel pages, Map<String, JPanel> cardMap, UsersMatch match) {
-		super(layout, pages, cardMap, match);
+	public MatchWatch(CardLayout layout, JPanel pages, UsersMatch match) {
+		super(layout, pages, match);
 		
 		JLayeredPane layeredPane = getLayeredPane();
         JPanel mainPanel = new JPanel();

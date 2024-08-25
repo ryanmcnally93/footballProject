@@ -65,13 +65,13 @@ public class UsersMatch extends Match {
         layout = new CardLayout();
         matchPages = new JPanel(layout);
 		
-        watchPanel = new MatchWatch(layout, matchPages, cardMap, this);
-        scorerPanel = new MatchScorers(layout, matchPages, cardMap, this);
-        statsPanel = new MatchStats(layout, matchPages, cardMap, this);
-        eventsPanel = new MatchEvents(layout, matchPages, cardMap, this);
-        allMatchesPanel = new MatchAllMatches(layout, matchPages, cardMap, this);
-        tablePanel = new MatchTable(layout, matchPages, cardMap, this);
-        ratingsPanel = new MatchRatings(layout, matchPages, cardMap, this);
+        watchPanel = new MatchWatch(layout, matchPages, this);
+        scorerPanel = new MatchScorers(layout, matchPages, this);
+        statsPanel = new MatchStats(layout, matchPages, this);
+        eventsPanel = new MatchEvents(layout, matchPages, this);
+        allMatchesPanel = new MatchAllMatches(layout, matchPages, this);
+        tablePanel = new MatchTable(layout, matchPages, this);
+        ratingsPanel = new MatchRatings(layout, matchPages, this);
 
         // Add MatchFrame instances to the MatchFrames main panel
         

@@ -26,8 +26,8 @@ public class MatchScorers extends MatchFrames {
     private JPanel leftBox, rightBox;
     private Box centerBox, container;
 
-	public MatchScorers(CardLayout cardLayout, JPanel pages, Map<String, JPanel> cardMap, UsersMatch match) {
-		super(cardLayout, pages, cardMap, match);
+	public MatchScorers(CardLayout cardLayout, JPanel pages, UsersMatch match) {
+		super(cardLayout, pages, match);
 		
 		JLayeredPane layeredPane = getLayeredPane();
         JPanel mainPanel = new JPanel();

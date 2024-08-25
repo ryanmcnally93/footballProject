@@ -23,8 +23,8 @@ public class MatchStats extends MatchFrames {
     private Color homeColor, awayColor;
     private ArrayList<Box> boxes;
 
-    public MatchStats(CardLayout layout, JPanel pages, Map<String, JPanel> cardMap, UsersMatch match) {
-        super(layout, pages, cardMap, match);
+    public MatchStats(CardLayout layout, JPanel pages, UsersMatch match) {
+        super(layout, pages, match);
 
         // Set colours for the progress bars to match team colours
         homeColor = getMatch().getHome().getPrimaryColour();
