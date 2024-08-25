@@ -221,7 +221,8 @@ public class MatchFrames extends GamePanel {
             @Override
             public void mouseClicked(MouseEvent e) {
             	match.getWindow().getContentPane().removeAll();
-            	match.getSchedule().displayPage(match.getWindow());
+            	match.getScheduler().displayPage(match.getWindow());
+				match.getScheduler().refreshMessages();
             	match.getWindow().revalidate();
             	match.getWindow().repaint();
             }
@@ -232,7 +233,7 @@ public class MatchFrames extends GamePanel {
 			@Override
 		    public void actionPerformed(ActionEvent e) {
 		    	match.getWindow().getContentPane().removeAll();
-            	match.getSchedule().displayPage(match.getWindow());
+            	match.getScheduler().displayPage(match.getWindow());
             	match.getWindow().revalidate();
             	match.getWindow().repaint();
 		    }

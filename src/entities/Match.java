@@ -23,6 +23,7 @@ public class Match {
     private LocalDateTime dateTime;
     private League league;
 	private Scheduler scheduler;
+	private Boolean simulated = false;
 	
 	public Match() {};
 	
@@ -294,17 +295,20 @@ public class Match {
 				league.getLeagueTable().updateLinesInTableLogic();
 				callUpdateTableVisually();
 			}
-			// This only runs on a simulated match
+
 			if(scheduler != null){
 				scheduler.getEventContainer().removeAll();
 				// Give 1st place message if user is now 1st
 				if(league.getLeagueTable().getLine(scheduler.getTeam()).getPosition() == 1) {
 					scheduler.addFirstPositionMessage();
 				}
-				Events simulatedResult = new Events("Result", getScore(), getDateTime().plusHours(2));
-				System.out.println("Adding an event in match class (for simulated matches)");
-				scheduler.getEvents().add(simulatedResult);
-				scheduler.refreshMessages();
+				// We only want this on a simulated match
+				if(simulated) {
+					Events simulatedResult = new Events("Result", getScore(), getDateTime().plusHours(2));
+					System.out.println("Adding an event in match class (for simulated matches)");
+					scheduler.getEvents().add(simulatedResult);
+					scheduler.refreshMessages();
+				}
 				// Refresh messages once match is played
 				scheduler.getEventContainer().repaint();
 				scheduler.getSouth().revalidate();
@@ -326,8 +330,9 @@ public class Match {
 		initialSetup();
     }
 
-	public void startMatch(Scheduler scheduler) {
+	public void startMatch(Scheduler scheduler, Boolean bool) {
 		this.scheduler = scheduler;
+		this.simulated = true;
 		initialSetup();
 	}
 
@@ -461,5 +466,12 @@ public class Match {
 	public void setLeague(League league) {
 		this.league = league;
 	}
-	
+
+	public Scheduler getScheduler() {
+		return scheduler;
+	}
+
+	public void setScheduler(Scheduler scheduler) {
+		this.scheduler = scheduler;
+	}
 }

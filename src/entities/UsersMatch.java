@@ -37,7 +37,6 @@ public class UsersMatch extends Match {
     private MatchTable tablePanel;
     private MatchRatings ratingsPanel;
     private GameWindow window;
-    private Scheduler schedule;
 	
 	public UsersMatch() {};
 	
@@ -95,7 +94,7 @@ public class UsersMatch extends Match {
 	
 	public void displayGame(GameWindow window, Scheduler schedule) {
 		this.window = window;
-		this.schedule = schedule;
+		setScheduler(schedule);
 		window.getContentPane().removeAll();
 		window.getContentPane().add(matchPages, BorderLayout.CENTER);
         layout.show(matchPages, "Stats");
@@ -305,11 +304,4 @@ public class UsersMatch extends Match {
 		this.window = window;
 	}
 
-	public Scheduler getSchedule() {
-		return schedule;
-	}
-
-	public void setSchedule(Scheduler schedule) {
-		this.schedule = schedule;
-	}
 }

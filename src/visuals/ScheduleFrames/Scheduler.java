@@ -7,10 +7,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
 import entities.League;
 import entities.Match;
 import entities.UsersMatch;
@@ -164,7 +162,7 @@ public class Scheduler extends GamePanel {
 		main.setVisible(true);
 
 		// When we come back from a match, we want to sort buttons out
-		actOnMatchResult();
+		updateButtonsAfterUsersMatch();
 	}
 
 	public void refreshMessages(){
@@ -189,24 +187,21 @@ public class Scheduler extends GamePanel {
 		showTodaysEvents(todaysEvents);
 	}
 
-	public void actOnMatchResult(){
-		// This only runs on a non-simulated match
+	public void updateButtonsAfterUsersMatch(){
+		// This only runs if there is a usersmatch
 		if(match != null) {
 			if(match.getMinute() == 90) {
 				southMiddle.remove(playGame);
 				southMiddle.remove(simGame);
-				southMiddle.add(advance);
-				// This doesn't work
+				// We don't want the advance button when messages are present
+				// Let's check there isn't already an advance button
+				if(!southMiddle.isAncestorOf(advance)){
+					southMiddle.add(advance);
+				}
+				// This makes sure the match is removed from the events list
 				if(eventToRemove != null){
 					events.remove(eventToRemove);
 				}
-				eventContainer.removeAll();
-				// Give 1st place message if team is 1st
-				if(league.getLeagueTable().getLine(team).getPosition() == 1){
-					addFirstPositionMessage();
-				}
-				System.out.println("WE NEED TO REMOVE MATCH FROM EVENTS HERE");
-				refreshMessages();
 			}
 		}
 	}
@@ -236,6 +231,7 @@ public class Scheduler extends GamePanel {
 						eventToRemove = event;
 					}
 				});
+				System.out.println("Adding a new playgame button");
 				southMiddle.add(playGame);
 				// This is the simulate match button and its functionality
 				simGame = new JButton("Simulate");
@@ -252,11 +248,12 @@ public class Scheduler extends GamePanel {
 							league.getFixtures().put(todaysMatch.toString(), child);
 							// This is the only time a scheduler is passed to a match
 							// So on at fulltime check, will run some tasks on this scheduler
-							child.startMatch(thissch);
+							child.startMatch(thissch, true);
 						}
 						events.remove(event);
 					}
 				});
+				System.out.println("Adding a simgame button");
 				southMiddle.add(simGame);
 			} else {
 				// This is not a match event
