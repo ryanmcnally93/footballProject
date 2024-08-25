@@ -124,7 +124,7 @@ public class League {
 					} else {
 						attempts++;
 					}
-					System.out.println(attempts);
+					System.out.println("Attempts: " + attempts);
 					restart = true;
 				} else {
 					int randomInt = (int) (Math.random() * temporary.size());

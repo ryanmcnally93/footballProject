@@ -1,15 +1,5 @@
 package visuals.CustomizedElements;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import javax.swing.JButton;
-import javax.swing.LookAndFeel;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.plaf.InsetsUIResource;
-import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 public class CustomizedButton extends JButton {
 

@@ -37,6 +37,7 @@ public class Scheduler extends GamePanel {
 	private UsersMatch match;
 	private JLayeredPane layeredPane;
 	private MainMenu main;
+	private Events eventToRemove;
 	
 	// New Game Constructor
 	public Scheduler(User user, Team team, League league) {
@@ -147,8 +148,6 @@ public class Scheduler extends GamePanel {
 			menuBox.add(menu);
 			layeredPane.revalidate();
 			layeredPane.repaint();
-		} else{
-			System.out.println("Menu isn't open?");
 		}
 	}
 	
@@ -164,53 +163,67 @@ public class Scheduler extends GamePanel {
 		main.setBounds(600, 70, 200,400); // Set bounds of MainMenu
 		main.setVisible(true);
 
-		if(match != null) {
-			if(match.getMinute() == 90) {
-				eventContainer.removeAll();
-				southMiddle.remove(playGame);
-				southMiddle.remove(simGame);
-				southMiddle.add(advance);
-				if(league.getLeagueTable().getLine(team).getPosition() == 1){
-					Events chairmanMessage = new Events("Chairman", "This is absolutely incredible! We are top of the league! From all of the staff and players, we thank you for your hard work!", getDate());
-					events.add(chairmanMessage);
-					refreshMessages();
-				}
-			}
-		}
+		// When we come back from a match, we want to sort buttons out
+		actOnMatchResult();
 	}
 
 	public void refreshMessages(){
-		System.out.println("Match has ended, lets refresh messages");
 		ArrayList<Events> todaysEvents  = new ArrayList<>();
 		for(Events each : events) {
 			if(each.getDate().toLocalDate().equals(getDate().toLocalDate())) {
 				todaysEvents.add(each);
 			}
 		}
-		System.out.println("Weve gotten this far 2nd");
 		// This ensures match is the last event today
 		Events matchEvent = null;
 		for(Events each : todaysEvents){
 			if(each.getType().equals("Match")) {
 				this.match = each.getMatch();
 				matchEvent = each;
-				todaysEvents.remove(each);
 			}
 		}
+		todaysEvents.remove(matchEvent);
 		if(matchEvent != null){
 			todaysEvents.add(matchEvent);
 		}
-		System.out.println("We are running showtodaysevents, which means event hasn't successfully been added to todays events if that message doesn't show after this");
 		showTodaysEvents(todaysEvents);
+	}
+
+	public void actOnMatchResult(){
+		// This only runs on a non-simulated match
+		if(match != null) {
+			if(match.getMinute() == 90) {
+				southMiddle.remove(playGame);
+				southMiddle.remove(simGame);
+				southMiddle.add(advance);
+				// This doesn't work
+				if(eventToRemove != null){
+					events.remove(eventToRemove);
+				}
+				eventContainer.removeAll();
+				// Give 1st place message if team is 1st
+				if(league.getLeagueTable().getLine(team).getPosition() == 1){
+					addFirstPositionMessage();
+				}
+				System.out.println("WE NEED TO REMOVE MATCH FROM EVENTS HERE");
+				refreshMessages();
+			}
+		}
+	}
+
+	public void addFirstPositionMessage(){
+		Events chairmanMessage = new Events("Chairman", "This is absolutely incredible! We are top of the league! From all of the staff and players, we thank you for your hard work!", getDate());
+		events.add(chairmanMessage);
 	}
 
 	public void showTodaysEvents(ArrayList<Events> todaysEvents){
 		// And now we will show todays events
+		System.out.println("Todays Events: " + todaysEvents);
 		for(Events event : todaysEvents){
 			showEventsDescription(event);
 			// Remove advance button
 			southMiddle.remove(advance);
-			System.out.println("Checking if this is a match or not");
+			// Checking if this is a match or not
 			if (event.getType().equals("Match")){
 				// This is a match event
 				// This is the play button and its functionality
@@ -220,6 +233,7 @@ public class Scheduler extends GamePanel {
 					@Override
 					public void mouseClicked(MouseEvent e) {
 						event.getMatch().displayGame(window, sch);
+						eventToRemove = event;
 					}
 				});
 				southMiddle.add(playGame);
@@ -231,7 +245,6 @@ public class Scheduler extends GamePanel {
 					public void mouseClicked(MouseEvent e){
 						southMiddle.remove(simGame);
 						southMiddle.remove(playGame);
-						eventContainer.removeAll();
 						// Run as normal match method
 						UsersMatch todaysMatch = ((UsersMatch) league.getFixtures().get(event.getMatch().toString()));
 						if(todaysMatch != null){
@@ -246,7 +259,7 @@ public class Scheduler extends GamePanel {
 				});
 				southMiddle.add(simGame);
 			} else {
-				System.out.println("This is not a match event");
+				// This is not a match event
 				JButton dismiss = new JButton("Dismiss");
 				dismiss.addMouseListener(new MouseAdapter() {
 					@Override
@@ -257,19 +270,23 @@ public class Scheduler extends GamePanel {
 						todaysEvents.remove(event);
 						events.remove(event);
 						showTodaysEvents(todaysEvents);
+						// Refresh messages if one is dismissed
 						eventContainer.repaint();
 						southMiddle.revalidate();
 						southMiddle.repaint();
 					}
 				});
-				southMiddle.add(dismiss);
+				// Only need 1 dismiss button
+				if(!southMiddle.isAncestorOf(dismiss)){
+					System.out.println("Adding a dismiss button");
+					southMiddle.add(dismiss);
+				}
 				break;
 			}
 		}
 	}
 
 	public void showEventsDescription(Events event) {
-		System.out.println("This is that event's stuff");
 		eventContainer = Box.createVerticalBox();
 		eventContainer.setPreferredSize(new Dimension(600,40));
 
@@ -300,6 +317,8 @@ public class Scheduler extends GamePanel {
 	}
 	
 	public void addDay() {
+		System.out.println("All Events: " + events);
+		System.out.println("Events size: " + events.size());
 		eventContainer.removeAll();
 		mainPanel.repaint();
 		date = date.plusDays(1);

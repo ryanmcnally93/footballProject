@@ -200,7 +200,6 @@ public class StartPage extends GamePanel {
     public void teamPick(Team team) {
     	User user = new User(name, 18, 40000);
     	Map<String, Team> cardMap = setup.getTopEnglishLeague().getTeams();
-		System.out.println(cardMap);
     	((Team) cardMap.get(team.getName())).setManager(user);
     	System.out.println(user.getName() + " is the new manager of " + team.getName());
     	

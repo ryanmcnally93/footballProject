@@ -216,8 +216,6 @@ public class MatchFrames extends GamePanel {
 		footerPanel.buttonPanel.remove(footerPanel.nextButton);
 		footerPanel.buttonPanel.remove(footerPanel.playButton);
 		CustomizedButton cont = new CustomizedButton("Continue");
-		System.out.println(getWidth());
-		System.out.println(footerPanel.getLine().getWidth());
 
 		cont.addMouseListener(new MouseAdapter() {
             @Override

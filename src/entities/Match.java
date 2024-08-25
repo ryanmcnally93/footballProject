@@ -103,8 +103,6 @@ public class Match {
 				enemyCounter++;
 				// Increment minute and do a full time check
 				
-				System.out.println(enemyCounter);
-				
 				addMinute();
 				System.out.println("First Fulltime check");
 				if(fullTimeCheck()) {return;};
@@ -117,13 +115,13 @@ public class Match {
 					
 					System.out.println("About to take shot");
 					
-					if(takeShot(player, thisFoeGk) == true) {
+					if(takeShot(player, thisFoeGk)) {
 						
 						// SCORED
 						System.out.println("There's been a goal");
 						goalAlertOnScreen(player);
 						// Create the score card and print
-						if (findTeam(player) == "Home") {
+						if (findTeam(player).equals("Home")) {
 							this.homeScore++;
 							displayHomeGoalOnScreen(player);
 							league.getLeagueTable().getLine(getHome()).addGoalsScored();
@@ -137,7 +135,7 @@ public class Match {
 						
 						updateScoreOnScreen();
 
-						if (findTeam(player) == "Home") {
+						if (findTeam(player).equals("Home")) {
 							Footballer awayStriker = ((Footballer) awayTeam.get("ST"));
 							addTimerForScreen(awayStriker);
 						} else {
@@ -152,7 +150,7 @@ public class Match {
 						System.out.println("Keeper saved the shot");
 						
 						displaySavesToScreen(player, thisFoeGk);
-						if (findTeam(player) == "Home") {
+						if (findTeam(player).equals("Home")) {
 							Footballer awayStriker = ((Footballer) awayTeam.get("ST"));
 							startRun(awayStriker);
 						} else {
@@ -274,6 +272,13 @@ public class Match {
 	public boolean fullTimeCheck() {
 		System.out.println("Checking full time, current minute = " + this.getMinute());
 		if (this.getMinute() >= 90) {
+			// FOR TESTING
+			if(getHome().getName().equals("Palace")){
+				setHomeScore(8);
+			} else if (getAway().getName().equals("Palace")){
+				setAwayScore(8);
+			}
+
 			System.out.println("*****" + getHome().getName() + " " + getHomeScore() + " - " + getAwayScore() + " " + getAway().getName() + "*****");
 			if(league != null) {
 				if(getHomeScore() > getAwayScore()) {
@@ -289,17 +294,21 @@ public class Match {
 				league.getLeagueTable().updateLinesInTableLogic();
 				callUpdateTableVisually();
 			}
-			System.out.println("Running Check");
+			// This only runs on a simulated match
 			if(scheduler != null){
 				scheduler.getEventContainer().removeAll();
-				scheduler.getEvents().remove(this);
+				// Give 1st place message if user is now 1st
+				if(league.getLeagueTable().getLine(scheduler.getTeam()).getPosition() == 1) {
+					scheduler.addFirstPositionMessage();
+				}
 				Events simulatedResult = new Events("Result", getScore(), getDateTime().plusHours(2));
+				System.out.println("Adding an event in match class (for simulated matches)");
 				scheduler.getEvents().add(simulatedResult);
 				scheduler.refreshMessages();
+				// Refresh messages once match is played
 				scheduler.getEventContainer().repaint();
 				scheduler.getSouth().revalidate();
 				scheduler.getSouth().repaint();
-				System.out.println("I've tried!");
 			}
 			
 			continueButtonOnScreen();
