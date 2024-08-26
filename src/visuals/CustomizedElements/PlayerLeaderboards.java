@@ -107,6 +107,55 @@ public class PlayerLeaderboards extends GamePanel {
             }
         });
 
+        filterByOverallRating.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                updateLinesInTableLogic("OVR");
+            }
+        });
+
+        filterByName.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                updateLinesInTableLogic("Name");
+            }
+        });
+
+        filterByTeamname.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                updateLinesInTableLogic("Team");
+            }
+        });
+
+        filterByGoal.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                updateLinesInTableLogic("Goals");
+            }
+        });
+
+        filterByAssists.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                updateLinesInTableLogic("Assists");
+            }
+        });
+
+        filterByYellowCards.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                updateLinesInTableLogic("Yellows");
+            }
+        });
+
+        filterByRedCards.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                updateLinesInTableLogic("Reds");
+            }
+        });
+
     }
 
     // This could be used to add a searchbar looking for the player
@@ -125,11 +174,11 @@ public class PlayerLeaderboards extends GamePanel {
             lines.sort(new Comparator<PlayerAchievementLine>() {
                 @Override
                 public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
-                    int goalComparison = t2.getGoals().compareTo(t1.getGoals());
+                    int goalComparison = t1.getGoals().compareTo(t2.getGoals());
 
                     // If amount of goals is the same, place those with most assists at the top
                     if (goalComparison == 0) {
-                        return t2.getAssists().compareTo(t1.getAssists());
+                        return t1.getAssists().compareTo(t2.getAssists());
                     }
                     return goalComparison;
                 }
@@ -141,9 +190,71 @@ public class PlayerLeaderboards extends GamePanel {
                     int positionComparison = t2.getPositionByNumber().compareTo(t1.getPositionByNumber());
 
                     if (positionComparison == 0) {
-                        return t2.getName().compareTo(t1.getName());
+                        return t1.getName().compareTo(t2.getName());
                     }
                     return positionComparison;
+                }
+            });
+        } else if (filterType.equals("OVR")){
+            lines.sort(new Comparator<PlayerAchievementLine>() {
+                @Override
+                public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
+                    int ovrComparison = t1.getOVR().compareTo(t2.getOVR());
+
+                    if (ovrComparison == 0) {
+                        return t1.getName().compareTo(t2.getName());
+                    }
+                    return ovrComparison;
+                }
+            });
+        } else if (filterType.equals("Name")){
+            lines.sort(new Comparator<PlayerAchievementLine>() {
+                @Override
+                public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
+                    return t1.getName().compareTo(t2.getName());
+                }
+            });
+        } else if (filterType.equals("Team")){
+            lines.sort(new Comparator<PlayerAchievementLine>() {
+                @Override
+                public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
+                    return t1.getTeam().compareTo(t2.getTeam());
+                }
+            });
+        } else if (filterType.equals("Assists")){
+            lines.sort(new Comparator<PlayerAchievementLine>() {
+                @Override
+                public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
+                    int assistsComparison = t1.getAssists().compareTo(t2.getAssists());
+
+                    if (assistsComparison == 0) {
+                        return t1.getGoals().compareTo(t2.getGoals());
+                    }
+                    return assistsComparison;
+                }
+            });
+        } else if (filterType.equals("Yellows")){
+            lines.sort(new Comparator<PlayerAchievementLine>() {
+                @Override
+                public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
+                    int yellowsComparison = t1.getYellows().compareTo(t2.getYellows());
+
+                    if (yellowsComparison == 0) {
+                        return t1.getReds().compareTo(t2.getReds());
+                    }
+                    return yellowsComparison;
+                }
+            });
+        } else if (filterType.equals("Reds")){
+            lines.sort(new Comparator<PlayerAchievementLine>() {
+                @Override
+                public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
+                    int redsComparison = t1.getReds().compareTo(t2.getReds());
+
+                    if (redsComparison == 0) {
+                        return t1.getYellows().compareTo(t2.getYellows());
+                    }
+                    return redsComparison;
                 }
             });
         }
