@@ -261,11 +261,11 @@ public class initialSetup {
 	fullhamFirst.put("RW", wilson);
 	fullhamFirst.put("LW", perreir);
 	fullhamFirst.put("CAM", palhinh);
-	fullhamFirst.put("CM", reen);
-	fullhamFirst.put("CM", lukic);
+	fullhamFirst.put("CM1", reen);
+	fullhamFirst.put("CM2", lukic);
 	fullhamFirst.put("LB", robertz);
-	fullhamFirst.put("CB", diob);
-	fullhamFirst.put("CB", adarabioyu);
+	fullhamFirst.put("CB1", diob);
+	fullhamFirst.put("CB2", adarabioyu);
 	fullhamFirst.put("RB", tete);
 
 	Map<String, Footballer> upswitchFirst = new HashMap<>();
@@ -274,11 +274,11 @@ public class initialSetup {
 	upswitchFirst.put("RW", burnz);
 	upswitchFirst.put("LW", clark);
 	upswitchFirst.put("CAM", evens);
-	upswitchFirst.put("CM", morsy);
-	upswitchFirst.put("CM", luongo);
+	upswitchFirst.put("CM1", morsy);
+	upswitchFirst.put("CM2", luongo);
 	upswitchFirst.put("LB", kenlocke);
-	upswitchFirst.put("CB", wolfenden);
-	upswitchFirst.put("CB", donacien);
+	upswitchFirst.put("CB1", wolfenden);
+	upswitchFirst.put("CB2", donacien);
 	upswitchFirst.put("RB", leigh);
 
 	Map<String, Footballer> evertunFirst = new HashMap<>();
@@ -287,11 +287,11 @@ public class initialSetup {
 	evertunFirst.put("RW", grary);
 	evertunFirst.put("LW", mcneil);
 	evertunFirst.put("CAM", gueye);
-	evertunFirst.put("CM", onan);
-	evertunFirst.put("CM", iwobi);
+	evertunFirst.put("CM1", onan);
+	evertunFirst.put("CM2", iwobi);
 	evertunFirst.put("LB", mykalenko);
-	evertunFirst.put("CB", tarkowsky);
-	evertunFirst.put("CB", coad);
+	evertunFirst.put("CB1", tarkowsky);
+	evertunFirst.put("CB2", coad);
 	evertunFirst.put("RB", patterson);
 
 	Map<String, Footballer> brightenFirst = new HashMap<>();
@@ -300,11 +300,11 @@ public class initialSetup {
 	brightenFirst.put("RW", marc);
 	brightenFirst.put("LW", estupinaz);
 	brightenFirst.put("CAM", macalliste);
-	brightenFirst.put("CM", caicedo);
-	brightenFirst.put("CM", gilmore);
+	brightenFirst.put("CM1", caicedo);
+	brightenFirst.put("CM2", gilmore);
 	brightenFirst.put("LB", veltma);
-	brightenFirst.put("CB", dunk);
-	brightenFirst.put("CB", webste);
+	brightenFirst.put("CB1", dunk);
+	brightenFirst.put("CB2", webste);
 	brightenFirst.put("RB", lamptey);
 
 	Map<String, Footballer> nottinghamWoodsFirst = new HashMap<>();
@@ -313,11 +313,11 @@ public class initialSetup {
 	nottinghamWoodsFirst.put("RW", lingrd);
 	nottinghamWoodsFirst.put("LW", johnsn);
 	nottinghamWoodsFirst.put("CAM", yates);
-	nottinghamWoodsFirst.put("CM", freuler);
-	nottinghamWoodsFirst.put("CM", pereira);
+	nottinghamWoodsFirst.put("CM1", freuler);
+	nottinghamWoodsFirst.put("CM2", pereira);
 	nottinghamWoodsFirst.put("LB", lodi);
-	nottinghamWoodsFirst.put("CB", mckenna);
-	nottinghamWoodsFirst.put("CB", worrll);
+	nottinghamWoodsFirst.put("CB1", mckenna);
+	nottinghamWoodsFirst.put("CB2", worrll);
 	nottinghamWoodsFirst.put("RB", nico);
 
 	Map<String, Footballer> palaceFirst = new HashMap<>();
@@ -326,11 +326,11 @@ public class initialSetup {
 	palaceFirst.put("RW", zah);
 	palaceFirst.put("LW", olise);
 	palaceFirst.put("CAM", doucoure);
-	palaceFirst.put("CM", lurie);
-	palaceFirst.put("CM", hughes);
+	palaceFirst.put("CM1", lurie);
+	palaceFirst.put("CM2", hughes);
 	palaceFirst.put("LB", mitchell);
-	palaceFirst.put("CB", gueh);
-	palaceFirst.put("CB", andersn);
+	palaceFirst.put("CB1", gueh);
+	palaceFirst.put("CB2", andersn);
 	palaceFirst.put("RB", wrad);
 
 	Map<String, Footballer> southamtonFirst = new HashMap<>();
@@ -339,11 +339,11 @@ public class initialSetup {
 	southamtonFirst.put("RW", wardprose);
 	southamtonFirst.put("LW", peraud);
 	southamtonFirst.put("CAM", lavie);
-	southamtonFirst.put("CM", arreole);
-	southamtonFirst.put("CM", jankwitz);
+	southamtonFirst.put("CM1", arreole);
+	southamtonFirst.put("CM2", jankwitz);
 	southamtonFirst.put("LB", karlsen);
-	southamtonFirst.put("CB", salisu);
-	southamtonFirst.put("CB", bednarek);
+	southamtonFirst.put("CB1", salisu);
+	southamtonFirst.put("CB2", bednarek);
 	southamtonFirst.put("RB", walkr);
 
 	Map<String, Footballer> bornmouthFirst = new HashMap<>();
@@ -352,11 +352,11 @@ public class initialSetup {
 	bornmouthFirst.put("RW", antony);
 	bornmouthFirst.put("LW", billong);
 	bornmouthFirst.put("CAM", lerme);
-	bornmouthFirst.put("CM", ramsay);
-	bornmouthFirst.put("CM", cooke);
+	bornmouthFirst.put("CM1", ramsay);
+	bornmouthFirst.put("CM2", cooke);
 	bornmouthFirst.put("LB", zamor);
-	bornmouthFirst.put("CB", mepham);
-	bornmouthFirst.put("CB", smiths);
+	bornmouthFirst.put("CB1", mepham);
+	bornmouthFirst.put("CB2", smiths);
 	bornmouthFirst.put("RB", travers);
 
 	Map<String, Footballer> burntfordFirst = new HashMap<>();
@@ -365,11 +365,11 @@ public class initialSetup {
 	burntfordFirst.put("RW", breetton);
 	burntfordFirst.put("LW", dasilva);
 	burntfordFirst.put("CAM", janelt);
-	burntfordFirst.put("CM", norgaard);
-	burntfordFirst.put("CM", hicksy);
+	burntfordFirst.put("CM1", norgaard);
+	burntfordFirst.put("CM2", hicksy);
 	burntfordFirst.put("LB", henrey);
-	burntfordFirst.put("CB", pinnok);
-	burntfordFirst.put("CB", mee);
+	burntfordFirst.put("CB1", pinnok);
+	burntfordFirst.put("CB2", mee);
 	burntfordFirst.put("RB", canos);
 
 	Map<String, Footballer> wolvesFirst = new HashMap<>();
@@ -378,11 +378,11 @@ public class initialSetup {
 	wolvesFirst.put("RW", podenc);
 	wolvesFirst.put("LW", nett);
 	wolvesFirst.put("CAM", neves);
-	wolvesFirst.put("CM", lobato);
-	wolvesFirst.put("CM", nunes);
+	wolvesFirst.put("CM1", lobato);
+	wolvesFirst.put("CM2", nunes);
 	wolvesFirst.put("LB", marcal);
-	wolvesFirst.put("CB", kilman);
-	wolvesFirst.put("CB", collins);
+	wolvesFirst.put("CB1", kilman);
+	wolvesFirst.put("CB2", collins);
 	wolvesFirst.put("RB", casto);
 
 	Map<String, Footballer> leicestorFirst = new HashMap<>();
@@ -391,11 +391,11 @@ public class initialSetup {
 	leicestorFirst.put("RW", iheanachos);
 	leicestorFirst.put("LW", madisonn);
 	leicestorFirst.put("CAM", ndidy);
-	leicestorFirst.put("CM", soumara);
-	leicestorFirst.put("CM", dewburyHull);
+	leicestorFirst.put("CM1", soumara);
+	leicestorFirst.put("CM2", dewburyHull);
 	leicestorFirst.put("LB", castagna);
-	leicestorFirst.put("CB", fase);
-	leicestorFirst.put("CB", soutar);
+	leicestorFirst.put("CB1", fase);
+	leicestorFirst.put("CB2", soutar);
 	leicestorFirst.put("RB", riccardo);
 	
 	Map<String, Footballer> eastHamFirst = new HashMap<>();
@@ -404,11 +404,11 @@ public class initialSetup {
 	eastHamFirst.put("RW", bowem);
 	eastHamFirst.put("LW", benrahme);
 	eastHamFirst.put("CAM", paquetn);
-	eastHamFirst.put("CM", wardPrewse);
-	eastHamFirst.put("CM", soucik);
+	eastHamFirst.put("CM1", wardPrewse);
+	eastHamFirst.put("CM2", soucik);
 	eastHamFirst.put("LB", emerson);
-	eastHamFirst.put("CB", zoumx);
-	eastHamFirst.put("CB", aguerb);
+	eastHamFirst.put("CB1", zoumx);
+	eastHamFirst.put("CB2", aguerb);
 	eastHamFirst.put("RB", coufalr);
     
 	Map<String, Footballer> actonVillaFirst = new HashMap<>();
@@ -417,11 +417,11 @@ public class initialSetup {
     actonVillaFirst.put("RW", traora);
     actonVillaFirst.put("LW", diabi);
     actonVillaFirst.put("CAM", buendio);
-    actonVillaFirst.put("CM", douglasLuix);
-    actonVillaFirst.put("CM", mcguinness);
+    actonVillaFirst.put("CM1", douglasLuix);
+    actonVillaFirst.put("CM2", mcguinness);
     actonVillaFirst.put("LB", digme);
-    actonVillaFirst.put("CB", konsi);
-    actonVillaFirst.put("CB", torrex);
+    actonVillaFirst.put("CB1", konsi);
+    actonVillaFirst.put("CB2", torrex);
     actonVillaFirst.put("RB", casp);
 
     Map<String, Footballer> newcostleFirst = new HashMap<>();
@@ -430,11 +430,11 @@ public class initialSetup {
     newcostleFirst.put("RW", almiran);
     newcostleFirst.put("LW", gordan);
     newcostleFirst.put("CAM", tonalo);
-    newcostleFirst.put("CM", guimaraez);
-    newcostleFirst.put("CM", longstaffh);
+    newcostleFirst.put("CM1", guimaraez);
+    newcostleFirst.put("CM2", longstaffh);
     newcostleFirst.put("LB", burm);
-    newcostleFirst.put("CB", botmam);
-    newcostleFirst.put("CB", schas);
+    newcostleFirst.put("CB1", botmam);
+    newcostleFirst.put("CB2", schas);
     newcostleFirst.put("RB", trippiar);
 
     Map<String, Footballer> tanUtdFirst = new HashMap<>();
@@ -443,11 +443,11 @@ public class initialSetup {
     tanUtdFirst.put("RW", anthony);
     tanUtdFirst.put("LW", garnache);
     tanUtdFirst.put("CAM", bruno);
-    tanUtdFirst.put("CM", casomiro);
-    tanUtdFirst.put("CM", eriksem);
+    tanUtdFirst.put("CM1", casomiro);
+    tanUtdFirst.put("CM2", eriksem);
     tanUtdFirst.put("LB", shas);
-    tanUtdFirst.put("CB", martinev);
-    tanUtdFirst.put("CB", varanr);
+    tanUtdFirst.put("CB1", martinev);
+    tanUtdFirst.put("CB2", varanr);
     tanUtdFirst.put("RB", dalog);
 
     Map<String, Footballer> chelseeFirst = new HashMap<>();
@@ -456,11 +456,11 @@ public class initialSetup {
     chelseeFirst.put("RW", sterliny);
     chelseeFirst.put("LW", mudryi);
     chelseeFirst.put("CAM", enzo);
-    chelseeFirst.put("CM", caicede);
-    chelseeFirst.put("CM", gallaghar);
+    chelseeFirst.put("CM1", caicede);
+    chelseeFirst.put("CM2", gallaghar);
     chelseeFirst.put("LB", chilwoll);
-    chelseeFirst.put("CB", silve);
-    chelseeFirst.put("CB", colwilk);
+    chelseeFirst.put("CB1", silve);
+    chelseeFirst.put("CB2", colwilk);
     chelseeFirst.put("RB", jamis);
 
     Map<String, Footballer> liverpuleFirst = new HashMap<>();
@@ -469,11 +469,11 @@ public class initialSetup {
     liverpuleFirst.put("RW", salak);
     liverpuleFirst.put("LW", diax);
     liverpuleFirst.put("CAM", szoboszlan);
-    liverpuleFirst.put("CM", macAllistir);
-    liverpuleFirst.put("CM", jomes);
+    liverpuleFirst.put("CM1", macAllistir);
+    liverpuleFirst.put("CM2", jomes);
     liverpuleFirst.put("LB", robertsen);
-    liverpuleFirst.put("CB", vanDikl);
-    liverpuleFirst.put("CB", konete);
+    liverpuleFirst.put("CB1", vanDikl);
+    liverpuleFirst.put("CB2", konete);
     liverpuleFirst.put("RB", alexanderArneld);
 
     Map<String, Footballer> vanCityFirst = new HashMap<>();
@@ -482,11 +482,11 @@ public class initialSetup {
     vanCityFirst.put("RW", Dsilvo);
     vanCityFirst.put("LW", grealosh);
     vanCityFirst.put("CAM", deBruyan);
-    vanCityFirst.put("CM", rodri);
-    vanCityFirst.put("CM", gundogam);
+    vanCityFirst.put("CM1", rodri);
+    vanCityFirst.put("CM2", gundogam);
     vanCityFirst.put("LB", aka);
-    vanCityFirst.put("CB", diaz);
-    vanCityFirst.put("CB", stonas);
+    vanCityFirst.put("CB1", diaz);
+    vanCityFirst.put("CB2", stonas);
     vanCityFirst.put("RB", walkar);
 	
 	Map<String, Footballer> arsenolFirst = new HashMap<>();
@@ -495,11 +495,11 @@ public class initialSetup {
 	arsenolFirst.put("LW", trossart);
 	arsenolFirst.put("RW", sake);
 	arsenolFirst.put("CAM", ovegaard);
-	arsenolFirst.put("CM", parley);
-	arsenolFirst.put("CM", rire);
+	arsenolFirst.put("CM1", parley);
+	arsenolFirst.put("CM2", rire);
 	arsenolFirst.put("LB", tomiyasa);
-	arsenolFirst.put("CB", gabriel);
-	arsenolFirst.put("CB", salima);
+	arsenolFirst.put("CB1", gabriel);
+	arsenolFirst.put("CB2", salima);
 	arsenolFirst.put("RB", whites);
 
 	Map<String, Footballer> totenhamFirst = new HashMap<>();
@@ -508,11 +508,11 @@ public class initialSetup {
 	totenhamFirst.put("RW", sun);
 	totenhamFirst.put("LW", kulusevsi);
 	totenhamFirst.put("CAM", maddisom);
-	totenhamFirst.put("CM", bissouna);
-	totenhamFirst.put("CM", sara);
+	totenhamFirst.put("CM1", bissouna);
+	totenhamFirst.put("CM2", sara);
 	totenhamFirst.put("LB", udogia);
-	totenhamFirst.put("CB", vanDeVem);
-	totenhamFirst.put("CB", romaro);
+	totenhamFirst.put("CB1", vanDeVem);
+	totenhamFirst.put("CB2", romaro);
 	totenhamFirst.put("RB", poriro);
 	
 	Manager Arteta = new Manager("Mikel Arteta", 31, 30000);

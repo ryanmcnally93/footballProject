@@ -177,4 +177,19 @@ public class MainMenuPageTemplate extends GamePanel {
         this.footerPanel = footerPanel;
     }
 
+    public Scheduler getScheduler() {
+        return scheduler;
+    }
+
+    public void setScheduler(Scheduler scheduler) {
+        this.scheduler = scheduler;
+    }
+
+    public JPanel getPages() {
+        return pages;
+    }
+
+    public void setPages(JPanel pages) {
+        this.pages = pages;
+    }
 }

@@ -26,6 +26,13 @@ public class Team {
 		this.stadium = stadium;
 		this.primaryColour = primaryColour;
 		this.secondaryColour = secondaryColour;
+		this.players = players;
+
+		for(Map.Entry<String, Footballer> each : players.entrySet()){
+			Footballer thisPlayer = each.getValue();
+			thisPlayer.setTeam(this);
+		}
+
 	}
 	
 	public Goalkeeper getGoalkeeper() {

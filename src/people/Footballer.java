@@ -4,6 +4,8 @@ package people;
 // Make startrun smaller using more methods
 // Call more functions from other .java?
 
+import entities.Team;
+
 // Players are called Characters, because that's how we started
 public class Footballer extends Individual {
 	
@@ -11,6 +13,7 @@ public class Footballer extends Individual {
 	public int defence;
 	public int stamina; 
 	public String likedPosition;
+	private Team team;
 	
 	// Define Player Characteristics
 	
@@ -24,11 +27,8 @@ public class Footballer extends Individual {
 		this.defence = defence;
 		this.stamina = stamina;
 		this.likedPosition = position;
+
 	}
-	
-	/* This method will determine whether or not a player
-	has successfully sprinted past his opponent, we are
-	going to use math random against the likelihood out of 100 */
 	
 	public int getStamina() {
 		return this.stamina;
@@ -57,5 +57,21 @@ public class Footballer extends Individual {
 	public void setStamina(int stamina) {
 		this.stamina = stamina;
 	}
-	
+
+	public String getLikedPosition() {
+		return likedPosition;
+	}
+
+	public void setLikedPosition(String likedPosition) {
+		this.likedPosition = likedPosition;
+	}
+
+	public Team getTeam() {
+		return team;
+	}
+
+	public void setTeam(Team team) {
+		this.team = team;
+	}
+
 }
