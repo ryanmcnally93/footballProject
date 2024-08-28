@@ -177,7 +177,7 @@ public class StartPage extends GamePanel {
         teamsBox.setPreferredSize(new Dimension(600, 90));
 
         // Assuming setup.getPremierLeague().getTeams() returns a Map
-        Map<String, Team> teams = setup.getTopEnglishLeague().getTeams();
+        Map<String, Team> teams = setup.getSeason().getPremLeague().getTeams();
         for (Map.Entry<String, Team> each : teams.entrySet()) {
             Team current = each.getValue();
             JButton teamButton = new JButton(current.getName());
@@ -199,12 +199,12 @@ public class StartPage extends GamePanel {
 
     public void teamPick(Team team) {
     	User user = new User(name, 18, 40000);
-    	Map<String, Team> cardMap = setup.getTopEnglishLeague().getTeams();
+    	Map<String, Team> cardMap = setup.getSeason().getPremLeague().getTeams();
     	((Team) cardMap.get(team.getName())).setManager(user);
     	System.out.println(user.getName() + " is the new manager of " + team.getName());
     	
     	// Create Schedule
-    	Scheduler schedule = new Scheduler(user, team, setup.getTopEnglishLeague());
+    	Scheduler schedule = new Scheduler(user, team, setup.getSeason().getPremLeague());
     	setup.getWindow().getContentPane().remove(this);
     	setup.getWindow().getContentPane().revalidate();
     	setup.getWindow().getContentPane().repaint();

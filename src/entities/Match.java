@@ -5,6 +5,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import people.Footballer;
 import people.Goalkeeper;
+import visuals.CustomizedElements.PlayerAchievementLine;
 import visuals.ScheduleFrames.Events;
 import visuals.ScheduleFrames.Scheduler;
 
@@ -126,11 +127,23 @@ public class Match {
 							this.homeScore++;
 							displayHomeGoalOnScreen(player);
 							league.getLeagueTable().getLine(getHome()).addGoalsScored();
+							for(PlayerAchievementLine line : league.getPlayerAchievements()){
+								if(line.getPlayer() == player){
+									line.addToGoals();
+									break;
+								};
+							}
 							league.getLeagueTable().getLine(getAway()).addGoalsConceded();
 						} else {
 							this.awayScore++;
 							displayAwayGoalOnScreen(player);
 							league.getLeagueTable().getLine(getAway()).addGoalsScored();
+							for(PlayerAchievementLine line : league.getPlayerAchievements()){
+								if(line.getPlayer() == player){
+									line.addToGoals();
+									break;
+								};
+							}
 							league.getLeagueTable().getLine(getHome()).addGoalsConceded();
 						}
 						
@@ -294,6 +307,7 @@ public class Match {
 				}
 				league.getLeagueTable().updateLinesInTableLogic();
 				callUpdateTableVisually();
+				league.getPlayerLeaderboard().updateLinesInTableLogic("Goals");
 			}
 
 			if(scheduler != null){

@@ -1,7 +1,9 @@
 package entities;
+import people.Footballer;
 import visuals.CustomizedElements.LeagueTable;
+import visuals.CustomizedElements.PlayerAchievementLine;
+import visuals.CustomizedElements.PlayerLeaderboards;
 import visuals.CustomizedElements.TableLine;
-
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,20 +16,22 @@ import java.util.Map;
 
 public class League {
 
-	private String name;
-	private String country;
+	private String name, country;
 	private int numOfTeams;
 	private Map<String, Team> teams;
 	private int tier;
 	private Map<String, Match> fixtures;
-	private int season = 0;
+	private Season season;
 	private ArrayList<Match> toLookThrough, temporary;
 	private Map<Integer, Map<String, Match>> matchWeeksMatches;
 	private Map<Integer, Map<Integer, LocalDateTime>> matchWeeksSlots;
 	private boolean restartWholeProcess = false;
 	private LeagueTable leagueTable;
+	private ArrayList<PlayerAchievementLine> playerAchievements;
+	private PlayerLeaderboards leaderboard;
+	// private Map<String, TeamAchievementLine> teamAchievements;
 	
-	public League(String name, String country, int numOfTeams, Map<String, Team> teams, int tier) {
+	public League(String name, String country, int numOfTeams, Map<String, Team> teams, int tier, Season season) {
 		this.name = name;
 		this.country = country;
 		this.numOfTeams = numOfTeams;
@@ -37,8 +41,11 @@ public class League {
 		this.matchWeeksMatches = new HashMap<>();
 		this.matchWeeksSlots = new HashMap<>();
 		this.leagueTable = new LeagueTable(this);
-		this.season += 1;
-		
+		this.season = season;
+		this.playerAchievements = new ArrayList<>();
+		this.leaderboard = new PlayerLeaderboards(this);
+
+		// Creating visual League table
 		List<Team> teamNamesInOrder = new ArrayList<>();
 		for(Map.Entry<String, Team> eachTeam : teams.entrySet()) {
 			Team team = eachTeam.getValue();
@@ -54,15 +61,21 @@ public class League {
 			TableLine line = new TableLine(teamNamesInOrder.get(i-1));
 			getLeagueTable().getAllLines().add(line);
 		}
-		
 		getLeagueTable().updateLinesInTableLogic();
+
+		// Creating initial player achievements page
+		for(Map.Entry<String, Team> eachTeam : getTeams().entrySet()){
+			Team thisTeam = eachTeam.getValue();
+			for(Map.Entry<String, Footballer> eachPlayer : thisTeam.getPlayers().entrySet()) {
+				Footballer thisPlayer = eachPlayer.getValue();
+				PlayerAchievementLine line = new PlayerAchievementLine(thisPlayer);
+				playerAchievements.add(line);
+			}
+		}
 	}
 	
 	public void assignFixturesToWeekNumber() {
 		createFixtures();
-		if(getSeason() != 1) {
-			this.season += 1;
-		}
 		
 		toLookThrough = new ArrayList<Match>(getFixtures().values());
 		temporary = new ArrayList<>(toLookThrough);
@@ -232,7 +245,8 @@ public class League {
 	}
 	
 	public void assignDatetimesToWeekNumber() {
-		int startYear = 2023 + season;
+		int startYear = 2023 + season.getNumber();
+		System.out.println("Giving times to season " + season.getYearFrom() + " to " + season.getYearTo());
 		LocalDateTime saturday = findFirstSaturday(startYear);
 		normalWeekend(1, saturday);
 		normalWeekend(2, saturday.plusWeeks(1));
@@ -367,6 +381,14 @@ public class League {
 		this.teams = teams;
 	}
 
+	public PlayerLeaderboards getPlayerLeaderboard() {
+		return leaderboard;
+	}
+
+	public void setPlayerLeaderboard(PlayerLeaderboards leaderboard) {
+		this.leaderboard = leaderboard;
+	}
+
 	public int getTier() {
 		return tier;
 	}
@@ -400,11 +422,11 @@ public class League {
 		this.fixtures = fixtures;
 	}
 
-	public int getSeason() {
+	public Season getSeason() {
 		return season;
 	}
 
-	public void setSeason(int season) {
+	public void setSeason(Season season) {
 		this.season = season;
 	}
 
@@ -439,5 +461,29 @@ public class League {
 	public void setLeagueTable(LeagueTable leagueTable) {
 		this.leagueTable = leagueTable;
 	}
-	
+
+	public ArrayList<PlayerAchievementLine> getPlayerAchievements() {
+		return playerAchievements;
+	}
+
+	public void setPlayerAchievements(ArrayList<PlayerAchievementLine> playerAchievements) {
+		this.playerAchievements = playerAchievements;
+	}
+
+	public boolean isRestartWholeProcess() {
+		return restartWholeProcess;
+	}
+
+	public void setRestartWholeProcess(boolean restartWholeProcess) {
+		this.restartWholeProcess = restartWholeProcess;
+	}
+
+	public Map<Integer, Map<Integer, LocalDateTime>> getMatchWeeksSlots() {
+		return matchWeeksSlots;
+	}
+
+	public void setMatchWeeksSlots(Map<Integer, Map<Integer, LocalDateTime>> matchWeeksSlots) {
+		this.matchWeeksSlots = matchWeeksSlots;
+	}
+
 }

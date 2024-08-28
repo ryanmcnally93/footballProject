@@ -3,6 +3,7 @@ import people.Footballer;
 
 public class PlayerAchievementLine {
 
+    private Footballer player;
     private int number;
     private String position;
     private Integer OVR;
@@ -19,12 +20,13 @@ public class PlayerAchievementLine {
     public PlayerAchievementLine(Footballer player) {
         this.position = player.getLikedPosition();
         this.OVR = 99;
+        this.player = player;
         this.name = player.getName();
         this.team = player.getTeam().getName();
-        this.goals = 5;
-        this.assists = 5;
-        this.yellows = 5;
-        this.reds = 5;
+        this.goals = 0;
+        this.assists = 0;
+        this.yellows = 0;
+        this.reds = 0;
         initialNum++;
         this.number = initialNum;
         if(position.equals("GK")){
@@ -51,6 +53,8 @@ public class PlayerAchievementLine {
     public String getPosition() {
         return position;
     }
+
+
 
     public void setPosition(String position) {
         this.position = position;
@@ -84,16 +88,16 @@ public class PlayerAchievementLine {
         return goals;
     }
 
-    public void setGoals(Integer goals) {
-        this.goals = goals;
+    public void addToGoals() {
+        this.goals += 1;
     }
 
     public Integer getAssists() {
         return assists;
     }
 
-    public void setAssists(Integer assists) {
-        this.assists = assists;
+    public void addToAssists() {
+        this.assists += 1;
     }
 
     public Integer getReds() {
@@ -130,6 +134,22 @@ public class PlayerAchievementLine {
 
     public Integer getPositionByNumber() {
         return positionByNumber;
+    }
+
+    public Footballer getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Footballer player) {
+        this.player = player;
+    }
+
+    public void setGoals(Integer goals) {
+        this.goals = goals;
+    }
+
+    public void setAssists(Integer assists) {
+        this.assists = assists;
     }
 
     public void setPositionByNumber(Integer positionByNumber) {

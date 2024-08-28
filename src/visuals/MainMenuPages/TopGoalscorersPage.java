@@ -8,9 +8,11 @@ import java.awt.*;
 public class TopGoalscorersPage extends MainMenuPageTemplate {
 
     private JPanel mainPanel;
+    private PlayerLeaderboards leaderboard;
 
     public TopGoalscorersPage(CardLayout cardLayout, JPanel pages, Scheduler scheduler){
         super(cardLayout, pages, scheduler);
+        this.leaderboard = scheduler.getLeague().getPlayerLeaderboard();
         getHeaderPanel().setTitle("Player Leaderboards");
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
@@ -19,7 +21,6 @@ public class TopGoalscorersPage extends MainMenuPageTemplate {
 
         Box centerBox = Box.createVerticalBox();
         centerBox.setBackground(Color.LIGHT_GRAY);
-        PlayerLeaderboards leaderboard = new PlayerLeaderboards(scheduler);
         centerBox.add(leaderboard);
 
         JScrollPane scroller = makeScroller(centerBox);

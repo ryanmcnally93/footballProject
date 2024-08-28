@@ -9,11 +9,8 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import entities.League;
-import entities.Match;
-import entities.UsersMatch;
-import entities.Team;
-import entities.User;
+
+import entities.*;
 import visuals.CustomizedElements.GamePanel;
 import main.GameWindow;
 import visuals.CustomizedElements.MainMenu;
@@ -36,6 +33,7 @@ public class Scheduler extends GamePanel {
 	private JLayeredPane layeredPane;
 	private MainMenu main;
 	private Events eventToRemove;
+	private Season season;
 	
 	// New Game Constructor
 	public Scheduler(User user, Team team, League league) {
@@ -44,6 +42,7 @@ public class Scheduler extends GamePanel {
 		this.team = team;
 		this.league = league;
 		this.events = new ArrayList<Events>();
+		this.season = league.getSeason();
 
 		layeredPane = new JLayeredPane();
 		setPermanentWidthAndHeight(layeredPane, 800, 600);
@@ -54,7 +53,7 @@ public class Scheduler extends GamePanel {
 
         header = new JPanel();
         header.setPreferredSize(new Dimension(800, 80));
-        JLabel title = new JLabel(team.getName() + " - " + user.getName() + " season " + league.getSeason(), SwingConstants.CENTER);
+        JLabel title = new JLabel(team.getName() + " - " + user.getName() + " " + season.getYearFrom() + "/" + season.getYearTo(), SwingConstants.CENTER);
         title.setFont(new Font("Menlo", Font.BOLD, 30));
         header.add(title);
         mainPanel.add(header, BorderLayout.NORTH);
@@ -321,7 +320,7 @@ public class Scheduler extends GamePanel {
 		date = date.plusDays(1);
 		todaysDate.setText("Today's date is: " + getDate());
 
-		int year = 2023 + league.getSeason();
+		int year = 2023 + season.getNumber();
 
 		// This will decide which matches are played on which week
 		if(date.toLocalDate().isEqual(LocalDate.of(year, 06, 05))) {

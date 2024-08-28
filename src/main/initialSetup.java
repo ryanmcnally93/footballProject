@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 import entities.League;
+import entities.Season;
 import entities.Team;
 import people.Footballer;
 import people.Goalkeeper;
@@ -11,7 +12,7 @@ import people.Manager;
 @SuppressWarnings("TextBlockMigration")
 public class initialSetup {
 	
-	private League league;
+	private Season season;
 	private GameWindow window;
 	
 	public initialSetup() {
@@ -582,7 +583,7 @@ public class initialSetup {
 	preTeams.put("Burntford", Burntford);
 	preTeams.put("Southamton", Southamton);
 	
-	league = new League("Premia League", "England", 20, preTeams, 1);
+	season = new Season(preTeams);
     
 	window = new GameWindow();
     window.setVisible(true);
@@ -594,19 +595,19 @@ public class initialSetup {
 	
 	public void startSeason() {}
 
-	public League getTopEnglishLeague() {
-		return league;
-	}
-
-	public void setTopEnglishLeague(League league) {
-		this.league = league;
-	}
-
 	public GameWindow getWindow() {
 		return window;
 	}
 
 	public void setWindow(GameWindow window) {
 		this.window = window;
+	}
+
+	public Season getSeason() {
+		return season;
+	}
+
+	public void setSeason(Season season) {
+		this.season = season;
 	}
 }

@@ -14,17 +14,15 @@ import visuals.ScheduleFrames.Scheduler;
 
 public class PlayerLeaderboards extends GamePanel {
 
-    private ArrayList<PlayerAchievementLine> lines;
     private PlayerAchievementLine errorLine;
     private League league;
     private Box mainButtonContainer, rowAboveNames;
     private JPanel tableContainer;
-    private Scheduler scheduler;
+//    private Scheduler scheduler;
 
-    public PlayerLeaderboards(Scheduler scheduler) {
-        this.lines = new ArrayList<PlayerAchievementLine>();
-        this.scheduler = scheduler;
-        this.league = scheduler.getLeague();
+    public PlayerLeaderboards(League league) {
+//        this.scheduler = scheduler;
+        this.league = league;
 
         setBackground(Color.LIGHT_GRAY);
         setLayout(new BorderLayout());
@@ -87,18 +85,8 @@ public class PlayerLeaderboards extends GamePanel {
         tableContainer.add(mainButtonContainer, BorderLayout.CENTER);
         tableContainer.add(rowAboveNames, BorderLayout.CENTER);
 
-        for(Map.Entry<String, Team> eachTeam : league.getTeams().entrySet()){
-            Team thisTeam = eachTeam.getValue();
-            for(Map.Entry<String, Footballer> eachPlayer : thisTeam.getPlayers().entrySet()) {
-                Footballer thisPlayer = eachPlayer.getValue();
-                PlayerAchievementLine line = new PlayerAchievementLine(thisPlayer);
-                lines.add(line);
-            }
-        }
-
         // For containing the rows of players
         add(tableContainer, BorderLayout.CENTER);
-        updateLinesInTableLogic("Goals");
 
         filterByPosition.addMouseListener(new MouseAdapter(){
             @Override
@@ -160,7 +148,7 @@ public class PlayerLeaderboards extends GamePanel {
 
     // This could be used to add a searchbar looking for the player
     public PlayerAchievementLine getLine(Footballer player) {
-        for(PlayerAchievementLine tableLine : lines) {
+        for(PlayerAchievementLine tableLine : league.getPlayerAchievements()) {
             if(player.getName().equals(tableLine.getName())) {
                 return tableLine;
             }
@@ -171,10 +159,11 @@ public class PlayerLeaderboards extends GamePanel {
     public void updateLinesInTableLogic(String filterType) {
 
         if(filterType.equals("Goals")){
-            lines.sort(new Comparator<PlayerAchievementLine>() {
+            System.out.println("Sorting by goals");
+            league.getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
                 @Override
                 public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
-                    int goalComparison = t1.getGoals().compareTo(t2.getGoals());
+                    int goalComparison = t2.getGoals().compareTo(t1.getGoals());
 
                     // If amount of goals is the same, place those with most assists at the top
                     if (goalComparison == 0) {
@@ -184,7 +173,7 @@ public class PlayerLeaderboards extends GamePanel {
                 }
             });
         } else if (filterType.equals("Position")){
-            lines.sort(new Comparator<PlayerAchievementLine>() {
+            league.getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
                 @Override
                 public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
                     int positionComparison = t2.getPositionByNumber().compareTo(t1.getPositionByNumber());
@@ -196,7 +185,7 @@ public class PlayerLeaderboards extends GamePanel {
                 }
             });
         } else if (filterType.equals("OVR")){
-            lines.sort(new Comparator<PlayerAchievementLine>() {
+            league.getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
                 @Override
                 public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
                     int ovrComparison = t1.getOVR().compareTo(t2.getOVR());
@@ -208,21 +197,21 @@ public class PlayerLeaderboards extends GamePanel {
                 }
             });
         } else if (filterType.equals("Name")){
-            lines.sort(new Comparator<PlayerAchievementLine>() {
+            league.getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
                 @Override
                 public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
                     return t1.getName().compareTo(t2.getName());
                 }
             });
         } else if (filterType.equals("Team")){
-            lines.sort(new Comparator<PlayerAchievementLine>() {
+            league.getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
                 @Override
                 public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
                     return t1.getTeam().compareTo(t2.getTeam());
                 }
             });
         } else if (filterType.equals("Assists")){
-            lines.sort(new Comparator<PlayerAchievementLine>() {
+            league.getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
                 @Override
                 public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
                     int assistsComparison = t1.getAssists().compareTo(t2.getAssists());
@@ -234,7 +223,7 @@ public class PlayerLeaderboards extends GamePanel {
                 }
             });
         } else if (filterType.equals("Yellows")){
-            lines.sort(new Comparator<PlayerAchievementLine>() {
+            league.getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
                 @Override
                 public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
                     int yellowsComparison = t1.getYellows().compareTo(t2.getYellows());
@@ -246,7 +235,7 @@ public class PlayerLeaderboards extends GamePanel {
                 }
             });
         } else if (filterType.equals("Reds")){
-            lines.sort(new Comparator<PlayerAchievementLine>() {
+            league.getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
                 @Override
                 public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
                     int redsComparison = t1.getReds().compareTo(t2.getReds());
@@ -262,15 +251,15 @@ public class PlayerLeaderboards extends GamePanel {
         System.out.println("List has been sorted");
 
         // Numbers the results of the search
-        for(int i=0;i<lines.size();i++) {
-            lines.get(i).setNumber(i+1);
+        for(int i=0;i<league.getPlayerAchievements().size();i++) {
+            league.getPlayerAchievements().get(i).setNumber(i+1);
         }
 
         tableContainer.removeAll();
         tableContainer.add(mainButtonContainer, BorderLayout.CENTER);
         tableContainer.add(rowAboveNames, BorderLayout.CENTER);
 
-        for(PlayerAchievementLine eachLine : lines) {
+        for(PlayerAchievementLine eachLine : league.getPlayerAchievements()) {
 
             Box row = Box.createHorizontalBox();
             row.setPreferredSize(new Dimension(600,20));
@@ -308,14 +297,6 @@ public class PlayerLeaderboards extends GamePanel {
 
         tableContainer.revalidate();
         tableContainer.repaint();
-    }
-
-    public ArrayList<PlayerAchievementLine> getAllLines() {
-        return lines;
-    }
-
-    public void setLines(ArrayList<PlayerAchievementLine> lines) {
-        this.lines = lines;
     }
 
     public PlayerAchievementLine getErrorLine() {
@@ -357,24 +338,5 @@ public class PlayerLeaderboards extends GamePanel {
     public void setTableContainer(JPanel tableContainer) {
         this.tableContainer = tableContainer;
     }
-
-    public Scheduler getScheduler() {
-        return scheduler;
-    }
-
-    public void setScheduler(Scheduler scheduler) {
-        this.scheduler = scheduler;
-    }
-// We may need this to display or update
-//    public void updateTableVisually() {
-//        centerBox.removeAll();
-//        table = getMatch().getLeague().getLeagueTable();
-//        centerBox.add(table);
-//        Box padding = Box.createVerticalBox();
-//        padding.add(Box.createVerticalStrut(20));  // 20 pixels of padding, adjust as needed
-//        centerBox.add(padding);
-//        centerBox.revalidate();
-//        centerBox.repaint();
-//    }
 
 }
