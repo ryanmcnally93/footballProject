@@ -27,7 +27,6 @@ public class League {
 	private Map<Integer, Map<Integer, LocalDateTime>> matchWeeksSlots;
 	private boolean restartWholeProcess = false;
 	private LeagueTable leagueTable;
-	private ArrayList<PlayerAchievementLine> playerAchievements;
 	private PlayerLeaderboards leaderboard;
 	// private Map<String, TeamAchievementLine> teamAchievements;
 	
@@ -42,7 +41,6 @@ public class League {
 		this.matchWeeksSlots = new HashMap<>();
 		this.leagueTable = new LeagueTable(this);
 		this.season = season;
-		this.playerAchievements = new ArrayList<>();
 		this.leaderboard = new PlayerLeaderboards(this);
 
 		// Creating visual League table
@@ -63,15 +61,6 @@ public class League {
 		}
 		getLeagueTable().updateLinesInTableLogic();
 
-		// Creating initial player achievements page
-		for(Map.Entry<String, Team> eachTeam : getTeams().entrySet()){
-			Team thisTeam = eachTeam.getValue();
-			for(Map.Entry<String, Footballer> eachPlayer : thisTeam.getPlayers().entrySet()) {
-				Footballer thisPlayer = eachPlayer.getValue();
-				PlayerAchievementLine line = new PlayerAchievementLine(thisPlayer);
-				playerAchievements.add(line);
-			}
-		}
 	}
 	
 	public void assignFixturesToWeekNumber() {
@@ -460,14 +449,6 @@ public class League {
 
 	public void setLeagueTable(LeagueTable leagueTable) {
 		this.leagueTable = leagueTable;
-	}
-
-	public ArrayList<PlayerAchievementLine> getPlayerAchievements() {
-		return playerAchievements;
-	}
-
-	public void setPlayerAchievements(ArrayList<PlayerAchievementLine> playerAchievements) {
-		this.playerAchievements = playerAchievements;
 	}
 
 	public boolean isRestartWholeProcess() {

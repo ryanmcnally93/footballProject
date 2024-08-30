@@ -26,7 +26,7 @@ public class Match {
 	private Scheduler scheduler;
 	private Boolean simulated = false;
 	
-	public Match() {};
+	public Match() {}
 	
 	public Match(Team home, Team away) {
 		this.home = home;
@@ -101,13 +101,13 @@ public class Match {
 			
 			System.out.println("Trying to run past player");
 			
-			if (getPastPlayer(player, enemy) == true) {
+			if (getPastPlayer(player, enemy)) {
 				enemyCounter++;
 				// Increment minute and do a full time check
 				
 				addMinute();
 				System.out.println("First Fulltime check");
-				if(fullTimeCheck()) {return;};
+				if(fullTimeCheck()) {return;}
 
 				System.out.println("Checking number of player ran past");
 				
@@ -127,7 +127,7 @@ public class Match {
 							this.homeScore++;
 							displayHomeGoalOnScreen(player);
 							league.getLeagueTable().getLine(getHome()).addGoalsScored();
-							for(PlayerAchievementLine line : league.getPlayerAchievements()){
+							for(PlayerAchievementLine line : league.getPlayerLeaderboard().getPlayerAchievements()){
 								if(line.getPlayer() == player){
 									line.addToGoals();
 									break;
@@ -138,7 +138,7 @@ public class Match {
 							this.awayScore++;
 							displayAwayGoalOnScreen(player);
 							league.getLeagueTable().getLine(getAway()).addGoalsScored();
-							for(PlayerAchievementLine line : league.getPlayerAchievements()){
+							for(PlayerAchievementLine line : league.getPlayerLeaderboard().getPlayerAchievements()){
 								if(line.getPlayer() == player){
 									line.addToGoals();
 									break;
@@ -150,10 +150,10 @@ public class Match {
 						updateScoreOnScreen();
 
 						if (findTeam(player).equals("Home")) {
-							Footballer awayStriker = ((Footballer) awayTeam.get("ST"));
+							Footballer awayStriker = awayTeam.get("ST");
 							addTimerForScreen(awayStriker);
 						} else {
-							Footballer homeStriker = ((Footballer) homeTeam.get("ST"));
+							Footballer homeStriker = homeTeam.get("ST");
 							addTimerForScreen(homeStriker);
 						}
 						
@@ -165,10 +165,10 @@ public class Match {
 						
 						displaySavesToScreen(player, thisFoeGk);
 						if (findTeam(player).equals("Home")) {
-							Footballer awayStriker = ((Footballer) awayTeam.get("ST"));
+							Footballer awayStriker = awayTeam.get("ST");
 							startRun(awayStriker);
 						} else {
-							Footballer homeStriker = ((Footballer) homeTeam.get("ST"));
+							Footballer homeStriker = homeTeam.get("ST");
 							startRun(homeStriker);
 						}
 						return;
@@ -185,10 +185,8 @@ public class Match {
 				return;
 			}			
 		}
-		
-		// Ensure that the method always returns.
-	    return;
-	}
+
+    }
 
 	public void displaySavesToScreen(Footballer player, Goalkeeper thisFoeGk) {}
 
@@ -363,7 +361,7 @@ public class Match {
 			getAwaygk().setStamina(100);
 		}
 
-		Footballer homeStriker = ((Footballer) homeTeam.get("ST"));
+		Footballer homeStriker = homeTeam.get("ST");
 		startRun(homeStriker);
 	}
 	

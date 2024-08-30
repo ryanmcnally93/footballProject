@@ -18,11 +18,23 @@ public class PlayerLeaderboards extends GamePanel {
     private League league;
     private Box mainButtonContainer, rowAboveNames;
     private JPanel tableContainer;
+    private ArrayList<PlayerAchievementLine> playerAchievements;
 //    private Scheduler scheduler;
 
     public PlayerLeaderboards(League league) {
 //        this.scheduler = scheduler;
         this.league = league;
+        this.playerAchievements = new ArrayList<>();
+
+        // Creating initial player achievements page
+        for(Map.Entry<String, Team> eachTeam : league.getTeams().entrySet()){
+            Team thisTeam = eachTeam.getValue();
+            for(Map.Entry<String, Footballer> eachPlayer : thisTeam.getPlayers().entrySet()) {
+                Footballer thisPlayer = eachPlayer.getValue();
+                PlayerAchievementLine line = new PlayerAchievementLine(thisPlayer);
+                playerAchievements.add(line);
+            }
+        }
 
         setBackground(Color.LIGHT_GRAY);
         setLayout(new BorderLayout());
@@ -148,7 +160,7 @@ public class PlayerLeaderboards extends GamePanel {
 
     // This could be used to add a searchbar looking for the player
     public PlayerAchievementLine getLine(Footballer player) {
-        for(PlayerAchievementLine tableLine : league.getPlayerAchievements()) {
+        for(PlayerAchievementLine tableLine : getPlayerAchievements()) {
             if(player.getName().equals(tableLine.getName())) {
                 return tableLine;
             }
@@ -160,7 +172,7 @@ public class PlayerLeaderboards extends GamePanel {
 
         if(filterType.equals("Goals")){
             System.out.println("Sorting by goals");
-            league.getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
+            getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
                 @Override
                 public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
                     int goalComparison = t2.getGoals().compareTo(t1.getGoals());
@@ -173,7 +185,7 @@ public class PlayerLeaderboards extends GamePanel {
                 }
             });
         } else if (filterType.equals("Position")){
-            league.getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
+            getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
                 @Override
                 public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
                     int positionComparison = t2.getPositionByNumber().compareTo(t1.getPositionByNumber());
@@ -185,7 +197,7 @@ public class PlayerLeaderboards extends GamePanel {
                 }
             });
         } else if (filterType.equals("OVR")){
-            league.getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
+            getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
                 @Override
                 public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
                     int ovrComparison = t1.getOVR().compareTo(t2.getOVR());
@@ -197,21 +209,21 @@ public class PlayerLeaderboards extends GamePanel {
                 }
             });
         } else if (filterType.equals("Name")){
-            league.getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
+            getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
                 @Override
                 public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
                     return t1.getName().compareTo(t2.getName());
                 }
             });
         } else if (filterType.equals("Team")){
-            league.getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
+            getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
                 @Override
                 public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
                     return t1.getTeam().compareTo(t2.getTeam());
                 }
             });
         } else if (filterType.equals("Assists")){
-            league.getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
+            getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
                 @Override
                 public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
                     int assistsComparison = t1.getAssists().compareTo(t2.getAssists());
@@ -223,7 +235,7 @@ public class PlayerLeaderboards extends GamePanel {
                 }
             });
         } else if (filterType.equals("Yellows")){
-            league.getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
+            getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
                 @Override
                 public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
                     int yellowsComparison = t1.getYellows().compareTo(t2.getYellows());
@@ -235,7 +247,7 @@ public class PlayerLeaderboards extends GamePanel {
                 }
             });
         } else if (filterType.equals("Reds")){
-            league.getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
+            getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
                 @Override
                 public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
                     int redsComparison = t1.getReds().compareTo(t2.getReds());
@@ -251,15 +263,15 @@ public class PlayerLeaderboards extends GamePanel {
         System.out.println("List has been sorted");
 
         // Numbers the results of the search
-        for(int i=0;i<league.getPlayerAchievements().size();i++) {
-            league.getPlayerAchievements().get(i).setNumber(i+1);
+        for(int i=0;i<getPlayerAchievements().size();i++) {
+            getPlayerAchievements().get(i).setNumber(i+1);
         }
 
         tableContainer.removeAll();
         tableContainer.add(mainButtonContainer, BorderLayout.CENTER);
         tableContainer.add(rowAboveNames, BorderLayout.CENTER);
 
-        for(PlayerAchievementLine eachLine : league.getPlayerAchievements()) {
+        for(PlayerAchievementLine eachLine : getPlayerAchievements()) {
 
             Box row = Box.createHorizontalBox();
             row.setPreferredSize(new Dimension(600,20));
@@ -337,6 +349,14 @@ public class PlayerLeaderboards extends GamePanel {
 
     public void setTableContainer(JPanel tableContainer) {
         this.tableContainer = tableContainer;
+    }
+
+    public ArrayList<PlayerAchievementLine> getPlayerAchievements() {
+        return playerAchievements;
+    }
+
+    public void setPlayerAchievements(ArrayList<PlayerAchievementLine> playerAchievements) {
+        this.playerAchievements = playerAchievements;
     }
 
 }

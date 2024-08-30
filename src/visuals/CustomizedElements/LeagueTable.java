@@ -5,11 +5,13 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Map;
 
 import javax.swing.*;
 
 import entities.League;
 import entities.Team;
+import people.Footballer;
 
 public class LeagueTable extends GamePanel {
 
