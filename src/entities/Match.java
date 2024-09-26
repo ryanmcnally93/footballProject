@@ -6,8 +6,11 @@ import java.util.TimerTask;
 import people.Footballer;
 import people.Goalkeeper;
 import visuals.CustomizedElements.PlayerAchievementLine;
+import visuals.MatchFrames.MatchFrames;
 import visuals.ScheduleFrames.Events;
 import visuals.ScheduleFrames.Scheduler;
+
+import javax.swing.*;
 
 public class Match {
 	
@@ -83,8 +86,6 @@ public class Match {
 		Map<String, Footballer> thisPlayersEnemy;
 		Goalkeeper thisFoeGk;
 		
-		System.out.println("Get's to team setters");
-		
 		if(getAwayTeam().containsValue(player)) {
 			thisPlayersEnemy = getHomeTeam();
 			thisFoeGk = getHomegk();
@@ -124,6 +125,7 @@ public class Match {
 						goalAlertOnScreen(player);
 						// Create the score card and print
 						if (findTeam(player).equals("Home")) {
+							System.out.println("HOME GOAL");
 							this.homeScore++;
 							displayHomeGoalOnScreen(player);
 							league.getLeagueTable().getLine(getHome()).addGoalsScored();
@@ -135,6 +137,7 @@ public class Match {
 							}
 							league.getLeagueTable().getLine(getAway()).addGoalsConceded();
 						} else {
+							System.out.println("AWAY GOAL");
 							this.awayScore++;
 							displayAwayGoalOnScreen(player);
 							league.getLeagueTable().getLine(getAway()).addGoalsScored();
@@ -339,8 +342,11 @@ public class Match {
 	public void continueButtonOnScreen() {};
 
 	public void startMatch() {
+		removePlayButton();
 		initialSetup();
     }
+
+	public void removePlayButton() {};
 
 	public void startMatch(Scheduler scheduler, Boolean bool) {
 		this.scheduler = scheduler;

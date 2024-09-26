@@ -188,8 +188,7 @@ public class MatchEvents extends MatchFrames {
         label.setOpaque(true);
         getScroller().getViewport().scrollRectToVisible(label.getBounds());
     }
-    
-    
+
     public void addAwayEvents(int minute, Footballer player, String type) {
     	String s = String.valueOf(minute);
     	if(events > 13) {

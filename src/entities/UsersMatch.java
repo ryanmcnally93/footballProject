@@ -146,7 +146,7 @@ public class UsersMatch extends Match {
 	public void updateScoreOnScreen() {
 		for (JPanel page : cardMap.values()) {
             if (page instanceof MatchFrames) {
-            	((MatchFrames) page).getHeaderPanel().updateScoreBoard(getHomeScore(), getAwayScore());
+            	((MatchFrames) page).updateScoreBoard(getHomeScore(), getAwayScore());
             }
         }
 	}
@@ -180,6 +180,15 @@ public class UsersMatch extends Match {
             	((MatchFrames) page).createContinueButton();
             }
         }
+	}
+
+	@Override
+	public void removePlayButton() {
+		for (JPanel page : cardMap.values()) {
+			if (page instanceof MatchFrames) {
+				((MatchFrames) page).removePlayButton();
+			}
+		}
 	}
 	
 	// Getters & Setters
