@@ -2,7 +2,7 @@ package visuals.CustomizedElements;
 
 import entities.Team;
 
-public class TableLine {
+public class TeamAchievementLine {
 
 	private Team team;
 	private int position;
@@ -16,7 +16,7 @@ public class TableLine {
 	private Integer points;
 	private static int initialPos = 0;
 	
-	public TableLine(Team team) {
+	public TeamAchievementLine(Team team) {
 		this.team = team;
 		this.wins = 0;
 		this.draws = 0;

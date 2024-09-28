@@ -15,6 +15,7 @@ public class Events {
 	private JLabel title;
 	private JLabel description;
 	private UsersMatch match;
+	private Boolean removeEvent;
 
 	public Events(){};
 
@@ -25,10 +26,12 @@ public class Events {
 		this.type = "Match";
 		this.title  = new JLabel();
 		this.match = match;
+		this.removeEvent = false;
 	}
 
 	public Events(String person, String message, LocalDateTime dateTime){
 		this.date = dateTime;
+		this.removeEvent = false;
 		String text = "<html><body style='width: %1spx; text-align: center;'>" + message + "</body></html>";
 		this.description = new JLabel(String.format(text, 400), SwingConstants.CENTER);
 		if(person.equals("Chairman")){
@@ -103,5 +106,12 @@ public class Events {
 	public String toString() {
 		return "Events [date=" + date + ", type=" + type + ", title=" + ", match=" + match + "]";
 	}
-	
+
+	public Boolean getRemoveEvent() {
+		return removeEvent;
+	}
+
+	public void setRemoveEvent(Boolean removeEvent) {
+		this.removeEvent = removeEvent;
+	}
 }

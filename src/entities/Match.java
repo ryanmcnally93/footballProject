@@ -313,15 +313,15 @@ public class Match {
 
 			if(scheduler != null){
 				scheduler.getEventContainer().removeAll();
-				// Give 1st place message if user is now 1st
-				if(league.getLeagueTable().getLine(scheduler.getTeam()).getPosition() == 1) {
-					scheduler.addFirstPositionMessage();
-				}
 				// We only want this on a simulated match
 				if(simulated) {
 					Events simulatedResult = new Events("Result", getScore(), getDateTime().plusHours(2));
 					System.out.println("Adding an event in match class (for simulated matches)");
 					scheduler.getEvents().add(simulatedResult);
+					// Give 1st place message if user is now 1st
+					if(league.getLeagueTable().getLine(scheduler.getTeam()).getPosition() == 1) {
+						scheduler.addFirstPositionMessage();
+					}
 					scheduler.refreshMessages();
 				}
 				// Refresh messages once match is played

@@ -4,6 +4,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,7 @@ public class Scheduler extends GamePanel {
 	private MainMenu main;
 	private Events eventToRemove;
 	private Season season;
+	private Boolean removeEvent;
 	
 	// New Game Constructor
 	public Scheduler(User user, Team team, League league) {
@@ -64,7 +66,8 @@ public class Scheduler extends GamePanel {
 		south.setPreferredSize(new Dimension(800, 80));
 		southMiddle = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-		todaysDate = new JLabel("Today's date is: " + getDate());
+		String todaysDateFormatted = getTodaysDateWithGoodFormat();
+		todaysDate = new JLabel(todaysDateFormatted);
 		advance = new JButton("Advance");
 		southMiddle.add(todaysDate);
 		southMiddle.add(advance);
@@ -211,45 +214,59 @@ public class Scheduler extends GamePanel {
 	}
 
 	public void showTodaysEvents(ArrayList<Events> todaysEvents){
-		// And now we will show todays events
 		System.out.println("Todays Events: " + todaysEvents);
+
+		// Find events to remove
+		ArrayList<Events> toRemove = new ArrayList<Events>();
+		for(Events event : todaysEvents) {
+			if(event.getRemoveEvent()){
+				toRemove.add(event);
+			}
+		}
+		// Remove them
+		for(Events event : toRemove){
+			todaysEvents.remove(event);
+			events.remove(event);
+		}
+
+		// Let's look through todays events that are left
 		for(Events event : todaysEvents){
 			showEventsDescription(event);
-			// Remove advance button
 			southMiddle.remove(advance);
-			// Checking if this is a match or not
-			if (event.getType().equals("Match")){
-				// This is a match event
-				// This is the play button and its functionality
+
+			// This is a match event
+			if (event.getType().equals("Match")) {
 				playGame = new JButton("Play");
 				Scheduler sch = this;
 				playGame.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
 						event.getMatch().displayGame(window, sch);
-						eventToRemove = event;
+						event.setRemoveEvent(true);
 					}
 				});
 				System.out.println("Adding a new playgame button");
 				southMiddle.add(playGame);
+
 				// This is the simulate match button and its functionality
 				simGame = new JButton("Simulate");
 				Scheduler thissch = this;
-				simGame.addMouseListener(new MouseAdapter(){
+				simGame.addMouseListener(new MouseAdapter() {
 					@Override
-					public void mouseClicked(MouseEvent e){
+					public void mouseClicked(MouseEvent e) {
 						southMiddle.remove(simGame);
 						southMiddle.remove(playGame);
 						// Run as normal match method
-						UsersMatch todaysMatch = ((UsersMatch) league.getFixtures().get(event.getMatch().toString()));
-						if(todaysMatch != null){
+						Match todaysMatch = (league.getFixtures().get(event.getMatch().toString()));
+						if (todaysMatch != null) {
 							Match child = new Match(todaysMatch.getHome(), todaysMatch.getAway(), league, todaysMatch.getDateTime());
 							league.getFixtures().put(todaysMatch.toString(), child);
 							// This is the only time a scheduler is passed to a match
 							// So on at fulltime check, will run some tasks on this scheduler
 							child.startMatch(thissch, true);
 						}
-						events.remove(event);
+						event.setRemoveEvent(true);
+						showTodaysEvents(todaysEvents);
 					}
 				});
 				System.out.println("Adding a simgame button");
@@ -263,17 +280,15 @@ public class Scheduler extends GamePanel {
 						eventContainer.removeAll();
 						southMiddle.remove(dismiss);
 						southMiddle.add(advance);
-						todaysEvents.remove(event);
-						events.remove(event);
+						event.setRemoveEvent(true);
 						showTodaysEvents(todaysEvents);
-						// Refresh messages if one is dismissed
 						eventContainer.repaint();
 						southMiddle.revalidate();
 						southMiddle.repaint();
 					}
 				});
 				// Only need 1 dismiss button
-				if(!southMiddle.isAncestorOf(dismiss)){
+				if (!southMiddle.isAncestorOf(dismiss)) {
 					System.out.println("Adding a dismiss button");
 					southMiddle.add(dismiss);
 				}
@@ -318,7 +333,9 @@ public class Scheduler extends GamePanel {
 		eventContainer.removeAll();
 		mainPanel.repaint();
 		date = date.plusDays(1);
-		todaysDate.setText("Today's date is: " + getDate());
+
+		String todaysDateFormatted = getTodaysDateWithGoodFormat();
+		todaysDate.setText(todaysDateFormatted);
 
 		int year = 2023 + season.getNumber();
 
@@ -382,6 +399,25 @@ public class Scheduler extends GamePanel {
 			}
 		}
 	}
+
+	private String getTodaysDateWithGoodFormat(){
+		int day = getDate().getDayOfMonth();
+		String dayWithSuffix = day + getDayOfMonthSuffix(day);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy HH:mm");
+		return dayWithSuffix + " " + getDate().format(formatter);
+	}
+
+	private static String getDayOfMonthSuffix(int day) {
+		if (day >= 11 && day <= 13) {
+			return "th";
+		}
+		return switch (day % 10) {
+			case 1 -> "st";
+			case 2 -> "nd";
+			case 3 -> "rd";
+			default -> "th";
+		};
+	}
 	
 	public void setMatchdays() {
 
@@ -395,6 +431,7 @@ public class Scheduler extends GamePanel {
 		}
 		
 		// This overwrites each entry with a child UsersMatch
+		int k = 0;
 		for (String key : keysToReplace) {
             Match adult = league.getFixtures().get(key);
             if (adult != null) {
@@ -402,6 +439,7 @@ public class Scheduler extends GamePanel {
                 league.getFixtures().put(key, child); // Replace the entry in the map
             }
         }
+		System.out.println("Created " + k + "UserMatches");
 		
 		// This looks for UsersMatches and creates an event from it
 		for(Map.Entry<String, Match> each : league.getFixtures().entrySet()) {

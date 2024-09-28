@@ -14,11 +14,11 @@ import visuals.ScheduleFrames.Scheduler;
 
 public class PlayerLeaderboards extends GamePanel {
 
+    private ArrayList<PlayerAchievementLine> playerAchievements;
     private PlayerAchievementLine errorLine;
     private League league;
     private Box mainButtonContainer, rowAboveNames;
     private JPanel tableContainer;
-    private ArrayList<PlayerAchievementLine> playerAchievements;
 //    private Scheduler scheduler;
 
     public PlayerLeaderboards(League league) {

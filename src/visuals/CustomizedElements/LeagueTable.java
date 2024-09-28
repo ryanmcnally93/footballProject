@@ -5,19 +5,16 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Map;
 
 import javax.swing.*;
 
 import entities.League;
 import entities.Team;
-import people.Footballer;
 
 public class LeagueTable extends GamePanel {
 
-	private static final long serialVersionUID = -737891404507970413L;
-	private ArrayList<TableLine> lines;
-	private TableLine errorLine;
+	private ArrayList<TeamAchievementLine> lines;
+	private TeamAchievementLine errorLine;
 	private League league;
 	private Box container;
 	private JPanel teamBox;
@@ -86,8 +83,8 @@ public class LeagueTable extends GamePanel {
     	add(tableContainer, BorderLayout.CENTER);
 	}
 
-	public TableLine getLine(Team team) {
-		for(TableLine tableline : lines) {
+	public TeamAchievementLine getLine(Team team) {
+		for(TeamAchievementLine tableline : lines) {
 			if(team.getName().equals(tableline.getTeamName())) {
 				return tableline;
 			}
@@ -95,16 +92,16 @@ public class LeagueTable extends GamePanel {
 		return errorLine;
 	}
 	
-	public ArrayList<TableLine> getAllLines(){
+	public ArrayList<TeamAchievementLine> getAllLines(){
 		return lines;
 	}
 	
 	public void updateLinesInTableLogic() {
 
 		// Implement logic to 'sort' your array list by points and GD
-		lines.sort(new Comparator<TableLine>() {
+		lines.sort(new Comparator<TeamAchievementLine>() {
             @Override
-            public int compare(TableLine t1, TableLine t2) {
+            public int compare(TeamAchievementLine t1, TeamAchievementLine t2) {
                 int pointComparison = t2.getPoints().compareTo(t1.getPoints());
 
                 // If points are the same, compare by goal difference
@@ -121,7 +118,7 @@ public class LeagueTable extends GamePanel {
 		
 		tableContainer.removeAll();
 		tableContainer.add(titleRow);
-		for(TableLine eachLine : lines) {
+		for(TeamAchievementLine eachLine : lines) {
 			Box row = Box.createHorizontalBox();
 			row.setPreferredSize(new Dimension(600,20));
         	JLabel position = new JLabel(String.valueOf(eachLine.getPosition()));
@@ -163,7 +160,7 @@ public class LeagueTable extends GamePanel {
         tableContainer.repaint();
 	}
 
-	public void setLine(ArrayList<TableLine> line) {
+	public void setLine(ArrayList<TeamAchievementLine> line) {
 		this.lines = line;
 	}
 
@@ -172,19 +169,19 @@ public class LeagueTable extends GamePanel {
 		return "Definitely generating the right item";
 	}
 
-	public ArrayList<TableLine> getLines() {
+	public ArrayList<TeamAchievementLine> getLines() {
 		return lines;
 	}
 
-	public void setLines(ArrayList<TableLine> lines) {
+	public void setLines(ArrayList<TeamAchievementLine> lines) {
 		this.lines = lines;
 	}
 
-	public TableLine getErrorLine() {
+	public TeamAchievementLine getErrorLine() {
 		return errorLine;
 	}
 
-	public void setErrorLine(TableLine errorLine) {
+	public void setErrorLine(TeamAchievementLine errorLine) {
 		this.errorLine = errorLine;
 	}
 
