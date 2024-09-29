@@ -192,7 +192,7 @@ public class Scheduler extends GamePanel {
 	public void updateButtonsAfterUsersMatch(){
 		// This only runs if there is a usersmatch
 		if(match != null) {
-			if(match.getMinute() == 90) {
+			if(match.getTimer().getTime().equals("90:0")) {
 				southMiddle.remove(playGame);
 				southMiddle.remove(simGame);
 				// We don't want the advance button when messages are present

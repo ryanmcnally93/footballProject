@@ -73,7 +73,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		playButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (match.getMinute() == 0) {
+				if (match.getTimer().getTime().equals("0:0")) {
 					handleClick();
 				}
 			}
@@ -143,7 +143,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(match.getMinute() == 0){
+			if(match.getTimer().getTime().equals("0:0")){
 				handleClick();
 			}
 		}
@@ -159,8 +159,8 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		match.startMatch();
 	}
 	
-	public void goalAlert(String name, int minute) {
-    	getSlidingPanel().startSliding(name, minute);
+	public void goalAlert(String name, String time) {
+    	getSlidingPanel().startSliding(name, time);
     }
 
 	public SlidingPanel getSlidingPanel() {

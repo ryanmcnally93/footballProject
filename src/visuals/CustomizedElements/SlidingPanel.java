@@ -6,14 +6,13 @@ import java.awt.event.ActionListener;
 import java.awt.image.ImageObserver;
 
 public class SlidingPanel extends JPanel {
-    private static final long serialVersionUID = 7790773713887698024L;
 	private int yPosition;
     private final int panelHeight = 300;
     private Timer slideUpTimer;
     private Timer slideDownTimer;
     private final int slideSpeed = 5;
     private final int delayBeforeSlideDown = 3000; // 2 seconds
-    private int minute;
+    private String time;
     private String name;
 
     public SlidingPanel() {
@@ -22,9 +21,9 @@ public class SlidingPanel extends JPanel {
         setDoubleBuffered(true);
     }
 
-    public void startSliding(String name, int minute) {
+    public void startSliding(String name, String time) {
     	this.name = name;
-    	this.minute = minute;
+    	this.time = time;
         if (slideUpTimer != null && slideUpTimer.isRunning()) {
             return; // Prevent overlapping animations
         }
@@ -76,7 +75,7 @@ public class SlidingPanel extends JPanel {
         g.fillRect((int) ((getWidth()-seventyfivepercent)/2), yPosition, seventyfivepercent, panelHeight);
         g.setColor(Color.WHITE);
         FontMetrics metrics = g.getFontMetrics(g.getFont());
-        String message = "GOAL!" + name + minute;
+        String message = "GOAL!" + name + time;
         g.drawString(message, (getWidth() - metrics.stringWidth(message)) / 2, yPosition + ((panelHeight - metrics.getHeight()) / 2) + metrics.getAscent());
     }
     

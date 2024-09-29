@@ -21,7 +21,6 @@ import people.Footballer;
 
 public class MatchScorers extends MatchFrames {
 
-	private static final long serialVersionUID = 1903388672588119012L;
 	private ArrayList<String> homeScorers, awayScorers;
     private JPanel leftBox, rightBox;
     private Box centerBox, container;
@@ -119,7 +118,7 @@ public class MatchScorers extends MatchFrames {
         rightBox.setPreferredSize(new Dimension(half, getHeight()));
 	}
 	
-	public void displayGoalScorers(Footballer player, int minute, String side) {
+	public void displayGoalScorers(Footballer player, String time, String side) {
 		JPanel box;
 		ArrayList<String> scorers;
 		if(side.equals("Home")){
@@ -141,14 +140,14 @@ public class MatchScorers extends MatchFrames {
 			if (scorer.contains(player.getName()) ) {
 				bFound = true;
 				String minutes = scorer.substring(0, scorer.length() - 1);
-				String updatedMinutes = minutes + ", " + minute + ")";
+				String updatedMinutes = minutes + ", " + time + ")";
 				scorers.set(i, updatedMinutes);
 				break;
 			}
 		}
 		
 		if (!bFound) {
-			scorers.add(player.getName() + "(" + minute + ")");
+			scorers.add(player.getName() + "(" + time + ")");
 		}
 
 		for(String goal : scorers) {
@@ -165,6 +164,7 @@ public class MatchScorers extends MatchFrames {
 			} else {
 				result.setAlignmentX(Component.LEFT_ALIGNMENT); // Align to the right
 			}
+            assert box != null;
             box.add(result);
 	        containScorerSections();
 		}

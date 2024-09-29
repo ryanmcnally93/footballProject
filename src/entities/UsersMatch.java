@@ -125,21 +125,26 @@ public class UsersMatch extends Match {
 	public void goalAlertOnScreen(Footballer player) {
 		for (JPanel page : cardMap.values()) {
 			if (page instanceof MatchFrames) {
-            	((MatchFrames) page).goalAlert(player.getName(), this.getMinute());
+            	((MatchFrames) page).goalAlert(player.getName(), getTimer().getTime());
             }
         }
 	}
 						
 	@Override
 	public void displayHomeGoalOnScreen(Footballer player) {
-		((MatchEvents) cardMap.get("Events")).addHomeEvents(getMinute(), player, "goal");
-		((MatchScorers) cardMap.get("Scorers")).displayGoalScorers(player, getMinute(), "Home");
+		((MatchEvents) cardMap.get("Events")).addHomeEvents(getTimer().getTime(), player, "goal");
+		((MatchScorers) cardMap.get("Scorers")).displayGoalScorers(player, getTimer().getTime(), "Home");
 	}
 	
 	@Override
 	public void displayAwayGoalOnScreen(Footballer player) {
-		((MatchEvents) cardMap.get("Events")).addAwayEvents(getMinute(), player, "goal");
-		((MatchScorers) cardMap.get("Scorers")).displayGoalScorers(player, getMinute(), "Away");
+		((MatchEvents) cardMap.get("Events")).addAwayEvents(getTimer().getTime(), player, "goal");
+		((MatchScorers) cardMap.get("Scorers")).displayGoalScorers(player, getTimer().getTime(), "Away");
+	}
+
+	@Override
+	public void startTimer(){
+		getTimer().runEvent("slowest");
 	}
 	
 	@Override
@@ -166,10 +171,10 @@ public class UsersMatch extends Match {
 	
 	@Override
 	public void displaySavesToScreen(Footballer player, Goalkeeper thisFoeGk) {
-		if(findTeam(player) == "Away") {
-			((MatchEvents) cardMap.get("Events")).addAwayEvents(getMinute(), player, "save");
+		if(findTeam(player).equals("Away")) {
+			((MatchEvents) cardMap.get("Events")).addAwayEvents(getTimer().getTime(), player, "save");
 		} else {
-			((MatchEvents) cardMap.get("Events")).addHomeEvents(getMinute(), player, "save");
+			((MatchEvents) cardMap.get("Events")).addHomeEvents(getTimer().getTime(), player, "save");
 		}
 	}
 		

@@ -155,24 +155,23 @@ public class MatchEvents extends MatchFrames {
         });
     }
     
-    public void addHomeEvents(int minute, Footballer player, String type) {
-    	String s = String.valueOf(minute);
+    public void addHomeEvents(String time, Footballer player, String type) {
     	if(events > 13) {
     		addRow();
     	}
-    	if(type.equals("goal")) {
-    		leftIcons.get(events).setText("GOAL");
-    		leftIcons.get(events).setBackground(Color.GREEN);
-    		leftLabels.get(events).setBackground(Color.GREEN);
-    		leftLabels.get(events).setOpaque(true);
-    		leftIcons.get(events).setOpaque(true);
-    	} else if (type.equals("save")) {
-    		leftIcons.get(events).setText("SAVE");
-    	} else if (type.equals("corner")) {
-    		leftIcons.get(events).setText("CORNA");
-    	}
+        switch (type) {
+            case "goal" -> {
+                leftIcons.get(events).setText("GOAL");
+                leftIcons.get(events).setBackground(Color.GREEN);
+                leftLabels.get(events).setBackground(Color.GREEN);
+                leftLabels.get(events).setOpaque(true);
+                leftIcons.get(events).setOpaque(true);
+            }
+            case "save" -> leftIcons.get(events).setText("SAVE");
+            case "corner" -> leftIcons.get(events).setText("CORNA");
+        }
 		leftLabels.get(events).setText(player.getName());
-		middleLabels.get(events).setText(s);
+		middleLabels.get(events).setText(time);
     	events++;
     	JLabel oldLabel = middleLabels.get(button);
     	if(leftIcons.get(button).getText().equals("GOAL") || rightIcons.get(button).getText().equals("GOAL")) {
@@ -189,23 +188,22 @@ public class MatchEvents extends MatchFrames {
         getScroller().getViewport().scrollRectToVisible(label.getBounds());
     }
 
-    public void addAwayEvents(int minute, Footballer player, String type) {
-    	String s = String.valueOf(minute);
+    public void addAwayEvents(String time, Footballer player, String type) {
     	if(events > 13) {
     		addRow();
     	}
-    	if(type.equals("goal")) {
-    		rightLabels.get(events).setBackground(Color.GREEN);
-    		rightLabels.get(events).setOpaque(true);
-    		rightIcons.get(events).setText("GOAL");
-    		rightIcons.get(events).setBackground(Color.GREEN);
-    		rightIcons.get(events).setOpaque(true);
-    	} else if (type.equals("save")) {
-    		rightIcons.get(events).setText("SAVE");
-    	} else if (type.equals("corner")) {
-    		rightIcons.get(events).setText("CORNA");
-    	}
-		middleLabels.get(events).setText(s);
+        switch (type) {
+            case "goal" -> {
+                rightLabels.get(events).setBackground(Color.GREEN);
+                rightLabels.get(events).setOpaque(true);
+                rightIcons.get(events).setText("GOAL");
+                rightIcons.get(events).setBackground(Color.GREEN);
+                rightIcons.get(events).setOpaque(true);
+            }
+            case "save" -> rightIcons.get(events).setText("SAVE");
+            case "corner" -> rightIcons.get(events).setText("CORNA");
+        }
+		middleLabels.get(events).setText(time);
 		rightLabels.get(events).setText(player.getName());
     	events++;
     	JLabel oldLabel = middleLabels.get(button);
