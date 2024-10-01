@@ -48,7 +48,7 @@ public class LeagueTable extends GamePanel {
 		JLabel position = new JLabel("Pos.");
     	setPermanentWidthAndHeight(position, 30, 20);
     	JLabel clubName = new JLabel("Club");
-		setPermanentWidthAndHeight(clubName, 360, 20);
+		setPermanentWidthAndHeight(clubName, 330, 20);
         JLabel matchesPlayed = new JLabel("MP");
 		setPermanentWidthAndHeight(matchesPlayed, 30, 20);
         JLabel wins = new JLabel("W");
@@ -124,7 +124,7 @@ public class LeagueTable extends GamePanel {
         	JLabel position = new JLabel(String.valueOf(eachLine.getPosition()));
 			setPermanentWidthAndHeight(position, 30, 20);
         	JLabel clubName = new JLabel(eachLine.getTeamName());
-			setPermanentWidthAndHeight(clubName, 360, 20);
+			setPermanentWidthAndHeight(clubName, 330, 20);
             JLabel matchesPlayed = new JLabel(String.valueOf(eachLine.getGamesPlayed()));
 			setPermanentWidthAndHeight(matchesPlayed, 30, 20);
         	JLabel wins = new JLabel(String.valueOf(eachLine.getWins()));

@@ -29,10 +29,17 @@ public class MatchFrames extends CardmapMainPageTemplate {
 	private CustomizedButton playButton;
 	private InputMap playButtonInputMap;
 	private ActionMap playButtonActionMap;
+	private JLabel time;
 
 	public MatchFrames(CardLayout cardLayout, JPanel pages, UsersMatch match) {
     	super(cardLayout, pages);
         this.match = match;
+
+		// Add the time to the header
+		time = new JLabel(match.getTimer().getTime(), SwingConstants.CENTER);
+		time.setFont(new Font(time.getFont().getName(), Font.BOLD, 18));
+		time.setBorder(new EmptyBorder(0, 0, 5, 0));
+		getHeaderPanel().add(time, BorderLayout.SOUTH);
 
 		// Adding match event sliding panel
         slidingPanel = new SlidingPanel();
@@ -73,7 +80,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		playButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (match.getTimer().getTime().equals("0:0")) {
+				if (match.getTimer().getTime().equals("00:00")) {
 					handleClick();
 				}
 			}
@@ -104,7 +111,25 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		getHeaderPanel().setTitle(match.getHome().getName() + " " + home + " - " + away + " " + match.getAway().getName());
 		repaint();
 	}
-	
+
+	public int findRoundedInt(String time){
+		int roundedUp = 0;
+
+		// This sets gives us the time, rounded up to the next minute
+		try {
+			if(time.startsWith("0:")){
+				roundedUp = 1;
+			} else {
+				int newTime = Integer.parseInt(time.substring(0, 2));
+				roundedUp = newTime + 1;
+			}
+			System.out.println("The integer value is: " + roundedUp);
+		} catch (NumberFormatException e) {
+			System.out.println("Invalid number format: " + time.substring(0, 2));
+		}
+		return roundedUp;
+	}
+
 	public void createContinueButton() {
 		// Adding the continue button
 		CustomizedButton cont = new CustomizedButton("Continue");
@@ -143,7 +168,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(match.getTimer().getTime().equals("0:0")){
+			if(match.getTimer().getTime().equals("00:00")){
 				handleClick();
 			}
 		}
@@ -185,5 +210,13 @@ public class MatchFrames extends CardmapMainPageTemplate {
 
 	public void setPlayButton(CustomizedButton playButton) {
 		this.playButton = playButton;
+	}
+
+	public JLabel getTime() {
+		return time;
+	}
+
+	public void setTime(JLabel time) {
+		this.time = time;
 	}
 }

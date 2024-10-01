@@ -18,7 +18,6 @@ import visuals.CustomizedElements.MainMenu;
 
 public class Scheduler extends GamePanel {
 
-	private static final long serialVersionUID = -949295084027854854L;
 	private LocalDateTime date;
 	private JPanel eventsBox, southMiddle, menuBox, header;
 	private JButton advance, playGame, advanceToGame, simGame, menu, closeButton;
@@ -33,9 +32,7 @@ public class Scheduler extends GamePanel {
 	private UsersMatch match;
 	private JLayeredPane layeredPane;
 	private MainMenu main;
-	private Events eventToRemove;
 	private Season season;
-	private Boolean removeEvent;
 	
 	// New Game Constructor
 	public Scheduler(User user, Team team, League league) {
@@ -192,17 +189,13 @@ public class Scheduler extends GamePanel {
 	public void updateButtonsAfterUsersMatch(){
 		// This only runs if there is a usersmatch
 		if(match != null) {
-			if(match.getTimer().getTime().equals("90:0")) {
+			if(match.getTimer().getTime().equals("90:00")) {
 				southMiddle.remove(playGame);
 				southMiddle.remove(simGame);
 				// We don't want the advance button when messages are present
 				// Let's check there isn't already an advance button
 				if(!southMiddle.isAncestorOf(advance)){
 					southMiddle.add(advance);
-				}
-				// This makes sure the match is removed from the events list
-				if(eventToRemove != null){
-					events.remove(eventToRemove);
 				}
 			}
 		}
@@ -403,7 +396,7 @@ public class Scheduler extends GamePanel {
 	private String getTodaysDateWithGoodFormat(){
 		int day = getDate().getDayOfMonth();
 		String dayWithSuffix = day + getDayOfMonthSuffix(day);
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy HH:mm");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
 		return dayWithSuffix + " " + getDate().format(formatter);
 	}
 

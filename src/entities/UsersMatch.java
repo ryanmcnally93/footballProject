@@ -123,9 +123,26 @@ public class UsersMatch extends Match {
 
 	@Override
 	public void goalAlertOnScreen(Footballer player) {
+
+		String time = getTimer().getTime();
+		int roundedUp = 0;
+
+		// This sets gives us the time, rounded up to the next minute
+		try {
+			if(time.startsWith("0:")){
+				roundedUp = 1;
+			} else {
+				int newTime = Integer.parseInt(time.substring(0, 2));
+				roundedUp = newTime + 1;
+			}
+			System.out.println("The integer value is: " + roundedUp);
+		} catch (NumberFormatException e) {
+			System.out.println("Invalid number format: " + time.substring(0, 2));
+		}
+
 		for (JPanel page : cardMap.values()) {
 			if (page instanceof MatchFrames) {
-            	((MatchFrames) page).goalAlert(player.getName(), getTimer().getTime());
+            	((MatchFrames) page).goalAlert(player.getName(), String.valueOf(roundedUp));
             }
         }
 	}
@@ -144,7 +161,7 @@ public class UsersMatch extends Match {
 
 	@Override
 	public void startTimer(){
-		getTimer().runEvent("slowest");
+		getTimer().runEvent("slowest", this);
 	}
 	
 	@Override

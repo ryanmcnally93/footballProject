@@ -1,4 +1,8 @@
 package entities;
+import visuals.MatchFrames.MatchFrames;
+import visuals.MatchFrames.MatchStats;
+
+import javax.swing.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -14,6 +18,7 @@ public class MatchTimer {
     final int gameSecondsPerRealSecond = MatchSeconds / realWorldDurationInSeconds;
     private int gameMinutes;
     private int gameSeconds;
+    private Match match;
 
     public MatchTimer(){
        this.gameMinutes = 0;
@@ -21,7 +26,8 @@ public class MatchTimer {
     }
 
     // This method will run the timed event in two different modes: "normal" or "fast"
-    public void runEvent(String mode) {
+    public void runEvent(String mode, Match match) {
+        this.match = match;
         switch (mode) {
             case "slowest" -> runSlowestMode();
             case "slow" -> runSlowMode();
@@ -62,6 +68,13 @@ public class MatchTimer {
             setGameSeconds(inAppTime[0] % 60);
 
             // Prints the current in-app time
+            if(match instanceof UsersMatch newMatch){
+                for (JPanel page : newMatch.getCardMap().values()) {
+                    if (page instanceof MatchFrames) {
+                        ((MatchFrames) page).getTime().setText(getGameMinutes() + ":" + getGameSeconds());
+                    }
+                }
+            }
 //            System.out.println(getGameMinutes() + ":" + getGameSeconds());
 
             // Stop the scheduler when in-app time reaches 90 minutes (1200 seconds)
@@ -80,16 +93,28 @@ public class MatchTimer {
         return MatchMinutes;
     }
 
-    public int getGameMinutes() {
-        return gameMinutes;
+    public String getGameMinutes() {
+        String newValue = "";
+        if(gameMinutes<10){
+            newValue = "0" + gameMinutes;
+        } else {
+            newValue = String.valueOf(gameMinutes);
+        }
+        return newValue;
     }
 
     public void setGameMinutes(int gameMinutes) {
         this.gameMinutes = gameMinutes;
     }
 
-    public int getGameSeconds() {
-        return gameSeconds;
+    public String getGameSeconds() {
+        String newValue = "";
+        if(gameSeconds<10){
+            newValue = "0" + gameSeconds;
+        } else {
+            newValue = String.valueOf(gameSeconds);
+        }
+        return newValue;
     }
 
     public void setGameSeconds(int gameSeconds) {

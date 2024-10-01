@@ -6,13 +6,14 @@ import java.util.Map;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 
 import entities.UsersMatch;
 import people.Footballer;
 
 public class MatchEvents extends MatchFrames {
-	
-    private static final long serialVersionUID = 5937268249853937276L;
+
     private Box container;
     private JPanel leftIconBox, leftBox, middleBox, rightBox, rightIconBox;
     private ArrayList<JLabel> leftIcons, leftLabels, middleLabels, rightLabels, rightIcons;
@@ -49,11 +50,11 @@ public class MatchEvents extends MatchFrames {
         rightLabels = new ArrayList<>();
         rightIcons = new ArrayList<>();
 
-		makeRows(leftIcons, leftIconBox, 70);
-		makeRows(leftLabels, leftBox, 275);
-		makeRows(middleLabels, middleBox, 50);
-		makeRows(rightLabels, rightBox, 275);
-		makeRows(rightIcons, rightIconBox, 70);
+		makeRows(leftIcons, leftIconBox, 70, "none");
+		makeRows(leftLabels, leftBox, 275, "home");
+		makeRows(middleLabels, middleBox, 50, "none");
+		makeRows(rightLabels, rightBox, 275, "away");
+		makeRows(rightIcons, rightIconBox, 70, "none");
 
         container.add(Box.createHorizontalGlue());
         container.add(leftIconBox);
@@ -156,135 +157,102 @@ public class MatchEvents extends MatchFrames {
     }
     
     public void addHomeEvents(String time, Footballer player, String type) {
-    	if(events > 13) {
-    		addRow();
-    	}
-        switch (type) {
-            case "goal" -> {
-                leftIcons.get(events).setText("GOAL");
-                leftIcons.get(events).setBackground(Color.GREEN);
-                leftLabels.get(events).setBackground(Color.GREEN);
-                leftLabels.get(events).setOpaque(true);
-                leftIcons.get(events).setOpaque(true);
-            }
-            case "save" -> leftIcons.get(events).setText("SAVE");
-            case "corner" -> leftIcons.get(events).setText("CORNA");
-        }
-		leftLabels.get(events).setText(player.getName());
-		middleLabels.get(events).setText(time);
-    	events++;
-    	JLabel oldLabel = middleLabels.get(button);
-    	if(leftIcons.get(button).getText().equals("GOAL") || rightIcons.get(button).getText().equals("GOAL")) {
-        	oldLabel.setBackground(Color.GREEN);
-        	oldLabel.setOpaque(true);
-        } else {
-        	oldLabel.setBackground(Color.LIGHT_GRAY);
-            oldLabel.setOpaque(true);
-        }
-        button = events-1;
-        JLabel label = middleLabels.get(button);
-		label.setBackground(Color.YELLOW);
-        label.setOpaque(true);
-        getScroller().getViewport().scrollRectToVisible(label.getBounds());
+		addEvents(time, player, type, leftIcons, leftLabels, middleLabels, rightIcons, rightLabels, middleBox, "home");
     }
 
     public void addAwayEvents(String time, Footballer player, String type) {
-    	if(events > 13) {
-    		addRow();
-    	}
-        switch (type) {
-            case "goal" -> {
-                rightLabels.get(events).setBackground(Color.GREEN);
-                rightLabels.get(events).setOpaque(true);
-                rightIcons.get(events).setText("GOAL");
-                rightIcons.get(events).setBackground(Color.GREEN);
-                rightIcons.get(events).setOpaque(true);
-            }
-            case "save" -> rightIcons.get(events).setText("SAVE");
-            case "corner" -> rightIcons.get(events).setText("CORNA");
-        }
-		middleLabels.get(events).setText(time);
-		rightLabels.get(events).setText(player.getName());
-    	events++;
-    	JLabel oldLabel = middleLabels.get(button);
-    	if(leftIcons.get(button).getText().equals("GOAL") || rightIcons.get(button).getText().equals("GOAL")) {
-        	oldLabel.setBackground(Color.GREEN);
-        	oldLabel.setOpaque(true);
-        } else {
-        	oldLabel.setBackground(Color.LIGHT_GRAY);
-            oldLabel.setOpaque(true);
-        }
-        button = events-1;
-        JLabel label = middleLabels.get(button);
+		addEvents(time, player, type, rightIcons, rightLabels, middleLabels, leftIcons, leftLabels, middleBox, "away");
+	}
+
+	public void addEvents(String time, Footballer player, String type, ArrayList<JLabel> firstLabels, ArrayList<JLabel> secondLabels, ArrayList<JLabel> thirdLabels, ArrayList<JLabel> fourthLabels, ArrayList<JLabel> fifthLabels, JPanel middle, String homeOrAway) {
+		int roundedUp = findRoundedInt(time);
+
+		if(events > 13) {
+			addRow();
+		}
+		switch (type) {
+			case "goal" -> {
+				firstLabels.get(events).setText("GOAL");
+				firstLabels.get(events).setBackground(Color.GREEN);
+				secondLabels.get(events).setBackground(Color.GREEN);
+				secondLabels.get(events).setOpaque(true);
+				firstLabels.get(events).setOpaque(true);
+			}
+			case "save" -> firstLabels.get(events).setText("SAVE");
+			case "corner" -> firstLabels.get(events).setText("CORNA");
+		}
+		firstLabels.get(events).setHorizontalAlignment(SwingConstants.CENTER);
+
+		thirdLabels.get(events).setText(String.valueOf(roundedUp));
+		thirdLabels.get(events).setHorizontalAlignment(SwingConstants.CENTER);
+
+		secondLabels.get(events).setText(player.getName());
+		if(homeOrAway.equals("away")) {
+			secondLabels.get(events).setHorizontalAlignment(SwingConstants.RIGHT);
+		} else {
+			secondLabels.get(events).setHorizontalAlignment(SwingConstants.LEFT);
+		}
+
+		events++;
+		JLabel oldLabel = thirdLabels.get(button);
+		if(fourthLabels.get(button).getText().equals("GOAL") || firstLabels.get(button).getText().equals("GOAL")) {
+			oldLabel.setBackground(Color.GREEN);
+			oldLabel.setOpaque(true);
+		} else {
+			oldLabel.setBackground(Color.LIGHT_GRAY);
+			oldLabel.setOpaque(true);
+		}
+		button = events-1;
+		JLabel label = thirdLabels.get(button);
 		label.setBackground(Color.YELLOW);
-        label.setOpaque(true);    
-        }
-    
+		label.setOpaque(true);
+		getScroller().getViewport().scrollRectToVisible(label.getBounds());
+	}
+
     public void addRow() {
     	JLabel first = new JLabel();
     	first.setBorder(new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY));
-    	first.setPreferredSize(new Dimension(70, 30));
-        first.setMinimumSize(new Dimension(70, 30));
-        first.setMaximumSize(new Dimension(70, 30));
+		setPermanentWidthAndHeight(first, 70, 30);
     	leftIcons.add(first);
     	leftIconBox.add(first);
-        
+
     	JLabel second = new JLabel();
-    	second.setBorder(new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY));
-    	second.setPreferredSize(new Dimension(275, 30));
-        second.setMinimumSize(new Dimension(275, 30));
-        second.setMaximumSize(new Dimension(275, 30));
+		second.setBorder(new CompoundBorder(
+				new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY),
+				new EmptyBorder(0, 10, 0, 0)
+		));
+		setPermanentWidthAndHeight(second, 275, 30);
     	leftLabels.add(second);
     	leftBox.add(second);
-        
+
     	JLabel third = new JLabel();
     	third.setBorder(new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY));
-    	third.setPreferredSize(new Dimension(50, 30));
-        third.setMinimumSize(new Dimension(50, 30));
-        third.setMaximumSize(new Dimension(50, 30));
+		setPermanentWidthAndHeight(third, 50, 30);
     	middleLabels.add(third);
     	middleBox.add(third);
-        
+
     	JLabel fourth = new JLabel();
-    	fourth.setBorder(new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY));
-    	fourth.setPreferredSize(new Dimension(275, 30));
-        fourth.setMinimumSize(new Dimension(275, 30));
-        fourth.setMaximumSize(new Dimension(275, 30));
+		fourth.setBorder(new CompoundBorder(
+				new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY),
+				new EmptyBorder(0, 0, 0, 10)
+		));
+		setPermanentWidthAndHeight(fourth, 275, 30);
     	rightLabels.add(fourth);
     	rightBox.add(fourth);
-        
+
     	JLabel fifth = new JLabel();
     	fifth.setBorder(new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY));
-    	fifth.setPreferredSize(new Dimension(70, 30));
-        fifth.setMinimumSize(new Dimension(70, 30));
-        fifth.setMaximumSize(new Dimension(70, 30));
+		setPermanentWidthAndHeight(fifth, 70, 30);
     	rightIcons.add(fifth);
     	rightIconBox.add(fifth);
-    	
-    	leftIconBox.setPreferredSize(new Dimension(leftIconBox.getPreferredSize().width, leftIconBox.getPreferredSize().height+30));
-    	leftIconBox.setMinimumSize(new Dimension(leftIconBox.getMinimumSize().width, leftIconBox.getMinimumSize().height+30));
-    	leftIconBox.setMaximumSize(new Dimension(leftIconBox.getMaximumSize().width, leftIconBox.getMaximumSize().height+30));
-        
-    	leftBox.setPreferredSize(new Dimension(leftBox.getPreferredSize().width, leftBox.getPreferredSize().height+30));
-    	leftBox.setMinimumSize(new Dimension(leftBox.getMinimumSize().width, leftBox.getMinimumSize().height+30));
-    	leftBox.setMaximumSize(new Dimension(leftBox.getMaximumSize().width, leftBox.getMaximumSize().height+30));
-        
-    	middleBox.setPreferredSize(new Dimension(middleBox.getPreferredSize().width, middleBox.getPreferredSize().height+30));
-    	middleBox.setMinimumSize(new Dimension(middleBox.getMinimumSize().width, middleBox.getMinimumSize().height+30));
-    	middleBox.setMaximumSize(new Dimension(middleBox.getMaximumSize().width, middleBox.getMaximumSize().height+30));
-        
-    	rightBox.setPreferredSize(new Dimension(rightBox.getPreferredSize().width, rightBox.getPreferredSize().height+30));
-    	rightBox.setMinimumSize(new Dimension(rightBox.getMinimumSize().width, rightBox.getMinimumSize().height+30));
-    	rightBox.setMaximumSize(new Dimension(rightBox.getMaximumSize().width, rightBox.getMaximumSize().height+30));
-        
-    	rightIconBox.setPreferredSize(new Dimension(rightIconBox.getPreferredSize().width, rightIconBox.getPreferredSize().height+30));
-        rightIconBox.setMinimumSize(new Dimension(rightIconBox.getMinimumSize().width, rightIconBox.getMinimumSize().height+30));
-        rightIconBox.setMaximumSize(new Dimension(rightIconBox.getMaximumSize().width, rightIconBox.getMaximumSize().height+30));
-    	
-    	container.setPreferredSize(new Dimension(container.getPreferredSize().width, container.getPreferredSize().height+=30));
-        container.setMinimumSize(new Dimension(container.getMinimumSize().width, container.getMinimumSize().height+=30));
-        container.setMaximumSize(new Dimension(container.getMaximumSize().width, container.getMaximumSize().height+=30));
-        
+
+		setPermanentExtendedHeight(leftIconBox, 30);
+		setPermanentExtendedHeight(leftBox, 30);
+		setPermanentExtendedHeight(middleBox, 30);
+		setPermanentExtendedHeight(rightBox, 30);
+		setPermanentExtendedHeight(rightIconBox, 30);
+		setPermanentExtendedHeight(container, 30);
+
         JLabel label = middleLabels.get(button);
         // Calculate and adjust the rectangle for scrolling
         Rectangle rect = label.getBounds();
@@ -303,13 +271,23 @@ public class MatchEvents extends MatchFrames {
         });
     }
 
-	public void makeRows(ArrayList<JLabel> list, JPanel box, int width){
+	public void makeRows(ArrayList<JLabel> list, JPanel box, int width, String homeOrAway){
 		for(int i=0;i<rows;i++) {
 			JLabel result = new JLabel();
-			result.setBorder(new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY));
-			result.setPreferredSize(new Dimension(width, 30));
-			result.setMinimumSize(new Dimension(width, 30));
-			result.setMaximumSize(new Dimension(width, 30));
+			if(homeOrAway.equals("home")) {
+				result.setBorder(new CompoundBorder(
+						new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY),
+						new EmptyBorder(0, 5, 0, 0)
+				));
+			} else if (homeOrAway.equals("away")){
+				result.setBorder(new CompoundBorder(
+						new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY),
+						new EmptyBorder(0, 0, 0, 5)
+				));
+			} else {
+				result.setBorder(new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY));
+			}
+			setPermanentWidthAndHeight(result, width, 30);
 			list.add(result);
 			box.add(result);
 		}

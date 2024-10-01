@@ -134,20 +134,28 @@ public class MatchScorers extends MatchFrames {
 		}
 		
 		boolean bFound = false;
+		String minutes;
+		String updatedMinutes = "";
+
+		int roundedUp = findRoundedInt(time);
+
+		// Let's go through the right teams scorers
 		for (int i = 0;i<scorers.size();i++) {
 			String scorer = scorers.get(i);
-			
+
+			// Has this player already scored? Let's add the time to their String
 			if (scorer.contains(player.getName()) ) {
 				bFound = true;
-				String minutes = scorer.substring(0, scorer.length() - 1);
-				String updatedMinutes = minutes + ", " + time + ")";
-				scorers.set(i, updatedMinutes);
-				break;
+				minutes = scorer.substring(0, scorer.length() - 1);
+				updatedMinutes = minutes + ", " + roundedUp + ")";
+                scorers.set(i, updatedMinutes);
+                break;
 			}
 		}
-		
+
+		// This is the players first goal, so let's add their name and time
 		if (!bFound) {
-			scorers.add(player.getName() + "(" + time + ")");
+			scorers.add(player.getName() + "(" + roundedUp + ")");
 		}
 
 		for(String goal : scorers) {

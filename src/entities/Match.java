@@ -282,7 +282,7 @@ public class Match {
 	}
 	
 	public boolean fullTimeCheck() {
-		if (getTimer().getTime().equals("90:0")) {
+		if (getTimer().getTime().equals("90:00")) {
 			System.out.println("It's fulltime");
 
 			// FOR TESTING TOP OF THE LEAGUE MESSAGE
@@ -372,7 +372,7 @@ public class Match {
 	}
 
 	public void startTimer(){
-		getTimer().runEvent("instant");
+		getTimer().runEvent("instant", this);
 	}
 	
 	// Getters & Setters
