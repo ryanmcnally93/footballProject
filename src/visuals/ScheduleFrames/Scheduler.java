@@ -5,9 +5,9 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
@@ -33,6 +33,7 @@ public class Scheduler extends GamePanel {
 	private JLayeredPane layeredPane;
 	private MainMenu main;
 	private Season season;
+	private ArrayList<Match> laterMatches, sameDayMatches;
 	
 	// New Game Constructor
 	public Scheduler(User user, Team team, League league) {
@@ -71,6 +72,7 @@ public class Scheduler extends GamePanel {
 
 		menuBox = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		setPermanentWidth(menuBox, 115);
+
 		// Makes the southMiddle central
 		JPanel leftBlankBox = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		setPermanentWidth(leftBlankBox, 115);
@@ -89,7 +91,6 @@ public class Scheduler extends GamePanel {
 			}
 		});
 
-		// JLAYEREDPANE IS NOT ADDED TO ANYTHING!
 		layeredPane.add(mainPanel, JLayeredPane.DEFAULT_LAYER);
 		add(layeredPane, BorderLayout.CENTER);
 
@@ -179,6 +180,15 @@ public class Scheduler extends GamePanel {
 				matchEvent = each;
 			}
 		}
+		// If there isn't a match today, set 'match' to next weeks match
+		if(matchEvent == null){
+			Match nextWeeksMatch = events.stream()
+					.filter(event -> event.getType().equals("Match"))
+					.map(event -> (Match) event.getMatch())
+					.min(Comparator.comparing(Match::getDateTime))
+					.orElse(null);
+			setMatch((UsersMatch) nextWeeksMatch);
+		}
 		todaysEvents.remove(matchEvent);
 		if(matchEvent != null){
 			todaysEvents.add(matchEvent);
@@ -196,6 +206,13 @@ public class Scheduler extends GamePanel {
 				// Let's check there isn't already an advance button
 				if(!southMiddle.isAncestorOf(advance)){
 					southMiddle.add(advance);
+				}
+			}
+
+			// Play whatever later matches we have
+			if(!laterMatches.isEmpty()){
+				for(Match eachMatch : laterMatches){
+					CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
 				}
 			}
 		}
@@ -234,7 +251,7 @@ public class Scheduler extends GamePanel {
 				playGame.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						event.getMatch().displayGame(window, sch);
+						event.getMatch().displayGame(window, sch, sameDayMatches);
 						event.setRemoveEvent(true);
 					}
 				});
@@ -256,7 +273,10 @@ public class Scheduler extends GamePanel {
 							league.getFixtures().put(todaysMatch.toString(), child);
 							// This is the only time a scheduler is passed to a match
 							// So on at fulltime check, will run some tasks on this scheduler
-							child.startMatch(thissch, true);
+							child.startMatch(thissch, true, "instant");
+						}
+						for(Match eachMatch : sameDayMatches){
+							CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
 						}
 						event.setRemoveEvent(true);
 						showTodaysEvents(todaysEvents);
@@ -321,6 +341,9 @@ public class Scheduler extends GamePanel {
 	}
 	
 	public void addDay() {
+		this.laterMatches = new ArrayList<>();
+		this.sameDayMatches = new ArrayList<>();
+
 		System.out.println("All Events: " + events);
 		System.out.println("Events size: " + events.size());
 		eventContainer.removeAll();
@@ -374,21 +397,23 @@ public class Scheduler extends GamePanel {
 		}
 
 		refreshMessages();
-		
+
+		ArrayList<Match> todaysGames = getAllOfTodaysMatches();
+
 		// This will 'play' the background matches
-		if(getDate().toLocalDate().isAfter(LocalDate.of(year, 06, 8))) {
-			for(Map.Entry<String, Match> each : league.getFixtures().entrySet()) {
-				Match match = each.getValue();
-				if (!(match instanceof UsersMatch)) {
-					if(match.getDateTime().toLocalDate().equals(getDate().toLocalDate())) {
-						match.startMatch();
-						try {
-							Thread.sleep(50);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-					}
+		for(Match backgroundMatch : todaysGames) {
+			if (getMatch() != null) {
+				if (backgroundMatch.getDateTime().toLocalDate().isBefore(getMatch().getDateTime().toLocalDate())) {
+					CompletableFuture.runAsync(() -> backgroundMatch.startMatch("instant"));
+				} else if (backgroundMatch.getDateTime().toLocalDate().isEqual(getMatch().getDateTime().toLocalDate())) {
+					// Same Time match
+					sameDayMatches.add(backgroundMatch);
+				} else {
+					// We need to make sure that this plays when the UsersMatch finishes
+					laterMatches.add(backgroundMatch);
 				}
+			} else {
+				CompletableFuture.runAsync(() -> backgroundMatch.startMatch("instant"));
 			}
 		}
 	}
@@ -398,6 +423,21 @@ public class Scheduler extends GamePanel {
 		String dayWithSuffix = day + getDayOfMonthSuffix(day);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
 		return dayWithSuffix + " " + getDate().format(formatter);
+	}
+
+	public ArrayList<Match> getAllOfTodaysMatches(){
+		ArrayList<Match> todaysGames = new ArrayList<>();
+		if(getDate().toLocalDate().isAfter(LocalDate.of(2023 + season.getNumber(), 06, 8))) {
+			for (Map.Entry<String, Match> each : league.getFixtures().entrySet()) {
+				Match backgroundMatch = each.getValue();
+				if (!(backgroundMatch instanceof UsersMatch)) {
+					if (backgroundMatch.getDateTime().toLocalDate().equals(getDate().toLocalDate())) {
+						todaysGames.add(backgroundMatch);
+					}
+				}
+			}
+		}
+		return todaysGames;
 	}
 
 	private static String getDayOfMonthSuffix(int day) {

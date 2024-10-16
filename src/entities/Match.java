@@ -21,14 +21,15 @@ public class Match {
 	private int awayScore;
 	private Map<String, Footballer> homeTeam;
 	private Map<String, Footballer> awayTeam;
-	private int minute;
 	private Goalkeeper homegk;
 	private Goalkeeper awaygk;
     private LocalDateTime dateTime;
     private League league;
 	private Scheduler scheduler;
 	private Boolean simulated = false;
+	private Boolean backgroundGame = false;
 	private MatchTimer timer;
+	private String speed;
 	
 	public Match() {}
 	
@@ -38,7 +39,6 @@ public class Match {
 		this.stadium = home.getStadium();
 		this.homeTeam = home.getFirstTeam();
 		this.awayTeam = away.getFirstTeam();
-		this.minute = 0;
 		this.homegk = home.getGoalkeeper();
 		this.awaygk = away.getGoalkeeper();
 		this.awayScore = 0;
@@ -52,7 +52,6 @@ public class Match {
 		this.stadium = home.getStadium();
 		this.homeTeam = home.getFirstTeam();
 		this.awayTeam = away.getFirstTeam();
-		this.minute = 0;
 		this.homegk = home.getGoalkeeper();
 		this.awaygk = away.getGoalkeeper();
 		this.awayScore = 0;
@@ -67,7 +66,6 @@ public class Match {
 		this.stadium = home.getStadium();
 		this.homeTeam = home.getFirstTeam();
 		this.awayTeam = away.getFirstTeam();
-		this.minute = 0;
 		this.homegk = home.getGoalkeeper();
 		this.awaygk = away.getGoalkeeper();
 		this.awayScore = 0;
@@ -134,6 +132,14 @@ public class Match {
 								};
 							}
 							league.getLeagueTable().getLine(getAway()).addGoalsConceded();
+							// This stops sameday matches scoring 1000 goals!
+							if(backgroundGame) {
+								try {
+									Thread.sleep(5000);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+							}
 						} else {
 							System.out.println("AWAY GOAL");
 							this.awayScore++;
@@ -146,6 +152,14 @@ public class Match {
 								};
 							}
 							league.getLeagueTable().getLine(getHome()).addGoalsConceded();
+							// This stops sameday matches scoring 1000 goals!
+							if(backgroundGame) {
+								try {
+									Thread.sleep(5000);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+							}
 						}
 						
 						updateScoreOnScreen();
@@ -220,12 +234,6 @@ public class Match {
 		
 		// If the opponent is out of juice, we run past them
 		if (otherPlayer.stamina <= 0) {
-			// After we make a successful run, we have less energy
-//			player.removeStamina(10);
-			// Check to see we haven't run out of stamina
-			if (player.stamina <= 0) {
-				return false;
-			}
 			// Successful run past
 			return true;
 		} else {
@@ -340,16 +348,26 @@ public class Match {
 	
 	public void continueButtonOnScreen() {};
 
-	public void startMatch() {
+	public void startMatch(String speed) {
+		this.speed = speed;
 		removePlayButton();
 		initialSetup();
     }
 
+	public void startMatch(String speed, Boolean backgroundGame) {
+		this.speed = speed;
+		this.backgroundGame = backgroundGame;
+		removePlayButton();
+		initialSetup();
+	}
+
 	public void removePlayButton() {};
 
-	public void startMatch(Scheduler scheduler, Boolean bool) {
+	// For simulated matches
+	public void startMatch(Scheduler scheduler, Boolean bool, String speed) {
 		this.scheduler = scheduler;
 		this.simulated = true;
+		this.speed = speed;
 		initialSetup();
 	}
 
@@ -372,7 +390,7 @@ public class Match {
 	}
 
 	public void startTimer(){
-		getTimer().runEvent("instant", this);
+		getTimer().runEvent(getSpeed(), this);
 	}
 	
 	// Getters & Setters
@@ -499,5 +517,13 @@ public class Match {
 
 	public void setTimer(MatchTimer timer) {
 		this.timer = timer;
+	}
+
+	public String getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(String speed) {
+		this.speed = speed;
 	}
 }

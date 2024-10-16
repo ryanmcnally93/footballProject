@@ -168,7 +168,7 @@ public class PlayerLeaderboards extends GamePanel {
         return errorLine;
     }
 
-    public void updateLinesInTableLogic(String filterType) {
+    public synchronized void updateLinesInTableLogic(String filterType) {
 
         if(filterType.equals("Goals")){
             System.out.println("Sorting by goals");

@@ -2,11 +2,10 @@ package entities;
 import java.time.LocalDateTime;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TimerTask;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import javax.swing.JPanel;
-import java.util.Timer;
+
 import people.Footballer;
 import people.Goalkeeper;
 import main.GameWindow;
@@ -37,6 +36,7 @@ public class UsersMatch extends Match {
     private MatchTable tablePanel;
     private MatchRatings ratingsPanel;
     private GameWindow window;
+	private ArrayList<Match> sameDayMatches;
 	
 	public UsersMatch() {};
 	
@@ -56,6 +56,7 @@ public class UsersMatch extends Match {
 		this.homeShotsOn = 0;
 		this.awayAllShots = 0;
 		this.awayShotsOn = 0;
+		setSpeed("slowest");
 		
 		initialize();
 	}
@@ -92,8 +93,9 @@ public class UsersMatch extends Match {
 
 	}
 	
-	public void displayGame(GameWindow window, Scheduler schedule) {
+	public void displayGame(GameWindow window, Scheduler schedule, ArrayList<Match> sameDayMatches) {
 		this.window = window;
+		this.sameDayMatches = sameDayMatches;
 		setScheduler(schedule);
 		window.getContentPane().removeAll();
 		window.getContentPane().add(matchPages, BorderLayout.CENTER);
@@ -146,7 +148,21 @@ public class UsersMatch extends Match {
             }
         }
 	}
-						
+
+	@Override
+	public void startMatch(String speed) {
+		removePlayButton();
+		sameDayMatches.add(this);
+		for(Match eachMatch : sameDayMatches){
+			CompletableFuture.runAsync(() -> eachMatch.startMatch(speed, true));
+		}
+	}
+
+	@Override
+	public void startMatch(String speed, Boolean backgroundGame){
+		initialSetup();
+	}
+
 	@Override
 	public void displayHomeGoalOnScreen(Footballer player) {
 		((MatchEvents) cardMap.get("Events")).addHomeEvents(getTimer().getTime(), player, "goal");
@@ -157,11 +173,6 @@ public class UsersMatch extends Match {
 	public void displayAwayGoalOnScreen(Footballer player) {
 		((MatchEvents) cardMap.get("Events")).addAwayEvents(getTimer().getTime(), player, "goal");
 		((MatchScorers) cardMap.get("Scorers")).displayGoalScorers(player, getTimer().getTime(), "Away");
-	}
-
-	@Override
-	public void startTimer(){
-		getTimer().runEvent("slowest", this);
 	}
 	
 	@Override

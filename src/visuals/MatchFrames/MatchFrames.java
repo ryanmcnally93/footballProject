@@ -164,8 +164,6 @@ public class MatchFrames extends CardmapMainPageTemplate {
     
     public class PlayGame extends AbstractAction {
 
-		private static final long serialVersionUID = 7874836628287155601L;
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(match.getTimer().getTime().equals("00:00")){
@@ -181,7 +179,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 
 	public void handleClick() {
 		// Start the match
-		match.startMatch();
+		match.startMatch("slowest");
 	}
 	
 	public void goalAlert(String name, String time) {

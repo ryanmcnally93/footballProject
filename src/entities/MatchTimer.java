@@ -68,7 +68,7 @@ public class MatchTimer {
             setGameSeconds(inAppTime[0] % 60);
 
             // Prints the current in-app time
-            if(match instanceof UsersMatch newMatch){
+            if(this.match instanceof UsersMatch newMatch){
                 for (JPanel page : newMatch.getCardMap().values()) {
                     if (page instanceof MatchFrames) {
                         ((MatchFrames) page).getTime().setText(getGameMinutes() + ":" + getGameSeconds());

@@ -83,7 +83,7 @@ public class LeagueTable extends GamePanel {
     	add(tableContainer, BorderLayout.CENTER);
 	}
 
-	public TeamAchievementLine getLine(Team team) {
+	public synchronized TeamAchievementLine getLine(Team team) {
 		for(TeamAchievementLine tableline : lines) {
 			if(team.getName().equals(tableline.getTeamName())) {
 				return tableline;
@@ -96,7 +96,7 @@ public class LeagueTable extends GamePanel {
 		return lines;
 	}
 	
-	public void updateLinesInTableLogic() {
+	public synchronized void updateLinesInTableLogic() {
 
 		// Implement logic to 'sort' your array list by points and GD
 		lines.sort(new Comparator<TeamAchievementLine>() {
