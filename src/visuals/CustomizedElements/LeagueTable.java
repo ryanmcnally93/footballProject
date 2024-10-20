@@ -155,9 +155,11 @@ public class LeagueTable extends GamePanel {
         	row.add(points);
         	tableContainer.add(row);
         };
-		
-        tableContainer.revalidate();
-        tableContainer.repaint();
+
+		SwingUtilities.invokeLater(() -> {
+			tableContainer.revalidate();
+			tableContainer.repaint();
+		});
 	}
 
 	public void setLine(ArrayList<TeamAchievementLine> line) {
