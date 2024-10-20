@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.CompletableFuture;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -16,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import entities.Match;
 import entities.UsersMatch;
 import visuals.CustomizedElements.CardmapMainPageTemplate;
 import visuals.CustomizedElements.CustomizedButton;
@@ -123,7 +125,6 @@ public class MatchFrames extends CardmapMainPageTemplate {
 				int newTime = Integer.parseInt(time.substring(0, 2));
 				roundedUp = newTime + 1;
 			}
-			System.out.println("The integer value is: " + roundedUp);
 		} catch (NumberFormatException e) {
 			System.out.println("Invalid number format: " + time.substring(0, 2));
 		}
@@ -136,22 +137,14 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		cont.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-            	match.getWindow().getContentPane().removeAll();
-            	match.getScheduler().displayPage(match.getWindow());
-				match.getScheduler().refreshMessages();
-            	match.getWindow().revalidate();
-            	match.getWindow().repaint();
+            	continueToScheduler();
             }
         });
 
 		Action contAction = new AbstractAction() {
 			@Override
 		    public void actionPerformed(ActionEvent e) {
-		    	match.getWindow().getContentPane().removeAll();
-            	match.getScheduler().displayPage(match.getWindow());
-				match.getScheduler().refreshMessages();
-            	match.getWindow().revalidate();
-            	match.getWindow().repaint();
+		    	continueToScheduler();
 		    }
 		};
 
@@ -161,7 +154,24 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		getFooterPanel().getButtonBox().revalidate();
 		getFooterPanel().getButtonBox().repaint();
 	}
-    
+
+	public void continueToScheduler(){
+		match.getWindow().getContentPane().removeAll();
+		match.getScheduler().displayPage(match.getWindow());
+		match.getScheduler().refreshMessages();
+
+		match.getLeague().getPlayerLeaderboard().updateLinesInTableLogic("Goals");
+
+		match.getWindow().revalidate();
+		match.getWindow().repaint();
+		// Play whatever later matches we have
+		if(!match.getLaterMatches().isEmpty()){
+			for(Match eachMatch : match.getLaterMatches()){
+				CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
+			}
+		}
+	}
+
     public class PlayGame extends AbstractAction {
 
 		@Override

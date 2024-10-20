@@ -169,9 +169,8 @@ public class PlayerLeaderboards extends GamePanel {
     }
 
     public synchronized void updateLinesInTableLogic(String filterType) {
-
+        System.out.println("RUNNING PLAYER updateLinesInTableLogic METHOD");
         if(filterType.equals("Goals")){
-            System.out.println("Sorting by goals");
             getPlayerAchievements().sort(new Comparator<PlayerAchievementLine>() {
                 @Override
                 public int compare(PlayerAchievementLine t1, PlayerAchievementLine t2) {
@@ -259,8 +258,6 @@ public class PlayerLeaderboards extends GamePanel {
                 }
             });
         }
-
-        System.out.println("List has been sorted");
 
         // Numbers the results of the search
         for(int i=0;i<getPlayerAchievements().size();i++) {

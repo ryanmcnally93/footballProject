@@ -31,6 +31,7 @@ public class SlidingPanel extends JPanel {
     }
 
     private void slideUp() {
+        System.out.println("RUNNING slideUp METHOD");
         slideUpTimer = new Timer(10, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -53,6 +54,7 @@ public class SlidingPanel extends JPanel {
     }
 
     private void slideDown() {
+        System.out.println("RUNNING slideDown METHOD");
         slideDownTimer = new Timer(10, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

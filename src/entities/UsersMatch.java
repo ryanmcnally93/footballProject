@@ -5,7 +5,6 @@ import java.awt.CardLayout;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import javax.swing.JPanel;
-
 import people.Footballer;
 import people.Goalkeeper;
 import main.GameWindow;
@@ -36,7 +35,7 @@ public class UsersMatch extends Match {
     private MatchTable tablePanel;
     private MatchRatings ratingsPanel;
     private GameWindow window;
-	private ArrayList<Match> sameDayMatches;
+	private final Timer delayTimer = new Timer();
 	
 	public UsersMatch() {};
 	
@@ -93,18 +92,21 @@ public class UsersMatch extends Match {
 
 	}
 	
-	public void displayGame(GameWindow window, Scheduler schedule, ArrayList<Match> sameDayMatches) {
+	public void displayGame(GameWindow window, Scheduler schedule, ArrayList<Match> sameDayMatches, ArrayList<Match> laterMatches) {
 		this.window = window;
-		this.sameDayMatches = sameDayMatches;
+		setSameDayMatches(sameDayMatches);
+		setLaterMatches(laterMatches);
 		setScheduler(schedule);
 		window.getContentPane().removeAll();
 		window.getContentPane().add(matchPages, BorderLayout.CENTER);
         layout.show(matchPages, "Stats");
-        tablePanel.updateTableVisually();
+
+		updateDomesticLeagueTable();
+
 		window.revalidate();
 		window.repaint();
 	}
-	
+
 	@Override
 	public void callUpdateTableVisually() {
 		tablePanel.updateTableVisually();
@@ -137,7 +139,6 @@ public class UsersMatch extends Match {
 				int newTime = Integer.parseInt(time.substring(0, 2));
 				roundedUp = newTime + 1;
 			}
-			System.out.println("The integer value is: " + roundedUp);
 		} catch (NumberFormatException e) {
 			System.out.println("Invalid number format: " + time.substring(0, 2));
 		}
@@ -152,8 +153,9 @@ public class UsersMatch extends Match {
 	@Override
 	public void startMatch(String speed) {
 		removePlayButton();
-		sameDayMatches.add(this);
-		for(Match eachMatch : sameDayMatches){
+		getSameDayMatches().add(this);
+		addMatchPlayed();
+		for(Match eachMatch : getSameDayMatches()){
 			CompletableFuture.runAsync(() -> eachMatch.startMatch(speed, true));
 		}
 	}
@@ -186,13 +188,14 @@ public class UsersMatch extends Match {
 	
 	@Override
 	public void addTimerForScreen(Footballer enemy) {
-		Timer timer = new Timer();
 		int delay = 7000;
 		UsersMatch match = this;
-		timer.schedule(new TimerTask() {
+		this.delayTimer.schedule(new TimerTask() {
 		    @Override
 		    public void run() {
-		    	match.startRun(enemy);
+				if(!match.fullTimeCheck()){
+					match.startRun(enemy);
+				}
 		    }
 		}, delay);
 	}
@@ -208,6 +211,17 @@ public class UsersMatch extends Match {
 		
 	@Override
 	public void continueButtonOnScreen() {
+		int numberOfFinishedMatches = 0;
+		int numberOfActualMatches = getSameDayMatches().size();
+		while(numberOfFinishedMatches != numberOfActualMatches){
+			numberOfFinishedMatches = 0;
+			for(Match everyOtherMatch : getSameDayMatches()){
+				if(everyOtherMatch.getTimer().getTime().equals("90:00")){
+					numberOfFinishedMatches++;
+				}
+			}
+		}
+
 		for (JPanel page : cardMap.values()) {
             if (page instanceof MatchFrames) {
             	((MatchFrames) page).createContinueButton();
@@ -346,4 +360,7 @@ public class UsersMatch extends Match {
 		this.window = window;
 	}
 
+	public Timer getDelayTimer() {
+		return delayTimer;
+	}
 }

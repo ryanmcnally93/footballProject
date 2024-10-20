@@ -57,6 +57,9 @@ public class TeamAchievementLine {
 	public void addWin() {
 		this.wins += 1;
 		this.points +=3;
+	}
+
+	public void addMatchPlayed(){
 		this.gamesPlayed += 1;
 	}
 
@@ -67,7 +70,6 @@ public class TeamAchievementLine {
 	public void addDraw() {
 		this.draws += 1;
 		this.points +=1;
-		this.gamesPlayed += 1;
 	}
 
 	public int getLosses() {
@@ -76,7 +78,20 @@ public class TeamAchievementLine {
 
 	public void addLoss() {
 		this.losses += 1;
-		this.gamesPlayed += 1;
+	}
+
+	public void removeLoss() {
+		this.losses -= 1;
+	}
+
+	public void removeWin() {
+		this.wins -= 1;
+		this.points -= 3;
+	}
+
+	public void removeDraw() {
+		this.draws -= 1;
+		this.points -= 1;
 	}
 
 	public Integer getGoalDifference() {

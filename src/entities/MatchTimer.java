@@ -75,10 +75,15 @@ public class MatchTimer {
                     }
                 }
             }
-//            System.out.println(getGameMinutes() + ":" + getGameSeconds());
 
             // Stop the scheduler when in-app time reaches 90 minutes (1200 seconds)
             if (inAppTime[0] >= MatchSeconds) {
+                if(match instanceof UsersMatch usersMatch){
+                    System.out.println("RUNNING methods inside runTimer finished");
+                    usersMatch.getDelayTimer().cancel();
+                    usersMatch.getDelayTimer().purge();
+                    usersMatch.fullTimeCheck();
+                }
                 scheduler.shutdown();
             }
         };
@@ -141,9 +146,11 @@ public class MatchTimer {
 
             setGameMinutes(inAppTime[0] / 60);
             setGameSeconds(inAppTime[0] % 60);
-
-//            System.out.println("In-app time: " + gameMinutes + " minutes and " + gameSeconds + " seconds");
         }
+        System.out.println("AN INSTANTLY PLAYED MATCH JUST FINISHED");
+        match.updateWinsDrawsAndLossesForInstantMatches();
+        match.updateDomesticLeagueTable();
+        match.getLeague().getPlayerLeaderboard().updateLinesInTableLogic("Goals");
     }
 
     public int getRealWorldDurationInSeconds() {

@@ -11,7 +11,6 @@ import entities.UsersMatch;
 
 public class MatchTable extends MatchFrames {
 
-	private static final long serialVersionUID = -37261786755290081L;
 	private Box centerBox;
 	private LeagueTable table;
 	private JPanel mainPanel;

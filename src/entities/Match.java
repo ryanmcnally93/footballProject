@@ -1,11 +1,15 @@
 package entities;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.CompletableFuture;
+
 import people.Footballer;
 import people.Goalkeeper;
 import visuals.CustomizedElements.PlayerAchievementLine;
+import visuals.CustomizedElements.TeamAchievementLine;
 import visuals.MatchFrames.MatchFrames;
 import visuals.ScheduleFrames.Events;
 import visuals.ScheduleFrames.Scheduler;
@@ -30,6 +34,7 @@ public class Match {
 	private Boolean backgroundGame = false;
 	private MatchTimer timer;
 	private String speed;
+	private ArrayList<Match> laterMatches, sameDayMatches;
 	
 	public Match() {}
 	
@@ -104,7 +109,6 @@ public class Match {
 				enemyCounter++;
 				// Increment minute and do a full time check
 
-				System.out.println("First Fulltime check");
 				if(fullTimeCheck()) {return;}
 
 				System.out.println("Checking number of player ran past");
@@ -118,7 +122,13 @@ public class Match {
 						
 						// SCORED
 						System.out.println("There's been a goal");
+
+						// This triggers the slider
 						goalAlertOnScreen(player);
+
+						int oldHomeScore = getHomeScore();
+						int oldAwayScore = getAwayScore();
+
 						// Create the score card and print
 						if (findTeam(player).equals("Home")) {
 							System.out.println("HOME GOAL");
@@ -161,7 +171,12 @@ public class Match {
 								}
 							}
 						}
-						
+
+						// We only want live goal alerts on non instant matches
+						if(!getSpeed().equals("instant")) {
+							goalUpdatesTable(oldHomeScore, oldAwayScore);
+						}
+
 						updateScoreOnScreen();
 
 						if (findTeam(player).equals("Home")) {
@@ -193,7 +208,6 @@ public class Match {
 				
 				System.out.println("Defender won the ball");
 
-				System.out.println("Second Fulltime check");
 				if(fullTimeCheck()) {return;};
 				startRun(enemy);
 				return;
@@ -201,6 +215,49 @@ public class Match {
 		}
 
     }
+
+	public void goalUpdatesTable(int oldHome, int oldAway) {
+		System.out.println("RUNNING goalUpdatesTable METHOD");
+		TeamAchievementLine home = league.getLeagueTable().getLine(getHome());
+		TeamAchievementLine away = league.getLeagueTable().getLine(getAway());
+
+		if(oldHome == 0 && oldAway == 0 && getHomeScore() > getAwayScore()){
+			home.addWin();
+			away.addLoss();
+		} else if (oldHome == 0 && oldAway == 0 && getHomeScore() < getAwayScore()){
+			home.addLoss();
+			away.addWin();
+		} else {
+			if (oldHome == oldAway && getHomeScore() > getAwayScore()) {
+				home.addWin();
+				home.removeDraw();
+				away.addLoss();
+				away.removeDraw();
+			} else if (oldHome == oldAway && getHomeScore() < getAwayScore()) {
+				home.addLoss();
+				home.removeDraw();
+				away.addWin();
+				away.removeDraw();
+			} else if (oldHome > oldAway && getAwayScore() == getHomeScore()) {
+				home.addDraw();
+				home.removeWin();
+				away.addDraw();
+				away.removeLoss();
+			} else if (oldHome < oldAway && getAwayScore() == getHomeScore()) {
+				home.addDraw();
+				home.removeLoss();
+				away.addDraw();
+				away.removeWin();
+			}
+		}
+		updateDomesticLeagueTable();
+	}
+
+	public void updateDomesticLeagueTable(){
+		System.out.println("RUNNING updateDomesticLeagueTable METHOD");
+		getLeague().getLeagueTable().updateLinesInTableLogic();
+		callUpdateTableVisually();
+	}
 
 	public void displaySavesToScreen(Footballer player, Goalkeeper thisFoeGk) {}
 
@@ -253,12 +310,9 @@ public class Match {
 				// After we make a successful run, we have less energy
 //				player.removeStamina(10);
 				// Check to see we haven't run out of stamina
-				if (player.stamina <= 0) {
-					return false;
-				}
+                return player.stamina > 0;
 				// Successful run past
-				return true;
-			} else {
+            } else {
 				return false;
 			}
 		}
@@ -274,11 +328,7 @@ public class Match {
 		
 		/* If 30 percent, and the random number resides within
 		the first 30 numbers, we will run past. */
-		if (randomNumber <= perc) {
-			return true;
-		} else {
-			return false;
-		}
+        return randomNumber <= perc;
 	}
 	
 	public String findTeam(Footballer player) {
@@ -290,32 +340,11 @@ public class Match {
 	}
 	
 	public boolean fullTimeCheck() {
+		System.out.println("RUNNING fullTimeCheck METHOD");
 		if (getTimer().getTime().equals("90:00")) {
 			System.out.println("It's fulltime");
 
-			// FOR TESTING TOP OF THE LEAGUE MESSAGE
-			if(getHome().getName().equals("Palace")){
-				setHomeScore(8);
-			} else if (getAway().getName().equals("Palace")){
-				setAwayScore(8);
-			}
-
 			System.out.println("*****" + getHome().getName() + " " + getHomeScore() + " - " + getAwayScore() + " " + getAway().getName() + "*****");
-			if(league != null) {
-				if(getHomeScore() > getAwayScore()) {
-					league.getLeagueTable().getLine(getHome()).addWin();
-					league.getLeagueTable().getLine(getAway()).addLoss();
-				} else if (getAwayScore() > getHomeScore()) {
-					league.getLeagueTable().getLine(getHome()).addLoss();
-					league.getLeagueTable().getLine(getAway()).addWin();
-				} else {
-					league.getLeagueTable().getLine(getHome()).addDraw();
-					league.getLeagueTable().getLine(getAway()).addDraw();
-				}
-				league.getLeagueTable().updateLinesInTableLogic();
-				callUpdateTableVisually();
-				league.getPlayerLeaderboard().updateLinesInTableLogic("Goals");
-			}
 
 			if(scheduler != null){
 				scheduler.getEventContainer().removeAll();
@@ -327,6 +356,12 @@ public class Match {
 					// Give 1st place message if user is now 1st
 					if(league.getLeagueTable().getLine(scheduler.getTeam()).getPosition() == 1) {
 						scheduler.addFirstPositionMessage();
+					}
+					if(getLaterMatches() != null){
+						System.out.println("Playing todays Later Matches");
+						for(Match eachMatch : getLaterMatches()){
+							CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
+						}
 					}
 					scheduler.refreshMessages();
 				}
@@ -343,7 +378,7 @@ public class Match {
 	    	return false;
 	    }
 	}
-	
+
 	public void callUpdateTableVisually() {};
 	
 	public void continueButtonOnScreen() {};
@@ -351,6 +386,7 @@ public class Match {
 	public void startMatch(String speed) {
 		this.speed = speed;
 		removePlayButton();
+		addMatchPlayed();
 		initialSetup();
     }
 
@@ -358,17 +394,27 @@ public class Match {
 		this.speed = speed;
 		this.backgroundGame = backgroundGame;
 		removePlayButton();
+		addMatchPlayed();
 		initialSetup();
 	}
 
 	public void removePlayButton() {};
 
 	// For simulated matches
-	public void startMatch(Scheduler scheduler, Boolean bool, String speed) {
+	public void startMatch(Scheduler scheduler, Boolean bool, String speed, ArrayList<Match> laterMatches) {
 		this.scheduler = scheduler;
 		this.simulated = true;
 		this.speed = speed;
+		this.laterMatches = laterMatches;
+		addMatchPlayed();
 		initialSetup();
+	}
+
+	public void addMatchPlayed() {
+		TeamAchievementLine home = league.getLeagueTable().getLine(getHome());
+		TeamAchievementLine away = league.getLeagueTable().getLine(getAway());
+		home.addMatchPlayed();
+		away.addMatchPlayed();
 	}
 
 	public void initialSetup(){
@@ -525,5 +571,39 @@ public class Match {
 
 	public void setSpeed(String speed) {
 		this.speed = speed;
+	}
+
+	public ArrayList<Match> getLaterMatches() {
+		return laterMatches;
+	}
+
+	public void setLaterMatches(ArrayList<Match> laterMatches) {
+		this.laterMatches = laterMatches;
+	}
+
+	public void updateWinsDrawsAndLossesForInstantMatches() {
+
+		TeamAchievementLine home = league.getLeagueTable().getLine(getHome());
+		TeamAchievementLine away = league.getLeagueTable().getLine(getAway());
+
+		if(getHomeScore() > getAwayScore()){
+			home.addWin();
+			away.addLoss();
+		} else if (getHomeScore() < getAwayScore()){
+			home.addLoss();
+			away.addWin();
+		} else {
+			home.addDraw();
+			away.addDraw();
+		}
+
+	}
+
+	public ArrayList<Match> getSameDayMatches() {
+		return sameDayMatches;
+	}
+
+	public void setSameDayMatches(ArrayList<Match> sameDayMatches) {
+		this.sameDayMatches = sameDayMatches;
 	}
 }

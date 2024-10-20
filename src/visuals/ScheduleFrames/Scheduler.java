@@ -209,12 +209,6 @@ public class Scheduler extends GamePanel {
 				}
 			}
 
-			// Play whatever later matches we have
-			if(!laterMatches.isEmpty()){
-				for(Match eachMatch : laterMatches){
-					CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
-				}
-			}
 		}
 	}
 
@@ -251,7 +245,7 @@ public class Scheduler extends GamePanel {
 				playGame.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						event.getMatch().displayGame(window, sch, sameDayMatches);
+						event.getMatch().displayGame(window, sch, sameDayMatches, laterMatches);
 						event.setRemoveEvent(true);
 					}
 				});
@@ -273,7 +267,7 @@ public class Scheduler extends GamePanel {
 							league.getFixtures().put(todaysMatch.toString(), child);
 							// This is the only time a scheduler is passed to a match
 							// So on at fulltime check, will run some tasks on this scheduler
-							child.startMatch(thissch, true, "instant");
+							child.startMatch(thissch, true, "instant", laterMatches);
 						}
 						for(Match eachMatch : sameDayMatches){
 							CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
@@ -346,6 +340,9 @@ public class Scheduler extends GamePanel {
 
 		System.out.println("All Events: " + events);
 		System.out.println("Events size: " + events.size());
+		// Need ones that aren't finished
+//		System.out.println("All Fixtures: " + league.getFixtures());
+//		System.out.println("Fixtures Size: " + league.getFixtures().size());
 		eventContainer.removeAll();
 		mainPanel.repaint();
 		date = date.plusDays(1);
@@ -396,16 +393,15 @@ public class Scheduler extends GamePanel {
 			southMiddle.add(advanceToGame);
 		}
 
-		refreshMessages();
-
 		ArrayList<Match> todaysGames = getAllOfTodaysMatches();
 
+		System.out.println("Today's Matches" + todaysGames);
 		// This will 'play' the background matches
 		for(Match backgroundMatch : todaysGames) {
-			if (getMatch() != null) {
-				if (backgroundMatch.getDateTime().toLocalDate().isBefore(getMatch().getDateTime().toLocalDate())) {
+			if (getMatch() != null && getMatch().getDateTime().toLocalDate().isEqual(date.toLocalDate())) {
+				if (backgroundMatch.getDateTime().isBefore(getMatch().getDateTime())) {
 					CompletableFuture.runAsync(() -> backgroundMatch.startMatch("instant"));
-				} else if (backgroundMatch.getDateTime().toLocalDate().isEqual(getMatch().getDateTime().toLocalDate())) {
+				} else if (backgroundMatch.getDateTime().isEqual(getMatch().getDateTime())) {
 					// Same Time match
 					sameDayMatches.add(backgroundMatch);
 				} else {
@@ -416,6 +412,11 @@ public class Scheduler extends GamePanel {
 				CompletableFuture.runAsync(() -> backgroundMatch.startMatch("instant"));
 			}
 		}
+		if(!laterMatches.isEmpty()) {
+			System.out.println("Today's Later Matches are: " + laterMatches);
+		}
+
+		refreshMessages();
 	}
 
 	private String getTodaysDateWithGoodFormat(){
@@ -679,5 +680,13 @@ public class Scheduler extends GamePanel {
 
 	public void setMain(MainMenu main) {
 		this.main = main;
+	}
+
+	public ArrayList<Match> getLaterMatches() {
+		return laterMatches;
+	}
+
+	public void setLaterMatches(ArrayList<Match> laterMatches) {
+		this.laterMatches = laterMatches;
 	}
 }
