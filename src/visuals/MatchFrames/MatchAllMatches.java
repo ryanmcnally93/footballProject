@@ -1,7 +1,5 @@
 package visuals.MatchFrames;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Color;
+import java.awt.*;
 import java.util.Map;
 
 import javax.swing.*;
@@ -47,6 +45,7 @@ public class MatchAllMatches extends MatchFrames {
                         new EmptyBorder(3, 5, 5, 5)));
                 matchTitle.setText(eachBackgroundMatch.getScore());
                 setPermanentWidth(matchTitle, centerBox.getWidth());
+                matchTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
                 centerBox.add(matchTitle);
 
                 // Box for scorers
@@ -55,25 +54,46 @@ public class MatchAllMatches extends MatchFrames {
                         new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY),
                         new EmptyBorder(3, 5, 5, 5)));
                 setPermanentWidth(scorerPanel, centerBox.getWidth());
+                scorerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
                 scorerPanel.setLayout(new BorderLayout());
                 centerBox.add(scorerPanel);
+
+                // Vertical inner boxes for each side
+                Box homeVerticalBox = Box.createVerticalBox();
+                Box awayVerticalBox = Box.createVerticalBox();
+                scorerPanel.add(awayVerticalBox, BorderLayout.EAST);
+                scorerPanel.add(homeVerticalBox, BorderLayout.WEST);
+
+                int homeGoalCounter = 0;
 
                 // Home Scorers
                 for(String eachGoalscorer : eachBackgroundMatch.getHomeScorers()) {
                     JLabel matchScorer = new JLabel("", SwingConstants.CENTER);
-                    matchScorer.setBorder(new EmptyBorder(3, 5, 5, 5));
+                    matchScorer.setBorder(new EmptyBorder(0, 5, 0, 5));
                     matchScorer.setText(eachGoalscorer);
                     setPermanentWidth(matchScorer, centerBox.getWidth()/2);
-                    scorerPanel.add(matchScorer, BorderLayout.WEST);
+                    homeVerticalBox.add(matchScorer);
+                    homeGoalCounter++;
                 }
+
+                int awayGoalCounter = 0;
 
                 // Away Scorers
                 for(String eachGoalscorer : eachBackgroundMatch.getAwayScorers()) {
                     JLabel matchScorer = new JLabel("", SwingConstants.CENTER);
-                    matchScorer.setBorder(new EmptyBorder(3, 5, 5, 5));
+                    matchScorer.setBorder(new EmptyBorder(0, 5, 0, 5));
                     matchScorer.setText(eachGoalscorer);
-                    setPermanentWidth(matchScorer, centerBox.getWidth()/2);
-                    scorerPanel.add(matchScorer, BorderLayout.EAST);
+                    setPermanentWidth(matchScorer,  centerBox.getWidth()/2);
+                    awayVerticalBox.add(matchScorer);
+                    awayGoalCounter++;
+                }
+
+                if(homeGoalCounter == 0 && awayGoalCounter == 0){
+                    setPermanentHeight(scorerPanel, 0);
+                } else if(homeGoalCounter > awayGoalCounter){
+                    setPermanentHeight(scorerPanel, 10+(18*homeGoalCounter));
+                } else {
+                    setPermanentHeight(scorerPanel, 10+(18*awayGoalCounter));
                 }
             }
             centerBox.revalidate();
