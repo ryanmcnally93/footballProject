@@ -118,44 +118,16 @@ public class MatchScorers extends MatchFrames {
         rightBox.setPreferredSize(new Dimension(half, getHeight()));
 	}
 	
-	public void displayGoalScorers(Footballer player, String time, String side) {
+	public void displayGoalScorers(String side, ArrayList<String> scorers) {
 		JPanel box;
-		ArrayList<String> scorers;
 		if(side.equals("Home")){
 			box = leftBox;
-			scorers = getHomeScorers();
 		} else{
 			box = rightBox;
-			scorers = getAwayScorers();
 		}
 
 		if(box != null) {
 			box.removeAll();
-		}
-		
-		boolean bFound = false;
-		String minutes;
-		String updatedMinutes = "";
-
-		int roundedUp = findRoundedInt(time);
-
-		// Let's go through the right teams scorers
-		for (int i = 0;i<scorers.size();i++) {
-			String scorer = scorers.get(i);
-
-			// Has this player already scored? Let's add the time to their String
-			if (scorer.contains(player.getName()) ) {
-				bFound = true;
-				minutes = scorer.substring(0, scorer.length() - 1);
-				updatedMinutes = minutes + ", " + roundedUp + ")";
-                scorers.set(i, updatedMinutes);
-                break;
-			}
-		}
-
-		// This is the players first goal, so let's add their name and time
-		if (!bFound) {
-			scorers.add(player.getName() + "(" + roundedUp + ")");
 		}
 
 		for(String goal : scorers) {

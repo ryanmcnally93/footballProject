@@ -5,12 +5,12 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CompletableFuture;
-
 import people.Footballer;
 import people.Goalkeeper;
 import visuals.CustomizedElements.PlayerAchievementLine;
 import visuals.CustomizedElements.TeamAchievementLine;
-import visuals.MatchFrames.MatchFrames;
+import visuals.MatchFrames.MatchAllMatches;
+import visuals.MatchFrames.MatchScorers;
 import visuals.ScheduleFrames.Events;
 import visuals.ScheduleFrames.Scheduler;
 
@@ -34,7 +34,8 @@ public class Match {
 	private Boolean backgroundGame = false;
 	private MatchTimer timer;
 	private String speed;
-	private ArrayList<Match> laterMatches, sameDayMatches;
+	private ArrayList<Match> laterMatches, sameDayMatches, earlierMatches;
+	private ArrayList<String> homeScorers, awayScorers;
 	
 	public Match() {}
 	
@@ -49,6 +50,11 @@ public class Match {
 		this.awayScore = 0;
 		this.homeScore = 0;
 		this.timer = new MatchTimer();
+		this.homeScorers = new ArrayList<>();
+		this.awayScorers = new ArrayList<>();
+		this.earlierMatches = new ArrayList<>();
+		this.sameDayMatches = new ArrayList<>();
+		this.laterMatches = new ArrayList<>();
 	}
 
 	public Match(Team home, Team away, League league) {
@@ -63,6 +69,11 @@ public class Match {
 		this.homeScore = 0;
 		this.league = league;
 		this.timer = new MatchTimer();
+		this.homeScorers = new ArrayList<>();
+		this.awayScorers = new ArrayList<>();
+		this.earlierMatches = new ArrayList<>();
+		this.sameDayMatches = new ArrayList<>();
+		this.laterMatches = new ArrayList<>();
 	}
 	
 	public Match(Team home, Team away, League league, LocalDateTime dateTime) {
@@ -78,6 +89,19 @@ public class Match {
 		this.league = league;
 		this.dateTime = dateTime;
 		this.timer = new MatchTimer();
+		this.homeScorers = new ArrayList<>();
+		this.awayScorers = new ArrayList<>();
+		this.earlierMatches = new ArrayList<>();
+		this.sameDayMatches = new ArrayList<>();
+		this.laterMatches = new ArrayList<>();
+	}
+
+	public void updateAllMatchesPage(){
+		for(Match eachMatch : getSameDayMatches()){
+			if(eachMatch instanceof UsersMatch usersMatch){
+				((MatchAllMatches) usersMatch.getCardMap().get("All Matches")).addTodaysMatchesToPage();
+			}
+		}
 	}
 
 	public void startRun(Footballer player) {
@@ -175,6 +199,7 @@ public class Match {
 						// We only want live goal alerts on non instant matches
 						if(!getSpeed().equals("instant")) {
 							goalUpdatesTable(oldHomeScore, oldAwayScore);
+							updateAllMatchesPage();
 						}
 
 						updateScoreOnScreen();
@@ -275,9 +300,74 @@ public class Match {
 
 	public void updateScoreOnScreen() {}
 
-	public void displayAwayGoalOnScreen(Footballer player) {}
+	public void displayAwayGoalOnScreen(Footballer player) {
+		appendToTeamScorers(player, getTimer().getTime(), "Away");
+	}
 
-	public void displayHomeGoalOnScreen(Footballer player) {}
+	public void displayHomeGoalOnScreen(Footballer player) {
+		appendToTeamScorers(player, getTimer().getTime(), "Home");
+	}
+
+	public void appendToTeamScorers(Footballer player, String time, String side){
+		ArrayList<String> scorers;
+		if(side.equals("Home")){
+			scorers = getHomeScorers();
+		} else{
+			scorers = getAwayScorers();
+		}
+
+		boolean bFound = false;
+		String minutes;
+		String updatedMinutes = "";
+
+		int roundedUp = findRoundedInt(time);
+
+		// Let's go through the right teams scorers
+		for (int i = 0;i<scorers.size();i++) {
+			String scorer = scorers.get(i);
+
+			// Has this player already scored? Let's add the time to their String
+			if (scorer.contains(player.getName()) ) {
+				bFound = true;
+				minutes = scorer.substring(0, scorer.length() - 1);
+				updatedMinutes = minutes + ", " + roundedUp + ")";
+				scorers.set(i, updatedMinutes);
+				break;
+			}
+		}
+
+		// This is the players first goal, so let's add their name and time
+		if (!bFound) {
+			scorers.add(player.getName() + "(" + roundedUp + ")");
+		}
+
+		if(side.equals("Home")){
+			setHomeScorers(scorers);
+		} else{
+			setAwayScorers(scorers);
+		}
+
+		if(this instanceof UsersMatch usersMatch) {
+			((MatchScorers) usersMatch.getCardMap().get("Scorers")).displayGoalScorers(side, scorers);
+		}
+	}
+
+	public int findRoundedInt(String time){
+		int roundedUp = 0;
+
+		// This sets gives us the time, rounded up to the next minute
+		try {
+			if(time.startsWith("0:")){
+				roundedUp = 1;
+			} else {
+				int newTime = Integer.parseInt(time.substring(0, 2));
+				roundedUp = newTime + 1;
+			}
+		} catch (NumberFormatException e) {
+			System.out.println("Invalid number format: " + time.substring(0, 2));
+		}
+		return roundedUp;
+	}
 
 	public void goalAlertOnScreen(Footballer player) {}
 
@@ -401,11 +491,10 @@ public class Match {
 	public void removePlayButton() {};
 
 	// For simulated matches
-	public void startMatch(Scheduler scheduler, Boolean bool, String speed, ArrayList<Match> laterMatches) {
+	public void startMatch(Scheduler scheduler, Boolean bool, String speed) {
 		this.scheduler = scheduler;
-		this.simulated = true;
+		this.simulated = bool;
 		this.speed = speed;
-		this.laterMatches = laterMatches;
 		addMatchPlayed();
 		initialSetup();
 	}
@@ -577,8 +666,8 @@ public class Match {
 		return laterMatches;
 	}
 
-	public void setLaterMatches(ArrayList<Match> laterMatches) {
-		this.laterMatches = laterMatches;
+	public void appendLaterMatches(Match newMatch) {
+		this.laterMatches.add(newMatch);
 	}
 
 	public void updateWinsDrawsAndLossesForInstantMatches() {
@@ -603,7 +692,39 @@ public class Match {
 		return sameDayMatches;
 	}
 
-	public void setSameDayMatches(ArrayList<Match> sameDayMatches) {
-		this.sameDayMatches = sameDayMatches;
+	public Boolean getBackgroundGame() {
+		return backgroundGame;
+	}
+
+	public void setBackgroundGame(Boolean backgroundGame) {
+		this.backgroundGame = backgroundGame;
+	}
+
+	public ArrayList<String> getHomeScorers() {
+		return homeScorers;
+	}
+
+	public void setHomeScorers(ArrayList<String> homeScorers) {
+		this.homeScorers = homeScorers;
+	}
+
+	public ArrayList<String> getAwayScorers() {
+		return awayScorers;
+	}
+
+	public void setAwayScorers(ArrayList<String> awayScorers) {
+		this.awayScorers = awayScorers;
+	}
+
+	public void appendSameDayMatches(Match newMatch) {
+		this.sameDayMatches.add(newMatch);
+	}
+
+	public ArrayList<Match> getEarlierMatches() {
+		return earlierMatches;
+	}
+
+	public void appendEarlierMatches(Match newMatch) {
+		this.earlierMatches.add(newMatch);
 	}
 }

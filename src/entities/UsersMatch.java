@@ -92,19 +92,23 @@ public class UsersMatch extends Match {
 
 	}
 	
-	public void displayGame(GameWindow window, Scheduler schedule, ArrayList<Match> sameDayMatches, ArrayList<Match> laterMatches) {
+	public void displayGame(GameWindow window, Scheduler schedule) {
 		this.window = window;
-		setSameDayMatches(sameDayMatches);
-		setLaterMatches(laterMatches);
 		setScheduler(schedule);
 		window.getContentPane().removeAll();
 		window.getContentPane().add(matchPages, BorderLayout.CENTER);
         layout.show(matchPages, "Stats");
 
+		updateAllMatchesPage();
 		updateDomesticLeagueTable();
 
 		window.revalidate();
 		window.repaint();
+	}
+
+	@Override
+	public void updateAllMatchesPage(){
+		allMatchesPanel.addTodaysMatchesToPage();
 	}
 
 	@Override
@@ -167,14 +171,14 @@ public class UsersMatch extends Match {
 
 	@Override
 	public void displayHomeGoalOnScreen(Footballer player) {
+		appendToTeamScorers(player, getTimer().getTime(), "Home");
 		((MatchEvents) cardMap.get("Events")).addHomeEvents(getTimer().getTime(), player, "goal");
-		((MatchScorers) cardMap.get("Scorers")).displayGoalScorers(player, getTimer().getTime(), "Home");
 	}
 	
 	@Override
 	public void displayAwayGoalOnScreen(Footballer player) {
+		appendToTeamScorers(player, getTimer().getTime(), "Away");
 		((MatchEvents) cardMap.get("Events")).addAwayEvents(getTimer().getTime(), player, "goal");
-		((MatchScorers) cardMap.get("Scorers")).displayGoalScorers(player, getTimer().getTime(), "Away");
 	}
 	
 	@Override

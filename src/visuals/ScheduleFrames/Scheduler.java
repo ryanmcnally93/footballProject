@@ -245,7 +245,7 @@ public class Scheduler extends GamePanel {
 				playGame.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						event.getMatch().displayGame(window, sch, sameDayMatches, laterMatches);
+						event.getMatch().displayGame(window, sch);
 						event.setRemoveEvent(true);
 					}
 				});
@@ -267,7 +267,7 @@ public class Scheduler extends GamePanel {
 							league.getFixtures().put(todaysMatch.toString(), child);
 							// This is the only time a scheduler is passed to a match
 							// So on at fulltime check, will run some tasks on this scheduler
-							child.startMatch(thissch, true, "instant", laterMatches);
+							child.startMatch(thissch, true, "instant");
 						}
 						for(Match eachMatch : sameDayMatches){
 							CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
@@ -400,13 +400,16 @@ public class Scheduler extends GamePanel {
 		for(Match backgroundMatch : todaysGames) {
 			if (getMatch() != null && getMatch().getDateTime().toLocalDate().isEqual(date.toLocalDate())) {
 				if (backgroundMatch.getDateTime().isBefore(getMatch().getDateTime())) {
+					// We add this to the usersmatch earlier matches list
+					getMatch().appendEarlierMatches(backgroundMatch);
 					CompletableFuture.runAsync(() -> backgroundMatch.startMatch("instant"));
 				} else if (backgroundMatch.getDateTime().isEqual(getMatch().getDateTime())) {
-					// Same Time match
-					sameDayMatches.add(backgroundMatch);
+					// Make sure we add this to the usersmatch too
+					getMatch().appendSameDayMatches(backgroundMatch);
+					backgroundMatch.appendSameDayMatches(getMatch());
 				} else {
 					// We need to make sure that this plays when the UsersMatch finishes
-					laterMatches.add(backgroundMatch);
+					getMatch().appendLaterMatches(backgroundMatch);
 				}
 			} else {
 				CompletableFuture.runAsync(() -> backgroundMatch.startMatch("instant"));
