@@ -99,6 +99,10 @@ public class UsersMatch extends Match {
 		window.getContentPane().add(matchPages, BorderLayout.CENTER);
         layout.show(matchPages, "Stats");
 
+		if(!getSameDayMatches().contains(this)){
+			getSameDayMatches().add(this);
+		}
+
 		updateAllMatchesPage();
 		updateDomesticLeagueTable();
 
@@ -157,7 +161,6 @@ public class UsersMatch extends Match {
 	@Override
 	public void startMatch(String speed) {
 		removePlayButton();
-		getSameDayMatches().add(this);
 		addMatchPlayed();
 		for(Match eachMatch : getSameDayMatches()){
 			CompletableFuture.runAsync(() -> eachMatch.startMatch(speed, true));

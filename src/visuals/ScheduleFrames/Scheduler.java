@@ -268,9 +268,13 @@ public class Scheduler extends GamePanel {
 							// This is the only time a scheduler is passed to a match
 							// So on at fulltime check, will run some tasks on this scheduler
 							child.startMatch(thissch, true, "instant");
-						}
-						for(Match eachMatch : sameDayMatches){
-							CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
+
+							for(Match eachMatch : todaysMatch.getSameDayMatches()){
+								CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
+							}
+							for(Match eachMatch : todaysMatch.getLaterMatches()){
+								CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
+							}
 						}
 						event.setRemoveEvent(true);
 						showTodaysEvents(todaysEvents);

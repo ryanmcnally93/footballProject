@@ -434,6 +434,11 @@ public class Match {
 		if (getTimer().getTime().equals("90:00")) {
 			System.out.println("It's fulltime");
 
+			// Should make the bar green
+			if(!getSpeed().equals("instant")) {
+				updateAllMatchesPage();
+			}
+
 			System.out.println("*****" + getHome().getName() + " " + getHomeScore() + " - " + getAwayScore() + " " + getAway().getName() + "*****");
 
 			if(scheduler != null){
