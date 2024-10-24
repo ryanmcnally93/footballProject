@@ -15,6 +15,7 @@ import entities.*;
 import visuals.CustomizedElements.GamePanel;
 import main.GameWindow;
 import visuals.CustomizedElements.MainMenu;
+import visuals.CustomizedElements.PlayerAchievementLine;
 
 public class Scheduler extends GamePanel {
 
@@ -419,11 +420,25 @@ public class Scheduler extends GamePanel {
 				CompletableFuture.runAsync(() -> backgroundMatch.startMatch("instant"));
 			}
 		}
-		if(!laterMatches.isEmpty()) {
-			System.out.println("Today's Later Matches are: " + laterMatches);
+
+		if(getMatch() != null) {
+			sortMatchesByTime(getMatch().getEarlierMatches());
+			for(Match each : getMatch().getEarlierMatches()){
+				System.out.println(each.getHome().getName() + "'s match is at: " + each.getDateTime() + " HERE");
+			}
+			sortMatchesByTime(getMatch().getLaterMatches());
 		}
 
 		refreshMessages();
+	}
+
+	private void sortMatchesByTime(ArrayList<Match> matchArray) {
+		matchArray.sort(new Comparator<Match>() {
+			@Override
+			public int compare(Match matchOne, Match matchTwo) {
+				return matchOne.getDateTime().compareTo(matchTwo.getDateTime());
+			}
+		});
 	}
 
 	private String getTodaysDateWithGoodFormat(){

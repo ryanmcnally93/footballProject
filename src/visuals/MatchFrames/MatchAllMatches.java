@@ -16,6 +16,7 @@ public class MatchAllMatches extends MatchFrames {
     private Box topBox, centerBox, bottomBox;
     private Boolean earlyUpdated;
     private Boolean laterUpdated;
+    private JPanel mainPanel;
 
     public MatchAllMatches(CardLayout layout, JPanel pages, UsersMatch match) {
         super(layout, pages, match);
@@ -24,7 +25,7 @@ public class MatchAllMatches extends MatchFrames {
         laterUpdated = false;
 
         JLayeredPane layeredPane = getLayeredPane();
-        JPanel mainPanel = new JPanel();
+        mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
         topBox = Box.createVerticalBox();
@@ -60,78 +61,85 @@ public class MatchAllMatches extends MatchFrames {
         }
     }
 
-    public void updateMatches(Box box, ArrayList<Match> matches){
-        box.removeAll();
+    public void updateMatches(Box box, ArrayList<Match> matches) {
+        box.removeAll();  // Clear the existing components
+
         for (Match eachBackgroundMatch : matches) {
             // Match Title
-            JLabel matchTitle = new JLabel("", SwingConstants.CENTER);
+            JLabel matchTitle = new JLabel("", SwingConstants.CENTER) {
+                @Override
+                public Dimension getPreferredSize() {
+                    // Enforce fixed width and height for the title
+                    return new Dimension(600, 28);  // Width: 600, Height: 28
+                }
+            };
             matchTitle.setBorder(new CompoundBorder(
                     new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY),
                     new EmptyBorder(3, 5, 5, 5)));
             matchTitle.setText(eachBackgroundMatch.getScore());
-            setPermanentWidth(matchTitle, 600);
+            matchTitle.setMaximumSize(new Dimension(600, 28));  // Ensure it doesn't expand
+            matchTitle.setMinimumSize(new Dimension(600, 28));  // Ensure it doesn't shrink
             matchTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
-            box.add(matchTitle);
+            box.add(matchTitle);  // Add the match title to the box
 
-            if(eachBackgroundMatch.getDateTime().isAfter(getMatch().getDateTime())){
+            // Format time for future matches
+            if (eachBackgroundMatch.getDateTime().isAfter(getMatch().getDateTime())) {
                 int hour = eachBackgroundMatch.getDateTime().getHour();
                 int minute = eachBackgroundMatch.getDateTime().getMinute();
                 String home = eachBackgroundMatch.getHome().getName();
                 String away = eachBackgroundMatch.getAway().getName();
-                if(minute == 0){
+                if (minute == 0) {
                     matchTitle.setText(home + " " + hour + ":00 " + away);
                 } else {
                     matchTitle.setText(home + " " + hour + ":" + minute + " " + away);
                 }
             }
 
-            // Box for scorers
+            // Scorer Panel
             JPanel scorerPanel = new JPanel();
             scorerPanel.setBorder(new CompoundBorder(
                     new BevelBorder(BevelBorder.RAISED, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY, Color.DARK_GRAY),
                     new EmptyBorder(3, 5, 5, 5)));
-            setPermanentWidth(scorerPanel, box.getWidth());
-            scorerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-            scorerPanel.setLayout(new BorderLayout());
-            box.add(scorerPanel);
+            scorerPanel.setLayout(new BorderLayout());  // Layout for the scorer panel
+            setPermanentWidthAndHeight(scorerPanel, 600, 100);
+            scorerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);  // Center it in the box
+            box.add(scorerPanel);  // Add scorer panel to the box
 
-            // Vertical inner boxes for each side
+            // Vertical boxes for home and away scorers
             Box homeVerticalBox = Box.createVerticalBox();
             Box awayVerticalBox = Box.createVerticalBox();
             scorerPanel.add(awayVerticalBox, BorderLayout.EAST);
             scorerPanel.add(homeVerticalBox, BorderLayout.WEST);
 
             int homeGoalCounter = 0;
-
-            // Home Scorers
-            for(String eachGoalscorer : eachBackgroundMatch.getHomeScorers()) {
+            for (String eachGoalscorer : eachBackgroundMatch.getHomeScorers()) {
                 JLabel matchScorer = new JLabel("", SwingConstants.CENTER);
                 matchScorer.setBorder(new EmptyBorder(0, 5, 0, 5));
                 matchScorer.setText(eachGoalscorer);
-                setPermanentWidth(matchScorer, box.getWidth()/2);
+                matchScorer.setPreferredSize(new Dimension(300, 18));  // Example size
+                matchScorer.setMaximumSize(new Dimension(300, 18));  // Ensure no stretching
                 homeVerticalBox.add(matchScorer);
                 homeGoalCounter++;
             }
 
             int awayGoalCounter = 0;
-
-            // Away Scorers
-            for(String eachGoalscorer : eachBackgroundMatch.getAwayScorers()) {
+            for (String eachGoalscorer : eachBackgroundMatch.getAwayScorers()) {
                 JLabel matchScorer = new JLabel("", SwingConstants.CENTER);
                 matchScorer.setBorder(new EmptyBorder(0, 5, 0, 5));
                 matchScorer.setText(eachGoalscorer);
-                setPermanentWidth(matchScorer,  box.getWidth()/2);
+                matchScorer.setPreferredSize(new Dimension(300, 18));  // Example size
+                matchScorer.setMaximumSize(new Dimension(300, 18));  // Ensure no stretching
                 awayVerticalBox.add(matchScorer);
                 awayGoalCounter++;
             }
 
-            if(homeGoalCounter == 0 && awayGoalCounter == 0){
-                setPermanentHeight(scorerPanel, 0);
-            } else if(homeGoalCounter > awayGoalCounter){
-                setPermanentHeight(scorerPanel, 10+(18*homeGoalCounter));
-            } else {
-                setPermanentHeight(scorerPanel, 10+(18*awayGoalCounter));
+            int calculatedHeight = 0;
+            if(homeGoalCounter != 0 || awayGoalCounter != 0){
+                // Calculate height for scorerPanel based on number of goals
+                calculatedHeight = Math.max(10 + (18 * homeGoalCounter), 10 + (18 * awayGoalCounter));
             }
+
+            setPermanentWidthAndHeight(scorerPanel, 600, calculatedHeight);
 
             if(eachBackgroundMatch.getTimer().getTime().equals("90:00")){
                 matchTitle.setBackground(Color.GREEN);
@@ -139,8 +147,9 @@ public class MatchAllMatches extends MatchFrames {
             }
         }
 
-        box.revalidate();
-        box.repaint();
+        // No need to add a rigid area unless for additional spacing at the end
+        mainPanel.revalidate();
+        mainPanel.repaint();
     }
 
 }
