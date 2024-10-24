@@ -22,6 +22,7 @@ import entities.UsersMatch;
 import visuals.CustomizedElements.CardmapMainPageTemplate;
 import visuals.CustomizedElements.CustomizedButton;
 import visuals.CustomizedElements.SlidingPanel;
+import visuals.CustomizedElements.Speedometer;
 
 public class MatchFrames extends CardmapMainPageTemplate {
 
@@ -60,19 +61,17 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		setPermanentWidthAndHeight(dateAndTime,200,30);
 		dateAndTime.setBorder(new EmptyBorder(0, 15, 0, 0));
 
-		JLabel stadium = new JLabel(match.getStadium(), SwingConstants.CENTER);
-		setPermanentWidthAndHeight(stadium,200,30);
+		Speedometer speedometer = new Speedometer(getMatch());
+		setPermanentWidthAndHeight(speedometer, 400, 20);
 
-		JLabel attendance = new JLabel("60000", SwingConstants.RIGHT);
-		setPermanentWidthAndHeight(attendance,200,30);
-		attendance.setBorder(new EmptyBorder(0, 0, 0, 20));
+		JLabel stadiumAndAttendance = new JLabel(match.getStadium() + ": 60000", SwingConstants.RIGHT);
+		setPermanentWidthAndHeight(stadiumAndAttendance,200,30);
+		stadiumAndAttendance.setBorder(new EmptyBorder(0, 0, 0, 20));
 
 		Box line = Box.createHorizontalBox();
 		line.add(dateAndTime);
-		line.add(Box.createHorizontalStrut(100));
-		line.add(stadium);
-		line.add(Box.createHorizontalStrut(100));
-		line.add(attendance);
+		line.add(speedometer);
+		line.add(stadiumAndAttendance);
 
 		getFooterPanel().add(line, BorderLayout.NORTH);
 
