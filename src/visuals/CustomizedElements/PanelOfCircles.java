@@ -1,14 +1,45 @@
 package visuals.CustomizedElements;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class PanelOfCircles extends GamePanel {
-    private Color[] circleColors;  // Array to hold the colors of the circles
+    private ArrayList<Circle> circles;
 
     public PanelOfCircles() {
         // Initialize the array of colors for four circles
-        circleColors = new Color[] {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW};
         setPreferredSize(new Dimension(110, 100));  // Set preferred size of the panel
         setBackground(Color.LIGHT_GRAY);
+        circles = new ArrayList<>();
+
+        for (int i = 0; i < 4; i++) {
+            circles.add(new Circle());
+        }
+    }
+
+    public class Circle {
+        private Color colour;
+        public Circle(){};
+        public void draw(Graphics2D g2d, int i) {
+            // Remove any default insets/margins
+            Insets insets = getInsets();  // This could be checked if you added any insets or padding.
+            int xOffset = insets.left;
+            int yOffset = insets.top;
+
+            // Width and height of each circle
+            int circleDiameter = 20;
+            int spacing = 10; // Space between circles
+
+            g2d.setColor(colour);
+            g2d.fillOval(xOffset + (i * (circleDiameter + spacing)), yOffset, circleDiameter, circleDiameter);
+        }
+
+        public Color getColour() {
+            return colour;
+        }
+
+        public void setColour(Color colour) {
+            this.colour = colour;
+        }
     }
 
     @Override
@@ -16,19 +47,9 @@ public class PanelOfCircles extends GamePanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
-        // Remove any default insets/margins
-        Insets insets = getInsets();  // This could be checked if you added any insets or padding.
-        int xOffset = insets.left;
-        int yOffset = insets.top;
-
-        // Width and height of each circle
-        int circleDiameter = 20;
-        int spacing = 10; // Space between circles
-
         // Loop to draw circles without margins
-        for (int i = 0; i < circleColors.length; i++) {
-            g2d.setColor(circleColors[i]);
-            g2d.fillOval(xOffset + (i * (circleDiameter + spacing)), yOffset, circleDiameter, circleDiameter);
+        for (int i = 0; i < circles.size(); i++) {
+            circles.get(i).draw(g2d, i);
         }
     }
 
@@ -44,12 +65,14 @@ public class PanelOfCircles extends GamePanel {
             index = 3;
         }
 
-        for(int i=0; i<circleColors.length; i++){
+        for(int i=0; i<circles.size(); i++){
             if(i != index){
-                circleColors[i] = Color.WHITE;
+                circles.get(i).setColour(Color.WHITE);
             } else {
-                circleColors[i] = Color.GREEN;
+                circles.get(i).setColour(Color.GREEN);
             }
         }
+
+        repaint();
     }
 }
