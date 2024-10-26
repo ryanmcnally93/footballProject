@@ -81,10 +81,12 @@ public class CardmapMainPageTemplate extends GamePanel {
 
             prevButton.addActionListener(e -> {
                 layout.previous(pages);
+                moveSpeedometerBack();
             });
 
             nextButton.addActionListener(e -> {
                 layout.next(pages);
+                moveSpeedometerForward();
             });
 
             buttonBox = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -174,13 +176,19 @@ public class CardmapMainPageTemplate extends GamePanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             layout.next(pages);
+            moveSpeedometerForward();
         }
     }
+
+    public void moveSpeedometerForward() {}
+
+    public void moveSpeedometerBack() {}
 
     public class leftClick extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
             layout.previous(pages);
+            moveSpeedometerBack();
         }
     }
 

@@ -26,8 +26,8 @@ public class MatchEvents extends MatchFrames {
 	private ActionMap actionMap;
 	private int rows = 14;
 
-    public MatchEvents(CardLayout layout, JPanel pages, UsersMatch match) {
-    	super(layout, pages, match);
+    public MatchEvents(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer) {
+    	super(layout, pages, match, speedometer);
     	
     	this.events = 0;
     	this.button = 0;

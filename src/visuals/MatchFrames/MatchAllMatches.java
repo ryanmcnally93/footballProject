@@ -18,8 +18,8 @@ public class MatchAllMatches extends MatchFrames {
     private Boolean laterUpdated;
     private JPanel mainPanel;
 
-    public MatchAllMatches(CardLayout layout, JPanel pages, UsersMatch match) {
-        super(layout, pages, match);
+    public MatchAllMatches(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer) {
+        super(layout, pages, match, speedometer);
 
         earlyUpdated = false;
         laterUpdated = false;

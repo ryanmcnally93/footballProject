@@ -3,19 +3,14 @@ import java.time.LocalDateTime;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.util.*;
+import java.util.Timer;
 import java.util.concurrent.CompletableFuture;
-import javax.swing.JPanel;
+import javax.swing.*;
+
 import people.Footballer;
 import people.Goalkeeper;
 import main.GameWindow;
-import visuals.MatchFrames.MatchAllMatches;
-import visuals.MatchFrames.MatchEvents;
-import visuals.MatchFrames.MatchFrames;
-import visuals.MatchFrames.MatchRatings;
-import visuals.MatchFrames.MatchScorers;
-import visuals.MatchFrames.MatchStats;
-import visuals.MatchFrames.MatchTable;
-import visuals.MatchFrames.MatchWatch;
+import visuals.MatchFrames.*;
 import visuals.ScheduleFrames.Scheduler;
 
 public class UsersMatch extends Match {
@@ -36,6 +31,8 @@ public class UsersMatch extends Match {
     private MatchRatings ratingsPanel;
     private GameWindow window;
 	private final Timer delayTimer = new Timer();
+	private Speedometer speedometer;
+	private String currentPageName;
 	
 	public UsersMatch() {};
 	
@@ -48,7 +45,7 @@ public class UsersMatch extends Match {
 		
 		initialize();
 	}
-	
+
 	public UsersMatch(Team home, Team away, League league, LocalDateTime dateTime) {
 		super(home, away, league, dateTime);
 		this.homeAllShots = 0;
@@ -63,14 +60,16 @@ public class UsersMatch extends Match {
         cardMap = new HashMap<>();
         layout = new CardLayout();
         matchPages = new JPanel(layout);
-		
-        watchPanel = new MatchWatch(layout, matchPages, this);
-        scorerPanel = new MatchScorers(layout, matchPages, this);
-        statsPanel = new MatchStats(layout, matchPages, this);
-        eventsPanel = new MatchEvents(layout, matchPages, this);
-        allMatchesPanel = new MatchAllMatches(layout, matchPages, this);
-        tablePanel = new MatchTable(layout, matchPages, this);
-        ratingsPanel = new MatchRatings(layout, matchPages, this);
+
+		speedometer = new Speedometer();
+
+        watchPanel = new MatchWatch(layout, matchPages, this, speedometer);
+        scorerPanel = new MatchScorers(layout, matchPages, this, speedometer);
+        statsPanel = new MatchStats(layout, matchPages, this, speedometer);
+        eventsPanel = new MatchEvents(layout, matchPages, this, speedometer);
+        allMatchesPanel = new MatchAllMatches(layout, matchPages, this, speedometer);
+        tablePanel = new MatchTable(layout, matchPages, this, speedometer);
+        ratingsPanel = new MatchRatings(layout, matchPages, this, speedometer);
 
         // Add MatchFrame instances to the MatchFrames main panel
         
@@ -96,7 +95,9 @@ public class UsersMatch extends Match {
 		setScheduler(schedule);
 		window.getContentPane().removeAll();
 		window.getContentPane().add(matchPages, BorderLayout.CENTER);
+		statsPanel.getSpeedometerBox().add(speedometer);
         layout.show(matchPages, "Stats");
+		currentPageName = "Stats";
 
 		if(!getSameDayMatches().contains(this)){
 			getSameDayMatches().add(this);
@@ -368,5 +369,45 @@ public class UsersMatch extends Match {
 
 	public Timer getDelayTimer() {
 		return delayTimer;
+	}
+
+	public String getCurrentPageName() {
+		return currentPageName;
+	}
+
+	public void setCurrentPageName(String currentPageName) {
+		this.currentPageName = currentPageName;
+	}
+
+	public String getPrevPageName(){
+        switch (getCurrentPageName()) {
+            case "Watch" -> {return "Ratings";}
+            case "Scorers" -> {return "Watch";}
+            case "Stats" -> {return "Scorers";}
+            case "Events" -> {return "Stats";}
+            case "All Matches" -> {return "Events";}
+            case "Table" -> {return "All Matches";}
+            case "Ratings" -> {return "Table";}
+            default -> {
+                System.out.println("You've entered a dodgy page name");
+                return "Error 404";
+            }
+        }
+	}
+
+	public String getNextPageName(){
+		switch (getCurrentPageName()) {
+			case "Watch" -> {return "Scorers";}
+			case "Scorers" -> {return "Stats";}
+			case "Stats" -> {return "Events";}
+			case "Events" -> {return "All Matches";}
+			case "All Matches" -> {return "Table";}
+			case "Table" -> {return "Ratings";}
+			case "Ratings" -> {return "Watch";}
+			default -> {
+				System.out.println("You've entered a dodgy page name");
+				return "Error 404";
+			}
+		}
 	}
 }

@@ -168,7 +168,7 @@ public class LeagueTable extends GamePanel {
 
 	@Override
 	public String toString() {
-		return "Definitely generating the right item";
+		return "League Table";
 	}
 
 	public ArrayList<TeamAchievementLine> getLines() {

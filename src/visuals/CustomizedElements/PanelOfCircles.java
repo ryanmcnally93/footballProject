@@ -27,8 +27,8 @@ public class PanelOfCircles extends GamePanel {
             int yOffset = insets.top;
 
             // Width and height of each circle
-            int circleDiameter = 20;
-            int spacing = 10; // Space between circles
+            int circleDiameter = 10;
+            int spacing = 6; // Space between circles
 
             g2d.setColor(colour);
             g2d.fillOval(xOffset + (i * (circleDiameter + spacing)), yOffset, circleDiameter, circleDiameter);

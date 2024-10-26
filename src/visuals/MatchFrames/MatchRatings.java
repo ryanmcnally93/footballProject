@@ -2,8 +2,6 @@ package visuals.MatchFrames;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.util.Map;
-
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -16,8 +14,8 @@ public class MatchRatings extends MatchFrames {
 	private static final long serialVersionUID = -8877342968514201485L;
 	private Box centerBox;
 
-	public MatchRatings(CardLayout layout, JPanel pages, UsersMatch match) {
-		super(layout, pages, match);
+	public MatchRatings(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer) {
+		super(layout, pages, match, speedometer);
 		
 		JLayeredPane layeredPane = getLayeredPane();
         JPanel mainPanel = new JPanel();

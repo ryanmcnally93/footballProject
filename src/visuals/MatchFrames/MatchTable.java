@@ -16,8 +16,8 @@ public class MatchTable extends MatchFrames {
 	private JPanel mainPanel;
 	private JScrollPane scroller;
 
-	public MatchTable(CardLayout layout, JPanel pages, UsersMatch match) {
-		super(layout, pages, match);
+	public MatchTable(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer) {
+		super(layout, pages, match, speedometer);
 		
 		JLayeredPane layeredPane = getLayeredPane();
 		mainPanel = new JPanel();
