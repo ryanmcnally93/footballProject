@@ -4,25 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.ActionMap;
-import javax.swing.Box;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-import javax.swing.KeyStroke;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import entities.Match;
 import entities.UsersMatch;
-import visuals.CustomizedElements.CardmapMainPageTemplate;
-import visuals.CustomizedElements.CustomizedButton;
-import visuals.CustomizedElements.SlidingPanel;
-import visuals.CustomizedElements.Speedometer;
+import visuals.CustomizedElements.*;
 
 public class MatchFrames extends CardmapMainPageTemplate {
 
@@ -34,9 +23,125 @@ public class MatchFrames extends CardmapMainPageTemplate {
 	private ActionMap playButtonActionMap;
 	private JLabel time;
 
+	static class Speedometer extends GamePanel {
+
+		private Match match;
+		private PanelOfCircles circles;
+		private int speedIndex;
+		private ArrayList<String> speeds;
+		private JButton slowDown, speedUp;
+
+		public Speedometer(){
+			setLayout(null);
+
+			slowDown = new JButton("Slower");
+			slowDown.setMargin(new Insets(0, 0, 0, 0));
+			slowDown.setBounds(30, 0, 80, 20);
+			add(slowDown);
+
+			circles = new PanelOfCircles();
+			circles.setBounds(145, 0, 110, 20);
+			add(circles);
+
+			speedUp = new JButton("Faster");
+			speedUp.setMargin(new Insets(0, 0, 0, 0));
+			speedUp.setBounds(290, 0, 80, 20);
+			add(speedUp);
+
+			setPreferredSize(new Dimension(600, 70));
+			setBackground(Color.LIGHT_GRAY);
+			setBounds(0, 0, 600, 100);
+
+			speedIndex = 0;
+			speeds = new ArrayList<>(Arrays.asList("slowest", "slow", "fast", "fastest"));
+
+			slowDown.addMouseListener(new MouseAdapter(){
+				@Override
+				public void mouseClicked(MouseEvent e){
+					if(speedIndex != 0){
+						speedIndex--;
+						if(speedIndex ==0 ){
+							remove(slowDown);
+							revalidate();
+							repaint();
+						}
+					}
+					if (speedIndex == 2){
+						add(speedUp);
+						revalidate();
+						repaint();
+					}
+					getCircles().changeCircleColor(speeds.get(speedIndex));
+					for(Match each : getMatch().getSameDayMatches()){
+						each.setSpeed(speeds.get(speedIndex));
+						if(each.getTimer().isRunning()){
+							each.getTimer().run(speedIndex+1);
+						}
+					}
+					System.out.println("Speed is: " + getMatch().getSpeed());
+				}
+			});
+
+			speedUp.addMouseListener(new MouseAdapter(){
+				@Override
+				public void mouseClicked(MouseEvent e){
+					if(speedIndex != 3){
+						speedIndex++;
+						if (speedIndex == 3) {
+							remove(speedUp);
+							revalidate();
+							repaint();
+						}
+					}
+					if (speedIndex == 1) {
+						add(slowDown);
+						revalidate();
+						repaint();
+					}
+					getCircles().changeCircleColor(speeds.get(speedIndex));
+					for(Match each : getMatch().getSameDayMatches()){
+						each.setSpeed(speeds.get(speedIndex));
+						if(each.getTimer().isRunning()){
+							each.getTimer().run(speedIndex+1);
+						}
+					}
+					System.out.println("Speed is: " + getMatch().getSpeed());
+				}
+			});
+			setPermanentWidthAndHeight(this, 400, 20);
+
+			revalidate();
+			repaint();
+		}
+
+		public Match getMatch() {
+			return match;
+		}
+
+		public void setMatch(Match newMatch) {
+			this.match = newMatch;
+			circles.changeCircleColor(match.getSpeed());
+			for(int i=0; i<speeds.size(); i++){
+				if(getMatch().getSpeed().equals(speeds.get(i))){
+					speedIndex = i;
+					break;
+				}
+			}
+		}
+
+		public PanelOfCircles getCircles() {
+			return circles;
+		}
+
+		public void setCircles(PanelOfCircles circles) {
+			this.circles = circles;
+		}
+	}
+
 	public MatchFrames(CardLayout cardLayout, JPanel pages, UsersMatch match) {
     	super(cardLayout, pages);
         this.match = match;
+		Speedometer speedometer = new Speedometer();
 
 		// Add the time to the header
 		time = new JLabel(match.getTimer().getTime(), SwingConstants.CENTER);
@@ -61,8 +166,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		setPermanentWidthAndHeight(dateAndTime,200,30);
 		dateAndTime.setBorder(new EmptyBorder(0, 15, 0, 0));
 
-		Speedometer speedometer = new Speedometer(getMatch());
-		setPermanentWidthAndHeight(speedometer, 400, 20);
+		speedometer.setMatch(getMatch());
 
 		JLabel stadiumAndAttendance = new JLabel(match.getStadium() + ": 60000", SwingConstants.RIGHT);
 		setPermanentWidthAndHeight(stadiumAndAttendance,200,30);
@@ -188,7 +292,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 
 	public void handleClick() {
 		// Start the match
-		match.startMatch("slowest");
+		match.startMatch(match.getSpeed());
 	}
 	
 	public void goalAlert(String name, String time) {

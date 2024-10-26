@@ -12,12 +12,15 @@ public class MatchTimer {
 
     // Changing this changes the speed of timer
     private int realWorldDurationInSeconds = 60;
-
     final int MatchMinutes = 90;
     final int MatchSeconds = MatchMinutes * 60;
     final int gameSecondsPerRealSecond = MatchSeconds / realWorldDurationInSeconds;
     private int gameMinutes;
     private int gameSeconds;
+    private int speed;
+    private ScheduledExecutorService scheduler;
+    private boolean isRunning = false;
+    private int inAppTime = 0;
     private Match match;
 
     public MatchTimer(){
@@ -29,43 +32,33 @@ public class MatchTimer {
     public void runEvent(String mode, Match match) {
         this.match = match;
         switch (mode) {
-            case "slowest" -> runSlowestMode();
-            case "slow" -> runSlowMode();
-            case "fast" -> runfastMode();
-            case "fastest" -> runFastestMode();
+            case "slowest" -> run(1);
+            case "slow" -> run(2);
+            case "fast" -> run(3);
+            case "fastest" -> run(4);
             case "instant" -> runInstantMode();
             default -> System.out.println("You chose the inavlid option: " + mode);
         }
     }
 
-    public void runSlowestMode(){
-        CompletableFuture.runAsync(this::runTimer);
-    }
-
-    public void runSlowMode(){
-        setRealWorldDurationInSeconds(45);
-        CompletableFuture.runAsync(this::runTimer);
-    }
-
-    public void runfastMode(){
-        setRealWorldDurationInSeconds(30);
-        CompletableFuture.runAsync(this::runTimer);
-    }
-
-    public void runFastestMode(){
-        setRealWorldDurationInSeconds(15);
+    public void run(int speed){
+        changeSpeed(speed);
         CompletableFuture.runAsync(this::runTimer);
     }
 
     public void runTimer() {
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        final int[] inAppTime = {0};
+        if (scheduler != null && !scheduler.isShutdown()) {
+            scheduler.shutdown();
+        }
+
+        scheduler = Executors.newScheduledThreadPool(1);
+        isRunning = true;
 
         Runnable task = () -> {
-            inAppTime[0]++;
+            inAppTime++;
 
-            setGameMinutes(inAppTime[0] / 60);
-            setGameSeconds(inAppTime[0] % 60);
+            setGameMinutes(inAppTime / 60);
+            setGameSeconds(inAppTime % 60);
 
             // Prints the current in-app time
             if(this.match instanceof UsersMatch newMatch){
@@ -77,7 +70,7 @@ public class MatchTimer {
             }
 
             // Stop the scheduler when in-app time reaches 90 minutes (1200 seconds)
-            if (inAppTime[0] >= MatchSeconds) {
+            if (inAppTime >= MatchSeconds) {
                 if(match instanceof UsersMatch usersMatch){
                     System.out.println("RUNNING methods inside runTimer finished");
                     usersMatch.getDelayTimer().cancel();
@@ -85,9 +78,10 @@ public class MatchTimer {
                     usersMatch.fullTimeCheck();
                 }
                 scheduler.shutdown();
+                isRunning = false;
             }
         };
-        scheduler.scheduleAtFixedRate(task, 0, 1000 / gameSecondsPerRealSecond, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(task, 0, speed, TimeUnit.MILLISECONDS);
     }
 
     public String getTime(){
@@ -157,10 +151,17 @@ public class MatchTimer {
         return realWorldDurationInSeconds;
     }
 
-    public void setRealWorldDurationInSeconds(int realWorldDurationInSeconds) {
-        this.realWorldDurationInSeconds = realWorldDurationInSeconds;
+    public void changeSpeed(int value) {
+        speed = (1000 / gameSecondsPerRealSecond) / value;
     }
 
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    public void setRunning(boolean running) {
+        isRunning = running;
+    }
 }
 
 // Need to better understand exactly what inAppTime is doing, can we debug it to understand it?

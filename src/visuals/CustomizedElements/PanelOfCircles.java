@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class PanelOfCircles extends GamePanel {
     private ArrayList<Circle> circles;
+    int position = 0;
 
     public PanelOfCircles() {
         // Initialize the array of colors for four circles
@@ -55,24 +56,22 @@ public class PanelOfCircles extends GamePanel {
 
     // Method to change the color of a specific circle
     public void changeCircleColor(String speed) {
-        int index = 0;
-
-        if(speed.equals("slow")){
-            index = 1;
-        } else if (speed.equals("fast")){
-            index = 2;
-        } else if (speed.equals("fastest")){
-            index = 3;
+        switch (speed) {
+            case "slowest" -> position = 0;
+            case "slow" -> position = 1;
+            case "fast" -> position = 2;
+            case "fastest" -> position = 3;
         }
 
         for(int i=0; i<circles.size(); i++){
-            if(i != index){
+            if(i != position){
                 circles.get(i).setColour(Color.WHITE);
             } else {
                 circles.get(i).setColour(Color.GREEN);
             }
         }
 
+        revalidate();
         repaint();
     }
 }

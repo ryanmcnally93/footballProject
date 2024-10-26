@@ -56,7 +56,6 @@ public class UsersMatch extends Match {
 		this.awayAllShots = 0;
 		this.awayShotsOn = 0;
 		setSpeed("slowest");
-		
 		initialize();
 	}
 	
