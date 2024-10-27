@@ -11,10 +11,17 @@ public class Footballer extends Individual {
 	
 	public int attack;
 	public int defence;
-	public int stamina; 
 	public String likedPosition;
 	private Team team;
-	
+
+	private double savesThisMatch = 0.0;
+	private double duelsWonThisMatch = 0.0;
+	private double passingAccuracyThisMatch = 0.0;
+	private double shotAccuracyThisMatch = 0.0;
+	private double ratingThisMatch = 0.0;
+
+	public int stamina;
+
 	// Define Player Characteristics
 	
 	public Footballer(String name, int age) {
@@ -74,4 +81,43 @@ public class Footballer extends Individual {
 		this.team = team;
 	}
 
+	public double getPassingAccuracyThisMatch() {
+		return passingAccuracyThisMatch;
+	}
+
+	public void setPassingAccuracyThisMatch(double passingAccuracyThisMatch) {
+		this.passingAccuracyThisMatch = passingAccuracyThisMatch;
+	}
+
+	public double getSavesThisMatch() {
+		return savesThisMatch;
+	}
+
+	public void setSavesThisMatch(double savesThisMatch) {
+		this.savesThisMatch = savesThisMatch;
+	}
+
+	public double getDuelsWonThisMatch() {
+		return duelsWonThisMatch;
+	}
+
+	public void setDuelsWonThisMatch(double duelsWonThisMatch) {
+		this.duelsWonThisMatch = duelsWonThisMatch;
+	}
+
+	public double getShotAccuracyThisMatch() {
+		return shotAccuracyThisMatch;
+	}
+
+	public void setShotAccuracyThisMatch(double shotAccuracyThisMatch) {
+		this.shotAccuracyThisMatch = shotAccuracyThisMatch;
+	}
+
+	public double getRatingThisMatch() {
+		return ratingThisMatch;
+	}
+
+	public void setRatingThisMatch(double ratingThisMatch) {
+		this.ratingThisMatch = ratingThisMatch;
+	}
 }

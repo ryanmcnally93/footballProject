@@ -75,15 +75,15 @@ public class UsersMatch extends Match {
         
         matchPages.add(watchPanel, "Watch");
         cardMap.put("Watch", watchPanel);
-        matchPages.add(scorerPanel, "Scorers");
+        matchPages.add(scorerPanel, "Scorers"); // Updated
         cardMap.put("Scorers", scorerPanel);
-        matchPages.add(statsPanel, "Stats");
+        matchPages.add(statsPanel, "Stats"); // Updated
         cardMap.put("Stats", statsPanel);
-        matchPages.add(eventsPanel, "Events");
+        matchPages.add(eventsPanel, "Events"); // Updated
         cardMap.put("Events", eventsPanel);
-        matchPages.add(allMatchesPanel, "All Matches");
+        matchPages.add(allMatchesPanel, "All Matches"); // Updated
         cardMap.put("All Matches", allMatchesPanel);
-        matchPages.add(tablePanel, "Table");
+        matchPages.add(tablePanel, "Table"); // Updated
         cardMap.put("Table", tablePanel);
         matchPages.add(ratingsPanel, "Ratings");
         cardMap.put("Ratings", ratingsPanel);
