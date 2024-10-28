@@ -14,11 +14,18 @@ public class Footballer extends Individual {
 	public String likedPosition;
 	private Team team;
 
-	private double savesThisMatch = 0.0;
-	private double duelsWonThisMatch = 0.0;
-	private double passingAccuracyThisMatch = 0.0;
-	private double shotAccuracyThisMatch = 0.0;
-	private double ratingThisMatch = 0.0;
+	private int savesThisMatch = 0;
+	private int duelsPercentageThisMatch = 0;
+	private int passingAccuracyThisMatch = 0;
+	private int shotAccuracyThisMatch = 0;
+	private int ratingThisMatch = 0;
+
+	private int duelsWonThisMatch;
+	private int duelsLostThisMatch;
+	private int shotsOnTargetThisMatch;
+	private int shotsOffTargetThisMatch;
+	private int successfulPassesThisMatch;
+	private int failedPassesThisMatch;
 
 	public int stamina;
 
@@ -34,7 +41,6 @@ public class Footballer extends Individual {
 		this.defence = defence;
 		this.stamina = stamina;
 		this.likedPosition = position;
-
 	}
 	
 	public int getStamina() {
@@ -81,43 +87,134 @@ public class Footballer extends Individual {
 		this.team = team;
 	}
 
-	public double getPassingAccuracyThisMatch() {
+	public int getPassingAccuracyThisMatch() {
 		return passingAccuracyThisMatch;
 	}
 
-	public void setPassingAccuracyThisMatch(double passingAccuracyThisMatch) {
+	public void updatePassingAccuracyThisMatch(){
+		int passes = shotsOnTargetThisMatch + shotsOffTargetThisMatch;
+		passingAccuracyThisMatch = ((int) 100 /passes)*shotsOnTargetThisMatch;
+	}
+
+	public void setPassingAccuracyThisMatch(int passingAccuracyThisMatch) {
 		this.passingAccuracyThisMatch = passingAccuracyThisMatch;
 	}
 
-	public double getSavesThisMatch() {
+	public int getSavesThisMatch() {
 		return savesThisMatch;
 	}
 
-	public void setSavesThisMatch(double savesThisMatch) {
+	public void setSavesThisMatch(int savesThisMatch) {
 		this.savesThisMatch = savesThisMatch;
 	}
 
-	public double getDuelsWonThisMatch() {
-		return duelsWonThisMatch;
+	public int getDuelsPercentageThisMatch() {
+		return duelsPercentageThisMatch;
 	}
 
-	public void setDuelsWonThisMatch(double duelsWonThisMatch) {
-		this.duelsWonThisMatch = duelsWonThisMatch;
+	public void updateDuelsPercentageThisMatch(){
+		int duels = duelsWonThisMatch + duelsLostThisMatch;
+		duelsPercentageThisMatch = ((int) 100 /duels)*duelsWonThisMatch;
 	}
 
-	public double getShotAccuracyThisMatch() {
+	public void setDuelsPercentageThisMatch(int duelsPercentageThisMatch) {
+		this.duelsPercentageThisMatch = duelsPercentageThisMatch;
+	}
+
+	public void updateShotAccuracyThisMatch() {
+		int shots = shotsOnTargetThisMatch + shotsOffTargetThisMatch;
+		shotAccuracyThisMatch = ((int) 100 /shots)*shotsOnTargetThisMatch;
+	}
+
+	public int getShotAccuracyThisMatch(){
 		return shotAccuracyThisMatch;
 	}
 
-	public void setShotAccuracyThisMatch(double shotAccuracyThisMatch) {
+	public void setShotAccuracyThisMatch(int shotAccuracyThisMatch) {
 		this.shotAccuracyThisMatch = shotAccuracyThisMatch;
 	}
 
-	public double getRatingThisMatch() {
+	public int getRatingThisMatch() {
 		return ratingThisMatch;
 	}
 
-	public void setRatingThisMatch(double ratingThisMatch) {
+	public void setRatingThisMatch(int ratingThisMatch) {
 		this.ratingThisMatch = ratingThisMatch;
+	}
+
+	public void newMatchReset() {
+		setStamina(100);
+		setDuelsPercentageThisMatch(0);
+		setSavesThisMatch(0);
+		setDuelsPercentageThisMatch(0);
+		setPassingAccuracyThisMatch(0);
+		setShotAccuracyThisMatch(0);
+		setRatingThisMatch(0);
+		setDuelsWonThisMatch(0);
+		setDuelsLostThisMatch(0);
+		setShotsOnTargetThisMatch(0);
+		setShotsOffTargetThisMatch(0);
+		setSuccessfulPassesThisMatch(0);
+		setFailedPassesThisMatch(0);
+	}
+
+	public int getDuelsWonThisMatch() {
+		return duelsWonThisMatch;
+	}
+
+	public void setDuelsWonThisMatch(int duelsWonThisMatch) {
+		this.duelsWonThisMatch = duelsWonThisMatch;
+	}
+
+	public int getDuelsLostThisMatch() {
+		return duelsLostThisMatch;
+	}
+
+	public void setDuelsLostThisMatch(int duelsLostThisMatch) {
+		this.duelsLostThisMatch = duelsLostThisMatch;
+	}
+
+	public int getShotsOnTargetThisMatch() {
+		return shotsOnTargetThisMatch;
+	}
+
+	public void setShotsOnTargetThisMatch(int shotsOnTargetThisMatch) {
+		this.shotsOnTargetThisMatch = shotsOnTargetThisMatch;
+	}
+
+	public int getShotsOffTargetThisMatch() {
+		return shotsOffTargetThisMatch;
+	}
+
+	public void setShotsOffTargetThisMatch(int shotsOffTargetThisMatch) {
+		this.shotsOffTargetThisMatch = shotsOffTargetThisMatch;
+	}
+
+	public int getSuccessfulPassesThisMatch() {
+		return successfulPassesThisMatch;
+	}
+
+	public void setSuccessfulPassesThisMatch(int successfulPassesThisMatch) {
+		this.successfulPassesThisMatch = successfulPassesThisMatch;
+	}
+
+	public int getFailedPassesThisMatch() {
+		return failedPassesThisMatch;
+	}
+
+	public void setFailedPassesThisMatch(int failedPassesThisMatch) {
+		this.failedPassesThisMatch = failedPassesThisMatch;
+	}
+
+	public void addToDuelsWon() {
+		this.duelsWonThisMatch++;
+	}
+
+	public void addToDuelsLost() {
+		duelsLostThisMatch++;
+	}
+
+	public void addToShotOnTarget() {
+		shotsOnTargetThisMatch++;
 	}
 }

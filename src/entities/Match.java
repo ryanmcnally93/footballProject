@@ -8,8 +8,10 @@ import java.util.concurrent.CompletableFuture;
 import people.Footballer;
 import people.Goalkeeper;
 import visuals.CustomizedElements.PlayerAchievementLine;
+import visuals.CustomizedElements.PlayerMatchLine;
 import visuals.CustomizedElements.TeamAchievementLine;
 import visuals.MatchFrames.MatchAllMatches;
+import visuals.MatchFrames.MatchRatings;
 import visuals.MatchFrames.MatchScorers;
 import visuals.ScheduleFrames.Events;
 import visuals.ScheduleFrames.Scheduler;
@@ -103,6 +105,8 @@ public class Match {
 			}
 		}
 	}
+
+	public void updateRatingsPage(Footballer player){}
 
 	public void startRun(Footballer player) {
 		// Inserted game time was 0
@@ -200,6 +204,7 @@ public class Match {
 						if(!getSpeed().equals("instant")) {
 							goalUpdatesTable(oldHomeScore, oldAwayScore);
 							updateAllMatchesPage();
+							updateRatingsPage(player);
 						}
 
 						updateScoreOnScreen();
@@ -376,11 +381,13 @@ public class Match {
 	public boolean getPastPlayer(Footballer player, Footballer otherPlayer) {
 		
 		if (player.stamina <= 0) {
+			otherPlayer.addToDuelsWon();
 			return false;
 		}
 		
 		// If the opponent is out of juice, we run past them
 		if (otherPlayer.stamina <= 0) {
+			otherPlayer.addToDuelsLost();
 			// Successful run past
 			return true;
 		} else {
@@ -397,12 +404,11 @@ public class Match {
 			/* If 30 percent, and the random number resides within
 			the first 30 numbers, we will run past. */
 			if (randomNumber <= perc) {
-				// After we make a successful run, we have less energy
-//				player.removeStamina(10);
-				// Check to see we haven't run out of stamina
-                return player.stamina > 0;
+				otherPlayer.addToDuelsLost();
+                return true;
 				// Successful run past
             } else {
+				otherPlayer.addToDuelsWon();
 				return false;
 			}
 		}
@@ -418,6 +424,7 @@ public class Match {
 		
 		/* If 30 percent, and the random number resides within
 		the first 30 numbers, we will run past. */
+		player.addToShotOnTarget();
         return randomNumber <= perc;
 	}
 	
@@ -514,15 +521,15 @@ public class Match {
 	public void initialSetup(){
 		for(Map.Entry<String, Footballer> each : getHomeTeam().entrySet()) {
 			Footballer player = each.getValue();
-			player.setStamina(100);
-			getHomegk().setStamina(100);
+			player.newMatchReset();
 		}
+		getHomegk().newMatchReset();
 
 		for(Map.Entry<String, Footballer> each : getAwayTeam().entrySet()) {
 			Footballer player = each.getValue();
-			player.setStamina(100);
-			getAwaygk().setStamina(100);
+			player.newMatchReset();
 		}
+		getAwaygk().newMatchReset();
 
 		Footballer homeStriker = homeTeam.get("ST");
 		startTimer();

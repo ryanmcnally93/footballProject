@@ -1,22 +1,28 @@
 package visuals.MatchFrames;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
 
+import entities.Match;
 import entities.UsersMatch;
 import people.Footballer;
+import visuals.CustomizedElements.PlayerAchievementLine;
+import visuals.CustomizedElements.PlayerMatchLine;
 
 public class MatchRatings extends MatchFrames {
 
-	private static final long serialVersionUID = -8877342968514201485L;
 	private Box centerBox;
     private JPanel mainPanel;
-    private Map<String, Box> playerRatings;
+    private Map<String, PlayerMatchLine> playerRatings;
+    private ArrayList<PlayerMatchLine> homePlayers, awayPlayers;
 
 	public MatchRatings(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer) {
 		super(layout, pages, match, speedometer);
 
+        homePlayers = new ArrayList<>();
+        awayPlayers = new ArrayList<>();
         playerRatings = new HashMap<>();
 
 		JLayeredPane layeredPane = getLayeredPane();
@@ -33,21 +39,21 @@ public class MatchRatings extends MatchFrames {
         mainPanel.add(centerBox, BorderLayout.CENTER);
 
         // Create title line
-        Box line = Box.createHorizontalBox();
+        JPanel line = new JPanel();
         JLabel name = new JLabel("PLAYER NAME");
         setPermanentWidth(name, 200);
         JLabel saves = new JLabel("SAVES");
-        setPermanentWidth(saves, 50);
+        setPermanentWidth(saves, 60);
         JLabel passingAccuracy = new JLabel("PASSING");
-        setPermanentWidth(passingAccuracy, 50);
+        setPermanentWidth(passingAccuracy, 60);
         JLabel shootingAccuracy = new JLabel("SHOOTING");
-        setPermanentWidth(shootingAccuracy, 50);
+        setPermanentWidth(shootingAccuracy, 60);
         JLabel duelsWon = new JLabel("DUELS");
-        setPermanentWidth(duelsWon, 50);
+        setPermanentWidth(duelsWon, 60);
         JLabel fitness = new JLabel("FITNESS");
-        setPermanentWidth(fitness, 50);
+        setPermanentWidth(fitness, 60);
         JLabel rating = new JLabel("RATING");
-        setPermanentWidth(rating, 50);
+        setPermanentWidth(rating, 60);
         line.add(name);
         line.add(duelsWon);
         line.add(passingAccuracy);
@@ -59,7 +65,13 @@ public class MatchRatings extends MatchFrames {
 
         for(Map.Entry<String, Footballer> each : getMatch().getHomeTeam().entrySet()){
             Footballer eachPlayer = each.getValue();
-            createRatingLine(eachPlayer);
+            PlayerMatchLine newLine = createRatingLine(eachPlayer, "Home");
+            centerBox.add(newLine);
+        }
+
+        for(Map.Entry<String, Footballer> each : getMatch().getAwayTeam().entrySet()){
+            Footballer eachPlayer = each.getValue();
+            createRatingLine(eachPlayer, "Away");
         }
 
         String otherTeamsName = getMatch().getAway().getName();
@@ -73,9 +85,8 @@ public class MatchRatings extends MatchFrames {
             title.setText(getMatch().getAway().getName().toUpperCase());
             centerBox.add(title);
             centerBox.add(line);
-            for(Map.Entry<String, Footballer> each : getMatch().getAwayTeam().entrySet()){
-                Footballer eachPlayer = each.getValue();
-                createRatingLine(eachPlayer);
+            for(PlayerMatchLine eachLine : awayPlayers){
+                centerBox.add(eachLine);
             }
             String firstTeamsName = getMatch().getHome().getName();
             JButton switchTeamBack = new JButton(firstTeamsName);
@@ -90,9 +101,8 @@ public class MatchRatings extends MatchFrames {
                 title.setText(getMatch().getHome().getName().toUpperCase());
                 centerBox.add(title);
                 centerBox.add(line);
-                for(Map.Entry<String, Footballer> each : getMatch().getHomeTeam().entrySet()){
-                    Footballer eachPlayer = each.getValue();
-                    createRatingLine(eachPlayer);
+                for(PlayerMatchLine eachLine : homePlayers){
+                    centerBox.add(eachLine);
                 }
                 centerBox.add(switchTeamInView);
                 centerBox.revalidate();
@@ -109,40 +119,36 @@ public class MatchRatings extends MatchFrames {
 		
 	}
 
-    private void createRatingLine(Footballer player) {
-        Box line = Box.createHorizontalBox();
-        // Add football emoji to end of name when scored?
-        // Red when O.G? Different emoji for assists
-        // Number on top when more than one, prevents spilling out of bounds
-        JLabel name = new JLabel(player.getName());
-        setPermanentWidth(name, 200);
-        // For GK
-        JLabel saves = new JLabel(player.getSavesThisMatch() + "%");
-        setPermanentWidth(saves, 40);
-
-        JLabel passingAccuracy = new JLabel(player.getPassingAccuracyThisMatch() + "%");
-        setPermanentWidth(passingAccuracy, 40);
-        JLabel shootingAccuracy = new JLabel(player.getShotAccuracyThisMatch() + "%");
-        setPermanentWidth(shootingAccuracy, 40);
-        JLabel duelsWon = new JLabel(player.getDuelsWonThisMatch() + "%");
-        setPermanentWidth(duelsWon, 40);
-
-        JLabel fitness = new JLabel(player.getStamina() + "%");
-        setPermanentWidth(fitness, 40);
-        JLabel rating = new JLabel(player.getRatingThisMatch() + "%");
-        setPermanentWidth(rating, 40);
-
-        line.add(name);
-        line.add(duelsWon);
-        line.add(passingAccuracy);
-        line.add(shootingAccuracy);
-        line.add(fitness);
-        line.add(rating);
-        setPermanentHeight(line, 30);
-        centerBox.add(line);
+    private PlayerMatchLine createRatingLine(Footballer player, String homeOrAway) {
+        PlayerMatchLine newLine = new PlayerMatchLine(player);
 
         // Line will need to be a class in order for us to make changes to each section of the line
-        playerRatings.put(player.getName(), line);
+        playerRatings.put(player.getName(), newLine);
+
+        if(homeOrAway.equals("Home")){
+            homePlayers.add(newLine);
+        } else {
+            awayPlayers.add(newLine);
+        }
+        return newLine;
+    }
+
+    public void updateLine(Footballer player){
+        PlayerMatchLine line = playerRatings.get(player.getName());
+
+//        line.setSaves(String.valueOf(player.getSavesThisMatch()));
+        line.setFitness(player.getStamina() + "%");
+
+        player.updateDuelsPercentageThisMatch();
+        line.setDuelsWon(player.getDuelsPercentageThisMatch() + "%");
+
+        player.updatePassingAccuracyThisMatch();
+        line.setPassingAccuracy(player.getPassingAccuracyThisMatch() + "%");
+
+        player.updateShotAccuracyThisMatch();
+        line.setShootingAccuracy(player.getShotAccuracyThisMatch() + "%");
+
+        line.setRating(String.valueOf(10));
     }
 
 }

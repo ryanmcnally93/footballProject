@@ -192,6 +192,15 @@ public class UsersMatch extends Match {
             }
         }
 	}
+
+	@Override
+	public void updateRatingsPage(Footballer player){
+		for (JPanel page : cardMap.values()) {
+			if (page instanceof MatchRatings) {
+				((MatchRatings) page).updateLine(player);
+			}
+		}
+	}
 	
 	@Override
 	public void addTimerForScreen(Footballer enemy) {
