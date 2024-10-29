@@ -33,6 +33,7 @@ public class Footballer extends Individual {
 	
 	public Footballer(String name, int age) {
 		super(name,age);
+		this.stamina = 100;
 	}
 	
 	public Footballer(String name, int age, int attack, int defence, int stamina, String position) {

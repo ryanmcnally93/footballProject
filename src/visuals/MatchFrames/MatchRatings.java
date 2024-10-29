@@ -1,5 +1,7 @@
 package visuals.MatchFrames;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.*;
 import javax.swing.*;
@@ -15,10 +17,15 @@ public class MatchRatings extends MatchFrames {
 	private Box centerBox, rightBox;
     private JPanel mainPanel;
     private Map<String, PlayerMatchLine> playerRatings;
-    private ArrayList<PlayerMatchLine> homePlayers, awayPlayers;
+    private ArrayList<PlayerMatchLine> homePlayers, awayPlayers, teamInView;
+    private int lineInView;
+    private InputMap inputMap;
+    private ActionMap actionMap;
 
 	public MatchRatings(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer) {
 		super(layout, pages, match, speedometer);
+
+        lineInView = 0;
 
         homePlayers = new ArrayList<>();
         awayPlayers = new ArrayList<>();
@@ -27,9 +34,6 @@ public class MatchRatings extends MatchFrames {
 		JLayeredPane layeredPane = getLayeredPane();
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
-//        mainPanel.setLayout(new BorderLayout());
-
-//        appendEastAndWest(mainPanel);
 		
         centerBox = Box.createVerticalBox();
         JLabel title = new JLabel(getMatch().getHome().getName().toUpperCase());
@@ -37,12 +41,6 @@ public class MatchRatings extends MatchFrames {
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
         centerBox.add(title);
         mainPanel.add(centerBox);
-
-        rightBox = Box.createVerticalBox();
-        setPermanentWidthAndHeight(rightBox, 240, 440);
-        rightBox.setBackground(Color.RED);
-        rightBox.setOpaque(true);
-        mainPanel.add(rightBox);
 
         // Create title line
         JPanel line = new JPanel();
@@ -109,13 +107,15 @@ public class MatchRatings extends MatchFrames {
         // Execute commands in sorted order
         for (String position : sortedPositions) {
             Footballer player = getMatch().getHomeTeam().get(position);
-            PlayerMatchLine newLine = createRatingLine(player, "Home");
+            PlayerMatchLine newLine = createRatingLine(player, homePlayers);
             centerBox.add(newLine);
         }
 
+        teamInView = homePlayers;
+
         for (String position : sortedPositions) {
             Footballer player = getMatch().getAwayTeam().get(position);
-            createRatingLine(player, "Away");
+            createRatingLine(player, awayPlayers);
         }
 
         String otherTeamsName = getMatch().getAway().getName();
@@ -126,6 +126,7 @@ public class MatchRatings extends MatchFrames {
 
         switchTeamInView.addActionListener(e -> {
             centerBox.removeAll();
+            teamInView = awayPlayers;
             title.setText(getMatch().getAway().getName().toUpperCase());
             centerBox.add(title);
             centerBox.add(line);
@@ -137,11 +138,14 @@ public class MatchRatings extends MatchFrames {
             switchTeamBack.setHorizontalAlignment(SwingConstants.CENTER);
             switchTeamBack.setAlignmentX(Component.CENTER_ALIGNMENT);
             centerBox.add(switchTeamBack);
+            setPlayerLineFocus(awayPlayers, lineInView);
+
             centerBox.revalidate();
             centerBox.repaint();
 
             switchTeamBack.addActionListener(f -> {
                 centerBox.removeAll();
+                teamInView = homePlayers;
                 title.setText(getMatch().getHome().getName().toUpperCase());
                 centerBox.add(title);
                 centerBox.add(line);
@@ -149,6 +153,8 @@ public class MatchRatings extends MatchFrames {
                     centerBox.add(eachLine);
                 }
                 centerBox.add(switchTeamInView);
+                setPlayerLineFocus(homePlayers, lineInView);
+
                 centerBox.revalidate();
                 centerBox.repaint();
             });
@@ -160,26 +166,78 @@ public class MatchRatings extends MatchFrames {
         rightBox.setBackground(Color.RED);
         rightBox.setOpaque(true);
         mainPanel.add(rightBox);
-        
+
+        setPlayerLineFocus(homePlayers, 0);
+
         mainPanel.setBounds(35, 80, 730, 440);
         mainPanel.setBackground(Color.LIGHT_GRAY);
         layeredPane.add(mainPanel, JLayeredPane.DEFAULT_LAYER);
-        
+
+        Action upAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (lineInView > 0) {
+                    lineInView--;
+                    updateFocus("UP", teamInView);
+                }
+            }
+        };
+
+        Action downAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (lineInView < teamInView.size() - 1) {
+                    lineInView++;
+                    updateFocus("DOWN", teamInView);
+                }
+            }
+        };
+
+        inputMap = centerBox.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        actionMap = centerBox.getActionMap();
+
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "UP");
+        actionMap.put("UP", upAction);
+
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "DOWN");
+        actionMap.put("DOWN", downAction);
+
         setVisible(true);
 		
 	}
 
-    private PlayerMatchLine createRatingLine(Footballer player, String homeOrAway) {
-        PlayerMatchLine newLine = new PlayerMatchLine(player);
-
-        // Line will need to be a class in order for us to make changes to each section of the line
-        playerRatings.put(player.getName(), newLine);
-
-        if(homeOrAway.equals("Home")){
-            homePlayers.add(newLine);
-        } else {
-            awayPlayers.add(newLine);
+    private void setPlayerLineFocus(ArrayList<PlayerMatchLine> players, int index) {
+        for(PlayerMatchLine eachLine : players){
+            if(eachLine == players.get(index)){
+                eachLine.setVisible(true);
+                eachLine.requestFocusInWindow();
+                eachLine.setBackground(Color.YELLOW);
+                eachLine.setOpaque(true);
+            } else {
+                eachLine.setBackground(Color.LIGHT_GRAY);
+            }
         }
+    }
+
+    private void updateFocus(String direction, ArrayList<PlayerMatchLine> players) {
+        if(direction.equals("UP")) {
+            PlayerMatchLine current = players.get(lineInView + 1);
+            current.setBackground(Color.LIGHT_GRAY);
+            current.setOpaque(true);
+        } else if (direction.equals("DOWN")) {
+            PlayerMatchLine current = players.get(lineInView - 1);
+            current.setBackground(Color.LIGHT_GRAY);
+            current.setOpaque(true);
+        }
+        PlayerMatchLine current = players.get(lineInView);
+        current.setBackground(Color.YELLOW);
+        current.setOpaque(true);
+    }
+
+    private PlayerMatchLine createRatingLine(Footballer player, ArrayList<PlayerMatchLine> players) {
+        PlayerMatchLine newLine = new PlayerMatchLine(player);
+        playerRatings.put(player.getName(), newLine);
+        players.add(newLine);
         return newLine;
     }
 
