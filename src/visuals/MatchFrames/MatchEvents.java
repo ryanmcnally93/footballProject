@@ -69,7 +69,7 @@ public class MatchEvents extends MatchFrames {
 
 		appendEastAndWest(mainPanel, 20);
         
-        mainPanel.setBounds(0, 80, 800, 440);
+        mainPanel.setBounds(0, 80, 800, 420);
         mainPanel.setBackground(Color.LIGHT_GRAY);
         layeredPane.add(mainPanel, JLayeredPane.DEFAULT_LAYER);
         
