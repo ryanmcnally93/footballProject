@@ -326,9 +326,9 @@ public class initialSetup {
 	palaceFirst.put("ST", eze);
 	palaceFirst.put("RW", zah);
 	palaceFirst.put("LW", olise);
-	palaceFirst.put("CAM", doucoure);
+	palaceFirst.put("CM2", doucoure);
 	palaceFirst.put("CM1", lurie);
-	palaceFirst.put("CM2", hughes);
+	palaceFirst.put("CAM", hughes);
 	palaceFirst.put("LB", mitchell);
 	palaceFirst.put("CB1", gueh);
 	palaceFirst.put("CB2", andersn);

@@ -8,34 +8,45 @@ import java.awt.*;
 public class PlayerMatchLine extends GamePanel {
 
 //    private Box line;
-    private JLabel name, saves, duelsWon, passingAccuracy, shootingAccuracy, fitness, rating;
+    private JLabel name, saves, duelsWon, passingAccuracy, shootingAccuracy, fitness, rating, pos;
 
     public PlayerMatchLine(Footballer player){
 
         setBackground(Color.LIGHT_GRAY);
         setOpaque(true);
 
+        pos = new JLabel(player.getLikedPosition());
+        setPermanentWidth(pos, 40);
+        pos.setHorizontalAlignment(SwingConstants.CENTER);
+
         name = new JLabel(player.getName());
-        setPermanentWidth(name, 200);
+        setPermanentWidth(name, 130);
 
         saves = new JLabel("N/A");
-        setPermanentWidth(saves, 60);
+        setPermanentWidth(saves, 50);
+        saves.setHorizontalAlignment(SwingConstants.CENTER);
 
         passingAccuracy = new JLabel("N/A");
-        setPermanentWidth(passingAccuracy, 60);
+        setPermanentWidth(passingAccuracy, 50);
+        passingAccuracy.setHorizontalAlignment(SwingConstants.CENTER);
 
         shootingAccuracy = new JLabel("N/A");
-        setPermanentWidth(shootingAccuracy, 60);
+        setPermanentWidth(shootingAccuracy, 50);
+        shootingAccuracy.setHorizontalAlignment(SwingConstants.CENTER);
 
         duelsWon = new JLabel("N/A");
-        setPermanentWidth(duelsWon, 60);
+        setPermanentWidth(duelsWon, 50);
+        duelsWon.setHorizontalAlignment(SwingConstants.CENTER);
 
         fitness = new JLabel(player.getStamina() + "%");
-        setPermanentWidth(fitness, 60);
+        setPermanentWidth(fitness, 50);
+        fitness.setHorizontalAlignment(SwingConstants.CENTER);
 
         rating = new JLabel("N/A");
-        setPermanentWidth(rating, 60);
+        setPermanentWidth(rating, 50);
+        rating.setHorizontalAlignment(SwingConstants.CENTER);
 
+        add(pos);
         add(name);
         add(duelsWon);
         add(passingAccuracy);
