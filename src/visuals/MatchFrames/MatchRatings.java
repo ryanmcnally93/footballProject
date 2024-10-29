@@ -2,6 +2,8 @@ package visuals.MatchFrames;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.*;
 import javax.swing.*;
@@ -110,11 +112,31 @@ public class MatchRatings extends MatchFrames {
             centerBox.add(newLine);
         }
 
+        // Home Players Mouse Event Listeners
         teamInView = homePlayers;
+        for(PlayerMatchLine eachLine : homePlayers){
+            eachLine.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    updateFocus(homePlayers, eachLine);
+                }
+            });
+        }
 
+        // Let's create the away players lines, to be added later
         for (String position : sortedPositions) {
             Footballer player = getMatch().getAwayTeam().get(position);
             createRatingLine(player, awayPlayers);
+        }
+
+        // Away Players Mouse Event Listeners
+        for(PlayerMatchLine eachLine : awayPlayers){
+            eachLine.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    updateFocus(awayPlayers, eachLine);
+                }
+            });
         }
 
         String otherTeamsName = getMatch().getAway().getName();
@@ -231,6 +253,17 @@ public class MatchRatings extends MatchFrames {
         }
         PlayerMatchLine current = players.get(lineInView);
         current.setBackground(Color.YELLOW);
+    }
+
+    private void updateFocus(ArrayList<PlayerMatchLine> players, PlayerMatchLine thisLine) {
+        for(int i=0;i <players.size(); i++){
+            if(players.get(i) != thisLine){
+                players.get(i).setBackground(Color.LIGHT_GRAY);
+            } else {
+                lineInView = i;
+            }
+        }
+        thisLine.setBackground(Color.YELLOW);
     }
 
     private PlayerMatchLine createRatingLine(Footballer player, ArrayList<PlayerMatchLine> players) {
