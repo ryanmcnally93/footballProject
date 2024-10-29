@@ -5,18 +5,17 @@ import people.Footballer;
 import javax.swing.*;
 import java.awt.*;
 
-public class PlayerMatchLine extends GamePanel {
+public class PlayerMatchLine extends RoundedPanel {
 
-//    private Box line;
     private JLabel name, saves, duelsWon, passingAccuracy, shootingAccuracy, fitness, rating, pos;
 
     public PlayerMatchLine(Footballer player){
+        super(20);
 
         setBackground(Color.LIGHT_GRAY);
-        setOpaque(true);
 
         pos = new JLabel(player.getLikedPosition());
-        setPermanentWidth(pos, 40);
+        setPermanentWidth(pos, 30);
         pos.setHorizontalAlignment(SwingConstants.CENTER);
 
         name = new JLabel(player.getName());

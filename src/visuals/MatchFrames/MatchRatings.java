@@ -5,11 +5,10 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
-import entities.Match;
 import entities.UsersMatch;
 import people.Footballer;
-import visuals.CustomizedElements.PlayerAchievementLine;
 import visuals.CustomizedElements.PlayerMatchLine;
 
 public class MatchRatings extends MatchFrames {
@@ -50,7 +49,7 @@ public class MatchRatings extends MatchFrames {
         JLabel pos = new JLabel("POS");
         pos.setFont(new Font("Menlo", Font.BOLD, 12));
         pos.setHorizontalAlignment(SwingConstants.CENTER);
-        setPermanentWidth(pos, 40);
+        setPermanentWidth(pos, 30);
 
         JLabel name = new JLabel("PLAYER NAME");
         name.setFont(new Font("Menlo", Font.BOLD, 12));
@@ -161,8 +160,12 @@ public class MatchRatings extends MatchFrames {
 
         });
 
+        Box emptyGap= Box.createVerticalBox();
+        setPermanentWidthAndHeight(emptyGap, 20, 440);
+        mainPanel.add(emptyGap);
+
         rightBox = Box.createVerticalBox();
-        setPermanentWidthAndHeight(rightBox, 260, 440);
+        setPermanentWidthAndHeight(rightBox, 250, 440);
         rightBox.setBackground(Color.RED);
         rightBox.setOpaque(true);
         mainPanel.add(rightBox);
@@ -212,7 +215,6 @@ public class MatchRatings extends MatchFrames {
                 eachLine.setVisible(true);
                 eachLine.requestFocusInWindow();
                 eachLine.setBackground(Color.YELLOW);
-                eachLine.setOpaque(true);
             } else {
                 eachLine.setBackground(Color.LIGHT_GRAY);
             }
@@ -223,15 +225,12 @@ public class MatchRatings extends MatchFrames {
         if(direction.equals("UP")) {
             PlayerMatchLine current = players.get(lineInView + 1);
             current.setBackground(Color.LIGHT_GRAY);
-            current.setOpaque(true);
         } else if (direction.equals("DOWN")) {
             PlayerMatchLine current = players.get(lineInView - 1);
             current.setBackground(Color.LIGHT_GRAY);
-            current.setOpaque(true);
         }
         PlayerMatchLine current = players.get(lineInView);
         current.setBackground(Color.YELLOW);
-        current.setOpaque(true);
     }
 
     private PlayerMatchLine createRatingLine(Footballer player, ArrayList<PlayerMatchLine> players) {
