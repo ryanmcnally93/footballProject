@@ -7,30 +7,36 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.*;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 
 import entities.UsersMatch;
 import people.Footballer;
-import visuals.CustomizedElements.PlayerMatchLine;
+import visuals.CustomizedElements.PlayerStatsBoxOnRatingsPage;
+import visuals.CustomizedElements.PlayerStatsLineOnRatingsPage;
 
 public class MatchRatings extends MatchFrames {
 
-	private Box centerBox, rightBox;
+	private Box centerBox;
     private JPanel mainPanel;
-    private Map<String, PlayerMatchLine> playerRatings;
-    private ArrayList<PlayerMatchLine> homePlayers, awayPlayers, teamInView;
+    private Map<String, PlayerStatsLineOnRatingsPage> playerRatings;
+    private Map<String, PlayerStatsBoxOnRatingsPage> playerBoxes;
+    private ArrayList<PlayerStatsLineOnRatingsPage> homePlayersLines, awayPlayersLines, teamInViewLines;
+    private ArrayList<PlayerStatsBoxOnRatingsPage> homePlayersBoxes, awayPlayersBoxes, teamInViewBoxes;
     private int lineInView;
     private InputMap inputMap;
     private ActionMap actionMap;
+    private Box rightBox;
 
 	public MatchRatings(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer) {
 		super(layout, pages, match, speedometer);
 
         lineInView = 0;
 
-        homePlayers = new ArrayList<>();
-        awayPlayers = new ArrayList<>();
+        homePlayersLines = new ArrayList<>();
+        awayPlayersLines = new ArrayList<>();
+        homePlayersBoxes = new ArrayList<>();
+        awayPlayersBoxes = new ArrayList<>();
         playerRatings = new HashMap<>();
+        playerBoxes = new HashMap<>();
 
 		JLayeredPane layeredPane = getLayeredPane();
         mainPanel = new JPanel();
@@ -108,17 +114,19 @@ public class MatchRatings extends MatchFrames {
         // Execute commands in sorted order
         for (String position : sortedPositions) {
             Footballer player = getMatch().getHomeTeam().get(position);
-            PlayerMatchLine newLine = createRatingLine(player, homePlayers);
+            PlayerStatsLineOnRatingsPage newLine = createRatingLine(player, homePlayersLines);
             centerBox.add(newLine);
         }
 
         // Home Players Mouse Event Listeners
-        teamInView = homePlayers;
-        for(PlayerMatchLine eachLine : homePlayers){
-            eachLine.addMouseListener(new MouseAdapter() {
+        teamInViewLines = homePlayersLines;
+        teamInViewBoxes = homePlayersBoxes;
+        for (int i = 0; i < homePlayersLines.size(); i++) {
+            final int index = i;
+            homePlayersLines.get(i).addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    updateFocus(homePlayers, eachLine);
+                    updateFocus(homePlayersLines, homePlayersLines.get(index), homePlayersBoxes.get(index));
                 }
             });
         }
@@ -126,15 +134,16 @@ public class MatchRatings extends MatchFrames {
         // Let's create the away players lines, to be added later
         for (String position : sortedPositions) {
             Footballer player = getMatch().getAwayTeam().get(position);
-            createRatingLine(player, awayPlayers);
+            createRatingLine(player, awayPlayersLines);
         }
 
         // Away Players Mouse Event Listeners
-        for(PlayerMatchLine eachLine : awayPlayers){
-            eachLine.addMouseListener(new MouseAdapter() {
+        for(int i = 0; i < awayPlayersLines.size(); i++){
+            final int index = i;
+            awayPlayersLines.get(i).addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    updateFocus(awayPlayers, eachLine);
+                    updateFocus(awayPlayersLines, awayPlayersLines.get(index), awayPlayersBoxes.get(index));
                 }
             });
         }
@@ -147,11 +156,12 @@ public class MatchRatings extends MatchFrames {
 
         switchTeamInView.addActionListener(e -> {
             centerBox.removeAll();
-            teamInView = awayPlayers;
+            teamInViewLines = awayPlayersLines;
+            teamInViewBoxes = awayPlayersBoxes;
             title.setText(getMatch().getAway().getName().toUpperCase());
             centerBox.add(title);
             centerBox.add(line);
-            for(PlayerMatchLine eachLine : awayPlayers){
+            for(PlayerStatsLineOnRatingsPage eachLine : awayPlayersLines){
                 centerBox.add(eachLine);
             }
             String firstTeamsName = getMatch().getHome().getName();
@@ -159,22 +169,23 @@ public class MatchRatings extends MatchFrames {
             switchTeamBack.setHorizontalAlignment(SwingConstants.CENTER);
             switchTeamBack.setAlignmentX(Component.CENTER_ALIGNMENT);
             centerBox.add(switchTeamBack);
-            setPlayerLineFocus(awayPlayers, lineInView);
+            setPlayerLineFocus(awayPlayersLines, lineInView, awayPlayersBoxes.get(lineInView));
 
             centerBox.revalidate();
             centerBox.repaint();
 
             switchTeamBack.addActionListener(f -> {
                 centerBox.removeAll();
-                teamInView = homePlayers;
+                teamInViewLines = homePlayersLines;
+                teamInViewBoxes = homePlayersBoxes;
                 title.setText(getMatch().getHome().getName().toUpperCase());
                 centerBox.add(title);
                 centerBox.add(line);
-                for(PlayerMatchLine eachLine : homePlayers){
+                for(PlayerStatsLineOnRatingsPage eachLine : homePlayersLines){
                     centerBox.add(eachLine);
                 }
                 centerBox.add(switchTeamInView);
-                setPlayerLineFocus(homePlayers, lineInView);
+                setPlayerLineFocus(homePlayersLines, lineInView, homePlayersBoxes.get(lineInView));
 
                 centerBox.revalidate();
                 centerBox.repaint();
@@ -187,12 +198,24 @@ public class MatchRatings extends MatchFrames {
         mainPanel.add(emptyGap);
 
         rightBox = Box.createVerticalBox();
-        setPermanentWidthAndHeight(rightBox, 250, 440);
-        rightBox.setBackground(Color.RED);
-        rightBox.setOpaque(true);
+        PlayerStatsBoxOnRatingsPage playerBox = new PlayerStatsBoxOnRatingsPage(getMatch().getHomeTeam().get("GK"));
+        rightBox.add(playerBox);
+        setPermanentWidthAndHeight(rightBox, 250, 375);
         mainPanel.add(rightBox);
 
-        setPlayerLineFocus(homePlayers, 0);
+        // Create Boxes for each Team
+        for (String position : sortedPositions) {
+            Footballer player = getMatch().getHomeTeam().get(position);
+            createRatingBox(player, homePlayersBoxes);
+            rightBox.add(homePlayersBoxes.getFirst());
+        }
+
+        for (String position : sortedPositions) {
+            Footballer player = getMatch().getAwayTeam().get(position);
+            createRatingBox(player, awayPlayersBoxes);
+        }
+
+        setPlayerLineFocus(homePlayersLines, 0, homePlayersBoxes.get(lineInView));
 
         mainPanel.setBounds(35, 80, 730, 440);
         mainPanel.setBackground(Color.LIGHT_GRAY);
@@ -203,7 +226,7 @@ public class MatchRatings extends MatchFrames {
             public void actionPerformed(ActionEvent e) {
                 if (lineInView > 0) {
                     lineInView--;
-                    updateFocus("UP", teamInView);
+                    updateFocus("UP", teamInViewLines, teamInViewBoxes);
                 }
             }
         };
@@ -211,9 +234,9 @@ public class MatchRatings extends MatchFrames {
         Action downAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (lineInView < teamInView.size() - 1) {
+                if (lineInView < teamInViewLines.size() - 1) {
                     lineInView++;
-                    updateFocus("DOWN", teamInView);
+                    updateFocus("DOWN", teamInViewLines, teamInViewBoxes);
                 }
             }
         };
@@ -231,8 +254,8 @@ public class MatchRatings extends MatchFrames {
 		
 	}
 
-    private void setPlayerLineFocus(ArrayList<PlayerMatchLine> players, int index) {
-        for(PlayerMatchLine eachLine : players){
+    private void setPlayerLineFocus(ArrayList<PlayerStatsLineOnRatingsPage> players, int index, PlayerStatsBoxOnRatingsPage box) {
+        for(PlayerStatsLineOnRatingsPage eachLine : players){
             if(eachLine == players.get(index)){
                 eachLine.setVisible(true);
                 eachLine.requestFocusInWindow();
@@ -241,21 +264,32 @@ public class MatchRatings extends MatchFrames {
                 eachLine.setBackground(Color.LIGHT_GRAY);
             }
         }
+
+        rightBox.removeAll();
+        rightBox.add(box);
+        rightBox.revalidate();
+        rightBox.repaint();
     }
 
-    private void updateFocus(String direction, ArrayList<PlayerMatchLine> players) {
+    private void updateFocus(String direction, ArrayList<PlayerStatsLineOnRatingsPage> players, ArrayList<PlayerStatsBoxOnRatingsPage> boxes) {
         if(direction.equals("UP")) {
-            PlayerMatchLine current = players.get(lineInView + 1);
+            PlayerStatsLineOnRatingsPage current = players.get(lineInView + 1);
             current.setBackground(Color.LIGHT_GRAY);
         } else if (direction.equals("DOWN")) {
-            PlayerMatchLine current = players.get(lineInView - 1);
+            PlayerStatsLineOnRatingsPage current = players.get(lineInView - 1);
             current.setBackground(Color.LIGHT_GRAY);
         }
-        PlayerMatchLine current = players.get(lineInView);
+        PlayerStatsLineOnRatingsPage current = players.get(lineInView);
         current.setBackground(Color.YELLOW);
+        rightBox.removeAll();
+        rightBox.add(boxes.get(lineInView));
+        rightBox.revalidate();
+        rightBox.repaint();
     }
 
-    private void updateFocus(ArrayList<PlayerMatchLine> players, PlayerMatchLine thisLine) {
+    // Stats need labels
+
+    private void updateFocus(ArrayList<PlayerStatsLineOnRatingsPage> players, PlayerStatsLineOnRatingsPage thisLine, PlayerStatsBoxOnRatingsPage thisBox) {
         for(int i=0;i <players.size(); i++){
             if(players.get(i) != thisLine){
                 players.get(i).setBackground(Color.LIGHT_GRAY);
@@ -264,17 +298,27 @@ public class MatchRatings extends MatchFrames {
             }
         }
         thisLine.setBackground(Color.YELLOW);
+        rightBox.removeAll();
+        rightBox.add(thisBox);
+        rightBox.revalidate();
+        rightBox.repaint();
     }
 
-    private PlayerMatchLine createRatingLine(Footballer player, ArrayList<PlayerMatchLine> players) {
-        PlayerMatchLine newLine = new PlayerMatchLine(player);
+    public PlayerStatsLineOnRatingsPage createRatingLine(Footballer player, ArrayList<PlayerStatsLineOnRatingsPage> players) {
+        PlayerStatsLineOnRatingsPage newLine = new PlayerStatsLineOnRatingsPage(player);
         playerRatings.put(player.getName(), newLine);
         players.add(newLine);
         return newLine;
     }
 
+    public void createRatingBox(Footballer player, ArrayList<PlayerStatsBoxOnRatingsPage> players){
+        PlayerStatsBoxOnRatingsPage newBox = new PlayerStatsBoxOnRatingsPage(player);
+        playerBoxes.put(player.getName(), newBox);
+        players.add(newBox);
+    }
+
     public void updateLine(Footballer player){
-        PlayerMatchLine line = playerRatings.get(player.getName());
+        PlayerStatsLineOnRatingsPage line = playerRatings.get(player.getName());
 
 //        line.setSaves(String.valueOf(player.getSavesThisMatch()));
         line.setFitness(player.getStamina() + "%");
@@ -289,6 +333,32 @@ public class MatchRatings extends MatchFrames {
         line.setShootingAccuracy(player.getShotAccuracyThisMatch() + "%");
 
         line.setRating(String.valueOf(10));
+    }
+
+    public void updateBox(Footballer player){
+        PlayerStatsBoxOnRatingsPage box = playerBoxes.get(player.getName());
+
+//        line.setSaves(String.valueOf(player.getSavesThisMatch()));
+        box.setShotsOn("SON: " + player.getShotsOnTargetThisMatch());
+        box.setShotsOff("SOF: " + player.getShotsOffTargetThisMatch());
+
+        box.setDuelsWon("DW: " + player.getDuelsWonThisMatch());
+        box.setDuelsLost("DL: " + player.getDuelsLostThisMatch());
+
+        box.setSuccessfulPasses("SP: " + player.getSuccessfulPassesThisMatch());
+        box.setFailedPasses("FP: " + player.getFailedPassesThisMatch());
+
+        box.setYellowCard("YC: " + player.getYellowCardThisMatch());
+        box.setRedCard("RC: " + player.getRedCardThisMatch());
+
+        box.setGoals("GLS: " + player.getGoalsThisMatch());
+        box.setAssists("AST: " + player.getAssistsThisMatch());
+
+        box.setOffsides("OFS: " + player.getOffsidesThisMatch());
+        box.setFouls("FLS" + player.getFoulsThisMatch());
+        box.setSubstituted("SUB: " + player.getSubstitutedThisMatch());
+        box.setInjury("IJR: " + player.getInjuryTimeThisMatch());
+
     }
 
 }

@@ -8,15 +8,11 @@ import java.util.concurrent.CompletableFuture;
 import people.Footballer;
 import people.Goalkeeper;
 import visuals.CustomizedElements.PlayerAchievementLine;
-import visuals.CustomizedElements.PlayerMatchLine;
 import visuals.CustomizedElements.TeamAchievementLine;
 import visuals.MatchFrames.MatchAllMatches;
-import visuals.MatchFrames.MatchRatings;
 import visuals.MatchFrames.MatchScorers;
 import visuals.ScheduleFrames.Events;
 import visuals.ScheduleFrames.Scheduler;
-
-import javax.swing.*;
 
 public class Match {
 	

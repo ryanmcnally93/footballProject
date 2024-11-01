@@ -5,11 +5,11 @@ import people.Footballer;
 import javax.swing.*;
 import java.awt.*;
 
-public class PlayerMatchLine extends RoundedPanel {
+public class PlayerStatsLineOnRatingsPage extends RoundedPanel {
 
     private JLabel name, saves, duelsWon, passingAccuracy, shootingAccuracy, fitness, rating, pos;
 
-    public PlayerMatchLine(Footballer player){
+    public PlayerStatsLineOnRatingsPage (Footballer player){
         super(20);
 
         setBackground(Color.LIGHT_GRAY);

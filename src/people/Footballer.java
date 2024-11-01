@@ -26,6 +26,15 @@ public class Footballer extends Individual {
 	private int shotsOffTargetThisMatch;
 	private int successfulPassesThisMatch;
 	private int failedPassesThisMatch;
+	private int yellowCardThisMatch;
+	private int redCardThisMatch;
+	private int goalsThisMatch;
+	private int assistsThisMatch;
+	private int offsidesThisMatch;
+	private int foulsThisMatch;
+	private int substitutedThisMatch;
+	private int injuryTimeThisMatch;
+	private boolean injuredThisMatch;
 
 	public int stamina;
 
@@ -93,8 +102,12 @@ public class Footballer extends Individual {
 	}
 
 	public void updatePassingAccuracyThisMatch(){
-		int passes = shotsOnTargetThisMatch + shotsOffTargetThisMatch;
-		passingAccuracyThisMatch = ((int) 100 /passes)*shotsOnTargetThisMatch;
+		if(shotsOffTargetThisMatch == 0){
+			passingAccuracyThisMatch = 100;
+		} else {
+			int passes = shotsOnTargetThisMatch + shotsOffTargetThisMatch;
+			passingAccuracyThisMatch = ((int) 100 / passes) * shotsOnTargetThisMatch;
+		}
 	}
 
 	public void setPassingAccuracyThisMatch(int passingAccuracyThisMatch) {
@@ -114,8 +127,12 @@ public class Footballer extends Individual {
 	}
 
 	public void updateDuelsPercentageThisMatch(){
-		int duels = duelsWonThisMatch + duelsLostThisMatch;
-		duelsPercentageThisMatch = ((int) 100 /duels)*duelsWonThisMatch;
+		if(duelsLostThisMatch == 0){
+			duelsPercentageThisMatch = 100;
+		} else {
+			int duels = duelsWonThisMatch + duelsLostThisMatch;
+			duelsPercentageThisMatch = ((int) 100 / duels) * duelsWonThisMatch;
+		}
 	}
 
 	public void setDuelsPercentageThisMatch(int duelsPercentageThisMatch) {
@@ -123,8 +140,12 @@ public class Footballer extends Individual {
 	}
 
 	public void updateShotAccuracyThisMatch() {
-		int shots = shotsOnTargetThisMatch + shotsOffTargetThisMatch;
-		shotAccuracyThisMatch = ((int) 100 /shots)*shotsOnTargetThisMatch;
+		if(shotsOffTargetThisMatch == 0){
+			shotAccuracyThisMatch = 100;
+		} else {
+			int shots = shotsOnTargetThisMatch + shotsOffTargetThisMatch;
+			shotAccuracyThisMatch = ((int) 100 / shots) * shotsOnTargetThisMatch;
+		}
 	}
 
 	public int getShotAccuracyThisMatch(){
@@ -217,5 +238,109 @@ public class Footballer extends Individual {
 
 	public void addToShotOnTarget() {
 		shotsOnTargetThisMatch++;
+	}
+
+	// This should return a time, should be able to have 2 and create red from that
+	public int getYellowCardThisMatch() {
+		return yellowCardThisMatch;
+	}
+
+	public void addYellowCardThisMatch() {
+		yellowCardThisMatch++;
+	}
+
+	public void setYellowCardThisMatch(int yellowCardThisMatch) {
+		this.yellowCardThisMatch = yellowCardThisMatch;
+	}
+
+	// This should return a time
+	public int getRedCardThisMatch() {
+		return redCardThisMatch;
+	}
+
+	public void addRedCardThisMatch() {
+		redCardThisMatch++;
+	}
+
+	public void setRedCardThisMatch(int redCardThisMatch) {
+		this.redCardThisMatch = redCardThisMatch;
+	}
+
+	public int getGoalsThisMatch() {
+		return goalsThisMatch;
+	}
+
+	public void addGoalToThisMatch() {
+		goalsThisMatch++;
+	}
+
+	public void setGoalsThisMatch(int goalsThisMatch) {
+		this.goalsThisMatch = goalsThisMatch;
+	}
+
+	public int getAssistsThisMatch() {
+		return assistsThisMatch;
+	}
+
+	public void addAssistToThisMatch() {
+		assistsThisMatch++;
+	}
+
+	public void setAssistsThisMatch(int assistsThisMatch) {
+		this.assistsThisMatch = assistsThisMatch;
+	}
+
+	public int getOffsidesThisMatch() {
+		return offsidesThisMatch;
+	}
+
+	public void addOffsidesThisMatch() {
+		offsidesThisMatch++;
+	}
+
+	public void setOffsidesThisMatch(int offsidesThisMatch) {
+		this.offsidesThisMatch = offsidesThisMatch;
+	}
+
+	public int getFoulsThisMatch() {
+		return foulsThisMatch;
+	}
+
+	public void addFoulToThisMatch() {
+		foulsThisMatch++;
+	}
+
+	public void setFoulsThisMatch(int foulsThisMatch) {
+		this.foulsThisMatch = foulsThisMatch;
+	}
+
+	// This should return a time
+	public int getSubstitutedThisMatch() {
+		return substitutedThisMatch;
+	}
+
+	public void addSubstitutedThisMatch() {
+		substitutedThisMatch++;
+	}
+
+	public void setSubstitutedThisMatch(int substitutedThisMatch) {
+		this.substitutedThisMatch = substitutedThisMatch;
+	}
+
+	// This should return a time
+	public int getInjuryTimeThisMatch() {
+		return injuryTimeThisMatch;
+	}
+
+	public void setInjuryTimeThisMatch(int injuryTimeThisMatch) {
+		this.injuryTimeThisMatch = injuryTimeThisMatch;
+	}
+
+	public boolean isInjuredThisMatch() {
+		return injuredThisMatch;
+	}
+
+	public void setInjuredThisMatch(boolean injuredThisMatch) {
+		this.injuredThisMatch = injuredThisMatch;
 	}
 }

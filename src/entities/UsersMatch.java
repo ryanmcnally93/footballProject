@@ -198,6 +198,7 @@ public class UsersMatch extends Match {
 		for (JPanel page : cardMap.values()) {
 			if (page instanceof MatchRatings) {
 				((MatchRatings) page).updateLine(player);
+				((MatchRatings) page).updateBox(player);
 			}
 		}
 	}
