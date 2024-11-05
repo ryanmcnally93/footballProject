@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 import entities.UsersMatch;
 import people.Footballer;
@@ -198,9 +199,10 @@ public class MatchRatings extends MatchFrames {
         mainPanel.add(emptyGap);
 
         rightBox = Box.createVerticalBox();
+        setPermanentWidthAndHeight(rightBox, 250, 405);
         PlayerStatsBoxOnRatingsPage playerBox = new PlayerStatsBoxOnRatingsPage(getMatch().getHomeTeam().get("GK"));
         rightBox.add(playerBox);
-        setPermanentWidthAndHeight(rightBox, 250, 375);
+
         mainPanel.add(rightBox);
 
         // Create Boxes for each Team
@@ -217,7 +219,7 @@ public class MatchRatings extends MatchFrames {
 
         setPlayerLineFocus(homePlayersLines, 0, homePlayersBoxes.get(lineInView));
 
-        mainPanel.setBounds(35, 80, 730, 440);
+        mainPanel.setBounds(35, 70, 730, 440);
         mainPanel.setBackground(Color.LIGHT_GRAY);
         layeredPane.add(mainPanel, JLayeredPane.DEFAULT_LAYER);
 
@@ -339,25 +341,25 @@ public class MatchRatings extends MatchFrames {
         PlayerStatsBoxOnRatingsPage box = playerBoxes.get(player.getName());
 
 //        line.setSaves(String.valueOf(player.getSavesThisMatch()));
-        box.setShotsOn("SON: " + player.getShotsOnTargetThisMatch());
-        box.setShotsOff("SOF: " + player.getShotsOffTargetThisMatch());
+        box.setShotsOn(String.valueOf(player.getShotsOnTargetThisMatch()));
+        box.setShotsOff(String.valueOf(player.getShotsOffTargetThisMatch()));
 
-        box.setDuelsWon("DW: " + player.getDuelsWonThisMatch());
-        box.setDuelsLost("DL: " + player.getDuelsLostThisMatch());
+        box.setDuelsWon(String.valueOf(player.getDuelsWonThisMatch()));
+        box.setDuelsLost(String.valueOf(player.getDuelsLostThisMatch()));
 
-        box.setSuccessfulPasses("SP: " + player.getSuccessfulPassesThisMatch());
-        box.setFailedPasses("FP: " + player.getFailedPassesThisMatch());
+        box.setSuccessfulPasses(String.valueOf(player.getSuccessfulPassesThisMatch()));
+        box.setFailedPasses(String.valueOf(player.getFailedPassesThisMatch()));
 
-        box.setYellowCard("YC: " + player.getYellowCardThisMatch());
-        box.setRedCard("RC: " + player.getRedCardThisMatch());
+        box.setYellowCard(String.valueOf(player.getYellowCardThisMatch()));
+        box.setRedCard(String.valueOf(player.getRedCardThisMatch()));
 
-        box.setGoals("GLS: " + player.getGoalsThisMatch());
-        box.setAssists("AST: " + player.getAssistsThisMatch());
+        box.setGoals(String.valueOf(player.getGoalsThisMatch()));
+        box.setAssists(String.valueOf(player.getAssistsThisMatch()));
 
-        box.setOffsides("OFS: " + player.getOffsidesThisMatch());
-        box.setFouls("FLS" + player.getFoulsThisMatch());
-        box.setSubstituted("SUB: " + player.getSubstitutedThisMatch());
-        box.setInjury("IJR: " + player.getInjuryTimeThisMatch());
+        box.setOffsides(String.valueOf(player.getOffsidesThisMatch()));
+        box.setFouls(String.valueOf(player.getFoulsThisMatch()));
+        box.setSubstituted(String.valueOf(player.getSubstitutedThisMatch()));
+        box.setInjury(String.valueOf(player.getInjuryTimeThisMatch()));
 
     }
 

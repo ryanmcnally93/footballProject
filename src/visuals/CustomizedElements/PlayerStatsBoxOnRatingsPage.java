@@ -2,6 +2,9 @@ package visuals.CustomizedElements;
 import people.Footballer;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class PlayerStatsBoxOnRatingsPage extends RoundedPanel {
@@ -14,6 +17,11 @@ public class PlayerStatsBoxOnRatingsPage extends RoundedPanel {
 
         setBackground(Color.LIGHT_GRAY);
 
+        // This gives some bottom margin to the playerBox
+        setPermanentWidthAndHeight(this, 250, 395);
+        setBorder(new EmptyBorder(0, 0, 10, 0));
+        setBorder(Color.BLACK, 2);
+
         name = new JLabel(player.getName());
         setPermanentWidthAndHeight(name, 250, 30);
         name.setHorizontalAlignment(SwingConstants.CENTER);
@@ -23,54 +31,39 @@ public class PlayerStatsBoxOnRatingsPage extends RoundedPanel {
 
         leftBox = Box.createVerticalBox();
         setPermanentWidthAndHeight(leftBox, 125, 345);
-        leftBox.setBackground(Color.PINK);
-        leftBox.setOpaque(true);
 
 //        saves = new JLabel("N/A");
 //        setPermanentWidth(saves, 50);
 //        saves.setHorizontalAlignment(SwingConstants.CENTER);
 
         goals = new JLabel("N/A");
-        setPermanentWidthAndHeight(goals, 125, 50);
-        goals.setHorizontalAlignment(SwingConstants.LEFT);
         goals.setToolTipText("Goals Scored");
-        leftBox.add(goals);
+        createField(goals, "Goals: ", leftBox);
 
         shotsOn = new JLabel("N/A");
-        setPermanentWidthAndHeight(shotsOn, 125, 50);
-        shotsOn.setHorizontalAlignment(SwingConstants.LEFT);
         shotsOn.setToolTipText("Shots On Target");
-        leftBox.add(shotsOn);
+        createField(shotsOn, "Shots On: ", leftBox);
 
         shotsOff = new JLabel("N/A");
-        setPermanentWidthAndHeight(shotsOff, 125, 50);
-        shotsOff.setHorizontalAlignment(SwingConstants.LEFT);
         shotsOff.setToolTipText("Shots Off Target");
-        leftBox.add(shotsOff);
+        createField(shotsOff, "Shots Off: ", leftBox);
 
         offsides = new JLabel("N/A");
-        setPermanentWidthAndHeight(offsides, 125, 50);
-        offsides.setHorizontalAlignment(SwingConstants.LEFT);
         offsides.setToolTipText("Offsides");
-        leftBox.add(offsides);
+        createField(offsides, "Offsides: ", leftBox);
 
         duelsWon = new JLabel("N/A");
-        setPermanentWidthAndHeight(duelsWon, 125, 50);
-        duelsWon.setHorizontalAlignment(SwingConstants.LEFT);
         duelsWon.setToolTipText("Duels Won");
-        leftBox.add(duelsWon);
+        createField(duelsWon, "Duels Won: ", leftBox);
 
         duelsLost = new JLabel("N/A");
-        setPermanentWidthAndHeight(duelsLost, 125, 50);
-        duelsLost.setHorizontalAlignment(SwingConstants.LEFT);
         duelsLost.setToolTipText("Duels Lost");
-        leftBox.add(duelsLost);
+        createField(duelsLost, "Duels Lost: ", leftBox);
 
         substituted = new JLabel("N/A");
-        setPermanentWidthAndHeight(substituted, 125, 50);
-        substituted.setHorizontalAlignment(SwingConstants.LEFT);
         substituted.setToolTipText("Substituted");
-        leftBox.add(substituted);
+        createField(substituted, "Substituted: ", leftBox);
+        leftBox.setBorder(new EmptyBorder(0,9,0,0));
 
         mainBox.add(leftBox);
 
@@ -78,50 +71,34 @@ public class PlayerStatsBoxOnRatingsPage extends RoundedPanel {
 
         rightBox = Box.createVerticalBox();
         setPermanentWidthAndHeight(rightBox, 125, 345);
-        rightBox.setBackground(Color.BLUE);
-        rightBox.setOpaque(true);
 
         assists = new JLabel("N/A");
-        setPermanentWidthAndHeight(assists, 125, 50);
-        assists.setHorizontalAlignment(SwingConstants.LEFT);
         assists.setToolTipText("Assists");
-        rightBox.add(assists);
+        createField(assists, "Assists: ", rightBox);
 
         successfulPasses = new JLabel("N/A");
-        setPermanentWidthAndHeight(successfulPasses, 125, 50);
-        successfulPasses.setHorizontalAlignment(SwingConstants.LEFT);
         successfulPasses.setToolTipText("Successful Passes");
-        rightBox.add(successfulPasses);
+        createField(successfulPasses, "S. Passes: ", rightBox);
 
         failedPasses = new JLabel("N/A");
-        setPermanentWidthAndHeight(failedPasses, 125, 50);
-        failedPasses.setHorizontalAlignment(SwingConstants.LEFT);
         failedPasses.setToolTipText("Failed Passes");
-        rightBox.add(failedPasses);
+        createField(failedPasses, "F. Passes: ", rightBox);
 
         fouls = new JLabel("N/A");
-        setPermanentWidthAndHeight(fouls, 125, 50);
-        fouls.setHorizontalAlignment(SwingConstants.LEFT);
         fouls.setToolTipText("Fouls");
-        rightBox.add(fouls);
+        createField(fouls, "Fouls: ", rightBox);
 
         yellowCard = new JLabel("N/A");
-        setPermanentWidthAndHeight(yellowCard, 125, 50);
-        yellowCard.setHorizontalAlignment(SwingConstants.LEFT);
         yellowCard.setToolTipText("Yellow Cards");
-        rightBox.add(yellowCard);
+        createField(yellowCard, "Ylw. Cards: ", rightBox);
 
         redCard = new JLabel("N/A");
-        setPermanentWidthAndHeight(redCard, 125, 50);
-        redCard.setHorizontalAlignment(SwingConstants.LEFT);
-        redCard.setToolTipText("Red Card");
-        rightBox.add(redCard);
+        redCard.setToolTipText("Red Cards");
+        createField(redCard, "Red Cards: ", rightBox);
 
         injury = new JLabel("N/A");
-        setPermanentWidthAndHeight(injury, 125, 50);
-        injury.setHorizontalAlignment(SwingConstants.LEFT);
         injury.setToolTipText("Injury");
-        rightBox.add(injury);
+        createField(injury, "Injury: ", rightBox);
 
         mainBox.add(rightBox);
 
@@ -129,6 +106,17 @@ public class PlayerStatsBoxOnRatingsPage extends RoundedPanel {
 
         revalidate();
         repaint();
+    }
+
+    public void createField(JLabel field, String fieldLabel, Box box) {
+        Box line = Box.createHorizontalBox();
+        JLabel label = new JLabel(fieldLabel);
+        setPermanentWidthAndHeight(label, 85, 46);
+        label.setToolTipText(field.getToolTipText());
+        line.add(label);
+        setPermanentWidthAndHeight(field, 50, 46);
+        line.add(field);
+        box.add(line);
     }
 
     public String getPlayerName() {
