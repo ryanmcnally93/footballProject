@@ -4,13 +4,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.*;
+import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 
 import entities.UsersMatch;
 import people.Footballer;
+import visuals.CustomizedElements.ImageWithText;
 import visuals.CustomizedElements.PlayerStatsBoxOnRatingsPage;
 import visuals.CustomizedElements.PlayerStatsLineOnRatingsPage;
 
@@ -26,6 +30,8 @@ public class MatchRatings extends MatchFrames {
     private InputMap inputMap;
     private ActionMap actionMap;
     private Box rightBox;
+    private ImageIcon icon;
+    private BufferedImage bufferedScaledImage;
 
 	public MatchRatings(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer) {
 		super(layout, pages, match, speedometer);
@@ -252,6 +258,22 @@ public class MatchRatings extends MatchFrames {
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "DOWN");
         actionMap.put("DOWN", downAction);
 
+        // This is for the football image
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(new File("/Users/admin/Desktop/footballProject/src/visuals/images/ratings_page_goal.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(image != null) {
+            Image scaledImage = image.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+            bufferedScaledImage = new BufferedImage(50, 50, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedScaledImage.createGraphics();
+            g2d.drawImage(scaledImage, 0, 0, null);
+            g2d.dispose();
+            icon = new ImageIcon(bufferedScaledImage);
+        }
+
         setVisible(true);
 		
 	}
@@ -321,6 +343,18 @@ public class MatchRatings extends MatchFrames {
 
     public void updateLine(Footballer player){
         PlayerStatsLineOnRatingsPage line = playerRatings.get(player.getName());
+
+        // This is for the football image
+        if(player.getGoalsThisMatch() == 1) {
+            line.setName(player.getName());
+            line.getNameAsJLabel().setIcon(icon);
+            line.getNameAsJLabel().setHorizontalTextPosition(SwingConstants.LEFT);
+        } else if (player.getGoalsThisMatch() > 1) {
+            ImageWithText multipleGoals = new ImageWithText(bufferedScaledImage, String.valueOf(player.getGoalsThisMatch()), 0.8f);
+            line.setName(player.getName());
+            line.getNameAsJLabel().setIcon(multipleGoals);
+            line.getNameAsJLabel().setHorizontalTextPosition(SwingConstants.LEFT);
+        }
 
 //        line.setSaves(String.valueOf(player.getSavesThisMatch()));
         line.setFitness(player.getStamina() + "%");

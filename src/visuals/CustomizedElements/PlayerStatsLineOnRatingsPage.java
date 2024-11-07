@@ -106,6 +106,10 @@ public class PlayerStatsLineOnRatingsPage extends RoundedPanel {
         this.shootingAccuracy.repaint();
     }
 
+    public JLabel getNameAsJLabel(){
+        return name;
+    }
+
     public JLabel getFitness() {
         return fitness;
     }

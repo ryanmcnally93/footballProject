@@ -162,6 +162,7 @@ public class Match {
 							for(PlayerAchievementLine line : league.getPlayerLeaderboard().getPlayerAchievements()){
 								if(line.getPlayer() == player){
 									line.addToGoals();
+									player.addGoalToThisMatch();
 									break;
 								};
 							}
@@ -182,6 +183,7 @@ public class Match {
 							for(PlayerAchievementLine line : league.getPlayerLeaderboard().getPlayerAchievements()){
 								if(line.getPlayer() == player){
 									line.addToGoals();
+									player.addGoalToThisMatch();
 									break;
 								};
 							}
