@@ -266,8 +266,8 @@ public class MatchRatings extends MatchFrames {
             e.printStackTrace();
         }
         if(image != null) {
-            Image scaledImage = image.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-            bufferedScaledImage = new BufferedImage(50, 50, BufferedImage.TYPE_INT_ARGB);
+            Image scaledImage = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+            bufferedScaledImage = new BufferedImage(20, 20, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2d = bufferedScaledImage.createGraphics();
             g2d.drawImage(scaledImage, 0, 0, null);
             g2d.dispose();
@@ -350,7 +350,7 @@ public class MatchRatings extends MatchFrames {
             line.getNameAsJLabel().setIcon(icon);
             line.getNameAsJLabel().setHorizontalTextPosition(SwingConstants.LEFT);
         } else if (player.getGoalsThisMatch() > 1) {
-            ImageWithText multipleGoals = new ImageWithText(bufferedScaledImage, String.valueOf(player.getGoalsThisMatch()), 0.8f);
+            ImageWithText multipleGoals = new ImageWithText(bufferedScaledImage, String.valueOf(player.getGoalsThisMatch()), 0.4f);
             line.setName(player.getName());
             line.getNameAsJLabel().setIcon(multipleGoals);
             line.getNameAsJLabel().setHorizontalTextPosition(SwingConstants.LEFT);
