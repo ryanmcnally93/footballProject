@@ -9,8 +9,8 @@ import people.Footballer;
 import people.Goalkeeper;
 import visuals.CustomizedElements.PlayerAchievementLine;
 import visuals.CustomizedElements.TeamAchievementLine;
-import visuals.MatchFrames.MatchAllMatches;
-import visuals.MatchFrames.MatchScorers;
+import visuals.MatchPages.MatchAllMatches;
+import visuals.MatchPages.MatchScorers;
 import visuals.ScheduleFrames.Events;
 import visuals.ScheduleFrames.Scheduler;
 
@@ -34,6 +34,7 @@ public class Match {
 	private String speed;
 	private ArrayList<Match> laterMatches, sameDayMatches, earlierMatches;
 	private ArrayList<String> homeScorers, awayScorers;
+	private boolean isPaused = false;
 	
 	public Match() {}
 	
@@ -106,6 +107,11 @@ public class Match {
 
 	public void startRun(Footballer player) {
 		// Inserted game time was 0
+
+		while(isPaused){
+			// wait
+		}
+
 		System.out.println("Started run with " + player.getName());
 		
 		int enemyCounter = 0;
@@ -375,6 +381,10 @@ public class Match {
 	public void goalAlertOnScreen(Footballer player) {}
 
 	public void updateShotsOnScreen(Footballer player) {}
+
+	public boolean isInMiddleOfMatch(){
+		return !getTimer().getTime().equals("90:00") && !getTimer().getTime().equals("00:00");
+	}
 
 	public boolean getPastPlayer(Footballer player, Footballer otherPlayer) {
 		
@@ -736,5 +746,13 @@ public class Match {
 
 	public void appendEarlierMatches(Match newMatch) {
 		this.earlierMatches.add(newMatch);
+	}
+
+	public boolean isPaused() {
+		return isPaused;
+	}
+
+	public void setPaused(boolean paused) {
+		isPaused = paused;
 	}
 }

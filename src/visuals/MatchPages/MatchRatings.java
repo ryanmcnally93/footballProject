@@ -1,4 +1,4 @@
-package visuals.MatchFrames;
+package visuals.MatchPages;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -14,6 +14,7 @@ import javax.swing.*;
 
 import entities.UsersMatch;
 import people.Footballer;
+import visuals.CustomizedElements.CustomizedButton;
 import visuals.CustomizedElements.ImageWithText;
 import visuals.CustomizedElements.PlayerStatsBoxOnRatingsPage;
 import visuals.CustomizedElements.PlayerStatsLineOnRatingsPage;
@@ -33,8 +34,8 @@ public class MatchRatings extends MatchFrames {
     private ImageIcon icon;
     private BufferedImage bufferedScaledImage;
 
-	public MatchRatings(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer) {
-		super(layout, pages, match, speedometer);
+	public MatchRatings(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer, CustomizedButton pauseButton, CustomizedButton resumeButton) {
+		super(layout, pages, match, speedometer, pauseButton, resumeButton);
 
         lineInView = 0;
 

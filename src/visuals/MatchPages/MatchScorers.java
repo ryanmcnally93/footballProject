@@ -1,4 +1,4 @@
-package visuals.MatchFrames;
+package visuals.MatchPages;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -8,7 +8,6 @@ import java.awt.Font;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
-import java.util.Map;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -17,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import entities.UsersMatch;
-import people.Footballer;
+import visuals.CustomizedElements.CustomizedButton;
 
 public class MatchScorers extends MatchFrames {
 
@@ -25,8 +24,8 @@ public class MatchScorers extends MatchFrames {
     private JPanel leftBox, rightBox;
     private Box centerBox, container;
 
-	public MatchScorers(CardLayout cardLayout, JPanel pages, UsersMatch match, Speedometer speedometer) {
-		super(cardLayout, pages, match, speedometer);
+	public MatchScorers(CardLayout cardLayout, JPanel pages, UsersMatch match, Speedometer speedometer, CustomizedButton pauseButton, CustomizedButton resumeButton) {
+		super(cardLayout, pages, match, speedometer, pauseButton, resumeButton);
 		
 		JLayeredPane layeredPane = getLayeredPane();
         JPanel mainPanel = new JPanel();
@@ -165,5 +164,5 @@ public class MatchScorers extends MatchFrames {
 	public void setAwayScorers(ArrayList<String> awayScorers) {
 		this.awayScorers = awayScorers;
 	}
-	
+
 }

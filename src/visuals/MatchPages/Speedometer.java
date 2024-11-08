@@ -1,10 +1,9 @@
-package visuals.MatchFrames;
+package visuals.MatchPages;
 import entities.Match;
 import visuals.CustomizedElements.CustomizedButton;
 import visuals.CustomizedElements.GamePanel;
 import visuals.CustomizedElements.PanelOfCircles;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

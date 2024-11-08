@@ -1,6 +1,5 @@
 package entities;
-import visuals.MatchFrames.MatchFrames;
-import visuals.MatchFrames.MatchStats;
+import visuals.MatchPages.MatchFrames;
 
 import javax.swing.*;
 import java.util.concurrent.CompletableFuture;
@@ -46,6 +45,12 @@ public class MatchTimer {
         CompletableFuture.runAsync(this::runTimer);
     }
 
+    public void resumeTimer(){
+        CompletableFuture.runAsync(this::runTimer);
+        isRunning = true;
+        match.setPaused(false);
+    }
+
     public void runTimer() {
         if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdown();
@@ -72,7 +77,6 @@ public class MatchTimer {
             // Stop the scheduler when in-app time reaches 90 minutes (1200 seconds)
             if (inAppTime >= MatchSeconds) {
                 if(match instanceof UsersMatch usersMatch){
-                    System.out.println("RUNNING methods inside runTimer finished");
                     usersMatch.getDelayTimer().cancel();
                     usersMatch.getDelayTimer().purge();
                     usersMatch.fullTimeCheck();
@@ -82,6 +86,14 @@ public class MatchTimer {
             }
         };
         scheduler.scheduleAtFixedRate(task, 0, speed, TimeUnit.MILLISECONDS);
+    }
+
+    public void pauseTimer() {
+        if (isRunning && scheduler != null && !scheduler.isShutdown()) {
+            scheduler.shutdown();
+            isRunning = false;
+            match.setPaused(true);
+        }
     }
 
     public String getTime(){
@@ -163,5 +175,3 @@ public class MatchTimer {
         isRunning = running;
     }
 }
-
-// Need to better understand exactly what inAppTime is doing, can we debug it to understand it?

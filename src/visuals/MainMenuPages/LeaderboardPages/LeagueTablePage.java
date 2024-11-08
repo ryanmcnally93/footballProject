@@ -1,5 +1,6 @@
-package visuals.MainMenuPages;
+package visuals.MainMenuPages.LeaderboardPages;
 import visuals.CustomizedElements.LeagueTable;
+import visuals.MainMenuPages.MainMenuPageTemplate;
 import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
@@ -12,8 +13,8 @@ public class LeagueTablePage extends MainMenuPageTemplate {
     private JScrollPane scroller;
     private LeagueTable table;
 
-    public LeagueTablePage(CardLayout cardLayout, JPanel pages, Scheduler scheduler){
-        super(cardLayout, pages, scheduler);
+    public LeagueTablePage(CardLayout cardLayout, JPanel pages, Scheduler scheduler, boolean fromScheduler){
+        super(cardLayout, pages, scheduler, fromScheduler);
         getHeaderPanel().setTitle("League Table");
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());

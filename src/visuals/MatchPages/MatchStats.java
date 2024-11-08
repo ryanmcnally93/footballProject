@@ -1,6 +1,5 @@
-package visuals.MatchFrames;
+package visuals.MatchPages;
 import java.util.ArrayList;
-import java.util.Map;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -14,6 +13,7 @@ import javax.swing.border.EmptyBorder;
 
 import entities.UsersMatch;
 import visuals.CustomizedElements.CustomProgressBar;
+import visuals.CustomizedElements.CustomizedButton;
 
 public class MatchStats extends MatchFrames {
     private static final long serialVersionUID = 5937268249853937276L;
@@ -23,8 +23,8 @@ public class MatchStats extends MatchFrames {
     private Color homeColor, awayColor;
     private ArrayList<Box> boxes;
 
-    public MatchStats(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer) {
-        super(layout, pages, match, speedometer);
+    public MatchStats(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer, CustomizedButton pauseButton, CustomizedButton resumeButton) {
+        super(layout, pages, match, speedometer, pauseButton, resumeButton);
 
         // Set colours for the progress bars to match team colours
         homeColor = getMatch().getHome().getPrimaryColour();

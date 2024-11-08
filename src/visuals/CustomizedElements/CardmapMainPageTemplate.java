@@ -1,10 +1,13 @@
 package visuals.CustomizedElements;
+import entities.Match;
 import visuals.MainMenuPages.MainMenuPageTemplate;
-import visuals.MatchFrames.MatchFrames;
+import visuals.MatchPages.MatchFrames;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class CardmapMainPageTemplate extends GamePanel {
 

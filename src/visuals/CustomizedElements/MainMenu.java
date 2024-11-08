@@ -1,6 +1,14 @@
 package visuals.CustomizedElements;
 import main.GameWindow;
-import visuals.MainMenuPages.*;
+import visuals.MainMenuPages.FixturesPages.AllFixturesPage;
+import visuals.MainMenuPages.FixturesPages.MyFixturesPage;
+import visuals.MainMenuPages.FixturesPages.ResultsPage;
+import visuals.MainMenuPages.LeaderboardPages.LeagueTablePage;
+import visuals.MainMenuPages.LeaderboardPages.TopAssistsPage;
+import visuals.MainMenuPages.LeaderboardPages.TopGoalscorersPage;
+import visuals.MainMenuPages.TacticsPages.FirstTeamPage;
+import visuals.MainMenuPages.TacticsPages.FormationPage;
+import visuals.MainMenuPages.TacticsPages.MatchRolesPage;
 import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
@@ -14,6 +22,9 @@ public class MainMenu extends GamePanel {
     private Scheduler scheduler;
     private GameWindow window;
     private JButton leagueTableButton, goalscorersButton, assistsButton, allFixturesButton, myFixturesButton, resultsButton, firstTeamButton, formationButton, matchRolesButton;
+    private FirstTeamPage firstTeam;
+    private FormationPage formation;
+    private MatchRolesPage matchRoles;
 
     public MainMenu(GameWindow newWindow, Scheduler scheduler) {
         window = newWindow;
@@ -40,9 +51,9 @@ public class MainMenu extends GamePanel {
         // Make the card layout for the pages of these buttons
         CardLayout firstRowLayout = new CardLayout();
         JPanel firstPages = new JPanel(firstRowLayout);
-        LeagueTablePage league = new LeagueTablePage(firstRowLayout, firstPages, scheduler);
-        TopGoalscorersPage goals = new TopGoalscorersPage(firstRowLayout, firstPages, scheduler);
-        TopAssistsPage assists = new TopAssistsPage(firstRowLayout, firstPages, scheduler);
+        LeagueTablePage league = new LeagueTablePage(firstRowLayout, firstPages, scheduler, true);
+        TopGoalscorersPage goals = new TopGoalscorersPage(firstRowLayout, firstPages, scheduler, true);
+        TopAssistsPage assists = new TopAssistsPage(firstRowLayout, firstPages, scheduler, true);
         firstPages.add(league, "League Table");
         firstPages.add(goals, "Top Goals");
         firstPages.add(assists, "Top Assists");
@@ -61,9 +72,9 @@ public class MainMenu extends GamePanel {
         // Make the card layout for the pages of these buttons
         CardLayout secondRowLayout = new CardLayout();
         JPanel secondPages = new JPanel(secondRowLayout);
-        AllFixturesPage allFixtures = new AllFixturesPage(secondRowLayout, secondPages, scheduler);
-        MyFixturesPage myFixtures = new MyFixturesPage(secondRowLayout, secondPages, scheduler);
-        ResultsPage results = new ResultsPage(secondRowLayout, secondPages, scheduler);
+        AllFixturesPage allFixtures = new AllFixturesPage(secondRowLayout, secondPages, scheduler, true);
+        MyFixturesPage myFixtures = new MyFixturesPage(secondRowLayout, secondPages, scheduler, true);
+        ResultsPage results = new ResultsPage(secondRowLayout, secondPages, scheduler, true);
         secondPages.add(allFixtures, "All Fixtures");
         secondPages.add(myFixtures, "My Fixtures");
         secondPages.add(results, "Results");
@@ -82,9 +93,9 @@ public class MainMenu extends GamePanel {
         // Make the card layout for the pages of these buttons
         CardLayout thirdRowLayout = new CardLayout();
         JPanel thirdPages = new JPanel(thirdRowLayout);
-        FirstTeamPage firstTeam = new FirstTeamPage(thirdRowLayout, thirdPages, scheduler);
-        FormationPage formation = new FormationPage(thirdRowLayout, thirdPages, scheduler);
-        MatchRolesPage matchRoles = new MatchRolesPage(thirdRowLayout, thirdPages, scheduler);
+        firstTeam = new FirstTeamPage(thirdRowLayout, thirdPages, scheduler, true);
+        formation = new FormationPage(thirdRowLayout, thirdPages, scheduler, true);
+        matchRoles = new MatchRolesPage(thirdRowLayout, thirdPages, scheduler, true);
         thirdPages.add(firstTeam, "First Team");
         thirdPages.add(formation, "Formation");
         thirdPages.add(matchRoles, "Match Roles");
@@ -161,6 +172,18 @@ public class MainMenu extends GamePanel {
             layout.next(buttonBox);
         });
 
+    }
+
+    public FirstTeamPage getFirstTeamPage() {
+        return firstTeam;
+    }
+
+    public MatchRolesPage getMatchRolesPage() {
+        return matchRoles;
+    }
+
+    public FormationPage getFormationPage() {
+        return formation;
     }
 
 }

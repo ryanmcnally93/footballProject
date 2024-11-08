@@ -1,11 +1,11 @@
-package visuals.MatchFrames;
+package visuals.MatchPages;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.util.Map;
 
 import javax.swing.*;
 
+import visuals.CustomizedElements.CustomizedButton;
 import visuals.CustomizedElements.LeagueTable;
 import entities.UsersMatch;
 
@@ -16,8 +16,8 @@ public class MatchTable extends MatchFrames {
 	private JPanel mainPanel;
 	private JScrollPane scroller;
 
-	public MatchTable(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer) {
-		super(layout, pages, match, speedometer);
+	public MatchTable(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer, CustomizedButton pauseButton, CustomizedButton resumeButton) {
+		super(layout, pages, match, speedometer, pauseButton, resumeButton);
 		
 		JLayeredPane layeredPane = getLayeredPane();
 		mainPanel = new JPanel();
@@ -65,5 +65,5 @@ public class MatchTable extends MatchFrames {
 	public void setTable(LeagueTable table) {
 		this.table = table;
 	}
-	
+
 }

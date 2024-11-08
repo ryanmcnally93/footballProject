@@ -1,7 +1,6 @@
 package entities;
+import java.awt.*;
 import java.time.LocalDateTime;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.util.*;
 import java.util.Timer;
 import java.util.concurrent.CompletableFuture;
@@ -10,7 +9,8 @@ import javax.swing.*;
 import people.Footballer;
 import people.Goalkeeper;
 import main.GameWindow;
-import visuals.MatchFrames.*;
+import visuals.CustomizedElements.CustomizedButton;
+import visuals.MatchPages.*;
 import visuals.ScheduleFrames.Scheduler;
 
 public class UsersMatch extends Match {
@@ -33,6 +33,7 @@ public class UsersMatch extends Match {
 	private final Timer delayTimer = new Timer();
 	private Speedometer speedometer;
 	private String currentPageName;
+	private CustomizedButton pauseButton, resumeButton;
 	
 	public UsersMatch() {};
 	
@@ -63,13 +64,20 @@ public class UsersMatch extends Match {
 
 		speedometer = new Speedometer();
 
-        watchPanel = new MatchWatch(layout, matchPages, this, speedometer);
-        scorerPanel = new MatchScorers(layout, matchPages, this, speedometer);
-        statsPanel = new MatchStats(layout, matchPages, this, speedometer);
-        eventsPanel = new MatchEvents(layout, matchPages, this, speedometer);
-        allMatchesPanel = new MatchAllMatches(layout, matchPages, this, speedometer);
-        tablePanel = new MatchTable(layout, matchPages, this, speedometer);
-        ratingsPanel = new MatchRatings(layout, matchPages, this, speedometer);
+		// Add Pause and Resume Buttons here
+		pauseButton = new CustomizedButton("Pause");
+		pauseButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+		resumeButton = new CustomizedButton("Resume");
+		resumeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        watchPanel = new MatchWatch(layout, matchPages, this, speedometer, pauseButton, resumeButton);
+        scorerPanel = new MatchScorers(layout, matchPages, this, speedometer, pauseButton, resumeButton);
+        statsPanel = new MatchStats(layout, matchPages, this, speedometer, pauseButton, resumeButton);
+        eventsPanel = new MatchEvents(layout, matchPages, this, speedometer, pauseButton, resumeButton);
+        allMatchesPanel = new MatchAllMatches(layout, matchPages, this, speedometer, pauseButton, resumeButton);
+        tablePanel = new MatchTable(layout, matchPages, this, speedometer, pauseButton, resumeButton);
+        ratingsPanel = new MatchRatings(layout, matchPages, this, speedometer, pauseButton, resumeButton);
 
         // Add MatchFrame instances to the MatchFrames main panel
         
@@ -250,11 +258,11 @@ public class UsersMatch extends Match {
 	public void removePlayButton() {
 		for (JPanel page : cardMap.values()) {
 			if (page instanceof MatchFrames) {
-				((MatchFrames) page).removePlayButton();
+				((MatchFrames) page).replacePlayButtonWithPauseButton();
 			}
 		}
 	}
-	
+
 	// Getters & Setters
 
 	public int getHomeAllShots() {

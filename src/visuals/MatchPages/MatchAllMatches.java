@@ -1,7 +1,6 @@
-package visuals.MatchFrames;
+package visuals.MatchPages;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Map;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -10,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 
 import entities.Match;
 import entities.UsersMatch;
+import visuals.CustomizedElements.CustomizedButton;
 
 public class MatchAllMatches extends MatchFrames {
 
@@ -18,8 +18,8 @@ public class MatchAllMatches extends MatchFrames {
     private Boolean laterUpdated;
     private JPanel mainPanel;
 
-    public MatchAllMatches(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer) {
-        super(layout, pages, match, speedometer);
+    public MatchAllMatches(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer, CustomizedButton pauseButton, CustomizedButton resumeButton) {
+        super(layout, pages, match, speedometer, pauseButton, resumeButton);
 
         earlyUpdated = false;
         laterUpdated = false;

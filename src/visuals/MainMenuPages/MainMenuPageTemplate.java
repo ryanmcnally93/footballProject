@@ -1,4 +1,5 @@
 package visuals.MainMenuPages;
+import entities.UsersMatch;
 import visuals.CustomizedElements.CardmapMainPageTemplate;
 import visuals.ScheduleFrames.Scheduler;
 import javax.swing.*;
@@ -11,10 +12,13 @@ public class MainMenuPageTemplate extends CardmapMainPageTemplate {
     private Scheduler scheduler;
     private JPanel mainPanel;
     private JButton back;
+    private UsersMatch match;
+    private boolean fromScheduler = true;
 
-    public MainMenuPageTemplate(CardLayout cardLayout, JPanel pages, Scheduler scheduler){
+    public MainMenuPageTemplate(CardLayout cardLayout, JPanel pages, Scheduler scheduler, boolean fromScheduler){
         super(cardLayout, pages);
         this.scheduler = scheduler;
+        this.fromScheduler = fromScheduler;
 
         // This right box in the footer will help push the other elements central
         JPanel backButtonBox = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -31,13 +35,26 @@ public class MainMenuPageTemplate extends CardmapMainPageTemplate {
         getFooterPanel().add(backButtonBox, BorderLayout.EAST);
         getFooterPanel().add(leftBlankBox, BorderLayout.WEST);
 
-        back.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                scheduler.displayPage(scheduler.getWindow());
-            }
-        });
+        addBackButtonFunctionality();
 
+    }
+
+    public void addBackButtonFunctionality(){
+        if(fromScheduler) {
+            back.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    scheduler.displayPage(scheduler.getWindow());
+                }
+            });
+        } else {
+            back.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    match.displayGame(scheduler.getWindow(), scheduler);
+                }
+            });
+        }
     }
 
     public JPanel getMainPanel() {

@@ -1,9 +1,7 @@
-package visuals.MatchFrames;
+package visuals.MatchPages;
 import java.awt.*;
 import java.awt.event.*;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -16,17 +14,19 @@ public class MatchFrames extends CardmapMainPageTemplate {
 	private static final String PLAY = "Play Game";
 	private SlidingPanel slidingPanel;
 	private UsersMatch match;
-	private CustomizedButton playButton;
+	private CustomizedButton playButton, resumeButton, pauseButton;
 	private InputMap playButtonInputMap;
 	private ActionMap playButtonActionMap;
 	private JLabel time;
 	private Speedometer speedometer;
 	private Box speedometerBox;
 
-	public MatchFrames(CardLayout cardLayout, JPanel pages, UsersMatch match, Speedometer speedometer) {
+	public MatchFrames(CardLayout cardLayout, JPanel pages, UsersMatch match, Speedometer speedometer, CustomizedButton pauseButton, CustomizedButton resumeButton) {
     	super(cardLayout, pages);
         this.match = match;
 		this.speedometer = speedometer;
+		this.pauseButton = pauseButton;
+		this.resumeButton = resumeButton;
 
 		// Add the time to the header
 		time = new JLabel(match.getTimer().getTime(), SwingConstants.CENTER);
@@ -76,6 +76,38 @@ public class MatchFrames extends CardmapMainPageTemplate {
 			}
 		});
 
+		getPauseButton().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				getFooterPanel().getMiddleBox().remove(getPauseButton());
+				for (Match each : getMatch().getSameDayMatches()) {
+					if (each.getTimer().isRunning()) {
+						each.getTimer().pauseTimer();
+					}
+				}
+				MatchFrames current = getCurrentPage();
+				current.getFooterPanel().getMiddleBox().add(getResumeButton());
+				current.getFooterPanel().getMiddleBox().revalidate();
+				current.getFooterPanel().getMiddleBox().repaint();
+			}
+		});
+
+		getResumeButton().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				getFooterPanel().getMiddleBox().remove(getResumeButton());
+				for (Match each : getMatch().getSameDayMatches()) {
+					if (each.getTimer().isRunning()) {
+						each.getTimer().resumeTimer();
+					}
+				}
+				MatchFrames current = getCurrentPage();
+				current.getFooterPanel().getMiddleBox().add(getPauseButton());
+				current.getFooterPanel().getMiddleBox().revalidate();
+				current.getFooterPanel().getMiddleBox().repaint();
+			}
+		});
+
 		playButtonInputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 		playButtonActionMap = getActionMap();
 
@@ -90,6 +122,11 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		String nextPageName = getMatch().getNextPageName();
 		MatchFrames page = (MatchFrames) getMatch().getCardMap().get(nextPageName);
 		page.getSpeedometerBox().add(this.speedometer);
+		if(getMatch().isPaused()) {
+			page.getFooterPanel().getMiddleBox().add(getResumeButton());
+		} else if (!getMatch().isPaused() && getMatch().isInMiddleOfMatch()){
+			page.getFooterPanel().getMiddleBox().add(getPauseButton());
+		}
 		getMatch().setCurrentPageName(nextPageName);
 	}
 
@@ -98,6 +135,11 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		String prevPageName = getMatch().getPrevPageName();
 		MatchFrames page = (MatchFrames) getMatch().getCardMap().get(prevPageName);
 		page.getSpeedometerBox().add(this.speedometer);
+		if(getMatch().isPaused()) {
+			page.getFooterPanel().getMiddleBox().add(getResumeButton());
+		} else if (!getMatch().isPaused() && getMatch().isInMiddleOfMatch()){
+			page.getFooterPanel().getMiddleBox().add(getPauseButton());
+		}
 		getMatch().setCurrentPageName(prevPageName);
 	}
 
@@ -152,8 +194,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		    }
 		};
 
-		getFooterPanel().getFooterActionMap().put(PLAY, contAction);
-
+		getFooterPanel().getMiddleBox().remove(getPauseButton());
 		getFooterPanel().getMiddleBox().add(cont);
 		getFooterPanel().getButtonBox().revalidate();
 		getFooterPanel().getButtonBox().repaint();
@@ -186,9 +227,18 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		}
     }
 
-	public void removePlayButton(){
+	public void replacePlayButtonWithPauseButton(){
 		// Removing the play button as soon as it's clicked
 		getFooterPanel().getMiddleBox().remove(getPlayButton());
+		MatchFrames current = getCurrentPage();
+		current.getFooterPanel().getMiddleBox().add(getPauseButton());
+		current.getFooterPanel().getMiddleBox().revalidate();
+		current.getFooterPanel().getMiddleBox().repaint();
+	}
+
+	public MatchFrames getCurrentPage(){
+		String currentPageString = getMatch().getCurrentPageName();
+		return (MatchFrames) getMatch().getCardMap().get(currentPageString);
 	}
 
 	public void handleClick() {
@@ -238,5 +288,21 @@ public class MatchFrames extends CardmapMainPageTemplate {
 
 	public void setSpeedometerBox(Box speedometerBox) {
 		this.speedometerBox = speedometerBox;
+	}
+
+	public CustomizedButton getResumeButton() {
+		return resumeButton;
+	}
+
+	public void setResumeButton(CustomizedButton resumeButton) {
+		this.resumeButton = resumeButton;
+	}
+
+	public CustomizedButton getPauseButton() {
+		return pauseButton;
+	}
+
+	public void setPauseButton(CustomizedButton pauseButton) {
+		this.pauseButton = pauseButton;
 	}
 }

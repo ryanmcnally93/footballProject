@@ -1,8 +1,7 @@
-package visuals.MatchFrames;
+package visuals.MatchPages;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.util.Map;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -11,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 
 import entities.UsersMatch;
 import people.Footballer;
+import visuals.CustomizedElements.CustomizedButton;
 
 public class MatchEvents extends MatchFrames {
 
@@ -26,8 +26,8 @@ public class MatchEvents extends MatchFrames {
 	private ActionMap actionMap;
 	private int rows = 14;
 
-    public MatchEvents(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer) {
-    	super(layout, pages, match, speedometer);
+    public MatchEvents(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer, CustomizedButton pauseButton, CustomizedButton resumeButton) {
+    	super(layout, pages, match, speedometer, pauseButton, resumeButton);
     	
     	this.events = 0;
     	this.button = 0;
