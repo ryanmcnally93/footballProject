@@ -109,7 +109,12 @@ public class Match {
 		// Inserted game time was 0
 
 		while(isPaused){
-			// wait
+			System.out.println(isPaused);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 
 		System.out.println("Started run with " + player.getName());
@@ -495,7 +500,7 @@ public class Match {
 
 	public void startMatch(String speed) {
 		this.speed = speed;
-		removePlayButton();
+		replacePlayButtonWithPauseButton();
 		addMatchPlayed();
 		initialSetup();
     }
@@ -503,12 +508,12 @@ public class Match {
 	public void startMatch(String speed, Boolean backgroundGame) {
 		this.speed = speed;
 		this.backgroundGame = backgroundGame;
-		removePlayButton();
+		replacePlayButtonWithPauseButton();
 		addMatchPlayed();
 		initialSetup();
 	}
 
-	public void removePlayButton() {};
+	public void replacePlayButtonWithPauseButton() {};
 
 	// For simulated matches
 	public void startMatch(Scheduler scheduler, Boolean bool, String speed) {

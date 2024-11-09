@@ -168,7 +168,7 @@ public class UsersMatch extends Match {
 
 	@Override
 	public void startMatch(String speed) {
-		removePlayButton();
+		replacePlayButtonWithPauseButton();
 		addMatchPlayed();
 		for(Match eachMatch : getSameDayMatches()){
 			CompletableFuture.runAsync(() -> eachMatch.startMatch(speed, true));
@@ -255,7 +255,7 @@ public class UsersMatch extends Match {
 	}
 
 	@Override
-	public void removePlayButton() {
+	public void replacePlayButtonWithPauseButton() {
 		for (JPanel page : cardMap.values()) {
 			if (page instanceof MatchFrames) {
 				((MatchFrames) page).replacePlayButtonWithPauseButton();

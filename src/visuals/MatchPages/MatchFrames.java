@@ -101,6 +101,8 @@ public class MatchFrames extends CardmapMainPageTemplate {
 						each.getTimer().resumeTimer();
 					}
 				}
+				getMatch().getTimer().resumeTimer();
+				System.out.println("ISPAUSED ONE " + getMatch().isPaused());
 				MatchFrames current = getCurrentPage();
 				current.getFooterPanel().getMiddleBox().add(getPauseButton());
 				current.getFooterPanel().getMiddleBox().revalidate();

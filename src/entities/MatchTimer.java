@@ -19,6 +19,7 @@ public class MatchTimer {
     private int speed;
     private ScheduledExecutorService scheduler;
     private boolean isRunning = false;
+    private boolean isPaused = false;
     private int inAppTime = 0;
     private Match match;
 
@@ -42,57 +43,61 @@ public class MatchTimer {
 
     public void run(int speed){
         changeSpeed(speed);
-        CompletableFuture.runAsync(this::runTimer);
+        if (!isRunning) {
+            CompletableFuture.runAsync(this::runTimer);
+        }
     }
 
     public void resumeTimer(){
-        CompletableFuture.runAsync(this::runTimer);
-        isRunning = true;
-        match.setPaused(false);
+        if (isPaused) {
+            isPaused = false;
+            match.setPaused(false);
+        }
     }
 
     public void runTimer() {
-        if (scheduler != null && !scheduler.isShutdown()) {
-            scheduler.shutdown();
+        if (scheduler == null || scheduler.isShutdown()) {
+            scheduler = Executors.newScheduledThreadPool(1);
         }
-
-        scheduler = Executors.newScheduledThreadPool(1);
         isRunning = true;
 
         Runnable task = () -> {
-            inAppTime++;
+            if (!isPaused) {
+                inAppTime++;
+                setGameMinutes(inAppTime / 60);
+                setGameSeconds(inAppTime % 60);
 
-            setGameMinutes(inAppTime / 60);
-            setGameSeconds(inAppTime % 60);
-
-            // Prints the current in-app time
-            if(this.match instanceof UsersMatch newMatch){
-                for (JPanel page : newMatch.getCardMap().values()) {
-                    if (page instanceof MatchFrames) {
-                        ((MatchFrames) page).getTime().setText(getGameMinutes() + ":" + getGameSeconds());
+                // Prints the current in-app time
+                if (this.match instanceof UsersMatch newMatch) {
+                    for (JPanel page : newMatch.getCardMap().values()) {
+                        if (page instanceof MatchFrames) {
+                            ((MatchFrames) page).getTime().setText(getGameMinutes() + ":" + getGameSeconds());
+                        }
                     }
                 }
-            }
 
-            // Stop the scheduler when in-app time reaches 90 minutes (1200 seconds)
-            if (inAppTime >= MatchSeconds) {
-                if(match instanceof UsersMatch usersMatch){
-                    usersMatch.getDelayTimer().cancel();
-                    usersMatch.getDelayTimer().purge();
-                    usersMatch.fullTimeCheck();
+                // Stop the scheduler when in-app time reaches 90 minutes (1200 seconds)
+                if (inAppTime >= MatchSeconds) {
+                    endMatch();
                 }
-                scheduler.shutdown();
-                isRunning = false;
             }
         };
         scheduler.scheduleAtFixedRate(task, 0, speed, TimeUnit.MILLISECONDS);
     }
 
     public void pauseTimer() {
-        if (isRunning && scheduler != null && !scheduler.isShutdown()) {
+        isPaused = true;
+        match.setPaused(true);
+    }
+
+    public void endMatch(){
+        if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdown();
-            isRunning = false;
-            match.setPaused(true);
+        }
+        if (match instanceof UsersMatch usersMatch) {
+            usersMatch.getDelayTimer().cancel();
+            usersMatch.getDelayTimer().purge();
+            usersMatch.fullTimeCheck();
         }
     }
 
