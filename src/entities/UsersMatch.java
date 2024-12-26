@@ -136,6 +136,15 @@ public class UsersMatch extends Match {
 	};
 
 	@Override
+	public void displayTacticsButton() {
+		for (JPanel page : cardMap.values()) {
+			if (page instanceof MatchFrames) {
+				((MatchFrames) page).displayTacticsButton();
+			}
+		}
+	}
+
+	@Override
 	public void updateShotsOnScreen(Footballer player) {
 		if(findTeam(player).equals("Away")) {
 			this.awayShotsOn++;

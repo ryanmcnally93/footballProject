@@ -21,6 +21,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 	private JLabel time;
 	private Speedometer speedometer;
 	private Box speedometerBox;
+	private boolean tacticsButtonVisible;
 
 	public MatchFrames(CardLayout cardLayout, JPanel pages, UsersMatch match, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
     	super(cardLayout, pages);
@@ -29,6 +30,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		this.pauseButton = buttons.getFirst();
 		this.resumeButton = buttons.get(1);
 		this.tacticsButton = buttons.get(2);
+		tacticsButtonVisible = false;
 
 		// Add the time to the header
 		time = new JLabel(match.getTimer().getTime(), SwingConstants.CENTER);
@@ -104,6 +106,8 @@ public class MatchFrames extends CardmapMainPageTemplate {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				getFooterPanel().getMiddleBox().remove(getResumeButton());
+				getFooterPanel().getMiddleBox().remove(getTacticsButton());
+				tacticsButtonVisible = false;
 				// Lets resume all the matches in the array
 				for (Match each : getMatch().getSameDayMatches()) {
 					each.getTimer().resumeTimer();
@@ -136,6 +140,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		page.getSpeedometerBox().add(this.speedometer);
 		if(getMatch().getTimer().isPaused()) {
 			page.getFooterPanel().getMiddleBox().add(getResumeButton());
+			page.getFooterPanel().getMiddleBox().add(getTacticsButton());
 		} else if (!getMatch().getTimer().isPaused() && getMatch().isInMiddleOfMatch()){
 			page.getFooterPanel().getMiddleBox().add(getPauseButton());
 		}
@@ -149,6 +154,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		page.getSpeedometerBox().add(this.speedometer);
 		if(getMatch().getTimer().isPaused()) {
 			page.getFooterPanel().getMiddleBox().add(getResumeButton());
+			page.getFooterPanel().getMiddleBox().add(getTacticsButton());
 		} else if (!getMatch().getTimer().isPaused() && getMatch().isInMiddleOfMatch()){
 			page.getFooterPanel().getMiddleBox().add(getPauseButton());
 		}
@@ -246,6 +252,16 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		current.getFooterPanel().getMiddleBox().add(getPauseButton());
 		current.getFooterPanel().getMiddleBox().revalidate();
 		current.getFooterPanel().getMiddleBox().repaint();
+	}
+
+	public void displayTacticsButton() {
+		if (!tacticsButtonVisible) {
+			MatchFrames current = getCurrentPage();
+			current.getFooterPanel().getMiddleBox().add(getTacticsButton());
+			current.getFooterPanel().getMiddleBox().revalidate();
+			current.getFooterPanel().getMiddleBox().repaint();
+			tacticsButtonVisible = true;
+		}
 	}
 
 	public MatchFrames getCurrentPage(){

@@ -109,6 +109,7 @@ public class Match {
 
 		while(getTimer().isPaused()){
 			System.out.println(getTimer().isPaused());
+			displayTacticsButton();
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
@@ -253,6 +254,8 @@ public class Match {
 		}
 
     }
+
+	public void displayTacticsButton() {}
 
 	public void goalUpdatesTable(int oldHome, int oldAway) {
 		System.out.println("RUNNING goalUpdatesTable METHOD");
