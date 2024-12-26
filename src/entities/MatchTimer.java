@@ -22,6 +22,7 @@ public class MatchTimer {
     private boolean isPaused = false;
     private int inAppTime = 0;
     private Match match;
+    private Runnable task;
 
     public MatchTimer(){
        this.gameMinutes = 0;
@@ -48,20 +49,14 @@ public class MatchTimer {
         }
     }
 
-    public void resumeTimer(){
-        if (isPaused) {
-            isPaused = false;
-            match.setPaused(false);
-        }
-    }
-
     public void runTimer() {
         if (scheduler == null || scheduler.isShutdown()) {
             scheduler = Executors.newScheduledThreadPool(1);
         }
         isRunning = true;
+        isPaused = false;
 
-        Runnable task = () -> {
+        task = () -> {
             if (!isPaused) {
                 inAppTime++;
                 setGameMinutes(inAppTime / 60);
@@ -79,15 +74,37 @@ public class MatchTimer {
                 // Stop the scheduler when in-app time reaches 90 minutes (1200 seconds)
                 if (inAppTime >= MatchSeconds) {
                     endMatch();
+                    isRunning = false;
                 }
             }
         };
         scheduler.scheduleAtFixedRate(task, 0, speed, TimeUnit.MILLISECONDS);
     }
 
+    public void changeSpeedDuringMatch(int newSpeed) {
+        if (isRunning) {
+            scheduler.shutdown();
+            scheduler = Executors.newScheduledThreadPool(1);
+            changeSpeed(newSpeed);
+            scheduler.scheduleAtFixedRate(task, 0, speed, TimeUnit.MILLISECONDS);
+        } else if (isPaused) {
+            changeSpeed(newSpeed);
+        }
+    }
+
     public void pauseTimer() {
         isPaused = true;
-        match.setPaused(true);
+        isRunning = false;
+        scheduler.shutdown();
+    }
+
+    public void resumeTimer(){
+        if (isPaused) {
+            isPaused = false;
+            isRunning = true;
+            scheduler = Executors.newScheduledThreadPool(1);
+            scheduler.scheduleAtFixedRate(task, 0, speed, TimeUnit.MILLISECONDS);
+        }
     }
 
     public void endMatch(){
@@ -178,5 +195,21 @@ public class MatchTimer {
 
     public void setRunning(boolean running) {
         isRunning = running;
+    }
+
+    public boolean isPaused() {
+        return isPaused;
+    }
+
+    public void setPaused(boolean paused) {
+        isPaused = paused;
+    }
+
+    public Runnable getTask() {
+        return task;
+    }
+
+    public void setTask(Runnable task) {
+        this.task = task;
     }
 }

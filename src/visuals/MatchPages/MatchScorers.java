@@ -24,8 +24,8 @@ public class MatchScorers extends MatchFrames {
     private JPanel leftBox, rightBox;
     private Box centerBox, container;
 
-	public MatchScorers(CardLayout cardLayout, JPanel pages, UsersMatch match, Speedometer speedometer, CustomizedButton pauseButton, CustomizedButton resumeButton) {
-		super(cardLayout, pages, match, speedometer, pauseButton, resumeButton);
+	public MatchScorers(CardLayout cardLayout, JPanel pages, UsersMatch match, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
+		super(cardLayout, pages, match, speedometer, buttons);
 		
 		JLayeredPane layeredPane = getLayeredPane();
         JPanel mainPanel = new JPanel();

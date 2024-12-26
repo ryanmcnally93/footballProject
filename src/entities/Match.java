@@ -34,7 +34,6 @@ public class Match {
 	private String speed;
 	private ArrayList<Match> laterMatches, sameDayMatches, earlierMatches;
 	private ArrayList<String> homeScorers, awayScorers;
-	private boolean isPaused = false;
 	
 	public Match() {}
 	
@@ -108,8 +107,8 @@ public class Match {
 	public void startRun(Footballer player) {
 		// Inserted game time was 0
 
-		while(isPaused){
-			System.out.println(isPaused);
+		while(getTimer().isPaused()){
+			System.out.println(getTimer().isPaused());
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
@@ -751,13 +750,5 @@ public class Match {
 
 	public void appendEarlierMatches(Match newMatch) {
 		this.earlierMatches.add(newMatch);
-	}
-
-	public boolean isPaused() {
-		return isPaused;
-	}
-
-	public void setPaused(boolean paused) {
-		isPaused = paused;
 	}
 }

@@ -2,6 +2,7 @@ package visuals.MatchPages;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -15,8 +16,8 @@ public class MatchWatch extends MatchFrames {
 	private static final long serialVersionUID = -3730364980616724000L;
 	private Box centerBox;
 
-	public MatchWatch(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer, CustomizedButton pauseButton, CustomizedButton resumeButton) {
-		super(layout, pages, match, speedometer, pauseButton, resumeButton);
+	public MatchWatch(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
+		super(layout, pages, match, speedometer, buttons);
 		
 		JLayeredPane layeredPane = getLayeredPane();
         JPanel mainPanel = new JPanel();

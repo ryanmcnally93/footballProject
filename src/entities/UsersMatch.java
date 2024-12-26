@@ -33,7 +33,7 @@ public class UsersMatch extends Match {
 	private final Timer delayTimer = new Timer();
 	private Speedometer speedometer;
 	private String currentPageName;
-	private CustomizedButton pauseButton, resumeButton;
+	private CustomizedButton pauseButton, resumeButton, tacticsButton;
 	
 	public UsersMatch() {};
 	
@@ -63,21 +63,28 @@ public class UsersMatch extends Match {
         matchPages = new JPanel(layout);
 
 		speedometer = new Speedometer();
+		ArrayList<CustomizedButton> buttons = new ArrayList<CustomizedButton>();
 
 		// Add Pause and Resume Buttons here
 		pauseButton = new CustomizedButton("Pause");
 		pauseButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		buttons.add(pauseButton);
 
 		resumeButton = new CustomizedButton("Resume");
 		resumeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		buttons.add(resumeButton);
 
-        watchPanel = new MatchWatch(layout, matchPages, this, speedometer, pauseButton, resumeButton);
-        scorerPanel = new MatchScorers(layout, matchPages, this, speedometer, pauseButton, resumeButton);
-        statsPanel = new MatchStats(layout, matchPages, this, speedometer, pauseButton, resumeButton);
-        eventsPanel = new MatchEvents(layout, matchPages, this, speedometer, pauseButton, resumeButton);
-        allMatchesPanel = new MatchAllMatches(layout, matchPages, this, speedometer, pauseButton, resumeButton);
-        tablePanel = new MatchTable(layout, matchPages, this, speedometer, pauseButton, resumeButton);
-        ratingsPanel = new MatchRatings(layout, matchPages, this, speedometer, pauseButton, resumeButton);
+		tacticsButton = new CustomizedButton("Tactics");
+		tacticsButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		buttons.add(tacticsButton);
+
+        watchPanel = new MatchWatch(layout, matchPages, this, speedometer, buttons);
+        scorerPanel = new MatchScorers(layout, matchPages, this, speedometer, buttons);
+        statsPanel = new MatchStats(layout, matchPages, this, speedometer, buttons);
+        eventsPanel = new MatchEvents(layout, matchPages, this, speedometer, buttons);
+        allMatchesPanel = new MatchAllMatches(layout, matchPages, this, speedometer, buttons);
+        tablePanel = new MatchTable(layout, matchPages, this, speedometer, buttons);
+        ratingsPanel = new MatchRatings(layout, matchPages, this, speedometer, buttons);
 
         // Add MatchFrame instances to the MatchFrames main panel
         

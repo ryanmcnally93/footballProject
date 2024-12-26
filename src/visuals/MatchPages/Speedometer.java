@@ -61,9 +61,7 @@ public class Speedometer extends GamePanel {
                     getCircles().changeCircleColor(speeds.get(speedIndex));
                     for(Match each : getMatch().getSameDayMatches()){
                         each.setSpeed(speeds.get(speedIndex));
-                        if(each.getTimer().isRunning()){
-                            each.getTimer().run(speedIndex+1);
-                        }
+                        each.getTimer().changeSpeedDuringMatch(speedIndex+1);
                     }
                     System.out.println("Speed is: " + getMatch().getSpeed());
                 }
@@ -88,9 +86,7 @@ public class Speedometer extends GamePanel {
                     getCircles().changeCircleColor(speeds.get(speedIndex));
                     for(Match each : getMatch().getSameDayMatches()){
                         each.setSpeed(speeds.get(speedIndex));
-                        if(each.getTimer().isRunning()){
-                            each.getTimer().run(speedIndex+1);
-                        }
+                        each.getTimer().changeSpeedDuringMatch(speedIndex+1);
                     }
                     System.out.println("Speed is: " + getMatch().getSpeed());
                 }

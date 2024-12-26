@@ -2,6 +2,7 @@ package visuals.MatchPages;
 import java.awt.*;
 import java.awt.event.*;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -14,19 +15,20 @@ public class MatchFrames extends CardmapMainPageTemplate {
 	private static final String PLAY = "Play Game";
 	private SlidingPanel slidingPanel;
 	private UsersMatch match;
-	private CustomizedButton playButton, resumeButton, pauseButton;
+	private CustomizedButton playButton, resumeButton, pauseButton, tacticsButton;
 	private InputMap playButtonInputMap;
 	private ActionMap playButtonActionMap;
 	private JLabel time;
 	private Speedometer speedometer;
 	private Box speedometerBox;
 
-	public MatchFrames(CardLayout cardLayout, JPanel pages, UsersMatch match, Speedometer speedometer, CustomizedButton pauseButton, CustomizedButton resumeButton) {
+	public MatchFrames(CardLayout cardLayout, JPanel pages, UsersMatch match, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
     	super(cardLayout, pages);
         this.match = match;
 		this.speedometer = speedometer;
-		this.pauseButton = pauseButton;
-		this.resumeButton = resumeButton;
+		this.pauseButton = buttons.getFirst();
+		this.resumeButton = buttons.get(1);
+		this.tacticsButton = buttons.get(2);
 
 		// Add the time to the header
 		time = new JLabel(match.getTimer().getTime(), SwingConstants.CENTER);
@@ -80,11 +82,17 @@ public class MatchFrames extends CardmapMainPageTemplate {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				getFooterPanel().getMiddleBox().remove(getPauseButton());
+				// Lets pause all the matches in the array
 				for (Match each : getMatch().getSameDayMatches()) {
 					if (each.getTimer().isRunning()) {
 						each.getTimer().pauseTimer();
 					}
 				}
+				// Sometimes the array doesn't contain the main match
+				if (!getMatch().getSameDayMatches().contains(match)) {
+					getMatch().getTimer().pauseTimer();
+				}
+
 				MatchFrames current = getCurrentPage();
 				current.getFooterPanel().getMiddleBox().add(getResumeButton());
 				current.getFooterPanel().getMiddleBox().revalidate();
@@ -96,13 +104,15 @@ public class MatchFrames extends CardmapMainPageTemplate {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				getFooterPanel().getMiddleBox().remove(getResumeButton());
+				// Lets resume all the matches in the array
 				for (Match each : getMatch().getSameDayMatches()) {
-					if (each.getTimer().isRunning()) {
-						each.getTimer().resumeTimer();
-					}
+					each.getTimer().resumeTimer();
 				}
-				getMatch().getTimer().resumeTimer();
-				System.out.println("ISPAUSED ONE " + getMatch().isPaused());
+				// Sometimes the array doesn't contain the main match
+				if (!getMatch().getSameDayMatches().contains(match)) {
+					getMatch().getTimer().resumeTimer();
+				}
+
 				MatchFrames current = getCurrentPage();
 				current.getFooterPanel().getMiddleBox().add(getPauseButton());
 				current.getFooterPanel().getMiddleBox().revalidate();
@@ -124,9 +134,9 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		String nextPageName = getMatch().getNextPageName();
 		MatchFrames page = (MatchFrames) getMatch().getCardMap().get(nextPageName);
 		page.getSpeedometerBox().add(this.speedometer);
-		if(getMatch().isPaused()) {
+		if(getMatch().getTimer().isPaused()) {
 			page.getFooterPanel().getMiddleBox().add(getResumeButton());
-		} else if (!getMatch().isPaused() && getMatch().isInMiddleOfMatch()){
+		} else if (!getMatch().getTimer().isPaused() && getMatch().isInMiddleOfMatch()){
 			page.getFooterPanel().getMiddleBox().add(getPauseButton());
 		}
 		getMatch().setCurrentPageName(nextPageName);
@@ -137,9 +147,9 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		String prevPageName = getMatch().getPrevPageName();
 		MatchFrames page = (MatchFrames) getMatch().getCardMap().get(prevPageName);
 		page.getSpeedometerBox().add(this.speedometer);
-		if(getMatch().isPaused()) {
+		if(getMatch().getTimer().isPaused()) {
 			page.getFooterPanel().getMiddleBox().add(getResumeButton());
-		} else if (!getMatch().isPaused() && getMatch().isInMiddleOfMatch()){
+		} else if (!getMatch().getTimer().isPaused() && getMatch().isInMiddleOfMatch()){
 			page.getFooterPanel().getMiddleBox().add(getPauseButton());
 		}
 		getMatch().setCurrentPageName(prevPageName);
@@ -306,5 +316,13 @@ public class MatchFrames extends CardmapMainPageTemplate {
 
 	public void setPauseButton(CustomizedButton pauseButton) {
 		this.pauseButton = pauseButton;
+	}
+
+	public CustomizedButton getTacticsButton() {
+		return tacticsButton;
+	}
+
+	public void setTacticsButton(CustomizedButton tacticsButton) {
+		this.tacticsButton = tacticsButton;
 	}
 }

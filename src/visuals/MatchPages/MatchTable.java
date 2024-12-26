@@ -2,6 +2,7 @@ package visuals.MatchPages;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -16,8 +17,8 @@ public class MatchTable extends MatchFrames {
 	private JPanel mainPanel;
 	private JScrollPane scroller;
 
-	public MatchTable(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer, CustomizedButton pauseButton, CustomizedButton resumeButton) {
-		super(layout, pages, match, speedometer, pauseButton, resumeButton);
+	public MatchTable(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
+		super(layout, pages, match, speedometer, buttons);
 		
 		JLayeredPane layeredPane = getLayeredPane();
 		mainPanel = new JPanel();

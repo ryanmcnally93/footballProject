@@ -34,8 +34,8 @@ public class MatchRatings extends MatchFrames {
     private ImageIcon icon;
     private BufferedImage bufferedScaledImage;
 
-	public MatchRatings(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer, CustomizedButton pauseButton, CustomizedButton resumeButton) {
-		super(layout, pages, match, speedometer, pauseButton, resumeButton);
+	public MatchRatings(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
+		super(layout, pages, match, speedometer, buttons);
 
         lineInView = 0;
 
