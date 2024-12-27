@@ -3,12 +3,16 @@ import java.awt.*;
 import java.awt.event.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import entities.Match;
+import entities.Team;
 import entities.UsersMatch;
 import visuals.CustomizedElements.*;
+import visuals.MainMenuPages.MainMenuPageTemplate;
+import visuals.MainMenuPages.TacticsPages.FirstTeamPage;
 
 public class MatchFrames extends CardmapMainPageTemplate {
 
@@ -99,6 +103,13 @@ public class MatchFrames extends CardmapMainPageTemplate {
 				current.getFooterPanel().getMiddleBox().add(getResumeButton());
 				current.getFooterPanel().getMiddleBox().revalidate();
 				current.getFooterPanel().getMiddleBox().repaint();
+			}
+		});
+
+		getTacticsButton().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				viewTacticsDuringMatch();
 			}
 		});
 
@@ -199,23 +210,36 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		// Adding the continue button
 		CustomizedButton cont = new CustomizedButton("Continue");
 		cont.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-            	continueToScheduler();
-            }
-        });
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				continueToScheduler();
+			}
+		});
 
 		Action contAction = new AbstractAction() {
 			@Override
-		    public void actionPerformed(ActionEvent e) {
-		    	continueToScheduler();
-		    }
+			public void actionPerformed(ActionEvent e) {
+				continueToScheduler();
+			}
 		};
 
 		getFooterPanel().getMiddleBox().remove(getPauseButton());
 		getFooterPanel().getMiddleBox().add(cont);
 		getFooterPanel().getButtonBox().revalidate();
 		getFooterPanel().getButtonBox().repaint();
+	}
+
+	public void viewTacticsDuringMatch() {
+		match.getWindow().getContentPane().removeAll();
+		for (Map.Entry<String, JPanel> eachTacticsPage : match.getScheduler().getTacticsMap().entrySet()) {
+			((MainMenuPageTemplate) eachTacticsPage.getValue()).setFromScheduler(false);
+			((MainMenuPageTemplate) eachTacticsPage.getValue()).updateBackButtonFunctionality(match);
+		}
+		match.getWindow().getContentPane().add(match.getScheduler().getTacticsPages(), BorderLayout.CENTER);
+		match.getScheduler().getTacticsLayout().show(match.getScheduler().getTacticsPages(), "First Team");
+		match.getWindow().revalidate();
+		match.getWindow().repaint();
+
 	}
 
 	public void continueToScheduler(){
@@ -232,6 +256,11 @@ public class MatchFrames extends CardmapMainPageTemplate {
 			for(Match eachMatch : match.getLaterMatches()){
 				CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
 			}
+		}
+		// Set the back button on tactics cardmap to normal
+		for (Map.Entry<String, JPanel> eachTacticsPage : match.getScheduler().getTacticsMap().entrySet()) {
+			((MainMenuPageTemplate) eachTacticsPage.getValue()).setFromScheduler(true);
+			((MainMenuPageTemplate) eachTacticsPage.getValue()).updateBackButtonFunctionality(match);
 		}
 	}
 

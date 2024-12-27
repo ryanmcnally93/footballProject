@@ -22,12 +22,9 @@ public class MainMenu extends GamePanel {
     private Scheduler scheduler;
     private GameWindow window;
     private JButton leagueTableButton, goalscorersButton, assistsButton, allFixturesButton, myFixturesButton, resultsButton, firstTeamButton, formationButton, matchRolesButton;
-    private FirstTeamPage firstTeam;
-    private FormationPage formation;
-    private MatchRolesPage matchRoles;
 
     public MainMenu(GameWindow newWindow, Scheduler scheduler) {
-        window = newWindow;
+        this.window = newWindow;
         this.scheduler = scheduler;
         setLayout(new BorderLayout());
 
@@ -43,63 +40,18 @@ public class MainMenu extends GamePanel {
         goalscorersButton = new JButton("Top Goals");
         assistsButton = new JButton("Top Assists");
         makeMenuRow(firstRow, leagueTableButton, goalscorersButton, assistsButton);
-        ArrayList<JButton> firstButtons = new ArrayList<>();
-        firstButtons.add(leagueTableButton);
-        firstButtons.add(goalscorersButton);
-        firstButtons.add(assistsButton);
-
-        // Make the card layout for the pages of these buttons
-        CardLayout firstRowLayout = new CardLayout();
-        JPanel firstPages = new JPanel(firstRowLayout);
-        LeagueTablePage league = new LeagueTablePage(firstRowLayout, firstPages, scheduler, true);
-        TopGoalscorersPage goals = new TopGoalscorersPage(firstRowLayout, firstPages, scheduler, true);
-        TopAssistsPage assists = new TopAssistsPage(firstRowLayout, firstPages, scheduler, true);
-        firstPages.add(league, "League Table");
-        firstPages.add(goals, "Top Goals");
-        firstPages.add(assists, "Top Assists");
-        addListeners(firstButtons, firstPages, firstRowLayout);
 
         Box secondRow = Box.createHorizontalBox();
         allFixturesButton = new JButton("All Fixtures");
         myFixturesButton = new JButton("My Fixtures");
         resultsButton = new JButton("Results");
         makeMenuRow(secondRow, allFixturesButton, myFixturesButton, resultsButton);
-        ArrayList<JButton> secondButtons = new ArrayList<>();
-        secondButtons.add(allFixturesButton);
-        secondButtons.add(myFixturesButton);
-        secondButtons.add(resultsButton);
-
-        // Make the card layout for the pages of these buttons
-        CardLayout secondRowLayout = new CardLayout();
-        JPanel secondPages = new JPanel(secondRowLayout);
-        AllFixturesPage allFixtures = new AllFixturesPage(secondRowLayout, secondPages, scheduler, true);
-        MyFixturesPage myFixtures = new MyFixturesPage(secondRowLayout, secondPages, scheduler, true);
-        ResultsPage results = new ResultsPage(secondRowLayout, secondPages, scheduler, true);
-        secondPages.add(allFixtures, "All Fixtures");
-        secondPages.add(myFixtures, "My Fixtures");
-        secondPages.add(results, "Results");
-        addListeners(secondButtons, secondPages, secondRowLayout);
 
         Box thirdRow = Box.createHorizontalBox();
         firstTeamButton = new JButton("First Team");
         formationButton = new JButton("Formation");
         matchRolesButton = new JButton("Match Roles");
         makeMenuRow(thirdRow, firstTeamButton, formationButton, matchRolesButton);
-        ArrayList<JButton> thirdButtons = new ArrayList<>();
-        thirdButtons.add(firstTeamButton);
-        thirdButtons.add(formationButton);
-        thirdButtons.add(matchRolesButton);
-
-        // Make the card layout for the pages of these buttons
-        CardLayout thirdRowLayout = new CardLayout();
-        JPanel thirdPages = new JPanel(thirdRowLayout);
-        firstTeam = new FirstTeamPage(thirdRowLayout, thirdPages, scheduler, true);
-        formation = new FormationPage(thirdRowLayout, thirdPages, scheduler, true);
-        matchRoles = new MatchRolesPage(thirdRowLayout, thirdPages, scheduler, true);
-        thirdPages.add(firstTeam, "First Team");
-        thirdPages.add(formation, "Formation");
-        thirdPages.add(matchRoles, "Match Roles");
-        addListeners(thirdButtons, thirdPages, thirdRowLayout);
 
         setPermanentWidthAndHeight(firstRow, 200, 40);
         setPermanentWidthAndHeight(secondRow, 200, 40);
@@ -114,21 +66,6 @@ public class MainMenu extends GamePanel {
         mainPanel.add(container);
         add(mainPanel, BorderLayout.CENTER);
         repaint();
-    }
-
-    public void addListeners(ArrayList<JButton> buttons, JPanel pages, CardLayout thisLayout){
-        for(JButton button : buttons){
-            button.addMouseListener(new MouseAdapter(){
-                @Override
-                public void mouseClicked(MouseEvent e){
-                    window.getContentPane().removeAll();
-                    window.getContentPane().add(pages, BorderLayout.CENTER);
-                    thisLayout.show(pages, button.getText());
-                    window.revalidate();
-                    window.repaint();
-                }
-            });
-        }
     }
 
     public void makeMenuRow(Box row, JButton buttonOne, JButton buttonTwo, JButton buttonThree){
@@ -174,16 +111,75 @@ public class MainMenu extends GamePanel {
 
     }
 
-    public FirstTeamPage getFirstTeamPage() {
-        return firstTeam;
+    public JButton getFirstTeamButton() {
+        return firstTeamButton;
     }
 
-    public MatchRolesPage getMatchRolesPage() {
-        return matchRoles;
+    public void setFirstTeamButton(JButton firstTeamButton) {
+        this.firstTeamButton = firstTeamButton;
     }
 
-    public FormationPage getFormationPage() {
-        return formation;
+    public JButton getLeagueTableButton() {
+        return leagueTableButton;
     }
 
+    public void setLeagueTableButton(JButton leagueTableButton) {
+        this.leagueTableButton = leagueTableButton;
+    }
+
+    public JButton getGoalscorersButton() {
+        return goalscorersButton;
+    }
+
+    public void setGoalscorersButton(JButton goalscorersButton) {
+        this.goalscorersButton = goalscorersButton;
+    }
+
+    public JButton getAssistsButton() {
+        return assistsButton;
+    }
+
+    public void setAssistsButton(JButton assistsButton) {
+        this.assistsButton = assistsButton;
+    }
+
+    public JButton getAllFixturesButton() {
+        return allFixturesButton;
+    }
+
+    public void setAllFixturesButton(JButton allFixturesButton) {
+        this.allFixturesButton = allFixturesButton;
+    }
+
+    public JButton getMyFixturesButton() {
+        return myFixturesButton;
+    }
+
+    public void setMyFixturesButton(JButton myFixturesButton) {
+        this.myFixturesButton = myFixturesButton;
+    }
+
+    public JButton getResultsButton() {
+        return resultsButton;
+    }
+
+    public void setResultsButton(JButton resultsButton) {
+        this.resultsButton = resultsButton;
+    }
+
+    public JButton getFormationButton() {
+        return formationButton;
+    }
+
+    public void setFormationButton(JButton formationButton) {
+        this.formationButton = formationButton;
+    }
+
+    public JButton getMatchRolesButton() {
+        return matchRolesButton;
+    }
+
+    public void setMatchRolesButton(JButton matchRolesButton) {
+        this.matchRolesButton = matchRolesButton;
+    }
 }

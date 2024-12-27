@@ -118,6 +118,11 @@ public class UsersMatch extends Match {
 			getSameDayMatches().add(this);
 		}
 
+		if(getTimer().isPaused()) {
+			statsPanel.getFooterPanel().getMiddleBox().add(statsPanel.getResumeButton());
+			statsPanel.displayTacticsButton();
+		}
+
 		updateAllMatchesPage();
 		updateDomesticLeagueTable();
 
@@ -137,11 +142,7 @@ public class UsersMatch extends Match {
 
 	@Override
 	public void displayTacticsButton() {
-		for (JPanel page : cardMap.values()) {
-			if (page instanceof MatchFrames) {
-				((MatchFrames) page).displayTacticsButton();
-			}
-		}
+		((MatchFrames) cardMap.get("Stats")).displayTacticsButton();
 	}
 
 	@Override

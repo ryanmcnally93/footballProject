@@ -1,4 +1,5 @@
 package visuals.MainMenuPages;
+import entities.Match;
 import entities.UsersMatch;
 import visuals.CustomizedElements.CardmapMainPageTemplate;
 import visuals.ScheduleFrames.Scheduler;
@@ -57,6 +58,24 @@ public class MainMenuPageTemplate extends CardmapMainPageTemplate {
         }
     }
 
+    public void updateBackButtonFunctionality(UsersMatch match){
+        if(fromScheduler) {
+            back.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    scheduler.displayPage(scheduler.getWindow());
+                }
+            });
+        } else {
+            back.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    match.displayGame(scheduler.getWindow(), scheduler);
+                }
+            });
+        }
+    }
+
     public JPanel getMainPanel() {
         return mainPanel;
     }
@@ -71,5 +90,13 @@ public class MainMenuPageTemplate extends CardmapMainPageTemplate {
 
     public void setScheduler(Scheduler scheduler) {
         this.scheduler = scheduler;
+    }
+
+    public boolean isFromScheduler() {
+        return fromScheduler;
+    }
+
+    public void setFromScheduler(boolean fromScheduler) {
+        this.fromScheduler = fromScheduler;
     }
 }

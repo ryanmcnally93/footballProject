@@ -15,13 +15,21 @@ import entities.*;
 import visuals.CustomizedElements.GamePanel;
 import main.GameWindow;
 import visuals.CustomizedElements.MainMenu;
-import visuals.CustomizedElements.PlayerAchievementLine;
+import visuals.MainMenuPages.FixturesPages.AllFixturesPage;
+import visuals.MainMenuPages.FixturesPages.MyFixturesPage;
+import visuals.MainMenuPages.FixturesPages.ResultsPage;
+import visuals.MainMenuPages.LeaderboardPages.LeagueTablePage;
+import visuals.MainMenuPages.LeaderboardPages.TopAssistsPage;
+import visuals.MainMenuPages.LeaderboardPages.TopGoalscorersPage;
+import visuals.MainMenuPages.TacticsPages.FirstTeamPage;
+import visuals.MainMenuPages.TacticsPages.FormationPage;
+import visuals.MainMenuPages.TacticsPages.MatchRolesPage;
 
 public class Scheduler extends GamePanel {
 
 	private LocalDateTime date;
 	private JPanel eventsBox, southMiddle, menuBox, header;
-	private JButton advance, playGame, advanceToGame, simGame, menu, closeButton;
+	private JButton advance, playGame, advanceToGame, simGame, menuButton, closeButton;
 	private Team team;
 	private User user;
 	private League league;
@@ -32,9 +40,12 @@ public class Scheduler extends GamePanel {
 	private Box eventContainer;
 	private UsersMatch match;
 	private JLayeredPane layeredPane;
-	private MainMenu main;
+	private MainMenu mainMenu;
 	private Season season;
 	private ArrayList<Match> laterMatches, sameDayMatches;
+	private CardLayout leaderboardsLayout, fixturesLayout, tacticsLayout;
+	private Map<String, JPanel> tacticsMap;
+	private JPanel tacticsPages;
 	
 	// New Game Constructor
 	public Scheduler(User user, Team team, League league) {
@@ -77,8 +88,8 @@ public class Scheduler extends GamePanel {
 		// Makes the southMiddle central
 		JPanel leftBlankBox = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		setPermanentWidth(leftBlankBox, 115);
-		menu = new JButton("Main Menu");
-		menuBox.add(menu);
+		menuButton = new JButton("Main Menu");
+		menuBox.add(menuButton);
 
 		south.add(menuBox, BorderLayout.EAST);
 		south.add(southMiddle, BorderLayout.CENTER);
@@ -95,7 +106,7 @@ public class Scheduler extends GamePanel {
 		layeredPane.add(mainPanel, JLayeredPane.DEFAULT_LAYER);
 		add(layeredPane, BorderLayout.CENTER);
 
-		menu.addMouseListener(new MouseAdapter() {
+		menuButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				triggerMenu();
@@ -109,23 +120,97 @@ public class Scheduler extends GamePanel {
 
 		refreshMessages();
 
+		createMainMenu();
+
 		revalidate();
 		repaint();
 	}
 
+	public void createMainMenu() {
+		mainMenu = new MainMenu(window, this);
+
+		leaderboardsLayout = new CardLayout();
+		JPanel firstPages = new JPanel(leaderboardsLayout);
+		LeagueTablePage leaguePage = new LeagueTablePage(leaderboardsLayout, firstPages, this, true);
+		TopGoalscorersPage goals = new TopGoalscorersPage(leaderboardsLayout, firstPages, this, true);
+		TopAssistsPage assists = new TopAssistsPage(leaderboardsLayout, firstPages, this, true);
+		firstPages.add(leaguePage, "League Table");
+		firstPages.add(goals, "Top Goals");
+		firstPages.add(assists, "Top Assists");
+
+		ArrayList<JButton> firstButtons = new ArrayList<>();
+		firstButtons.add(getMainMenu().getLeagueTableButton());
+		firstButtons.add(getMainMenu().getGoalscorersButton());
+		firstButtons.add(getMainMenu().getAssistsButton());
+
+		addListeners(firstButtons, firstPages, leaderboardsLayout);
+
+		fixturesLayout = new CardLayout();
+		JPanel secondPages = new JPanel(fixturesLayout);
+		AllFixturesPage allFixtures = new AllFixturesPage(fixturesLayout, secondPages, this, true);
+		MyFixturesPage myFixtures = new MyFixturesPage(fixturesLayout, secondPages, this, true);
+		ResultsPage results = new ResultsPage(fixturesLayout, secondPages, this, true);
+		secondPages.add(allFixtures, "All Fixtures");
+		secondPages.add(myFixtures, "My Fixtures");
+		secondPages.add(results, "Results");
+
+		ArrayList<JButton> secondButtons = new ArrayList<>();
+		secondButtons.add(getMainMenu().getAllFixturesButton());
+		secondButtons.add(getMainMenu().getMyFixturesButton());
+		secondButtons.add(getMainMenu().getResultsButton());
+
+		addListeners(secondButtons, secondPages, fixturesLayout);
+
+		tacticsLayout = new CardLayout();
+		tacticsPages = new JPanel(tacticsLayout);
+		FirstTeamPage firstTeam = new FirstTeamPage(tacticsLayout, tacticsPages, this, true);
+		FormationPage formation = new FormationPage(tacticsLayout, tacticsPages, this, true);
+		MatchRolesPage matchRoles = new MatchRolesPage(tacticsLayout, tacticsPages, this, true);
+		tacticsPages.add(firstTeam, "First Team");
+		tacticsPages.add(formation, "Formation");
+		tacticsPages.add(matchRoles, "Match Roles");
+
+		tacticsMap = new HashMap<>();
+		tacticsMap.put("First Team", firstTeam);
+		tacticsMap.put("Formation", formation);
+		tacticsMap.put("Match Roles", matchRoles);
+
+		ArrayList<JButton> thirdButtons = new ArrayList<>();
+		thirdButtons.add(getMainMenu().getFirstTeamButton());
+		thirdButtons.add(getMainMenu().getFormationButton());
+		thirdButtons.add(getMainMenu().getMatchRolesButton());
+
+		addListeners(thirdButtons, tacticsPages, tacticsLayout);
+	}
+
+	public void addListeners(ArrayList<JButton> buttons, JPanel pages, CardLayout thisLayout){
+		for(JButton button : buttons){
+			button.addMouseListener(new MouseAdapter(){
+				@Override
+				public void mouseClicked(MouseEvent e){
+					window.getContentPane().removeAll();
+					window.getContentPane().add(pages, BorderLayout.CENTER);
+					thisLayout.show(pages, button.getText());
+					window.revalidate();
+					window.repaint();
+				}
+			});
+		}
+	}
+
 	public void triggerMenu(){
-		menuBox.remove(menu);
+		menuBox.remove(menuButton);
 		closeButton = new JButton("Close Menu");
 		menuBox.add(closeButton);
-		setPermanentWidthAndHeight(main, layeredPane.getWidth(), layeredPane.getHeight());
-		layeredPane.add(main, JLayeredPane.PALETTE_LAYER);
+		setPermanentWidthAndHeight(mainMenu, layeredPane.getWidth(), layeredPane.getHeight());
+		layeredPane.add(mainMenu, JLayeredPane.PALETTE_LAYER);
 		layeredPane.revalidate();
 		layeredPane.repaint();
 
 		layeredPane.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (!main.getBounds().contains(e.getPoint())) {
+				if (!mainMenu.getBounds().contains(e.getPoint())) {
 					closeMenu();
 				}
 			}
@@ -141,10 +226,10 @@ public class Scheduler extends GamePanel {
 	}
 
 	public void closeMenu(){
-		if(layeredPane.isAncestorOf(main)){
-			layeredPane.remove(main);
+		if(layeredPane.isAncestorOf(mainMenu)){
+			layeredPane.remove(mainMenu);
 			menuBox.remove(closeButton);
-			menuBox.add(menu);
+			menuBox.add(menuButton);
 			layeredPane.revalidate();
 			layeredPane.repaint();
 		}
@@ -158,9 +243,8 @@ public class Scheduler extends GamePanel {
 		window.revalidate();
 		window.repaint();
 
-		main = new MainMenu(window, this);
-		main.setBounds(600, 70, 200,400); // Set bounds of MainMenu
-		main.setVisible(true);
+		mainMenu.setBounds(600, 70, 200,400); // Set bounds of MainMenu
+		mainMenu.setVisible(true);
 
 		// When we come back from a match, we want to sort buttons out
 		updateButtonsAfterUsersMatch();
@@ -632,12 +716,12 @@ public class Scheduler extends GamePanel {
 		this.simGame = simGame;
 	}
 
-	public JButton getMenu() {
-		return menu;
+	public JButton getMenuButton() {
+		return menuButton;
 	}
 
-	public void setMenu(JButton menu) {
-		this.menu = menu;
+	public void setMenuButton(JButton menuButton) {
+		this.menuButton = menuButton;
 	}
 
 	public JButton getCloseButton() {
@@ -696,12 +780,12 @@ public class Scheduler extends GamePanel {
 		this.layeredPane = layeredPane;
 	}
 
-	public MainMenu getMain() {
-		return main;
+	public MainMenu getMainMenu() {
+		return mainMenu;
 	}
 
-	public void setMain(MainMenu main) {
-		this.main = main;
+	public void setMainMenu(MainMenu mainMenu) {
+		this.mainMenu = mainMenu;
 	}
 
 	public ArrayList<Match> getLaterMatches() {
@@ -710,5 +794,61 @@ public class Scheduler extends GamePanel {
 
 	public void setLaterMatches(ArrayList<Match> laterMatches) {
 		this.laterMatches = laterMatches;
+	}
+
+	public Season getSeason() {
+		return season;
+	}
+
+	public void setSeason(Season season) {
+		this.season = season;
+	}
+
+	public ArrayList<Match> getSameDayMatches() {
+		return sameDayMatches;
+	}
+
+	public void setSameDayMatches(ArrayList<Match> sameDayMatches) {
+		this.sameDayMatches = sameDayMatches;
+	}
+
+	public CardLayout getLeaderboardsLayout() {
+		return leaderboardsLayout;
+	}
+
+	public void setLeaderboardsLayout(CardLayout leaderboardsLayout) {
+		this.leaderboardsLayout = leaderboardsLayout;
+	}
+
+	public CardLayout getFixturesLayout() {
+		return fixturesLayout;
+	}
+
+	public void setFixturesLayout(CardLayout fixturesLayout) {
+		this.fixturesLayout = fixturesLayout;
+	}
+
+	public CardLayout getTacticsLayout() {
+		return tacticsLayout;
+	}
+
+	public void setTacticsLayout(CardLayout tacticsLayout) {
+		this.tacticsLayout = tacticsLayout;
+	}
+
+	public Map<String, JPanel> getTacticsMap() {
+		return tacticsMap;
+	}
+
+	public void setTacticsMap(Map<String, JPanel> tacticsMap) {
+		this.tacticsMap = tacticsMap;
+	}
+
+	public JPanel getTacticsPages() {
+		return tacticsPages;
+	}
+
+	public void setTacticsPages(JPanel tacticsPages) {
+		this.tacticsPages = tacticsPages;
 	}
 }
