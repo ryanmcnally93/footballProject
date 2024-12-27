@@ -99,4 +99,12 @@ public class MainMenuPageTemplate extends CardmapMainPageTemplate {
     public void setFromScheduler(boolean fromScheduler) {
         this.fromScheduler = fromScheduler;
     }
+
+    public UsersMatch getMatch() {
+        return match;
+    }
+
+    public void setMatch(UsersMatch match) {
+        this.match = match;
+    }
 }

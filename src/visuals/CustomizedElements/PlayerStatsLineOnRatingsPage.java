@@ -129,4 +129,12 @@ public class PlayerStatsLineOnRatingsPage extends RoundedPanel {
         this.rating.revalidate();
         this.rating.repaint();
     }
+
+    public JLabel getPos() {
+        return pos;
+    }
+
+    public void setPos(JLabel pos) {
+        this.pos = pos;
+    }
 }
