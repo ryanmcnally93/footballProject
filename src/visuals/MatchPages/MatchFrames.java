@@ -34,7 +34,6 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		this.pauseButton = buttons.getFirst();
 		this.resumeButton = buttons.get(1);
 		this.tacticsButton = buttons.get(2);
-		tacticsButtonVisible = false;
 
 		// Add the time to the header
 		time = new JLabel(match.getTimer().getTime(), SwingConstants.CENTER);
@@ -118,7 +117,6 @@ public class MatchFrames extends CardmapMainPageTemplate {
 			public void mouseClicked(MouseEvent e) {
 				getFooterPanel().getMiddleBox().remove(getResumeButton());
 				getFooterPanel().getMiddleBox().remove(getTacticsButton());
-				tacticsButtonVisible = false;
 				// Lets resume all the matches in the array
 				for (Match each : getMatch().getSameDayMatches()) {
 					each.getTimer().resumeTimer();
@@ -284,12 +282,11 @@ public class MatchFrames extends CardmapMainPageTemplate {
 	}
 
 	public void displayTacticsButton() {
-		if (!tacticsButtonVisible) {
-			MatchFrames current = getCurrentPage();
+		MatchFrames current = getCurrentPage();
+		if (!getTacticsButton().isAncestorOf(current.getFooterPanel().getMiddleBox())) {
 			current.getFooterPanel().getMiddleBox().add(getTacticsButton());
 			current.getFooterPanel().getMiddleBox().revalidate();
 			current.getFooterPanel().getMiddleBox().repaint();
-			tacticsButtonVisible = true;
 		}
 	}
 
