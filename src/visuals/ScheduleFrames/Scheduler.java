@@ -23,6 +23,7 @@ import visuals.MainMenuPages.FixturesPages.ResultsPage;
 import visuals.MainMenuPages.LeaderboardPages.LeagueTablePage;
 import visuals.MainMenuPages.LeaderboardPages.TopAssistsPage;
 import visuals.MainMenuPages.LeaderboardPages.TopGoalscorersPage;
+import visuals.MainMenuPages.MainMenuPageTemplate;
 import visuals.MainMenuPages.TacticsPages.FirstTeamPage;
 import visuals.MainMenuPages.TacticsPages.FormationPage;
 import visuals.MainMenuPages.TacticsPages.MatchRolesPage;
@@ -49,7 +50,7 @@ public class Scheduler extends GamePanel {
 	private CardLayout leaderboardsLayout, fixturesLayout, tacticsLayout, matchFramesLayout;
 	private Map<String, JPanel> tacticsMap, fixturesMap, matchFramesMap;
 	private JPanel tacticsPages, fixturesPages, matchFramesPages;
-	private LeagueTablePage leaguePage;
+	private  LeagueTablePage leaguePage;
 	private TopGoalscorersPage goals;
 	private TopAssistsPage assists;
 	private AllFixturesPage allFixtures;
@@ -262,6 +263,9 @@ public class Scheduler extends GamePanel {
 					thisLayout.show(pages, button.getText());
 					window.revalidate();
 					window.repaint();
+					for (int i=0; i < pages.getComponents().length; i++) {
+						((MainMenuPageTemplate) pages.getComponent(i)).setFromScheduler(true);
+					}
 				}
 			});
 		}
@@ -405,7 +409,7 @@ public class Scheduler extends GamePanel {
 							frame.setMatch(event.getMatch());
 						}
 						sch.getStatsPanel().setFromScheduler(false);
-						sch.displayMatchFrames(event.getMatch());
+						sch.displayMatchFrames(event.getMatch(), true);
 						event.setRemoveEvent(true);
 					}
 				});
@@ -468,12 +472,16 @@ public class Scheduler extends GamePanel {
 		}
 	}
 
-	public void displayMatchFrames(UsersMatch match) {
+	public void displayMatchFrames(UsersMatch match, boolean statsPage) {
 		window.getContentPane().removeAll();
 		window.getContentPane().add(matchFramesPages, BorderLayout.CENTER);
 		statsPanel.getSpeedometerBox().add(speedometer);
-		matchFramesLayout.show(matchFramesPages, "Stats");
-		match.setCurrentPageName("Stats");
+		if (statsPage) {
+			matchFramesLayout.show(matchFramesPages, "Stats");
+			match.setCurrentPageName("Stats");
+		} else {
+			matchFramesLayout.show(matchFramesPages, match.getCurrentPageName());
+		}
 
 		if(!match.getSameDayMatches().contains(match)){
 			match.getSameDayMatches().add(match);
@@ -495,13 +503,6 @@ public class Scheduler extends GamePanel {
 						page.getFooterPanel().getMiddleBox().remove(button);
 					}
 				}
-				JPanel backButtonBox = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-				backButtonBox.setBackground(Color.LIGHT_GRAY);
-				setPermanentWidth(backButtonBox, 115);
-				JButton back = new JButton("Back");
-				backButtonBox.add(back);
-
-				page.getFooterPanel().add(backButtonBox, BorderLayout.EAST);
 			}
 		}
 
@@ -951,6 +952,10 @@ public class Scheduler extends GamePanel {
 		return tacticsLayout;
 	}
 
+	public JPanel getFixturesPages() {
+		return fixturesPages;
+	}
+
 	public void setTacticsLayout(CardLayout tacticsLayout) {
 		this.tacticsLayout = tacticsLayout;
 	}
@@ -1037,5 +1042,13 @@ public class Scheduler extends GamePanel {
 
 	public MatchRatings getRatingsPanel() {
 		return ratingsPanel;
+	}
+
+	public JPanel getMatchFramesPages() {
+		return matchFramesPages;
+	}
+
+	public void setMatchFramesPages(JPanel matchFramesPages) {
+		this.matchFramesPages = matchFramesPages;
 	}
 }

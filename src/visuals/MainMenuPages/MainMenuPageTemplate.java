@@ -1,6 +1,4 @@
 package visuals.MainMenuPages;
-import entities.Match;
-import entities.Team;
 import entities.UsersMatch;
 import visuals.CustomizedElements.CardmapMainPageTemplate;
 import visuals.MatchPages.MatchFrames;
@@ -9,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Map;
 
 public class MainMenuPageTemplate extends CardmapMainPageTemplate {
@@ -38,51 +37,37 @@ public class MainMenuPageTemplate extends CardmapMainPageTemplate {
         getFooterPanel().add(backButtonBox, BorderLayout.EAST);
         getFooterPanel().add(leftBlankBox, BorderLayout.WEST);
 
-        addBackButtonFunctionality();
-
+        updateBackButtonFunctionality();
     }
 
-    public void addBackButtonFunctionality(){
-        if(isFromScheduler()) {
-            back.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    scheduler.displayPage(scheduler.getWindow());
-                }
-            });
+    public void updateBackButtonFunctionality(){
+        if (back.getMouseListeners().length == 1) {
+            addBackButtonListener(back);
         } else {
-            back.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
+            MouseListener[] listeners = back.getMouseListeners();
+            back.removeMouseListener(listeners[listeners.length - 1]);
+            addBackButtonListener(back);
+        }
+    }
+
+    public void addBackButtonListener(JButton back) {
+        back.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (isFromScheduler()) {
+                    scheduler.displayPage(scheduler.getWindow());
+                } else {
                     for (Map.Entry<String, JPanel> page : scheduler.getMatchFramesMap().entrySet()) {
                         MatchFrames frame = (MatchFrames) page.getValue();
                         match.setScheduler(getScheduler());
                         frame.setMatch(match);
                     }
-                    scheduler.getStatsPanel().setFromScheduler(false);
-                    scheduler.displayMatchFrames(match);
+                    MatchFrames currentPanel = (MatchFrames) scheduler.getMatchFramesMap().get(match.getCurrentPageName());
+                    currentPanel.setFromScheduler(false);
+                    scheduler.displayMatchFrames(match, false);
                 }
-            });
-        }
-    }
-
-    public void updateBackButtonFunctionality(UsersMatch match){
-        if(isFromScheduler()) {
-            back.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    scheduler.displayPage(scheduler.getWindow());
-                }
-            });
-        } else {
-            back.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    scheduler.getStatsPanel().setFromScheduler(false);
-                    scheduler.displayMatchFrames(match);
-                }
-            });
-        }
+            }
+        });
     }
 
     public JPanel getMainPanel() {
@@ -107,5 +92,13 @@ public class MainMenuPageTemplate extends CardmapMainPageTemplate {
 
     public void setMatch(UsersMatch match) {
         this.match = match;
+    }
+
+    public JButton getBackButton() {
+        return back;
+    }
+
+    public void setBackButton(JButton back) {
+        this.back = back;
     }
 }

@@ -8,7 +8,6 @@ import java.util.concurrent.CompletableFuture;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import entities.Match;
-import entities.Team;
 import entities.UsersMatch;
 import visuals.CustomizedElements.*;
 import visuals.MainMenuPages.MainMenuPageTemplate;
@@ -24,6 +23,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 	private JLabel time, dateAndTime, stadiumAndAttendance;
 	private Speedometer speedometer;
 	private Box speedometerBox;
+	private JButton back;
 
 	public MatchFrames(CardLayout cardLayout, JPanel pages, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
     	super(cardLayout, pages);
@@ -32,6 +32,24 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		this.resumeButton = buttons.get(1);
 		this.tacticsButton = buttons.get(2);
 		continueButton = new CustomizedButton("Continue");
+
+		back = new JButton("Back");
+		back.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				getMatch().getScheduler().getWindow().getContentPane().removeAll();
+				getMatch().getScheduler().getWindow().getContentPane().add(getMatch().getScheduler().getFixturesPages(), BorderLayout.CENTER);
+				getMatch().getScheduler().getWindow().revalidate();
+				getMatch().getScheduler().getWindow().repaint();
+				// Remove the back button in MatchFrames now that it has been clicked
+				for (Map.Entry<String, JPanel> eachPage : getMatch().getScheduler().getMatchFramesMap().entrySet()) {
+					JPanel buttonBox = ((MatchFrames) eachPage.getValue()).getFooterPanel().getBackButtonBox();
+					if (buttonBox.isAncestorOf(getBackButton())) {
+						buttonBox.remove(getBackButton());
+					}
+				}
+			}
+		});
 
 		dateAndTime = new JLabel();
 		setPermanentWidthAndHeight(dateAndTime,200,30);
@@ -244,7 +262,6 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		match.getScheduler().getWindow().getContentPane().removeAll();
 		for (Map.Entry<String, JPanel> eachTacticsPage : match.getScheduler().getTacticsMap().entrySet()) {
 			((MainMenuPageTemplate) eachTacticsPage.getValue()).setFromScheduler(false);
-			((MainMenuPageTemplate) eachTacticsPage.getValue()).updateBackButtonFunctionality(match);
 		}
 		match.getScheduler().getWindow().getContentPane().add(match.getScheduler().getTacticsPages(), BorderLayout.CENTER);
 		match.getScheduler().getTacticsLayout().show(match.getScheduler().getTacticsPages(), "First Team");
@@ -274,7 +291,6 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		// Set the back button on tactics cardmap to normal
 		for (Map.Entry<String, JPanel> eachTacticsPage : match.getScheduler().getTacticsMap().entrySet()) {
 			((MainMenuPageTemplate) eachTacticsPage.getValue()).setFromScheduler(true);
-			((MainMenuPageTemplate) eachTacticsPage.getValue()).updateBackButtonFunctionality(match);
 		}
 	}
 
@@ -386,5 +402,9 @@ public class MatchFrames extends CardmapMainPageTemplate {
 
 	public void setContinueButton(CustomizedButton continueButton) {
 		this.continueButton = continueButton;
+	}
+
+	public JButton getBackButton() {
+		return back;
 	}
 }

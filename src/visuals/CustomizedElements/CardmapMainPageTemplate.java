@@ -71,7 +71,7 @@ public class CardmapMainPageTemplate extends GamePanel {
     public class FooterPanel extends JPanel {
 
         private CustomizedButton prevButton, nextButton;
-        private JPanel buttonBox, middleBox;
+        private JPanel buttonBox, middleBox, backButtonBox;
         private ActionMap actionMap;
         private Box line;
 
@@ -82,6 +82,17 @@ public class CardmapMainPageTemplate extends GamePanel {
 
             prevButton = new CustomizedButton("Prev");
             nextButton = new CustomizedButton("Next");
+
+            backButtonBox = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            backButtonBox.setBackground(Color.LIGHT_GRAY);
+            setPermanentWidth(backButtonBox, 115);
+
+            JPanel leftBlankBox = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            leftBlankBox.setBackground(Color.LIGHT_GRAY);
+            setPermanentWidth(leftBlankBox, 115);
+
+            add(backButtonBox, BorderLayout.EAST);
+            add(leftBlankBox, BorderLayout.WEST);
 
             prevButton.addActionListener(e -> {
                 layout.previous(pages);
@@ -117,6 +128,14 @@ public class CardmapMainPageTemplate extends GamePanel {
 
         public JPanel getMiddleBox() {
             return middleBox;
+        }
+
+        public JPanel getBackButtonBox() {
+            return backButtonBox;
+        }
+
+        public void setBackButtonBox(JPanel backButtonBox) {
+            this.backButtonBox = backButtonBox;
         }
 
         public void setMiddleBox(JPanel middleBox) {
