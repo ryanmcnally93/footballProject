@@ -116,17 +116,6 @@ public class MatchEvents extends MatchFrames {
 
 	@Override
 	public void removeContentForChildClass() {
-		boolean needToRemoveExtraRows = leftIcons.size() > 13;
-		while (needToRemoveExtraRows) {
-			leftIcons.removeLast();
-			leftLabels.removeLast();
-			middleLabels.removeLast();
-			rightLabels.removeLast();
-			rightIcons.removeLast();
-			needToRemoveExtraRows = leftIcons.size() > 13;
-		}
-		this.events = 0;
-		this.button = 0;
 		for (JLabel label : leftIcons) {
 			clearLabel(label);
 		}
@@ -142,6 +131,31 @@ public class MatchEvents extends MatchFrames {
 		for (JLabel label : rightIcons) {
 			clearLabel(label);
 		}
+
+		boolean needToRemoveExtraRows = leftIcons.size() > rows;
+		while (needToRemoveExtraRows) {
+			leftIcons.removeLast();
+			leftIconBox.remove(leftIconBox.getComponents().length - 1);
+			leftLabels.removeLast();
+			leftBox.remove(leftBox.getComponents().length - 1);
+			middleLabels.removeLast();
+			middleBox.remove(middleBox.getComponents().length - 1);
+			rightLabels.removeLast();
+			rightBox.remove(rightBox.getComponents().length - 1);
+			rightIcons.removeLast();
+			rightIconBox.remove(rightIconBox.getComponents().length - 1);
+			changeRowSize(-30);
+			needToRemoveExtraRows = leftIcons.size() != rows;
+		}
+		this.events = 0;
+		this.button = 0;
+
+		JLabel label = middleLabels.get(button);
+		label.setVisible(true);
+		label.requestFocusInWindow();
+		label.setBackground(Color.YELLOW);
+		label.setOpaque(true);
+		adjustViewportForLabel(label, false, 10);
 	}
 
 	public void clearLabel(JLabel label) {
@@ -149,6 +163,15 @@ public class MatchEvents extends MatchFrames {
 			label.setBackground(Color.LIGHT_GRAY);
 			label.setText("");
 		}
+	}
+
+	public void changeRowSize(int height) {
+		setPermanentExtendedHeight(leftIconBox, height);
+		setPermanentExtendedHeight(leftBox, height);
+		setPermanentExtendedHeight(middleBox, height);
+		setPermanentExtendedHeight(rightBox, height);
+		setPermanentExtendedHeight(rightIconBox, height);
+		setPermanentExtendedHeight(container, height);
 	}
     
     private void updateFocus(String direction) {
@@ -175,23 +198,27 @@ public class MatchEvents extends MatchFrames {
     	JLabel label = middleLabels.get(button);
         label.setBackground(Color.YELLOW);
         label.setOpaque(true);
-        
-     // Calculate and adjust the rectangle for scrolling
-        Rectangle rect = label.getBounds();
-        SwingUtilities.invokeLater(() -> {
-            // Adjust rectangle to be relative to viewport coordinates
-            Point location = SwingUtilities.convertPoint(label.getParent(), label.getLocation(), scroller.getViewport());
-            rect.setLocation(location);
-            rect.setSize(label.getSize());
-
-            // Include padding to ensure visibility
-            int padding = 10; // Adjust padding as needed
-            rect.grow(padding, padding);
-
-            // Scroll to make the label visible
-            scroller.getViewport().scrollRectToVisible(rect);
-        });
+		adjustViewportForLabel(label, true, 10);
     }
+
+	public void adjustViewportForLabel (JLabel label, boolean grow, int padding) {
+		// Calculate and adjust the rectangle for scrolling
+		Rectangle rect = label.getBounds();
+		SwingUtilities.invokeLater(() -> {
+			// Adjust rectangle to be relative to viewport coordinates
+			Point location = SwingUtilities.convertPoint(label.getParent(), label.getLocation(), scroller.getViewport());
+			rect.setLocation(location);
+			rect.setSize(label.getSize());
+
+			// Include padding to ensure visibility
+			if (grow) {
+				rect.grow(padding, padding);
+			}
+
+			// Scroll to make the label visible
+			scroller.getViewport().scrollRectToVisible(rect);
+		});
+	}
     
     public void addHomeEvents(String time, Footballer player, String type) {
 		addEvents(time, player, type, leftIcons, leftLabels, middleLabels, rightIcons, rightLabels, middleBox, "home");
@@ -283,29 +310,10 @@ public class MatchEvents extends MatchFrames {
     	rightIcons.add(fifth);
     	rightIconBox.add(fifth);
 
-		setPermanentExtendedHeight(leftIconBox, 30);
-		setPermanentExtendedHeight(leftBox, 30);
-		setPermanentExtendedHeight(middleBox, 30);
-		setPermanentExtendedHeight(rightBox, 30);
-		setPermanentExtendedHeight(rightIconBox, 30);
-		setPermanentExtendedHeight(container, 30);
+		changeRowSize(30);
 
         JLabel label = middleLabels.get(button);
-        // Calculate and adjust the rectangle for scrolling
-        Rectangle rect = label.getBounds();
-        SwingUtilities.invokeLater(() -> {
-            // Adjust rectangle to be relative to viewport coordinates
-            Point location = SwingUtilities.convertPoint(label.getParent(), label.getLocation(), scroller.getViewport());
-            rect.setLocation(location);
-            rect.setSize(label.getSize());
-
-            // Include padding to ensure visibility
-            int padding = 40; // Adjust padding as needed
-            rect.grow(padding, padding);
-
-            // Scroll to make the label visible
-            scroller.getViewport().scrollRectToVisible(rect);
-        });
+        adjustViewportForLabel(label, true, 40);
     }
 
 	public void makeRows(ArrayList<JLabel> list, JPanel box, int width, String homeOrAway){

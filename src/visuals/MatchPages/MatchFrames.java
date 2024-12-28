@@ -151,9 +151,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 
 	public void addContentForChildClass() {}
 
-	public void removeContentForChildClass() {
-		speedometer.getComponents();
-	}
+	public void removeContentForChildClass() {}
 
 	@Override
 	public void moveSpeedometerForward(){
