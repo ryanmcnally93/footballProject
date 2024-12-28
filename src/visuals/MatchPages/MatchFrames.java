@@ -12,55 +12,32 @@ import entities.Team;
 import entities.UsersMatch;
 import visuals.CustomizedElements.*;
 import visuals.MainMenuPages.MainMenuPageTemplate;
-import visuals.MainMenuPages.TacticsPages.FirstTeamPage;
 
 public class MatchFrames extends CardmapMainPageTemplate {
 
 	private static final String PLAY = "Play Game";
 	private SlidingPanel slidingPanel;
 	private UsersMatch match;
-	private CustomizedButton playButton, resumeButton, pauseButton, tacticsButton;
+	private CustomizedButton playButton, resumeButton, pauseButton, tacticsButton, continueButton;
 	private InputMap playButtonInputMap;
 	private ActionMap playButtonActionMap;
-	private JLabel time;
+	private JLabel time, dateAndTime, stadiumAndAttendance;
 	private Speedometer speedometer;
 	private Box speedometerBox;
-	private boolean tacticsButtonVisible;
 
-	public MatchFrames(CardLayout cardLayout, JPanel pages, UsersMatch match, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
+	public MatchFrames(CardLayout cardLayout, JPanel pages, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
     	super(cardLayout, pages);
-        this.match = match;
 		this.speedometer = speedometer;
 		this.pauseButton = buttons.getFirst();
 		this.resumeButton = buttons.get(1);
 		this.tacticsButton = buttons.get(2);
+		continueButton = new CustomizedButton("Continue");
 
-		// Add the time to the header
-		time = new JLabel(match.getTimer().getTime(), SwingConstants.CENTER);
-		time.setFont(new Font(time.getFont().getName(), Font.BOLD, 18));
-		time.setBorder(new EmptyBorder(0, 0, 5, 0));
-		getHeaderPanel().add(time, BorderLayout.SOUTH);
-
-		// Adding match event sliding panel
-        slidingPanel = new SlidingPanel();
-        slidingPanel.setBounds(0, 0, 800, 600);
-
-        getLayeredPane().add(slidingPanel, JLayeredPane.MODAL_LAYER);
-		getHeaderPanel().setTitle(match.getHome().getName() + " " + match.getHomeScore() + " - " + match.getAwayScore() + " " + match.getAway().getName());
-
-		// Adding stadium, date and attendance data to footer element
-		int day = match.getDateTime().getDayOfMonth();
-		String dayWithSuffix = day + getDayOfMonthSuffix(day);
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy HH:mm");
-		String formattedDate = dayWithSuffix + " " + match.getDateTime().format(formatter);
-
-		JLabel dateAndTime = new JLabel(formattedDate);
+		dateAndTime = new JLabel();
 		setPermanentWidthAndHeight(dateAndTime,200,30);
 		dateAndTime.setBorder(new EmptyBorder(0, 15, 0, 0));
 
-		this.speedometer.setMatch(getMatch());
-
-		JLabel stadiumAndAttendance = new JLabel(match.getStadium() + ": 60000", SwingConstants.RIGHT);
+		stadiumAndAttendance = new JLabel("", SwingConstants.RIGHT);
 		setPermanentWidthAndHeight(stadiumAndAttendance,200,30);
 		stadiumAndAttendance.setBorder(new EmptyBorder(0, 0, 0, 20));
 
@@ -70,6 +47,35 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		line.add(speedometerBox);
 		line.add(stadiumAndAttendance);
 		getFooterPanel().add(line, BorderLayout.NORTH);
+
+		time = new JLabel("", SwingConstants.CENTER);
+		getHeaderPanel().add(time, BorderLayout.SOUTH);
+		slidingPanel = new SlidingPanel();
+		slidingPanel.setBounds(0, 0, 800, 600);
+
+		getLayeredPane().add(slidingPanel, JLayeredPane.MODAL_LAYER);
+	}
+
+	public void setMatch(UsersMatch match) {
+		this.match = match;
+		// Add the time to the header
+		time.setText(match.getTimer().getTime());
+		time.setFont(new Font(time.getFont().getName(), Font.BOLD, 18));
+		time.setBorder(new EmptyBorder(0, 0, 5, 0));
+		if (!getMatch().getTimer().getTime().equals("90:00") && getFooterPanel().getMiddleBox().isAncestorOf(getContinueButton())) {
+			getFooterPanel().getMiddleBox().remove(getContinueButton());
+		}
+		getHeaderPanel().setTitle(match.getHome().getName() + " " + match.getHomeScore() + " - " + match.getAwayScore() + " " + match.getAway().getName());
+
+		// Adding stadium, date and attendance data to footer element
+		int day = match.getDateTime().getDayOfMonth();
+		String dayWithSuffix = day + getDayOfMonthSuffix(day);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy HH:mm");
+		String formattedDate = dayWithSuffix + " " + match.getDateTime().format(formatter);
+
+		dateAndTime.setText(formattedDate);
+		this.speedometer.setMatch(getMatch());
+		stadiumAndAttendance.setText(match.getStadium() + ": 60000");
 
 		// Adding play button
 		playButton = new CustomizedButton("Play");
@@ -140,12 +146,19 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		playButtonActionMap.put(PLAY, new MatchFrames.PlayGame());
 
 		getFooterPanel().getMiddleBox().add(playButton);
+		addContentForChildClass();
+	}
+
+	public void addContentForChildClass() {}
+
+	public void removeContentForChildClass() {
+		speedometer.getComponents();
 	}
 
 	@Override
 	public void moveSpeedometerForward(){
 		String nextPageName = getMatch().getNextPageName();
-		MatchFrames page = (MatchFrames) getMatch().getCardMap().get(nextPageName);
+		MatchFrames page = (MatchFrames) getMatch().getScheduler().getMatchFramesMap().get(nextPageName);
 		page.getSpeedometerBox().add(this.speedometer);
 		if(getMatch().getTimer().isPaused()) {
 			page.getFooterPanel().getMiddleBox().add(getResumeButton());
@@ -159,7 +172,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 	@Override
 	public void moveSpeedometerBack(){
 		String prevPageName = getMatch().getPrevPageName();
-		MatchFrames page = (MatchFrames) getMatch().getCardMap().get(prevPageName);
+		MatchFrames page = (MatchFrames) getMatch().getScheduler().getMatchFramesMap().get(prevPageName);
 		page.getSpeedometerBox().add(this.speedometer);
 		if(getMatch().getTimer().isPaused()) {
 			page.getFooterPanel().getMiddleBox().add(getResumeButton());
@@ -206,14 +219,16 @@ public class MatchFrames extends CardmapMainPageTemplate {
 
 	public void createContinueButton() {
 		// Adding the continue button
-		CustomizedButton cont = new CustomizedButton("Continue");
-		cont.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				continueToScheduler();
-			}
-		});
+		if (continueButton.getMouseListeners().length == 1) {
+			continueButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					continueToScheduler();
+				}
+			});
+		}
 
+		// This needs to override play button
 		Action contAction = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -222,33 +237,36 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		};
 
 		getFooterPanel().getMiddleBox().remove(getPauseButton());
-		getFooterPanel().getMiddleBox().add(cont);
+		getFooterPanel().getMiddleBox().add(continueButton);
 		getFooterPanel().getButtonBox().revalidate();
 		getFooterPanel().getButtonBox().repaint();
 	}
 
 	public void viewTacticsDuringMatch() {
-		match.getWindow().getContentPane().removeAll();
+		match.getScheduler().getWindow().getContentPane().removeAll();
 		for (Map.Entry<String, JPanel> eachTacticsPage : match.getScheduler().getTacticsMap().entrySet()) {
 			((MainMenuPageTemplate) eachTacticsPage.getValue()).setFromScheduler(false);
 			((MainMenuPageTemplate) eachTacticsPage.getValue()).updateBackButtonFunctionality(match);
 		}
-		match.getWindow().getContentPane().add(match.getScheduler().getTacticsPages(), BorderLayout.CENTER);
+		match.getScheduler().getWindow().getContentPane().add(match.getScheduler().getTacticsPages(), BorderLayout.CENTER);
 		match.getScheduler().getTacticsLayout().show(match.getScheduler().getTacticsPages(), "First Team");
-		match.getWindow().revalidate();
-		match.getWindow().repaint();
+		match.getScheduler().getWindow().revalidate();
+		match.getScheduler().getWindow().repaint();
 
 	}
 
 	public void continueToScheduler(){
-		match.getWindow().getContentPane().removeAll();
-		match.getScheduler().displayPage(match.getWindow());
+		for (Map.Entry<String, JPanel> eachPage : match.getScheduler().getMatchFramesMap().entrySet()) {
+			((MatchFrames) eachPage.getValue()).removeContentForChildClass();
+		}
+		match.getScheduler().getWindow().getContentPane().removeAll();
+		match.getScheduler().displayPage(match.getScheduler().getWindow());
 		match.getScheduler().refreshMessages();
 
 		match.getLeague().getPlayerLeaderboard().updateLinesInTableLogic("Goals");
 
-		match.getWindow().revalidate();
-		match.getWindow().repaint();
+		match.getScheduler().getWindow().revalidate();
+		match.getScheduler().getWindow().repaint();
 		// Play whatever later matches we have
 		if(!match.getLaterMatches().isEmpty()){
 			for(Match eachMatch : match.getLaterMatches()){
@@ -292,7 +310,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 
 	public MatchFrames getCurrentPage(){
 		String currentPageString = getMatch().getCurrentPageName();
-		return (MatchFrames) getMatch().getCardMap().get(currentPageString);
+		return (MatchFrames) getMatch().getScheduler().getMatchFramesMap().get(currentPageString);
 	}
 
 	public void handleClick() {
@@ -314,10 +332,6 @@ public class MatchFrames extends CardmapMainPageTemplate {
 
 	public UsersMatch getMatch() {
 		return match;
-	}
-
-	public void setMatch(UsersMatch match) {
-		this.match = match;
 	}
 
 	public CustomizedButton getPlayButton() {
@@ -366,5 +380,13 @@ public class MatchFrames extends CardmapMainPageTemplate {
 
 	public void setTacticsButton(CustomizedButton tacticsButton) {
 		this.tacticsButton = tacticsButton;
+	}
+
+	public CustomizedButton getContinueButton() {
+		return continueButton;
+	}
+
+	public void setContinueButton(CustomizedButton continueButton) {
+		this.continueButton = continueButton;
 	}
 }

@@ -23,15 +23,9 @@ public class MatchStats extends MatchFrames {
     private Color homeColor, awayColor;
     private ArrayList<Box> boxes;
 
-    public MatchStats(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
-        super(layout, pages, match, speedometer, buttons);
+    public MatchStats(CardLayout layout, JPanel pages, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
+        super(layout, pages, speedometer, buttons);
 
-        // Set colours for the progress bars to match team colours
-        homeColor = getMatch().getHome().getPrimaryColour();
-        awayColor = getMatch().getAway().getPrimaryColour();
-        if(homeColor == awayColor){
-            awayColor = getMatch().getAway().getSecondaryColour();
-        }
         // To help control title margins on different sized screens
         boxes = new ArrayList<>();
         
@@ -44,30 +38,20 @@ public class MatchStats extends MatchFrames {
         appendEastAndWest(mainPanel);
 
         // Make the five bars and titles
-        shotsOnBar = new CustomProgressBar(homeColor, awayColor);
         homeShotsOn = new JLabel("0");
         awayShotsOn = new JLabel("0");
-        makeBarWithTitle("Shots on Target", homeShotsOn, awayShotsOn, shotsOnBar);
 
-        allShotsBar = new CustomProgressBar(homeColor, awayColor);
         homeAllShots = new JLabel("0");
         awayAllShots = new JLabel("0");
-        makeBarWithTitle("All Shots", homeAllShots, awayAllShots, allShotsBar);
 
-        cornerBar = new CustomProgressBar(homeColor, awayColor);
         homeCorners = new JLabel("0");
         awayCorners = new JLabel("0");
-        makeBarWithTitle("Corners", homeCorners, awayCorners, cornerBar);
 
-        offsideBar = new CustomProgressBar(homeColor, awayColor);
         homeOffsides = new JLabel("0");
         awayOffsides = new JLabel("0");
-        makeBarWithTitle("Offside", homeOffsides, awayOffsides, offsideBar);
 
-        foulsBar = new CustomProgressBar(homeColor, awayColor);
         homeFouls = new JLabel("0");
         awayFouls = new JLabel("0");
-        makeBarWithTitle("Fouls", homeFouls, awayFouls, foulsBar);
         
         mainPanel.add(centerBox, BorderLayout.CENTER);
         
@@ -88,6 +72,53 @@ public class MatchStats extends MatchFrames {
         });
         
         setVisible(true);
+    }
+
+    @Override
+    public void removeContentForChildClass() {
+        centerBox.removeAll();
+        centerBox.revalidate();
+        centerBox.repaint();
+        boxes.clear();
+    }
+
+    @Override
+    public void addContentForChildClass() {
+        homeShotsOn.setText(String.valueOf(getMatch().getHomeShotsOn()));
+        awayShotsOn.setText(String.valueOf(getMatch().getAwayShotsOn()));
+
+        homeAllShots.setText(String.valueOf(getMatch().getHomeAllShots()));
+        awayAllShots.setText(String.valueOf(getMatch().getAwayAllShots()));
+
+//        homeCorners.setText(String.valueOf(getMatch().getHomeCorners()));
+//        awayCorners.setText(String.valueOf(getMatch().getAwayCorners()));
+
+//        homeOffsides.setText(String.valueOf(getMatch().getHomeOffsides()));
+//        awayOffsides.setText(String.valueOf(getMatch().getAwayOffsides()));
+
+//        homeFouls.setText(String.valueOf(getMatch().getHomeFouls()));
+//        awayFouls.setText(String.valueOf(getMatch().getAwayFouls()));
+
+        // Set colours for the progress bars to match team colours
+        homeColor = getMatch().getHome().getPrimaryColour();
+        awayColor = getMatch().getAway().getPrimaryColour();
+        if(homeColor == awayColor){
+            awayColor = getMatch().getAway().getSecondaryColour();
+        }
+        shotsOnBar = new CustomProgressBar(homeColor, awayColor);
+        makeBarWithTitle("Shots on Target", homeShotsOn, awayShotsOn, shotsOnBar);
+
+        allShotsBar = new CustomProgressBar(homeColor, awayColor);
+        makeBarWithTitle("All Shots", homeAllShots, awayAllShots, allShotsBar);
+
+        cornerBar = new CustomProgressBar(homeColor, awayColor);
+        makeBarWithTitle("Corners", homeCorners, awayCorners, cornerBar);
+
+        offsideBar = new CustomProgressBar(homeColor, awayColor);
+        makeBarWithTitle("Offside", homeOffsides, awayOffsides, offsideBar);
+
+        foulsBar = new CustomProgressBar(homeColor, awayColor);
+        makeBarWithTitle("Fouls", homeFouls, awayFouls, foulsBar);
     }
 
     public void makeBarWithTitle(String title, JLabel home, JLabel away, CustomProgressBar bar){

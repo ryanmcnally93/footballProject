@@ -12,7 +12,7 @@ import java.util.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import entities.UsersMatch;
+import entities.Team;
 import people.Footballer;
 import visuals.CustomizedElements.CustomizedButton;
 import visuals.CustomizedElements.ImageWithText;
@@ -22,7 +22,7 @@ import visuals.CustomizedElements.PlayerStatsLineOnRatingsPage;
 public class MatchRatings extends MatchFrames {
 
 	private Box centerBox;
-    private JPanel mainPanel;
+    private JPanel mainPanel, titleLine;
     private Map<String, PlayerStatsLineOnRatingsPage> playerRatings;
     private Map<String, PlayerStatsBoxOnRatingsPage> playerBoxes;
     private ArrayList<PlayerStatsLineOnRatingsPage> homePlayersLines, awayPlayersLines, teamInViewLines;
@@ -33,9 +33,11 @@ public class MatchRatings extends MatchFrames {
     private Box rightBox;
     private ImageIcon icon;
     private BufferedImage bufferedScaledImage;
+    private JLabel title;
+    private JButton switchTeamInView;
 
-	public MatchRatings(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
-		super(layout, pages, match, speedometer, buttons);
+	public MatchRatings(CardLayout layout, JPanel pages, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
+		super(layout, pages, speedometer, buttons);
 
         lineInView = 0;
 
@@ -51,16 +53,16 @@ public class MatchRatings extends MatchFrames {
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
 		
         centerBox = Box.createVerticalBox();
-        JLabel title = new JLabel(getMatch().getHome().getName().toUpperCase());
+        title = new JLabel();
         title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
         centerBox.add(title);
         mainPanel.add(centerBox);
 
         // Create title line
-        JPanel line = new JPanel();
-        line.setBackground(Color.LIGHT_GRAY);
-        line.setOpaque(true);
+        titleLine = new JPanel();
+        titleLine.setBackground(Color.LIGHT_GRAY);
+        titleLine.setOpaque(true);
 
         JLabel pos = new JLabel("POS");
         pos.setFont(new Font("Menlo", Font.BOLD, 12));
@@ -101,105 +103,20 @@ public class MatchRatings extends MatchFrames {
         rating.setHorizontalAlignment(SwingConstants.CENTER);
         setPermanentWidth(rating, 50);
 
-        line.add(pos);
-        line.add(name);
-        line.add(duelsWon);
-        line.add(passingAccuracy);
-        line.add(shootingAccuracy);
-        line.add(fitness);
-        line.add(rating);
-        setPermanentHeight(line, 30);
-        centerBox.add(line);
+        titleLine.add(pos);
+        titleLine.add(name);
+        titleLine.add(duelsWon);
+        titleLine.add(passingAccuracy);
+        titleLine.add(shootingAccuracy);
+        titleLine.add(fitness);
+        titleLine.add(rating);
+        setPermanentHeight(titleLine, 30);
+        centerBox.add(titleLine);
 
-        List<String> positionOrder = Arrays.asList(
-                "GK", "RB", "CB1", "CB2",
-                "LB", "CM1", "CAM", "CM2", "RW", "ST", "LW");
-
-        // Sort keys based on custom order
-        List<String> sortedPositions = new ArrayList<>(getMatch().getHomeTeam().keySet());
-        sortedPositions.sort(Comparator.comparingInt(positionOrder::indexOf));
-
-        // Execute commands in sorted order
-        for (String position : sortedPositions) {
-            Footballer player = getMatch().getHomeTeam().get(position);
-            PlayerStatsLineOnRatingsPage newLine = createRatingLine(player, homePlayersLines);
-            centerBox.add(newLine);
-        }
-
-        // Home Players Mouse Event Listeners
-        teamInViewLines = homePlayersLines;
-        teamInViewBoxes = homePlayersBoxes;
-        for (int i = 0; i < homePlayersLines.size(); i++) {
-            final int index = i;
-            homePlayersLines.get(i).addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    updateFocus(homePlayersLines, homePlayersLines.get(index), homePlayersBoxes.get(index));
-                }
-            });
-        }
-
-        // Let's create the away players lines, to be added later
-        for (String position : sortedPositions) {
-            Footballer player = getMatch().getAwayTeam().get(position);
-            createRatingLine(player, awayPlayersLines);
-        }
-
-        // Away Players Mouse Event Listeners
-        for(int i = 0; i < awayPlayersLines.size(); i++){
-            final int index = i;
-            awayPlayersLines.get(i).addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    updateFocus(awayPlayersLines, awayPlayersLines.get(index), awayPlayersBoxes.get(index));
-                }
-            });
-        }
-
-        String otherTeamsName = getMatch().getAway().getName();
-        JButton switchTeamInView = new JButton(otherTeamsName);
+        switchTeamInView = new JButton();
         switchTeamInView.setHorizontalAlignment(SwingConstants.CENTER);
         switchTeamInView.setAlignmentX(Component.CENTER_ALIGNMENT);
         centerBox.add(switchTeamInView);
-
-        switchTeamInView.addActionListener(e -> {
-            centerBox.removeAll();
-            teamInViewLines = awayPlayersLines;
-            teamInViewBoxes = awayPlayersBoxes;
-            title.setText(getMatch().getAway().getName().toUpperCase());
-            centerBox.add(title);
-            centerBox.add(line);
-            for(PlayerStatsLineOnRatingsPage eachLine : awayPlayersLines){
-                centerBox.add(eachLine);
-            }
-            String firstTeamsName = getMatch().getHome().getName();
-            JButton switchTeamBack = new JButton(firstTeamsName);
-            switchTeamBack.setHorizontalAlignment(SwingConstants.CENTER);
-            switchTeamBack.setAlignmentX(Component.CENTER_ALIGNMENT);
-            centerBox.add(switchTeamBack);
-            setPlayerLineFocus(awayPlayersLines, lineInView, awayPlayersBoxes.get(lineInView));
-
-            centerBox.revalidate();
-            centerBox.repaint();
-
-            switchTeamBack.addActionListener(f -> {
-                centerBox.removeAll();
-                teamInViewLines = homePlayersLines;
-                teamInViewBoxes = homePlayersBoxes;
-                title.setText(getMatch().getHome().getName().toUpperCase());
-                centerBox.add(title);
-                centerBox.add(line);
-                for(PlayerStatsLineOnRatingsPage eachLine : homePlayersLines){
-                    centerBox.add(eachLine);
-                }
-                centerBox.add(switchTeamInView);
-                setPlayerLineFocus(homePlayersLines, lineInView, homePlayersBoxes.get(lineInView));
-
-                centerBox.revalidate();
-                centerBox.repaint();
-            });
-
-        });
 
         Box emptyGap= Box.createVerticalBox();
         setPermanentWidthAndHeight(emptyGap, 20, 440);
@@ -207,24 +124,8 @@ public class MatchRatings extends MatchFrames {
 
         rightBox = Box.createVerticalBox();
         setPermanentWidthAndHeight(rightBox, 250, 405);
-        PlayerStatsBoxOnRatingsPage playerBox = new PlayerStatsBoxOnRatingsPage(getMatch().getHomeTeam().get("GK"));
-        rightBox.add(playerBox);
 
         mainPanel.add(rightBox);
-
-        // Create Boxes for each Team
-        for (String position : sortedPositions) {
-            Footballer player = getMatch().getHomeTeam().get(position);
-            createRatingBox(player, homePlayersBoxes);
-            rightBox.add(homePlayersBoxes.getFirst());
-        }
-
-        for (String position : sortedPositions) {
-            Footballer player = getMatch().getAwayTeam().get(position);
-            createRatingBox(player, awayPlayersBoxes);
-        }
-
-        setPlayerLineFocus(homePlayersLines, 0, homePlayersBoxes.get(lineInView));
 
         mainPanel.setBounds(35, 70, 730, 440);
         mainPanel.setBackground(Color.LIGHT_GRAY);
@@ -278,6 +179,141 @@ public class MatchRatings extends MatchFrames {
         setVisible(true);
 		
 	}
+
+    @Override
+    public void addContentForChildClass() {
+        List<String> positionOrder = Arrays.asList(
+                "GK", "RB", "CB1", "CB2",
+                "LB", "CM1", "CAM", "CM2", "RW", "ST", "LW");
+
+        // Sort keys based on custom order
+        List<String> sortedPositions = new ArrayList<>(getMatch().getHomeTeam().keySet());
+        sortedPositions.sort(Comparator.comparingInt(positionOrder::indexOf));
+
+        Map<String, Footballer> usersPlayers;
+        Map<String, Footballer> oppositionsPlayers;
+        Team usersTeam;
+        Team oppositionsTeam;
+
+        if (getMatch().getScheduler().getTeam() == getMatch().getHome()) {
+            usersPlayers = getMatch().getHomeTeam();
+            oppositionsPlayers = getMatch().getAwayTeam();
+            usersTeam = getMatch().getHome();
+            oppositionsTeam = getMatch().getAway();
+        } else {
+            usersPlayers = getMatch().getAwayTeam();
+            oppositionsPlayers = getMatch().getHomeTeam();
+            usersTeam = getMatch().getAway();
+            oppositionsTeam = getMatch().getHome();
+        }
+
+        title.setText(usersTeam.getName().toUpperCase());
+
+        // Execute commands in sorted order
+        for (String position : sortedPositions) {
+            Footballer player = usersPlayers.get(position);
+            PlayerStatsLineOnRatingsPage newLine = createRatingLine(player, homePlayersLines);
+            centerBox.add(newLine);
+        }
+
+        // Home Players Mouse Event Listeners
+        teamInViewLines = homePlayersLines;
+        teamInViewBoxes = homePlayersBoxes;
+        for (int i = 0; i < homePlayersLines.size(); i++) {
+            final int index = i;
+            homePlayersLines.get(i).addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    updateFocus(homePlayersLines, homePlayersLines.get(index), homePlayersBoxes.get(index));
+                }
+            });
+        }
+
+        // Let's create the away players lines, to be added later
+        for (String position : sortedPositions) {
+            Footballer player = oppositionsPlayers.get(position);
+            createRatingLine(player, awayPlayersLines);
+        }
+
+        // Away Players Mouse Event Listeners
+        for(int i = 0; i < awayPlayersLines.size(); i++){
+            final int index = i;
+            awayPlayersLines.get(i).addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    updateFocus(awayPlayersLines, awayPlayersLines.get(index), awayPlayersBoxes.get(index));
+                }
+            });
+        }
+
+        switchTeamInView.setText(oppositionsTeam.getName());
+        switchTeamInView.addActionListener(e -> {
+            centerBox.removeAll();
+            teamInViewLines = awayPlayersLines;
+            teamInViewBoxes = awayPlayersBoxes;
+            title.setText(oppositionsTeam.getName().toUpperCase());
+            centerBox.add(title);
+            centerBox.add(titleLine);
+            for(PlayerStatsLineOnRatingsPage eachLine : awayPlayersLines){
+                centerBox.add(eachLine);
+            }
+            String firstTeamsName = usersTeam.getName();
+            JButton switchTeamBack = new JButton(firstTeamsName);
+            switchTeamBack.setHorizontalAlignment(SwingConstants.CENTER);
+            switchTeamBack.setAlignmentX(Component.CENTER_ALIGNMENT);
+            centerBox.add(switchTeamBack);
+            setPlayerLineFocus(awayPlayersLines, lineInView, awayPlayersBoxes.get(lineInView));
+
+            centerBox.revalidate();
+            centerBox.repaint();
+
+            switchTeamBack.addActionListener(f -> {
+                centerBox.removeAll();
+                teamInViewLines = homePlayersLines;
+                teamInViewBoxes = homePlayersBoxes;
+                title.setText(usersTeam.getName().toUpperCase());
+                centerBox.add(title);
+                centerBox.add(titleLine);
+                for(PlayerStatsLineOnRatingsPage eachLine : homePlayersLines){
+                    centerBox.add(eachLine);
+                }
+                centerBox.add(switchTeamInView);
+                setPlayerLineFocus(homePlayersLines, lineInView, homePlayersBoxes.get(lineInView));
+
+                centerBox.revalidate();
+                centerBox.repaint();
+            });
+
+        });
+
+        // Place back at bottom
+        centerBox.remove(switchTeamInView);
+        centerBox.add(switchTeamInView);
+
+        PlayerStatsBoxOnRatingsPage playerBox = new PlayerStatsBoxOnRatingsPage(usersPlayers.get("GK"));
+        rightBox.add(playerBox);
+
+        // Create Boxes for each Team
+        for (String position : sortedPositions) {
+            Footballer player = usersPlayers.get(position);
+            createRatingBox(player, homePlayersBoxes);
+            rightBox.add(homePlayersBoxes.getFirst());
+        }
+
+        for (String position : sortedPositions) {
+            Footballer player = oppositionsPlayers.get(position);
+            createRatingBox(player, awayPlayersBoxes);
+        }
+
+        setPlayerLineFocus(homePlayersLines, 0, homePlayersBoxes.get(lineInView));
+    }
+
+    @Override
+    public void removeContentForChildClass() {
+        centerBox.removeAll();
+        playerRatings.clear();
+        playerBoxes.clear();
+    }
 
     private void setPlayerLineFocus(ArrayList<PlayerStatsLineOnRatingsPage> players, int index, PlayerStatsBoxOnRatingsPage box) {
         for(PlayerStatsLineOnRatingsPage eachLine : players){

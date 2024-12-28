@@ -97,7 +97,7 @@ public class Match {
 	public void updateAllMatchesPage(){
 		for(Match eachMatch : getSameDayMatches()){
 			if(eachMatch instanceof UsersMatch usersMatch){
-				((MatchAllMatches) usersMatch.getCardMap().get("All Matches")).addTodaysMatchesToPage();
+				eachMatch.getScheduler().getAllMatchesPanel().addTodaysMatchesToPage();
 			}
 		}
 	}
@@ -363,8 +363,8 @@ public class Match {
 			setAwayScorers(scorers);
 		}
 
-		if(this instanceof UsersMatch usersMatch) {
-			((MatchScorers) usersMatch.getCardMap().get("Scorers")).displayGoalScorers(side, scorers);
+		if(this instanceof UsersMatch) {
+			getScheduler().getScorerPanel().displayGoalScorers(side, scorers);
 		}
 	}
 
@@ -481,6 +481,7 @@ public class Match {
 						}
 					}
 					scheduler.refreshMessages();
+					simulated = false;
 				}
 				// Refresh messages once match is played
 				scheduler.getEventContainer().repaint();

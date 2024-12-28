@@ -24,8 +24,8 @@ public class MatchScorers extends MatchFrames {
     private JPanel leftBox, rightBox;
     private Box centerBox, container;
 
-	public MatchScorers(CardLayout cardLayout, JPanel pages, UsersMatch match, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
-		super(cardLayout, pages, match, speedometer, buttons);
+	public MatchScorers(CardLayout cardLayout, JPanel pages, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
+		super(cardLayout, pages, speedometer, buttons);
 		
 		JLayeredPane layeredPane = getLayeredPane();
         JPanel mainPanel = new JPanel();
@@ -70,6 +70,16 @@ public class MatchScorers extends MatchFrames {
         });
         
         setVisible(true);
+	}
+
+	@Override
+	public void removeContentForChildClass() {
+		leftBox.removeAll();
+		rightBox.removeAll();
+		leftBox.revalidate();
+		leftBox.repaint();
+		rightBox.revalidate();
+		rightBox.repaint();
 	}
 	
 	private void adjustPanelSize(Box box) {

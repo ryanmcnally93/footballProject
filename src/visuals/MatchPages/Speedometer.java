@@ -112,9 +112,15 @@ public class Speedometer extends GamePanel {
             }
             if(match.getSpeed().equals("slowest")) {
                 remove(slowDown);
+                if (!this.isAncestorOf(speedUp)) {
+                    add(speedUp);
+                }
             }
             if(match.getSpeed().equals("fastest")) {
                 remove(speedUp);
+                if (!this.isAncestorOf(slowDown)) {
+                    add(slowDown);
+                }
             }
             revalidate();
             repaint();

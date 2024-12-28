@@ -12,6 +12,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import entities.*;
+import people.Footballer;
+import visuals.CustomizedElements.CustomizedButton;
 import visuals.CustomizedElements.GamePanel;
 import main.GameWindow;
 import visuals.CustomizedElements.MainMenu;
@@ -24,6 +26,7 @@ import visuals.MainMenuPages.LeaderboardPages.TopGoalscorersPage;
 import visuals.MainMenuPages.TacticsPages.FirstTeamPage;
 import visuals.MainMenuPages.TacticsPages.FormationPage;
 import visuals.MainMenuPages.TacticsPages.MatchRolesPage;
+import visuals.MatchPages.*;
 
 public class Scheduler extends GamePanel {
 
@@ -43,9 +46,27 @@ public class Scheduler extends GamePanel {
 	private MainMenu mainMenu;
 	private Season season;
 	private ArrayList<Match> laterMatches, sameDayMatches;
-	private CardLayout leaderboardsLayout, fixturesLayout, tacticsLayout;
-	private Map<String, JPanel> tacticsMap;
-	private JPanel tacticsPages;
+	private CardLayout leaderboardsLayout, fixturesLayout, tacticsLayout, matchFramesLayout;
+	private Map<String, JPanel> tacticsMap, fixturesMap, matchFramesMap;
+	private JPanel tacticsPages, fixturesPages, matchFramesPages;
+	private LeagueTablePage leaguePage;
+	private TopGoalscorersPage goals;
+	private TopAssistsPage assists;
+	private AllFixturesPage allFixtures;
+	private MyFixturesPage myFixtures;
+	private ResultsPage results;
+	private FirstTeamPage firstTeam;
+	private FormationPage formation;
+	private MatchRolesPage matchRoles;
+	private MatchWatch watchPanel;
+	private MatchScorers scorerPanel;
+	private MatchStats statsPanel;
+	private MatchEvents eventsPanel;
+	private MatchAllMatches allMatchesPanel;
+	private MatchTable tablePanel;
+	private MatchRatings ratingsPanel;
+	private Speedometer speedometer;
+	private CustomizedButton pauseButton, resumeButton, tacticsButton;
 	
 	// New Game Constructor
 	public Scheduler(User user, Team team, League league) {
@@ -131,9 +152,9 @@ public class Scheduler extends GamePanel {
 
 		leaderboardsLayout = new CardLayout();
 		JPanel firstPages = new JPanel(leaderboardsLayout);
-		LeagueTablePage leaguePage = new LeagueTablePage(leaderboardsLayout, firstPages, this, true);
-		TopGoalscorersPage goals = new TopGoalscorersPage(leaderboardsLayout, firstPages, this, true);
-		TopAssistsPage assists = new TopAssistsPage(leaderboardsLayout, firstPages, this, true);
+		leaguePage = new LeagueTablePage(leaderboardsLayout, firstPages, this, true);
+		goals = new TopGoalscorersPage(leaderboardsLayout, firstPages, this, true);
+		assists = new TopAssistsPage(leaderboardsLayout, firstPages, this, true);
 		firstPages.add(leaguePage, "League Table");
 		firstPages.add(goals, "Top Goals");
 		firstPages.add(assists, "Top Assists");
@@ -146,26 +167,74 @@ public class Scheduler extends GamePanel {
 		addListeners(firstButtons, firstPages, leaderboardsLayout);
 
 		fixturesLayout = new CardLayout();
-		JPanel secondPages = new JPanel(fixturesLayout);
-		AllFixturesPage allFixtures = new AllFixturesPage(fixturesLayout, secondPages, this, true);
-		MyFixturesPage myFixtures = new MyFixturesPage(fixturesLayout, secondPages, this, true);
-		ResultsPage results = new ResultsPage(fixturesLayout, secondPages, this, true);
-		secondPages.add(allFixtures, "All Fixtures");
-		secondPages.add(myFixtures, "My Fixtures");
-		secondPages.add(results, "Results");
+		fixturesPages = new JPanel(fixturesLayout);
+		allFixtures = new AllFixturesPage(fixturesLayout, fixturesPages, this, true);
+		myFixtures = new MyFixturesPage(fixturesLayout, fixturesPages, this, true);
+		results = new ResultsPage(fixturesLayout, fixturesPages, this, true);
+		fixturesPages.add(allFixtures, "All Fixtures");
+		fixturesPages.add(myFixtures, "My Fixtures");
+		fixturesPages.add(results, "Results");
+
+		fixturesMap = new HashMap<>();
+		fixturesMap.put("All Fixtures", allFixtures);
+		fixturesMap.put("My Fixtures", myFixtures);
+		fixturesMap.put("Results", results);
 
 		ArrayList<JButton> secondButtons = new ArrayList<>();
 		secondButtons.add(getMainMenu().getAllFixturesButton());
 		secondButtons.add(getMainMenu().getMyFixturesButton());
 		secondButtons.add(getMainMenu().getResultsButton());
 
-		addListeners(secondButtons, secondPages, fixturesLayout);
+		addListeners(secondButtons, fixturesPages, fixturesLayout);
+
+		speedometer = new Speedometer();
+		ArrayList<CustomizedButton> buttons = new ArrayList<CustomizedButton>();
+
+		// Add Pause and Resume Buttons here
+		pauseButton = new CustomizedButton("Pause");
+		pauseButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		buttons.add(pauseButton);
+
+		resumeButton = new CustomizedButton("Resume");
+		resumeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		buttons.add(resumeButton);
+
+		tacticsButton = new CustomizedButton("Tactics");
+		tacticsButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		buttons.add(tacticsButton);
+
+		matchFramesLayout = new CardLayout();
+		matchFramesPages = new JPanel(matchFramesLayout);
+		watchPanel = new MatchWatch(matchFramesLayout, matchFramesPages, speedometer, buttons);
+		scorerPanel = new MatchScorers(matchFramesLayout, matchFramesPages, speedometer, buttons);
+		statsPanel = new MatchStats(matchFramesLayout, matchFramesPages, speedometer, buttons);
+		eventsPanel = new MatchEvents(matchFramesLayout, matchFramesPages, speedometer, buttons);
+		allMatchesPanel = new MatchAllMatches(matchFramesLayout, matchFramesPages, speedometer, buttons);
+		tablePanel = new MatchTable(matchFramesLayout, matchFramesPages, speedometer, buttons);
+		ratingsPanel = new MatchRatings(matchFramesLayout, matchFramesPages, speedometer, buttons);
+
+		matchFramesPages.add(watchPanel, "Watch");
+		matchFramesPages.add(scorerPanel, "Scorers"); // Updated
+		matchFramesPages.add(statsPanel, "Stats"); // Updated
+		matchFramesPages.add(eventsPanel, "Events"); // Updated
+		matchFramesPages.add(allMatchesPanel, "All Matches"); // Updated
+		matchFramesPages.add(tablePanel, "Table"); // Updated
+		matchFramesPages.add(ratingsPanel, "Ratings");
+
+		matchFramesMap = new HashMap<>();
+		matchFramesMap.put("Watch", watchPanel);
+		matchFramesMap.put("Scorers", scorerPanel);
+		matchFramesMap.put("Stats", statsPanel);
+		matchFramesMap.put("Events", eventsPanel);
+		matchFramesMap.put("All Matches", allMatchesPanel);
+		matchFramesMap.put("Table", tablePanel);
+		matchFramesMap.put("Ratings", ratingsPanel);
 
 		tacticsLayout = new CardLayout();
 		tacticsPages = new JPanel(tacticsLayout);
-		FirstTeamPage firstTeam = new FirstTeamPage(tacticsLayout, tacticsPages, this, true);
-		FormationPage formation = new FormationPage(tacticsLayout, tacticsPages, this, true);
-		MatchRolesPage matchRoles = new MatchRolesPage(tacticsLayout, tacticsPages, this, true);
+		firstTeam = new FirstTeamPage(tacticsLayout, tacticsPages, this, true);
+		formation = new FormationPage(tacticsLayout, tacticsPages, this, true);
+		matchRoles = new MatchRolesPage(tacticsLayout, tacticsPages, this, true);
 		tacticsPages.add(firstTeam, "First Team");
 		tacticsPages.add(formation, "Formation");
 		tacticsPages.add(matchRoles, "Match Roles");
@@ -330,7 +399,13 @@ public class Scheduler extends GamePanel {
 				playGame.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						event.getMatch().displayGame(window, sch);
+						for (Map.Entry<String, JPanel> page : getMatchFramesMap().entrySet()) {
+							MatchFrames frame = (MatchFrames) page.getValue();
+							event.getMatch().setScheduler(sch);
+							frame.setMatch(event.getMatch());
+						}
+						sch.getStatsPanel().setFromScheduler(false);
+						sch.displayMatchFrames(event.getMatch());
 						event.setRemoveEvent(true);
 					}
 				});
@@ -391,6 +466,48 @@ public class Scheduler extends GamePanel {
 				break;
 			}
 		}
+	}
+
+	public void displayMatchFrames(UsersMatch match) {
+		window.getContentPane().removeAll();
+		window.getContentPane().add(matchFramesPages, BorderLayout.CENTER);
+		statsPanel.getSpeedometerBox().add(speedometer);
+		matchFramesLayout.show(matchFramesPages, "Stats");
+		match.setCurrentPageName("Stats");
+
+		if(!match.getSameDayMatches().contains(match)){
+			match.getSameDayMatches().add(match);
+		}
+
+		if(match.getTimer().isPaused()) {
+			statsPanel.getFooterPanel().getMiddleBox().add(statsPanel.getResumeButton());
+			statsPanel.displayTacticsButton();
+		}
+
+		allMatchesPanel.addTodaysMatchesToPage();
+		match.updateDomesticLeagueTable();
+
+		if (statsPanel.isFromScheduler()) {
+			for (Map.Entry<String, JPanel> eachPanel : getMatchFramesMap().entrySet()) {
+				MatchFrames page = (MatchFrames) eachPanel.getValue();
+				for (Component button : page.getFooterPanel().getMiddleBox().getComponents()) {
+					if (button == page.getPauseButton() || button == page.getPlayButton() || button == page.getResumeButton() || button == page.getTacticsButton() || button == page.getContinueButton()) {
+						page.getFooterPanel().getMiddleBox().remove(button);
+					}
+				}
+				JPanel backButtonBox = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+				backButtonBox.setBackground(Color.LIGHT_GRAY);
+				setPermanentWidth(backButtonBox, 115);
+				JButton back = new JButton("Back");
+				backButtonBox.add(back);
+
+				page.getFooterPanel().add(backButtonBox, BorderLayout.EAST);
+			}
+		}
+
+		window.revalidate();
+		window.repaint();
+
 	}
 
 	public void showEventsDescription(Events event) {
@@ -577,6 +694,8 @@ public class Scheduler extends GamePanel {
             if (adult != null) {
                 UsersMatch child = new UsersMatch(adult.getHome(), adult.getAway(), league, adult.getDateTime()); // Create ChildClass instance
                 league.getFixtures().put(key, child); // Replace the entry in the map
+				MyFixturesPage myFixturesPage = (MyFixturesPage) fixturesMap.get("My Fixtures");
+				myFixturesPage.addFixtureLine(child);
             }
         }
 		System.out.println("Created " + k + "UserMatches");
@@ -848,7 +967,75 @@ public class Scheduler extends GamePanel {
 		return tacticsPages;
 	}
 
+	public Map<String, JPanel> getMatchFramesMap() {
+		return matchFramesMap;
+	}
+
 	public void setTacticsPages(JPanel tacticsPages) {
 		this.tacticsPages = tacticsPages;
+	}
+
+	public LeagueTablePage getLeaguePage() {
+		return leaguePage;
+	}
+
+	public TopGoalscorersPage getGoals() {
+		return goals;
+	}
+
+	public TopAssistsPage getAssists() {
+		return assists;
+	}
+
+	public AllFixturesPage getAllFixtures() {
+		return allFixtures;
+	}
+
+	public MyFixturesPage getMyFixtures() {
+		return myFixtures;
+	}
+
+	public ResultsPage getResults() {
+		return results;
+	}
+
+	public FirstTeamPage getFirstTeam() {
+		return firstTeam;
+	}
+
+	public FormationPage getFormation() {
+		return formation;
+	}
+
+	public MatchRolesPage getMatchRoles() {
+		return matchRoles;
+	}
+
+	public MatchWatch getWatchPanel() {
+		return watchPanel;
+	}
+
+	public MatchScorers getScorerPanel() {
+		return scorerPanel;
+	}
+
+	public MatchStats getStatsPanel() {
+		return statsPanel;
+	}
+
+	public MatchEvents getEventsPanel() {
+		return eventsPanel;
+	}
+
+	public MatchAllMatches getAllMatchesPanel() {
+		return allMatchesPanel;
+	}
+
+	public MatchTable getTablePanel() {
+		return tablePanel;
+	}
+
+	public MatchRatings getRatingsPanel() {
+		return ratingsPanel;
 	}
 }

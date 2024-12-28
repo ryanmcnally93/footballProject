@@ -18,6 +18,7 @@ public class CardmapMainPageTemplate extends GamePanel {
     private JPanel pages;
     private MainMenuPageTemplate.HeaderPanel headerPanel;
     private MainMenuPageTemplate.FooterPanel footerPanel;
+    private boolean fromScheduler = true;
 
     public CardmapMainPageTemplate(CardLayout cardLayout, JPanel pages){
         this.layout = cardLayout;
@@ -193,6 +194,14 @@ public class CardmapMainPageTemplate extends GamePanel {
             layout.previous(pages);
             moveSpeedometerBack();
         }
+    }
+
+    public boolean isFromScheduler() {
+        return fromScheduler;
+    }
+
+    public void setFromScheduler(boolean fromScheduler) {
+        this.fromScheduler = fromScheduler;
     }
 
 }

@@ -1,12 +1,15 @@
 package visuals.MainMenuPages;
 import entities.Match;
+import entities.Team;
 import entities.UsersMatch;
 import visuals.CustomizedElements.CardmapMainPageTemplate;
+import visuals.MatchPages.MatchFrames;
 import visuals.ScheduleFrames.Scheduler;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Map;
 
 public class MainMenuPageTemplate extends CardmapMainPageTemplate {
 
@@ -14,12 +17,11 @@ public class MainMenuPageTemplate extends CardmapMainPageTemplate {
     private JPanel mainPanel;
     private JButton back;
     private UsersMatch match;
-    private boolean fromScheduler = true;
 
     public MainMenuPageTemplate(CardLayout cardLayout, JPanel pages, Scheduler scheduler, boolean fromScheduler){
         super(cardLayout, pages);
         this.scheduler = scheduler;
-        this.fromScheduler = fromScheduler;
+        setFromScheduler(fromScheduler);
 
         // This right box in the footer will help push the other elements central
         JPanel backButtonBox = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -41,7 +43,7 @@ public class MainMenuPageTemplate extends CardmapMainPageTemplate {
     }
 
     public void addBackButtonFunctionality(){
-        if(fromScheduler) {
+        if(isFromScheduler()) {
             back.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -52,14 +54,20 @@ public class MainMenuPageTemplate extends CardmapMainPageTemplate {
             back.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    match.displayGame(scheduler.getWindow(), scheduler);
+                    for (Map.Entry<String, JPanel> page : scheduler.getMatchFramesMap().entrySet()) {
+                        MatchFrames frame = (MatchFrames) page.getValue();
+                        match.setScheduler(getScheduler());
+                        frame.setMatch(match);
+                    }
+                    scheduler.getStatsPanel().setFromScheduler(false);
+                    scheduler.displayMatchFrames(match);
                 }
             });
         }
     }
 
     public void updateBackButtonFunctionality(UsersMatch match){
-        if(fromScheduler) {
+        if(isFromScheduler()) {
             back.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -70,7 +78,8 @@ public class MainMenuPageTemplate extends CardmapMainPageTemplate {
             back.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    match.displayGame(scheduler.getWindow(), scheduler);
+                    scheduler.getStatsPanel().setFromScheduler(false);
+                    scheduler.displayMatchFrames(match);
                 }
             });
         }
@@ -90,14 +99,6 @@ public class MainMenuPageTemplate extends CardmapMainPageTemplate {
 
     public void setScheduler(Scheduler scheduler) {
         this.scheduler = scheduler;
-    }
-
-    public boolean isFromScheduler() {
-        return fromScheduler;
-    }
-
-    public void setFromScheduler(boolean fromScheduler) {
-        this.fromScheduler = fromScheduler;
     }
 
     public UsersMatch getMatch() {

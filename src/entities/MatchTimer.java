@@ -64,7 +64,7 @@ public class MatchTimer {
 
                 // Prints the current in-app time
                 if (this.match instanceof UsersMatch newMatch) {
-                    for (JPanel page : newMatch.getCardMap().values()) {
+                    for (JPanel page : newMatch.getScheduler().getMatchFramesMap().values()) {
                         if (page instanceof MatchFrames) {
                             ((MatchFrames) page).getTime().setText(getGameMinutes() + ":" + getGameSeconds());
                         }

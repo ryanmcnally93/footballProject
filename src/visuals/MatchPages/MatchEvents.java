@@ -26,8 +26,8 @@ public class MatchEvents extends MatchFrames {
 	private ActionMap actionMap;
 	private int rows = 14;
 
-    public MatchEvents(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
-    	super(layout, pages, match, speedometer, buttons);
+    public MatchEvents(CardLayout layout, JPanel pages, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
+    	super(layout, pages, speedometer, buttons);
     	
     	this.events = 0;
     	this.button = 0;
@@ -113,6 +113,43 @@ public class MatchEvents extends MatchFrames {
         setVisible(true);
         
     }
+
+	@Override
+	public void removeContentForChildClass() {
+		boolean needToRemoveExtraRows = leftIcons.size() > 13;
+		while (needToRemoveExtraRows) {
+			leftIcons.removeLast();
+			leftLabels.removeLast();
+			middleLabels.removeLast();
+			rightLabels.removeLast();
+			rightIcons.removeLast();
+			needToRemoveExtraRows = leftIcons.size() > 13;
+		}
+		this.events = 0;
+		this.button = 0;
+		for (JLabel label : leftIcons) {
+			clearLabel(label);
+		}
+		for (JLabel label : leftLabels) {
+			clearLabel(label);
+		}
+		for (JLabel label : middleLabels) {
+			clearLabel(label);
+		}
+		for (JLabel label : rightLabels) {
+			clearLabel(label);
+		}
+		for (JLabel label : rightIcons) {
+			clearLabel(label);
+		}
+	}
+
+	public void clearLabel(JLabel label) {
+		if (label.getBackground() == Color.GREEN || label.getBackground() == Color.YELLOW || !label.getText().isEmpty()) {
+			label.setBackground(Color.LIGHT_GRAY);
+			label.setText("");
+		}
+	}
     
     private void updateFocus(String direction) {
 		if(direction.equals("up")) {

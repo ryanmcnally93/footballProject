@@ -18,8 +18,8 @@ public class MatchAllMatches extends MatchFrames {
     private Boolean laterUpdated;
     private JPanel mainPanel;
 
-    public MatchAllMatches(CardLayout layout, JPanel pages, UsersMatch match, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
-        super(layout, pages, match, speedometer, buttons);
+    public MatchAllMatches(CardLayout layout, JPanel pages, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
+        super(layout, pages, speedometer, buttons);
 
         earlyUpdated = false;
         laterUpdated = false;
@@ -45,7 +45,6 @@ public class MatchAllMatches extends MatchFrames {
     }
 
     public void addTodaysMatchesToPage() {
-
         if(!earlyUpdated){
             updateMatches(topBox, getMatch().getEarlierMatches());
             earlyUpdated = true;
@@ -59,6 +58,13 @@ public class MatchAllMatches extends MatchFrames {
             updateMatches(bottomBox, getMatch().getLaterMatches());
             laterUpdated = true;
         }
+    }
+
+    @Override
+    public void addContentForChildClass() {
+        earlyUpdated = false;
+        laterUpdated = false;
+        addTodaysMatchesToPage();
     }
 
     public void updateMatches(Box box, ArrayList<Match> matches) {
