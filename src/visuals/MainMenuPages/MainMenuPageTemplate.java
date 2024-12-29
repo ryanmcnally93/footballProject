@@ -57,14 +57,9 @@ public class MainMenuPageTemplate extends CardmapMainPageTemplate {
                 if (isFromScheduler()) {
                     scheduler.displayPage(scheduler.getWindow());
                 } else {
-                    for (Map.Entry<String, JPanel> page : scheduler.getMatchFramesMap().entrySet()) {
-                        MatchFrames frame = (MatchFrames) page.getValue();
-                        match.setScheduler(getScheduler());
-                        frame.setMatch(match);
-                    }
-                    MatchFrames currentPanel = (MatchFrames) scheduler.getMatchFramesMap().get(match.getCurrentPageName());
+                    MatchFrames currentPanel = (MatchFrames) scheduler.getMatchFramesMap().get(scheduler.getMatch().getCurrentPageName());
                     currentPanel.setFromScheduler(false);
-                    scheduler.displayMatchFrames(match, false);
+                    scheduler.displayMatchFrames(scheduler.getMatch(), false);
                 }
             }
         });
