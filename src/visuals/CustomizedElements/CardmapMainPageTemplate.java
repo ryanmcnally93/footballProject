@@ -5,6 +5,8 @@ import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 
 public class CardmapMainPageTemplate extends GamePanel {
 
@@ -69,7 +71,6 @@ public class CardmapMainPageTemplate extends GamePanel {
 
         private CustomizedButton prevButton, nextButton;
         private JPanel buttonBox, middleBox, backButtonBox;
-        private ActionMap actionMap;
         private Box line;
 
         public FooterPanel() {
@@ -91,15 +92,7 @@ public class CardmapMainPageTemplate extends GamePanel {
             add(backButtonBox, BorderLayout.EAST);
             add(leftBlankBox, BorderLayout.WEST);
 
-            prevButton.addActionListener(e -> {
-                layout.previous(pages);
-                moveButtonsWithUser_Backwards();
-            });
-
-            nextButton.addActionListener(e -> {
-                layout.next(pages);
-                moveButtonsWithUser_Forwards();
-            });
+            addLeftAndRightActionListeners();
 
             buttonBox = new JPanel(new FlowLayout(FlowLayout.CENTER));
             buttonBox.add(prevButton);
@@ -112,15 +105,41 @@ public class CardmapMainPageTemplate extends GamePanel {
             buttonBox.setBackground(Color.LIGHT_GRAY);
             add(buttonBox, BorderLayout.CENTER);
 
+            addKeyListeners();
+        }
+
+        public void addKeyListeners() {
             InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-            actionMap = getActionMap();
+            ActionMap actionMap = getActionMap();
 
             inputMap.put(KeyStroke.getKeyStroke("LEFT"), LEFT);
             actionMap.put(LEFT, new MatchFrames.leftClick());
 
             inputMap.put(KeyStroke.getKeyStroke("RIGHT"), RIGHT);
             actionMap.put(RIGHT, new MatchFrames.rightClick());
+        }
 
+        public void removeKeyListeners() {
+            InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+            ActionMap actionMap = getActionMap();
+
+            inputMap.remove(KeyStroke.getKeyStroke("LEFT"));
+            actionMap.remove(LEFT);
+
+            inputMap.remove(KeyStroke.getKeyStroke("RIGHT"));
+            actionMap.remove(RIGHT);
+        }
+
+        public void addLeftAndRightActionListeners() {
+            prevButton.addActionListener(e -> {
+                layout.previous(pages);
+                moveButtonsWithUser_Backwards();
+            });
+
+            nextButton.addActionListener(e -> {
+                layout.next(pages);
+                moveButtonsWithUser_Forwards();
+            });
         }
 
         public JPanel getMiddleBox() {
@@ -139,16 +158,8 @@ public class CardmapMainPageTemplate extends GamePanel {
             this.middleBox = middleBox;
         }
 
-        public ActionMap getFooterActionMap() {
-            return actionMap;
-        }
-
         public Box getLine(){
             return this.line;
-        }
-
-        public void setFooterActionMap(ActionMap actionMap) {
-            this.actionMap = actionMap;
         }
 
         public JPanel getButtonBox() {
@@ -165,6 +176,14 @@ public class CardmapMainPageTemplate extends GamePanel {
 
         public void setNextButton(CustomizedButton nextButton) {
             this.nextButton = nextButton;
+        }
+
+        public CustomizedButton getPrevButton() {
+            return prevButton;
+        }
+
+        public void setPrevButton(CustomizedButton prevButton) {
+            this.prevButton = prevButton;
         }
     }
 

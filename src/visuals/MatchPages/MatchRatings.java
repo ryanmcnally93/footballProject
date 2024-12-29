@@ -181,7 +181,8 @@ public class MatchRatings extends MatchFrames {
 	}
 
     @Override
-    public void addContentForChildClass() {
+    public void populateMatchFramesContentForNewMatch() {
+        super.populateMatchFramesContentForNewMatch();
         List<String> positionOrder = Arrays.asList(
                 "GK", "RB", "CB1", "CB2",
                 "LB", "CM1", "CAM", "CM2", "RW", "ST", "LW");
@@ -309,7 +310,8 @@ public class MatchRatings extends MatchFrames {
     }
 
     @Override
-    public void removeContentForChildClass() {
+    public void removeMatchFramesContentWhenLeavingMatch() {
+        super.removeMatchFramesContentWhenLeavingMatch();
         centerBox.removeAll();
         playerRatings.clear();
         playerBoxes.clear();

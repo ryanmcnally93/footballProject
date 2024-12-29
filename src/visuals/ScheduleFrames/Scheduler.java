@@ -47,10 +47,12 @@ public class Scheduler extends GamePanel {
 	private MainMenu mainMenu;
 	private Season season;
 	private ArrayList<Match> laterMatches, sameDayMatches;
+	// Main Menu & MatchFrames Layouts, CardMap & Pages
 	private CardLayout leaderboardsLayout, fixturesLayout, tacticsLayout, matchFramesLayout;
 	private Map<String, JPanel> tacticsMap, fixturesMap, matchFramesMap;
 	private JPanel tacticsPages, fixturesPages, matchFramesPages;
-	private  LeagueTablePage leaguePage;
+	// Main Menu Pages
+	private LeagueTablePage leaguePage;
 	private TopGoalscorersPage goals;
 	private TopAssistsPage assists;
 	private AllFixturesPage allFixtures;
@@ -59,6 +61,7 @@ public class Scheduler extends GamePanel {
 	private FirstTeamPage firstTeam;
 	private FormationPage formation;
 	private MatchRolesPage matchRoles;
+	// Match Frames Pages
 	private MatchWatch watchPanel;
 	private MatchScorers scorerPanel;
 	private MatchStats statsPanel;
@@ -66,6 +69,7 @@ public class Scheduler extends GamePanel {
 	private MatchAllMatches allMatchesPanel;
 	private MatchTable tablePanel;
 	private MatchRatings ratingsPanel;
+	// Match Components
 	private Speedometer speedometer;
 	private CustomizedButton pauseButton, resumeButton, tacticsButton;
 	
@@ -405,7 +409,7 @@ public class Scheduler extends GamePanel {
 							event.getMatch().setScheduler(sch);
 							frame.setMatch(event.getMatch());
 						}
-						sch.displayMatchFrames(event.getMatch(), true);
+						sch.displayMatchFrames(event.getMatch());
 						event.setRemoveEvent(true);
 					}
 				});
@@ -468,43 +472,90 @@ public class Scheduler extends GamePanel {
 		}
 	}
 
-	public void displayMatchFrames(UsersMatch match, boolean statsPage) {
+	public static String removeCharactersAfterColon(String input) {
+		int colonIndex = input.indexOf(':');
+		if (colonIndex != -1) {
+			return input.substring(0, colonIndex);
+		}
+		return input; // No colon found, return the original string
+	}
+
+	public void displayMatchFrames(UsersMatch match) {
 		window.getContentPane().removeAll();
 		window.getContentPane().add(matchFramesPages, BorderLayout.CENTER);
-		statsPanel.getSpeedometerBox().add(speedometer);
-		if (statsPage) {
-			matchFramesLayout.show(matchFramesPages, "Stats");
-			match.setCurrentPageName("Stats");
+
+		if (!match.isMatchHasPlayed() && tablePanel.isFromScheduler()) {
+			viewMatchFramesWhenMatchNotPlayed();
+		} else if (match.isMatchHasPlayed() && tablePanel.isFromScheduler()) {
+			viewMatchFramesWhenMatchPlayed();
+		} else if (match.getTimer().isPaused()) {
+			viewMatchAfterTacticsPageViewed();
 		} else {
-			matchFramesLayout.show(matchFramesPages, match.getCurrentPageName());
+			viewMatchStartOfGame();
 		}
 
 		if(!match.getSameDayMatches().contains(match)){
 			match.getSameDayMatches().add(match);
 		}
 
-		if(match.getTimer().isPaused()) {
-			statsPanel.getFooterPanel().getMiddleBox().add(statsPanel.getResumeButton());
-			statsPanel.displayTacticsButton();
-		}
-
 		allMatchesPanel.addTodaysMatchesToPage();
 		match.updateDomesticLeagueTable();
 
 		if (statsPanel.isFromScheduler()) {
-			for (Map.Entry<String, JPanel> eachPanel : getMatchFramesMap().entrySet()) {
-				MatchFrames page = (MatchFrames) eachPanel.getValue();
-				for (Component button : page.getFooterPanel().getMiddleBox().getComponents()) {
-					if (button == page.getPauseButton() || button == page.getPlayButton() || button == page.getResumeButton() || button == page.getTacticsButton() || button == page.getContinueButton()) {
-						page.getFooterPanel().getMiddleBox().remove(button);
-					}
-				}
-			}
+			viewMatchFromScheduler();
 		}
 
 		window.revalidate();
 		window.repaint();
 
+	}
+
+	public void viewMatchStartOfGame() {
+		matchFramesLayout.show(matchFramesPages, "Stats");
+		match.setCurrentPageName("Stats");
+		statsPanel.getSpeedometerBox().add(speedometer);
+	}
+
+	public void viewMatchAfterTacticsPageViewed() {
+		MatchFrames currentPage = (MatchFrames) matchFramesMap.get(match.getCurrentPageName());
+		currentPage.getFooterPanel().getMiddleBox().add(currentPage.getResumeButton());
+		currentPage.displayTacticsButton();
+		currentPage.getSpeedometerBox().add(speedometer);
+	}
+
+	public void viewMatchFramesWhenMatchPlayed() {
+
+	}
+
+	public void viewMatchFromScheduler() {
+		for (Map.Entry<String, JPanel> eachPanel : getMatchFramesMap().entrySet()) {
+			MatchFrames page = (MatchFrames) eachPanel.getValue();
+			for (Component button : page.getFooterPanel().getMiddleBox().getComponents()) {
+				if (button == page.getPauseButton() || button == page.getPlayButton() || button == page.getResumeButton() || button == page.getTacticsButton() || button == page.getContinueButton()) {
+					page.getFooterPanel().getMiddleBox().remove(button);
+				}
+			}
+		}
+	}
+
+	public void viewMatchFramesWhenMatchNotPlayed() {
+		// Make sure speedometer space is empty
+		JPanel emptySpeedometer = new JPanel();
+		emptySpeedometer.setPreferredSize(new Dimension(200, 20));
+		emptySpeedometer.setBackground(Color.LIGHT_GRAY);
+		emptySpeedometer.setBounds(400, 0, 200, 20);
+		tablePanel.getSpeedometerBox().add(emptySpeedometer);
+
+		matchFramesLayout.show(matchFramesPages, "Table");
+		match.setCurrentPageName("Table");
+		tablePanel.getFooterPanel().getButtonBox().remove(tablePanel.getFooterPanel().getNextButton());
+		if (tablePanel.getFooterPanel().getMiddleBox().getComponents().length > 0) {
+			tablePanel.getFooterPanel().getMiddleBox().remove(tablePanel.getPlayButton());
+		}
+		tablePanel.getFooterPanel().getButtonBox().remove(tablePanel.getFooterPanel().getPrevButton());
+		tablePanel.getStadiumAndAttendance().setText(removeCharactersAfterColon(tablePanel.getStadiumAndAttendance().getText()));
+		tablePanel.getHeaderPanel().setTitle(match.getHome().getName() + " vs " + match.getAway().getName());
+		tablePanel.getFooterPanel().removeKeyListeners();
 	}
 
 	public void showEventsDescription(Events event) {

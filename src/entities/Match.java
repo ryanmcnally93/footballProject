@@ -34,6 +34,7 @@ public class Match {
 	private String speed;
 	private ArrayList<Match> laterMatches, sameDayMatches, earlierMatches;
 	private ArrayList<String> homeScorers, awayScorers;
+	private boolean matchHasPlayed = false;
 	
 	public Match() {}
 	
@@ -462,7 +463,7 @@ public class Match {
 			}
 
 			System.out.println("*****" + getHome().getName() + " " + getHomeScore() + " - " + getAwayScore() + " " + getAway().getName() + "*****");
-
+			matchHasPlayed = true;
 			if(scheduler != null){
 				scheduler.getEventContainer().removeAll();
 				// We only want this on a simulated match
@@ -754,5 +755,9 @@ public class Match {
 
 	public void appendEarlierMatches(Match newMatch) {
 		this.earlierMatches.add(newMatch);
+	}
+
+	public boolean isMatchHasPlayed() {
+		return matchHasPlayed;
 	}
 }

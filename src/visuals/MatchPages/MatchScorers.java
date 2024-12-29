@@ -73,7 +73,8 @@ public class MatchScorers extends MatchFrames {
 	}
 
 	@Override
-	public void removeContentForChildClass() {
+	public void removeMatchFramesContentWhenLeavingMatch() {
+		super.removeMatchFramesContentWhenLeavingMatch();
 		leftBox.removeAll();
 		rightBox.removeAll();
 		leftBox.revalidate();

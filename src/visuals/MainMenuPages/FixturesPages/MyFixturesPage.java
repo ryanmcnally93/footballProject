@@ -50,9 +50,13 @@ public class MyFixturesPage extends MainMenuPageTemplate {
                     frame.setMatch(child);
                     frame.setFromScheduler(true);
                 }
-                // Provide back button for MatchPages when viewing through main menu
-                getScheduler().getStatsPanel().getFooterPanel().getBackButtonBox().add(getScheduler().getStatsPanel().getBackButton());
-                getScheduler().displayMatchFrames(child, true);
+                // Provide back button for the first viewed MatchPage when viewing through main menu
+                if (child.isMatchHasPlayed()) {
+                    getScheduler().getStatsPanel().getFooterPanel().getBackButtonBox().add(getScheduler().getStatsPanel().getBackButton());
+                } else {
+                    getScheduler().getTablePanel().getFooterPanel().getBackButtonBox().add(getScheduler().getTablePanel().getBackButton());
+                }
+                getScheduler().displayMatchFrames(child);
             }
         });
         centerBox.add(matchLine);

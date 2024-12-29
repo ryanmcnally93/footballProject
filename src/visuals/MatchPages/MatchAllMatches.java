@@ -61,7 +61,8 @@ public class MatchAllMatches extends MatchFrames {
     }
 
     @Override
-    public void addContentForChildClass() {
+    public void populateMatchFramesContentForNewMatch() {
+        super.populateMatchFramesContentForNewMatch();
         earlyUpdated = false;
         laterUpdated = false;
         addTodaysMatchesToPage();

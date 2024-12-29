@@ -115,7 +115,8 @@ public class MatchEvents extends MatchFrames {
     }
 
 	@Override
-	public void removeContentForChildClass() {
+	public void removeMatchFramesContentWhenLeavingMatch() {
+		super.removeMatchFramesContentWhenLeavingMatch();
 		for (JLabel label : leftIcons) {
 			clearLabel(label);
 		}

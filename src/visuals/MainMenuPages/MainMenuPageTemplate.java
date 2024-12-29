@@ -57,7 +57,7 @@ public class MainMenuPageTemplate extends CardmapMainPageTemplate {
                 if (isFromScheduler()) {
                     scheduler.displayPage(scheduler.getWindow());
                 } else {
-                    scheduler.displayMatchFrames(scheduler.getMatch(), false);
+                    scheduler.displayMatchFrames(scheduler.getMatch());
                 }
             }
         });

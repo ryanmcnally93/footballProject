@@ -75,7 +75,8 @@ public class MatchStats extends MatchFrames {
     }
 
     @Override
-    public void removeContentForChildClass() {
+    public void removeMatchFramesContentWhenLeavingMatch() {
+        super.removeMatchFramesContentWhenLeavingMatch();
         centerBox.removeAll();
         centerBox.revalidate();
         centerBox.repaint();
@@ -83,7 +84,8 @@ public class MatchStats extends MatchFrames {
     }
 
     @Override
-    public void addContentForChildClass() {
+    public void populateMatchFramesContentForNewMatch() {
+        super.populateMatchFramesContentForNewMatch();
         homeShotsOn.setText(String.valueOf(getMatch().getHomeShotsOn()));
         awayShotsOn.setText(String.valueOf(getMatch().getAwayShotsOn()));
 

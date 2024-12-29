@@ -33,14 +33,27 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		this.tacticsButton = buttons.get(2);
 		continueButton = new CustomizedButton("Continue");
 
+		// Adding play button
+		playButton = new CustomizedButton("Play");
+		playButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		playButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				handleClick();
+			}
+		});
+
 		back = new JButton("Back");
 		back.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				getMatch().getScheduler().getWindow().getContentPane().removeAll();
 				getMatch().getScheduler().getWindow().getContentPane().add(getMatch().getScheduler().getFixturesPages(), BorderLayout.CENTER);
-				getMatch().getScheduler().getWindow().revalidate();
-				getMatch().getScheduler().getWindow().repaint();
+				if (!getMatch().isMatchHasPlayed()) {
+					removeUnplayedMatchViewAttributes();
+				} else {
+					removePlayedMatchViewAttributes();
+				}
 				// Remove the back button in MatchFrames now that it has been clicked
 				for (Map.Entry<String, JPanel> eachPage : match.getScheduler().getMatchFramesMap().entrySet()) {
 					JPanel buttonBox = ((MatchFrames) eachPage.getValue()).getFooterPanel().getBackButtonBox();
@@ -48,8 +61,10 @@ public class MatchFrames extends CardmapMainPageTemplate {
 						buttonBox.remove(0);
 					}
 					((MatchFrames) eachPage.getValue()).setFromScheduler(false);
-					((MatchFrames) eachPage.getValue()).removeContentForChildClass();
+					((MatchFrames) eachPage.getValue()).removeMatchFramesContentWhenLeavingMatch();
 				}
+				getMatch().getScheduler().getWindow().revalidate();
+				getMatch().getScheduler().getWindow().repaint();
 			}
 		});
 
@@ -74,40 +89,6 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		slidingPanel.setBounds(0, 0, 800, 600);
 
 		getLayeredPane().add(slidingPanel, JLayeredPane.MODAL_LAYER);
-	}
-
-	public void setMatch(UsersMatch match) {
-		this.match = match;
-		// Add the time to the header
-		time.setText(match.getTimer().getTime());
-		time.setFont(new Font(time.getFont().getName(), Font.BOLD, 18));
-		time.setBorder(new EmptyBorder(0, 0, 5, 0));
-		if (!getMatch().getTimer().getTime().equals("90:00") && getFooterPanel().getMiddleBox().isAncestorOf(getContinueButton())) {
-			getFooterPanel().getMiddleBox().remove(getContinueButton());
-		}
-		getHeaderPanel().setTitle(match.getHome().getName() + " " + match.getHomeScore() + " - " + match.getAwayScore() + " " + match.getAway().getName());
-
-		// Adding stadium, date and attendance data to footer element
-		int day = match.getDateTime().getDayOfMonth();
-		String dayWithSuffix = day + getDayOfMonthSuffix(day);
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy HH:mm");
-		String formattedDate = dayWithSuffix + " " + match.getDateTime().format(formatter);
-
-		dateAndTime.setText(formattedDate);
-		this.speedometer.setMatch(getMatch());
-		stadiumAndAttendance.setText(match.getStadium() + ": 60000");
-
-		// Adding play button
-		playButton = new CustomizedButton("Play");
-		playButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		playButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (match.getTimer().getTime().equals("00:00")) {
-					handleClick();
-				}
-			}
-		});
 
 		getPauseButton().addMouseListener(new MouseAdapter() {
 			@Override
@@ -166,12 +147,54 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		playButtonActionMap.put(PLAY, new MatchFrames.PlayGame());
 
 		getFooterPanel().getMiddleBox().add(playButton);
-		addContentForChildClass();
 	}
 
-	public void addContentForChildClass() {}
+	public void removePlayedMatchViewAttributes() {
 
-	public void removeContentForChildClass() {}
+	}
+
+	public void removeUnplayedMatchViewAttributes() {
+		MatchFrames tablePanel = getMatch().getScheduler().getTablePanel();
+		// At the moment, this create a spacing bug when going through the pages, it looks different to other pages
+		CardmapMainPageTemplate.FooterPanel footer = tablePanel.getFooterPanel();
+		footer.getButtonBox().remove(footer.getMiddleBox());
+		footer.getButtonBox().add(footer.getPrevButton());
+		footer.getButtonBox().add(footer.getMiddleBox());
+		getMatch().getScheduler().getStatsPanel().getFooterPanel().getMiddleBox().add(getMatch().getScheduler().getStatsPanel().getPlayButton());
+		footer.getButtonBox().add(footer.getNextButton());
+		// Set attendance back to default value 6000, change later
+		tablePanel.getStadiumAndAttendance().setText(tablePanel.getStadiumAndAttendance() + " 6000");
+		tablePanel.getHeaderPanel().setTitle(match.getHome().getName() + " " + match.getHomeScore() + " - " + match.getAwayScore() + " " + match.getAway().getName());
+		footer.addKeyListeners();
+		tablePanel.getSpeedometerBox().removeAll();
+	}
+
+	public void setMatch(UsersMatch match) {
+		this.match = match;
+		populateMatchFramesContentForNewMatch();
+	}
+
+	public void populateMatchFramesContentForNewMatch() {
+		// Add the time to the header
+		time.setText(match.getTimer().getTime());
+		time.setFont(new Font(time.getFont().getName(), Font.BOLD, 18));
+		time.setBorder(new EmptyBorder(0, 0, 5, 0));
+		getHeaderPanel().setTitle(match.getHome().getName() + " " + match.getHomeScore() + " - " + match.getAwayScore() + " " + match.getAway().getName());
+
+		// Adding stadium, date and attendance data to footer element
+		int day = match.getDateTime().getDayOfMonth();
+		String dayWithSuffix = day + getDayOfMonthSuffix(day);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy HH:mm");
+		String formattedDate = dayWithSuffix + " " + match.getDateTime().format(formatter);
+
+		dateAndTime.setText(formattedDate);
+		this.speedometer.setMatch(getMatch());
+		stadiumAndAttendance.setText(match.getStadium() + ": 60000");
+	}
+
+	public void removeMatchFramesContentWhenLeavingMatch() {saveMatchFramesContentForMatch();}
+
+	public void saveMatchFramesContentForMatch() {}
 
 	@Override
 	public void moveButtonsWithUser_Forwards(){
@@ -186,6 +209,10 @@ public class MatchFrames extends CardmapMainPageTemplate {
 			page.getFooterPanel().getMiddleBox().add(getTacticsButton());
 		} else if (!getMatch().getTimer().isPaused() && getMatch().isInMiddleOfMatch()){
 			page.getFooterPanel().getMiddleBox().add(getPauseButton());
+		} else if (getMatch().getTimer().getTime().equals("00:00")) {
+			if (page.getFooterPanel().getMiddleBox().getComponents().length == 0) {
+				page.getFooterPanel().getMiddleBox().add(page.getPlayButton());
+			}
 		}
 		if (page.isFromScheduler()) {
 			page.getFooterPanel().getBackButtonBox().add(getBackButton());
@@ -271,7 +298,8 @@ public class MatchFrames extends CardmapMainPageTemplate {
 
 	public void continueToScheduler(){
 		for (Map.Entry<String, JPanel> eachPage : match.getScheduler().getMatchFramesMap().entrySet()) {
-			((MatchFrames) eachPage.getValue()).removeContentForChildClass();
+			((MatchFrames) eachPage.getValue()).removeMatchFramesContentWhenLeavingMatch();
+			((MatchFrames) eachPage.getValue()).getFooterPanel().getMiddleBox().remove(getContinueButton());
 		}
 		match.getScheduler().getWindow().getContentPane().removeAll();
 		match.getScheduler().displayPage(match.getScheduler().getWindow());
@@ -328,7 +356,9 @@ public class MatchFrames extends CardmapMainPageTemplate {
 
 	public void handleClick() {
 		// Start the match
-		match.startMatch(match.getSpeed());
+		if (match.getTimer().getTime().equals("00:00")) {
+			match.startMatch(match.getSpeed());
+		}
 	}
 	
 	public void goalAlert(String name, String time) {
@@ -405,5 +435,13 @@ public class MatchFrames extends CardmapMainPageTemplate {
 
 	public JButton getBackButton() {
 		return back;
+	}
+
+	public JLabel getStadiumAndAttendance() {
+		return stadiumAndAttendance;
+	}
+
+	public void setStadiumAndAttendance(JLabel stadiumAndAttendance) {
+		this.stadiumAndAttendance = stadiumAndAttendance;
 	}
 }
