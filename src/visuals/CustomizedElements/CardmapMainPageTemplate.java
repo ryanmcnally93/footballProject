@@ -1,13 +1,10 @@
 package visuals.CustomizedElements;
-import entities.Match;
 import visuals.MainMenuPages.MainMenuPageTemplate;
 import visuals.MatchPages.MatchFrames;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class CardmapMainPageTemplate extends GamePanel {
 
@@ -18,7 +15,7 @@ public class CardmapMainPageTemplate extends GamePanel {
     private JPanel pages;
     private MainMenuPageTemplate.HeaderPanel headerPanel;
     private MainMenuPageTemplate.FooterPanel footerPanel;
-    private boolean fromScheduler = true;
+    private boolean fromScheduler = false;
 
     public CardmapMainPageTemplate(CardLayout cardLayout, JPanel pages){
         this.layout = cardLayout;
@@ -96,12 +93,12 @@ public class CardmapMainPageTemplate extends GamePanel {
 
             prevButton.addActionListener(e -> {
                 layout.previous(pages);
-                moveSpeedometerBack();
+                moveButtonsWithUser_Backwards();
             });
 
             nextButton.addActionListener(e -> {
                 layout.next(pages);
-                moveSpeedometerForward();
+                moveButtonsWithUser_Forwards();
             });
 
             buttonBox = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -199,19 +196,19 @@ public class CardmapMainPageTemplate extends GamePanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             layout.next(pages);
-            moveSpeedometerForward();
+            moveButtonsWithUser_Forwards();
         }
     }
 
-    public void moveSpeedometerForward() {}
+    public void moveButtonsWithUser_Forwards() {}
 
-    public void moveSpeedometerBack() {}
+    public void moveButtonsWithUser_Backwards() {}
 
     public class leftClick extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
             layout.previous(pages);
-            moveSpeedometerBack();
+            moveButtonsWithUser_Backwards();
         }
     }
 

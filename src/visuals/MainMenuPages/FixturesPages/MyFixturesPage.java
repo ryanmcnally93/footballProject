@@ -48,8 +48,8 @@ public class MyFixturesPage extends MainMenuPageTemplate {
                     MatchFrames frame = (MatchFrames) page.getValue();
                     child.setScheduler(getScheduler());
                     frame.setMatch(child);
+                    frame.setFromScheduler(true);
                 }
-                getScheduler().getStatsPanel().setFromScheduler(true);
                 // Provide back button for MatchPages when viewing through main menu
                 getScheduler().getStatsPanel().getFooterPanel().getBackButtonBox().add(getScheduler().getStatsPanel().getBackButton());
                 getScheduler().displayMatchFrames(child, true);

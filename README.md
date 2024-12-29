@@ -331,6 +331,23 @@ This worked on occasion, but also failed from time to time.
 ### Unfixed Bugs
 
 1. Mouse clicks are not very sensitive. I have to click several times if using the mouse in order to trigger a method.
+2. Back button needs to travel when going through matchframes 
+3. Viewing future fixtures shouldn’t have speedometer 
+   a. Shouldn’t have timer, attendance 
+   b. Should have vs in title and THAT days matches in all matches page 
+   c. Only really need the All Matches Page?!
+   d. So no next and prev buttons!
+4. Viewing past, played fixtures should populate the pages with information 
+   a. Again no timer 
+   b. That days all matches
+   c. No league page 
+   d. No watch match page 
+5. MatchRatings adding to stats, not restarting them 
+6. When coming off tactics page, there is no resume button 
+   a. Sometimes the speedometer goes missing too 
+7. Clicking button on ratings page stacks elements 
+8. MatchRatings needs to update with new positions 
+   a. Table missing on main menu page (Refactor may fix this)
 
 ### Responsive Design
 

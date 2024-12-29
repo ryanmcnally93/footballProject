@@ -263,9 +263,6 @@ public class Scheduler extends GamePanel {
 					thisLayout.show(pages, button.getText());
 					window.revalidate();
 					window.repaint();
-					for (int i=0; i < pages.getComponents().length; i++) {
-						((MainMenuPageTemplate) pages.getComponent(i)).setFromScheduler(true);
-					}
 				}
 			});
 		}
@@ -408,7 +405,6 @@ public class Scheduler extends GamePanel {
 							event.getMatch().setScheduler(sch);
 							frame.setMatch(event.getMatch());
 						}
-						sch.getStatsPanel().setFromScheduler(false);
 						sch.displayMatchFrames(event.getMatch(), true);
 						event.setRemoveEvent(true);
 					}

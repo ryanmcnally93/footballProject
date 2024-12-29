@@ -42,11 +42,13 @@ public class MatchFrames extends CardmapMainPageTemplate {
 				getMatch().getScheduler().getWindow().revalidate();
 				getMatch().getScheduler().getWindow().repaint();
 				// Remove the back button in MatchFrames now that it has been clicked
-				for (Map.Entry<String, JPanel> eachPage : getMatch().getScheduler().getMatchFramesMap().entrySet()) {
+				for (Map.Entry<String, JPanel> eachPage : match.getScheduler().getMatchFramesMap().entrySet()) {
 					JPanel buttonBox = ((MatchFrames) eachPage.getValue()).getFooterPanel().getBackButtonBox();
-					if (buttonBox.isAncestorOf(getBackButton())) {
-						buttonBox.remove(getBackButton());
+					if (buttonBox.getComponents().length > 0) {
+						buttonBox.remove(0);
 					}
+					((MatchFrames) eachPage.getValue()).setFromScheduler(false);
+					((MatchFrames) eachPage.getValue()).removeContentForChildClass();
 				}
 			}
 		});
@@ -172,9 +174,12 @@ public class MatchFrames extends CardmapMainPageTemplate {
 	public void removeContentForChildClass() {}
 
 	@Override
-	public void moveSpeedometerForward(){
-		String nextPageName = getMatch().getNextPageName();
-		MatchFrames page = (MatchFrames) getMatch().getScheduler().getMatchFramesMap().get(nextPageName);
+	public void moveButtonsWithUser_Forwards(){
+		moveButtons(getMatch().getNextPageName());
+	}
+
+	public void moveButtons(String pageName) {
+		MatchFrames page = (MatchFrames) getMatch().getScheduler().getMatchFramesMap().get(pageName);
 		page.getSpeedometerBox().add(this.speedometer);
 		if(getMatch().getTimer().isPaused()) {
 			page.getFooterPanel().getMiddleBox().add(getResumeButton());
@@ -182,21 +187,15 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		} else if (!getMatch().getTimer().isPaused() && getMatch().isInMiddleOfMatch()){
 			page.getFooterPanel().getMiddleBox().add(getPauseButton());
 		}
-		getMatch().setCurrentPageName(nextPageName);
+		if (page.isFromScheduler()) {
+			page.getFooterPanel().getBackButtonBox().add(getBackButton());
+		}
+		getMatch().setCurrentPageName(pageName);
 	}
 
 	@Override
-	public void moveSpeedometerBack(){
-		String prevPageName = getMatch().getPrevPageName();
-		MatchFrames page = (MatchFrames) getMatch().getScheduler().getMatchFramesMap().get(prevPageName);
-		page.getSpeedometerBox().add(this.speedometer);
-		if(getMatch().getTimer().isPaused()) {
-			page.getFooterPanel().getMiddleBox().add(getResumeButton());
-			page.getFooterPanel().getMiddleBox().add(getTacticsButton());
-		} else if (!getMatch().getTimer().isPaused() && getMatch().isInMiddleOfMatch()){
-			page.getFooterPanel().getMiddleBox().add(getPauseButton());
-		}
-		getMatch().setCurrentPageName(prevPageName);
+	public void moveButtonsWithUser_Backwards(){
+		moveButtons(getMatch().getPrevPageName());
 	}
 
 	private static String getDayOfMonthSuffix(int day) {
