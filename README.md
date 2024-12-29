@@ -330,31 +330,22 @@ This worked on occasion, but also failed from time to time.
 
 ### Unfixed Bugs
 
-1. Viewing future should have empty speedometer space filled 
-
-   a. Shouldn’t have timer, attendance 
-
-   b. Should have vs in title
+1. Viewing past, played fixtures should populate the pages with information 
    
-   c. Need to remove left and right key listeners, and add them back again later on 
-2. Viewing past, played fixtures should populate the pages with information 
+   a. That days all matches
    
-   a. Again no timer 
-
-   b. That days all matches
+   b. No league page 
    
-   c. No league page 
-   
-   d. No watch match page 
-3. MatchRatings adding to stats, not restarting them 
-4. When coming off tactics page, there is no resume button 
+   c. No watch match page 
+2. MatchRatings adding to stats, not restarting them 
+3. When coming off tactics page, there is no resume button 
 
    a. Sometimes the speedometer goes missing too 
-5. Clicking button on ratings page stacks elements 
-6. MatchRatings needs to update with new positions 
+4. Clicking button on ratings page stacks elements 
+5. MatchRatings needs to update with new positions 
    
    a. Table missing on main menu page (Refactor may fix this)
-7. Spacing bug on table page button box buttons
+6. Spacing bug on table page button box buttons
 
 ### Responsive Design
 

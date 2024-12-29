@@ -9,9 +9,11 @@ import java.awt.*;
 public class MatchLineOnFixturesPages extends RoundedPanel {
 
     private JLabel title;
+    private Match match;
 
     public MatchLineOnFixturesPages(Match match){
         super(20);
+        this.match = match;
 
         setBackground(Color.LIGHT_GRAY);
 
@@ -36,4 +38,17 @@ public class MatchLineOnFixturesPages extends RoundedPanel {
         this.title = name;
     }
 
+    public Match getMatch() {
+        return match;
+    }
+
+    public void setMatch(Match match) {
+        this.match = match;
+    }
+
+    public void gameComplete() {
+        setBackground(Color.GREEN);
+        revalidate();
+        repaint();
+    }
 }

@@ -17,6 +17,7 @@ import visuals.CustomizedElements.CustomizedButton;
 import visuals.CustomizedElements.GamePanel;
 import main.GameWindow;
 import visuals.CustomizedElements.MainMenu;
+import visuals.CustomizedElements.PlayerAchievementLine;
 import visuals.MainMenuPages.FixturesPages.AllFixturesPage;
 import visuals.MainMenuPages.FixturesPages.MyFixturesPage;
 import visuals.MainMenuPages.FixturesPages.ResultsPage;
@@ -535,6 +536,7 @@ public class Scheduler extends GamePanel {
 					page.getFooterPanel().getMiddleBox().remove(button);
 				}
 			}
+			page.getTime().setText("");
 		}
 	}
 
@@ -737,15 +739,16 @@ public class Scheduler extends GamePanel {
 		
 		// This overwrites each entry with a child UsersMatch
 		int k = 0;
+		MyFixturesPage myFixturesPage = (MyFixturesPage) fixturesMap.get("My Fixtures");
 		for (String key : keysToReplace) {
             Match adult = league.getFixtures().get(key);
             if (adult != null) {
                 UsersMatch child = new UsersMatch(adult.getHome(), adult.getAway(), league, adult.getDateTime()); // Create ChildClass instance
                 league.getFixtures().put(key, child); // Replace the entry in the map
-				MyFixturesPage myFixturesPage = (MyFixturesPage) fixturesMap.get("My Fixtures");
 				myFixturesPage.addFixtureLine(child);
             }
         }
+		myFixturesPage.organiseMyFixtures();
 		System.out.println("Created " + k + "UserMatches");
 		
 		// This looks for UsersMatches and creates an event from it

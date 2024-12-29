@@ -47,6 +47,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		back.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				// THIS BACK BUTTON IS ONLY VISIBLE WHEN WE ARE FROM SCHEDULER
 				getMatch().getScheduler().getWindow().getContentPane().removeAll();
 				getMatch().getScheduler().getWindow().getContentPane().add(getMatch().getScheduler().getFixturesPages(), BorderLayout.CENTER);
 				if (!getMatch().isMatchHasPlayed()) {
@@ -150,7 +151,14 @@ public class MatchFrames extends CardmapMainPageTemplate {
 	}
 
 	public void removePlayedMatchViewAttributes() {
+		removeOtherMatchFramesAttributes_WhenFromScheduler();
+	}
 
+	public void removeOtherMatchFramesAttributes_WhenFromScheduler() {
+		for (Map.Entry<String, JPanel> eachPanel : getMatch().getScheduler().getMatchFramesMap().entrySet()) {
+			MatchFrames currentPage = (MatchFrames) eachPanel.getValue();
+			currentPage.getTime().setText(getMatch().getTimer().getTime());
+		}
 	}
 
 	public void removeUnplayedMatchViewAttributes() {
@@ -167,6 +175,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		tablePanel.getHeaderPanel().setTitle(match.getHome().getName() + " " + match.getHomeScore() + " - " + match.getAwayScore() + " " + match.getAway().getName());
 		footer.addKeyListeners();
 		tablePanel.getSpeedometerBox().removeAll();
+		removeOtherMatchFramesAttributes_WhenFromScheduler();
 	}
 
 	public void setMatch(UsersMatch match) {
@@ -301,6 +310,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 			((MatchFrames) eachPage.getValue()).removeMatchFramesContentWhenLeavingMatch();
 			((MatchFrames) eachPage.getValue()).getFooterPanel().getMiddleBox().remove(getContinueButton());
 		}
+		match.getScheduler().getMyFixtures().getLine(match).gameComplete();
 		match.getScheduler().getWindow().getContentPane().removeAll();
 		match.getScheduler().displayPage(match.getScheduler().getWindow());
 		match.getScheduler().refreshMessages();

@@ -1,6 +1,7 @@
 package visuals.MainMenuPages.FixturesPages;
 import entities.UsersMatch;
 import visuals.CustomizedElements.MatchLineOnFixturesPages;
+import visuals.CustomizedElements.PlayerAchievementLine;
 import visuals.MainMenuPages.MainMenuPageTemplate;
 import visuals.MatchPages.MatchFrames;
 import visuals.ScheduleFrames.Scheduler;
@@ -9,6 +10,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Map;
 
 public class MyFixturesPage extends MainMenuPageTemplate {
@@ -16,11 +20,13 @@ public class MyFixturesPage extends MainMenuPageTemplate {
     private JPanel mainPanel;
     private Box centerBox;
     private JScrollPane scroller;
+    private ArrayList<MatchLineOnFixturesPages> lines;
 
     public MyFixturesPage(CardLayout cardLayout, JPanel pages, Scheduler scheduler, boolean fromScheduler){
         super(cardLayout, pages, scheduler, fromScheduler);
         mainPanel = pages;
         getHeaderPanel().setTitle("My Fixtures");
+        lines = new ArrayList<>();
 
         JLayeredPane layeredPane = getLayeredPane();
         mainPanel = new JPanel();
@@ -59,8 +65,31 @@ public class MyFixturesPage extends MainMenuPageTemplate {
                 getScheduler().displayMatchFrames(child);
             }
         });
-        centerBox.add(matchLine);
+        lines.add(matchLine);
+    }
+
+    public void organiseMyFixtures() {
+        lines.sort(new Comparator<MatchLineOnFixturesPages>() {
+            @Override
+            public int compare(MatchLineOnFixturesPages line1, MatchLineOnFixturesPages line2) {
+                return line1.getMatch().getDateTime().compareTo(line2.getMatch().getDateTime());
+            }
+        });
+
+        for (MatchLineOnFixturesPages eachLine : lines) {
+            centerBox.add(eachLine);
+        }
         centerBox.revalidate();
         centerBox.repaint();
+    }
+
+    public MatchLineOnFixturesPages getLine(UsersMatch match) {
+        for (MatchLineOnFixturesPages eachLine : lines) {
+            if (eachLine.getMatch() == match) {
+                return eachLine;
+            }
+        }
+        System.out.println("ERROR You haven't found your match line");
+        return new MatchLineOnFixturesPages(match);
     }
 }
