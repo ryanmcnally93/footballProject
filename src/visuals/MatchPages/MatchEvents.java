@@ -459,4 +459,9 @@ public class MatchEvents extends MatchFrames {
 		this.button = button;
 	}
 
+	@Override
+	public String getMatchFrameName() {
+		return "Events";
+	}
+
 }

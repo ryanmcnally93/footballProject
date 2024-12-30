@@ -13,11 +13,8 @@ import javax.swing.border.EmptyBorder;
 
 import entities.*;
 import people.Footballer;
-import visuals.CustomizedElements.CustomizedButton;
-import visuals.CustomizedElements.GamePanel;
+import visuals.CustomizedElements.*;
 import main.GameWindow;
-import visuals.CustomizedElements.MainMenu;
-import visuals.CustomizedElements.PlayerAchievementLine;
 import visuals.MainMenuPages.FixturesPages.AllFixturesPage;
 import visuals.MainMenuPages.FixturesPages.MyFixturesPage;
 import visuals.MainMenuPages.FixturesPages.ResultsPage;
@@ -508,7 +505,6 @@ public class Scheduler extends GamePanel {
 
 		window.revalidate();
 		window.repaint();
-
 	}
 
 	public void viewMatchStartOfGame() {
@@ -525,7 +521,98 @@ public class Scheduler extends GamePanel {
 	}
 
 	public void viewMatchFramesWhenMatchPlayed() {
+		removePage("Watch", getMatchFramesMap(), getMatchFramesPages());
+		removePage("Table", getMatchFramesMap(), getMatchFramesPages());
+		matchFramesLayout.show(matchFramesPages, "Stats");
+		match.setCurrentPageName("Stats");
+	}
 
+	public void removePage(String pageName, Map<String, JPanel> cardMap, JPanel cardPanel) {
+		// Ensure the page exists
+		if (cardMap.containsKey(pageName)) {
+			CardmapMainPageTemplate page = (CardmapMainPageTemplate) cardMap.get(pageName);
+
+			// Remove from the card layout panel
+			cardPanel.remove(page);
+			if (cardMap == getMatchFramesMap()) {
+				for (Map.Entry<String, JPanel> eachMatchPage : getMatchFramesMap().entrySet()) {
+					((MatchFrames) eachMatchPage.getValue()).setPages(cardPanel);
+				}
+			}
+
+			// Remove from the card map
+			cardMap.remove(pageName);
+
+			// Revalidate and repaint the panel to reflect changes
+			cardPanel.revalidate();
+			cardPanel.repaint();
+		} else {
+			System.out.println("Page \"" + pageName + "\" does not exist.");
+		}
+	}
+
+	public void addPage(String pageName, JPanel page, Map<String, JPanel> cardMap, JPanel cardPanel) {
+		String mapType = "";
+		if (cardMap == getTacticsMap()) {
+			mapType = "Tactics";
+		} else if (cardMap == getMatchFramesMap()) {
+			mapType = "Match Frames";
+		}
+
+		if (cardMap.containsKey(pageName)) {
+			System.out.println("Page \"" + pageName + "\" already exists.");
+			return;
+		}
+
+		// Insert the page into the map at the correct position
+		LinkedHashMap<String, JPanel> newCardMap = new LinkedHashMap<>();
+        newCardMap.putAll(cardMap);
+		newCardMap.put(pageName, page);
+
+		List<String> desiredOrder = Arrays.asList("Watch", "Scorers", "Stats", "Events", "All Matches", "Table", "Ratings");
+		Map<String, JPanel> sortedMap = sortMapByCustomOrder(newCardMap, desiredOrder);
+
+		// Replace the old cardMap with the new one
+		if (mapType.equals("Tactics")) {
+			getTacticsMap().clear();
+			setTacticsMap(sortedMap);
+			cardPanel.removeAll();
+			for (Map.Entry<String, JPanel> entry : getTacticsMap().entrySet()) {
+				cardPanel.add(entry.getValue(), entry.getKey());
+			}
+			for (Map.Entry<String, JPanel> entry : getTacticsMap().entrySet()) {
+				CardmapMainPageTemplate cardPage = (CardmapMainPageTemplate) entry.getValue();
+				cardPage.setPages(cardPanel);
+			}
+		} else if (mapType.equals("Match Frames")) {
+			getMatchFramesMap().clear();
+			setMatchFramesMap(sortedMap);
+			cardPanel.removeAll();
+			for (Map.Entry<String, JPanel> entry : getMatchFramesMap().entrySet()) {
+				cardPanel.add(entry.getValue(), entry.getKey());
+			}
+			for (Map.Entry<String, JPanel> entry : getMatchFramesMap().entrySet()) {
+				CardmapMainPageTemplate cardPage = (CardmapMainPageTemplate) entry.getValue();
+				cardPage.setPages(cardPanel);
+			}
+		}
+
+		// Revalidate and repaint to reflect changes
+		cardPanel.revalidate();
+		cardPanel.repaint();
+	}
+
+	public static Map<String, JPanel> sortMapByCustomOrder(Map<String, JPanel> unsortedMap, List<String> desiredOrder) {
+		Map<String, JPanel> sortedMap = new LinkedHashMap<>();
+
+		// Iterate through the desired order and add matching entries to the sorted map
+		for (String key : desiredOrder) {
+			if (unsortedMap.containsKey(key)) {
+				sortedMap.put(key, unsortedMap.get(key));
+			}
+		}
+
+		return sortedMap;
 	}
 
 	public void viewMatchFromScheduler() {
@@ -1026,6 +1113,10 @@ public class Scheduler extends GamePanel {
 		return matchFramesMap;
 	}
 
+	public void setMatchFramesMap(Map<String, JPanel> matchFramesMap) {
+		this.matchFramesMap = matchFramesMap;
+	}
+
 	public void setTacticsPages(JPanel tacticsPages) {
 		this.tacticsPages = tacticsPages;
 	}
@@ -1100,5 +1191,13 @@ public class Scheduler extends GamePanel {
 
 	public void setMatchFramesPages(JPanel matchFramesPages) {
 		this.matchFramesPages = matchFramesPages;
+	}
+
+	public CardLayout getMatchFramesLayout() {
+		return matchFramesLayout;
+	}
+
+	public void setMatchFramesLayout(CardLayout matchFramesLayout) {
+		this.matchFramesLayout = matchFramesLayout;
 	}
 }

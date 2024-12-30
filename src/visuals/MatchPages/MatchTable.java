@@ -67,4 +67,9 @@ public class MatchTable extends MatchFrames {
 		this.table = table;
 	}
 
+	@Override
+	public String getMatchFrameName() {
+		return "Table";
+	}
+
 }

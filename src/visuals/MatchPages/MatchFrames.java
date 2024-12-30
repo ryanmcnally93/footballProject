@@ -152,6 +152,8 @@ public class MatchFrames extends CardmapMainPageTemplate {
 
 	public void removePlayedMatchViewAttributes() {
 		removeOtherMatchFramesAttributes_WhenFromScheduler();
+		getMatch().getScheduler().addPage("Watch", getMatch().getScheduler().getWatchPanel(), getMatch().getScheduler().getMatchFramesMap(), getMatch().getScheduler().getMatchFramesPages());
+		getMatch().getScheduler().addPage("Table", getMatch().getScheduler().getTablePanel(), getMatch().getScheduler().getMatchFramesMap(), getMatch().getScheduler().getMatchFramesPages());
 	}
 
 	public void removeOtherMatchFramesAttributes_WhenFromScheduler() {
@@ -159,17 +161,20 @@ public class MatchFrames extends CardmapMainPageTemplate {
 			MatchFrames currentPage = (MatchFrames) eachPanel.getValue();
 			currentPage.getTime().setText(getMatch().getTimer().getTime());
 		}
-	}
-
-	public void removeUnplayedMatchViewAttributes() {
 		MatchFrames tablePanel = getMatch().getScheduler().getTablePanel();
-		// At the moment, this create a spacing bug when going through the pages, it looks different to other pages
 		CardmapMainPageTemplate.FooterPanel footer = tablePanel.getFooterPanel();
+
 		footer.getButtonBox().remove(footer.getMiddleBox());
 		footer.getButtonBox().add(footer.getPrevButton());
 		footer.getButtonBox().add(footer.getMiddleBox());
 		getMatch().getScheduler().getStatsPanel().getFooterPanel().getMiddleBox().add(getMatch().getScheduler().getStatsPanel().getPlayButton());
 		footer.getButtonBox().add(footer.getNextButton());
+	}
+
+	public void removeUnplayedMatchViewAttributes() {
+		MatchFrames tablePanel = getMatch().getScheduler().getTablePanel();
+		CardmapMainPageTemplate.FooterPanel footer = tablePanel.getFooterPanel();
+
 		// Set attendance back to default value 6000, change later
 		tablePanel.getStadiumAndAttendance().setText(tablePanel.getStadiumAndAttendance() + " 6000");
 		tablePanel.getHeaderPanel().setTitle(match.getHome().getName() + " " + match.getHomeScore() + " - " + match.getAwayScore() + " " + match.getAway().getName());
@@ -207,31 +212,42 @@ public class MatchFrames extends CardmapMainPageTemplate {
 
 	@Override
 	public void moveButtonsWithUser_Forwards(){
-		moveButtons(getMatch().getNextPageName());
+		moveButtons(getMatch().getNextPageName(), "forward");
 	}
 
-	public void moveButtons(String pageName) {
+	public void moveButtons(String pageName, String direction) {
 		MatchFrames page = (MatchFrames) getMatch().getScheduler().getMatchFramesMap().get(pageName);
+		// Skip a page that has been removed from the cardmap
+		if (page == null && direction.equals("forward")) {
+			getMatch().setCurrentPageName(getMatch().getNextPageName());
+			page = (MatchFrames) getMatch().getScheduler().getMatchFramesMap().get(getMatch().getNextPageName());
+		} else if (page == null && direction.equals("backward")) {
+			getMatch().setCurrentPageName(getMatch().getPrevPageName());
+			page = (MatchFrames) getMatch().getScheduler().getMatchFramesMap().get(getMatch().getPrevPageName());
+		}
+		// Take components with us through the pages
 		page.getSpeedometerBox().add(this.speedometer);
-		if(getMatch().getTimer().isPaused()) {
+		if (getMatch().getTimer().isPaused()) {
 			page.getFooterPanel().getMiddleBox().add(getResumeButton());
 			page.getFooterPanel().getMiddleBox().add(getTacticsButton());
-		} else if (!getMatch().getTimer().isPaused() && getMatch().isInMiddleOfMatch()){
+		} else if (!getMatch().getTimer().isPaused() && getMatch().isInMiddleOfMatch()) {
 			page.getFooterPanel().getMiddleBox().add(getPauseButton());
 		} else if (getMatch().getTimer().getTime().equals("00:00")) {
-			if (page.getFooterPanel().getMiddleBox().getComponents().length == 0) {
+			if (page.getFooterPanel().getMiddleBox().getComponents().length == 0 ) {
 				page.getFooterPanel().getMiddleBox().add(page.getPlayButton());
 			}
 		}
 		if (page.isFromScheduler()) {
 			page.getFooterPanel().getBackButtonBox().add(getBackButton());
+			page.getFooterPanel().getBackButtonBox().revalidate();
+			page.getFooterPanel().getBackButtonBox().repaint();
 		}
-		getMatch().setCurrentPageName(pageName);
+		getMatch().setCurrentPageName(page.getMatchFrameName());
 	}
 
 	@Override
 	public void moveButtonsWithUser_Backwards(){
-		moveButtons(getMatch().getPrevPageName());
+		moveButtons(getMatch().getPrevPageName(), "backward");
 	}
 
 	private static String getDayOfMonthSuffix(int day) {
@@ -307,9 +323,11 @@ public class MatchFrames extends CardmapMainPageTemplate {
 
 	public void continueToScheduler(){
 		for (Map.Entry<String, JPanel> eachPage : match.getScheduler().getMatchFramesMap().entrySet()) {
-			((MatchFrames) eachPage.getValue()).removeMatchFramesContentWhenLeavingMatch();
-			((MatchFrames) eachPage.getValue()).getFooterPanel().getMiddleBox().remove(getContinueButton());
+			MatchFrames matchPage = (MatchFrames) eachPage.getValue();
+			matchPage.removeMatchFramesContentWhenLeavingMatch();
+			matchPage.getFooterPanel().getMiddleBox().remove(matchPage.getContinueButton());
 		}
+		match.getScheduler().getStatsPanel().getFooterPanel().getMiddleBox().add(match.getScheduler().getStatsPanel().getPlayButton());
 		match.getScheduler().getMyFixtures().getLine(match).gameComplete();
 		match.getScheduler().getWindow().getContentPane().removeAll();
 		match.getScheduler().displayPage(match.getScheduler().getWindow());
@@ -453,5 +471,9 @@ public class MatchFrames extends CardmapMainPageTemplate {
 
 	public void setStadiumAndAttendance(JLabel stadiumAndAttendance) {
 		this.stadiumAndAttendance = stadiumAndAttendance;
+	}
+
+	public String getMatchFrameName() {
+		return "";
 	}
 }

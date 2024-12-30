@@ -176,4 +176,9 @@ public class MatchScorers extends MatchFrames {
 		this.awayScorers = awayScorers;
 	}
 
+	@Override
+	public String getMatchFrameName() {
+		return "Scorers";
+	}
+
 }

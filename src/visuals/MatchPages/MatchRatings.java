@@ -436,4 +436,9 @@ public class MatchRatings extends MatchFrames {
 
     }
 
+    @Override
+    public String getMatchFrameName() {
+        return "Ratings";
+    }
+
 }

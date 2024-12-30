@@ -239,4 +239,7 @@ public class CardmapMainPageTemplate extends GamePanel {
         this.fromScheduler = fromScheduler;
     }
 
+    public void setPages(JPanel pages) {
+        this.pages = pages;
+    }
 }

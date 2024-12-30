@@ -38,4 +38,9 @@ public class MatchWatch extends MatchFrames {
         
 	}
 
+    @Override
+    public String getMatchFrameName() {
+        return "Watch";
+    }
+
 }

@@ -250,5 +250,9 @@ public class MatchStats extends MatchFrames {
 		this.awayAllShots.setText(Integer.toString(num));
 	}
 
+    @Override
+    public String getMatchFrameName() {
+        return "Stats";
+    }
 
 }

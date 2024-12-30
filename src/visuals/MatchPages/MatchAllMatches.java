@@ -159,4 +159,9 @@ public class MatchAllMatches extends MatchFrames {
         mainPanel.repaint();
     }
 
+    @Override
+    public String getMatchFrameName() {
+        return "All Matches";
+    }
+
 }
