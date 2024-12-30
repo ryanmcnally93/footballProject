@@ -62,6 +62,7 @@ public class MyFixturesPage extends MainMenuPageTemplate {
                 } else {
                     getScheduler().getTablePanel().getFooterPanel().getBackButtonBox().add(getScheduler().getTablePanel().getBackButton());
                 }
+                getScheduler().setMatch(child);
                 getScheduler().displayMatchFrames(child);
             }
         });

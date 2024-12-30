@@ -66,6 +66,8 @@ public class MatchFrames extends CardmapMainPageTemplate {
 				}
 				getMatch().getScheduler().getWindow().revalidate();
 				getMatch().getScheduler().getWindow().repaint();
+				// We call this so that setMatch() is updated with correct Match
+				getMatch().getScheduler().refreshMessages();
 			}
 		});
 
@@ -225,8 +227,21 @@ public class MatchFrames extends CardmapMainPageTemplate {
 			getMatch().setCurrentPageName(getMatch().getPrevPageName());
 			page = (MatchFrames) getMatch().getScheduler().getMatchFramesMap().get(getMatch().getPrevPageName());
 		}
+
 		// Take components with us through the pages
-		page.getSpeedometerBox().add(this.speedometer);
+		page.getSpeedometerBox().removeAll();
+		if (isFromScheduler() && getMatch().getCurrentPageName().equals("Table") && direction.equals("forward")) {
+			page.getSpeedometerBox().add(getMatch().getScheduler().getAllMatchesPanel().getSpeedometerBox().getComponent(0));
+		} else if (isFromScheduler() && getMatch().getCurrentPageName().equals("Watch") && direction.equals("forward")) {
+			page.getSpeedometerBox().add(getMatch().getScheduler().getRatingsPanel().getSpeedometerBox().getComponent(0));
+		} else if (isFromScheduler() && getMatch().getCurrentPageName().equals("Table") && direction.equals("backward")) {
+			page.getSpeedometerBox().add(getMatch().getScheduler().getRatingsPanel().getSpeedometerBox().getComponent(0));
+		} else if (isFromScheduler() && getMatch().getCurrentPageName().equals("Watch") && direction.equals("backward")) {
+			page.getSpeedometerBox().add(getMatch().getScheduler().getScorerPanel().getSpeedometerBox().getComponent(0));
+		} else {
+			page.getSpeedometerBox().add(getCurrentPage().getSpeedometerBox().getComponent(0));
+		}
+
 		if (getMatch().getTimer().isPaused()) {
 			page.getFooterPanel().getMiddleBox().add(getResumeButton());
 			page.getFooterPanel().getMiddleBox().add(getTacticsButton());
@@ -238,9 +253,11 @@ public class MatchFrames extends CardmapMainPageTemplate {
 			}
 		}
 		if (page.isFromScheduler()) {
-			page.getFooterPanel().getBackButtonBox().add(getBackButton());
-			page.getFooterPanel().getBackButtonBox().revalidate();
-			page.getFooterPanel().getBackButtonBox().repaint();
+			if (!page.getFooterPanel().getBackButtonBox().isAncestorOf(page.getBackButton())) {
+				page.getFooterPanel().getBackButtonBox().add(page.getBackButton());
+				page.getFooterPanel().getBackButtonBox().revalidate();
+				page.getFooterPanel().getBackButtonBox().repaint();
+			}
 		}
 		getMatch().setCurrentPageName(page.getMatchFrameName());
 	}

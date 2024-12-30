@@ -330,22 +330,11 @@ This worked on occasion, but also failed from time to time.
 
 ### Unfixed Bugs
 
-1. Viewing past, played fixtures should populate the pages with information 
-   
-   a. That days all matches
-   
-   b. No league page 
-   
-   c. No watch match page 
-2. MatchRatings adding to stats, not restarting them 
-3. When coming off tactics page, there is no resume button 
-
-   a. Sometimes the speedometer goes missing too 
-4. Clicking button on ratings page stacks elements 
-5. MatchRatings needs to update with new positions 
-   
-   a. Table missing on main menu page (Refactor may fix this)
-6. Spacing bug on table page button box buttons
+1. Viewing past, played fixtures should populate the pages with information. Go through all the pages and make a note of each attribute we need to save. These should be added to match, and given on match view, and taken away on match leave (This may fix issue 2, 3 & 4)
+2. MatchRatings adding to stats, not restarting them
+3. Clicking button on ratings page stacks elements
+4. MatchRatings needs to update with new positions 
+5. Table missing on main menu page (Refactor may fix this)
 
 ### Responsive Design
 

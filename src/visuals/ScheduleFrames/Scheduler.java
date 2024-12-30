@@ -510,14 +510,14 @@ public class Scheduler extends GamePanel {
 	public void viewMatchStartOfGame() {
 		matchFramesLayout.show(matchFramesPages, "Stats");
 		match.setCurrentPageName("Stats");
-		statsPanel.getSpeedometerBox().add(speedometer);
+		addSpeedometer(statsPanel.getSpeedometerBox());
 	}
 
 	public void viewMatchAfterTacticsPageViewed() {
 		MatchFrames currentPage = (MatchFrames) matchFramesMap.get(match.getCurrentPageName());
 		currentPage.getFooterPanel().getMiddleBox().add(currentPage.getResumeButton());
 		currentPage.displayTacticsButton();
-		currentPage.getSpeedometerBox().add(speedometer);
+		addSpeedometer(currentPage.getSpeedometerBox());
 	}
 
 	public void viewMatchFramesWhenMatchPlayed() {
@@ -525,6 +525,7 @@ public class Scheduler extends GamePanel {
 		removePage("Table", getMatchFramesMap(), getMatchFramesPages());
 		matchFramesLayout.show(matchFramesPages, "Stats");
 		match.setCurrentPageName("Stats");
+		addSpeedometer(getStatsPanel().getSpeedometerBox());
 	}
 
 	public void removePage(String pageName, Map<String, JPanel> cardMap, JPanel cardPanel) {
@@ -625,16 +626,34 @@ public class Scheduler extends GamePanel {
 			}
 			page.getTime().setText("");
 		}
+
+		addEmptySpeedometer(tablePanel.getSpeedometerBox());
+		addEmptySpeedometer(statsPanel.getSpeedometerBox());
 	}
 
-	public void viewMatchFramesWhenMatchNotPlayed() {
-		// Make sure speedometer space is empty
+	public void addEmptySpeedometer(Box speedometerBox) {
 		JPanel emptySpeedometer = new JPanel();
 		emptySpeedometer.setPreferredSize(new Dimension(200, 20));
 		emptySpeedometer.setBackground(Color.LIGHT_GRAY);
 		emptySpeedometer.setBounds(400, 0, 200, 20);
-		tablePanel.getSpeedometerBox().add(emptySpeedometer);
+		if (speedometerBox.getComponents().length == 0) {
+			speedometerBox.add(emptySpeedometer);
+		} else {
+			speedometerBox.removeAll();
+			speedometerBox.add(emptySpeedometer);
+		}
+	}
 
+	public void addSpeedometer(Box speedometerBox) {
+		if (speedometerBox.getComponents().length == 0) {
+			speedometerBox.add(speedometer);
+		} else {
+			speedometerBox.removeAll();
+			speedometerBox.add(speedometer);
+		}
+	}
+
+	public void viewMatchFramesWhenMatchNotPlayed() {
 		matchFramesLayout.show(matchFramesPages, "Table");
 		match.setCurrentPageName("Table");
 		tablePanel.getFooterPanel().getButtonBox().remove(tablePanel.getFooterPanel().getNextButton());
