@@ -12,7 +12,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import entities.*;
-import people.Footballer;
 import visuals.CustomizedElements.*;
 import main.GameWindow;
 import visuals.MainMenuPages.FixturesPages.AllFixturesPage;
@@ -21,7 +20,6 @@ import visuals.MainMenuPages.FixturesPages.ResultsPage;
 import visuals.MainMenuPages.LeaderboardPages.LeagueTablePage;
 import visuals.MainMenuPages.LeaderboardPages.TopAssistsPage;
 import visuals.MainMenuPages.LeaderboardPages.TopGoalscorersPage;
-import visuals.MainMenuPages.MainMenuPageTemplate;
 import visuals.MainMenuPages.TacticsPages.FirstTeamPage;
 import visuals.MainMenuPages.TacticsPages.FormationPage;
 import visuals.MainMenuPages.TacticsPages.MatchRolesPage;

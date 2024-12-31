@@ -287,6 +287,11 @@ public class MatchFrames extends CardmapMainPageTemplate {
 	public int findRoundedInt(String time){
 		int roundedUp = 0;
 
+		// We are viewing an old event, time has already been rounded up and parsed once
+		if (!time.contains(":")) {
+			return Integer.parseInt(time);
+		}
+
 		// This sets gives us the time, rounded up to the next minute
 		try {
 			if(time.startsWith("0:")){

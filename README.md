@@ -334,7 +334,12 @@ This worked on occasion, but also failed from time to time.
 2. MatchRatings adding to stats, not restarting them
 3. Clicking button on ratings page stacks elements
 4. MatchRatings needs to update with new positions 
-5. Table missing on main menu page (Refactor may fix this)
+5. Table missing on main menu page (This cardmap refactor may fix this, have all 4 cardmaps been refactored now?)
+6. Give Tactics CardMap ability to add captain changing, and add a player view button (Broken link for now)
+7. Make UsersMatch go to tactics or confirm selection before going to MatchFrames 
+8. Update Bugs 
+9. Write tests 
+10. Add some images to pages / decorate some things or work on match logic
 
 ### Responsive Design
 

@@ -9,8 +9,6 @@ import people.Footballer;
 import people.Goalkeeper;
 import visuals.CustomizedElements.PlayerAchievementLine;
 import visuals.CustomizedElements.TeamAchievementLine;
-import visuals.MatchPages.MatchAllMatches;
-import visuals.MatchPages.MatchScorers;
 import visuals.ScheduleFrames.Events;
 import visuals.ScheduleFrames.Scheduler;
 
@@ -35,6 +33,7 @@ public class Match {
 	private ArrayList<Match> laterMatches, sameDayMatches, earlierMatches;
 	private ArrayList<String> homeScorers, awayScorers;
 	private boolean matchHasPlayed = false;
+	private ArrayList<MatchEvent> matchEvents;
 	
 	public Match() {}
 	
@@ -759,5 +758,13 @@ public class Match {
 
 	public boolean isMatchHasPlayed() {
 		return matchHasPlayed;
+	}
+
+	public ArrayList<MatchEvent> getMatchEvents() {
+		return matchEvents;
+	}
+
+	public void setMatchEvents(ArrayList<MatchEvent> matchEvents) {
+		this.matchEvents = matchEvents;
 	}
 }
