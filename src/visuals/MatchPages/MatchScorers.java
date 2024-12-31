@@ -20,7 +20,6 @@ import visuals.CustomizedElements.CustomizedButton;
 
 public class MatchScorers extends MatchFrames {
 
-	private ArrayList<String> homeScorers, awayScorers;
     private JPanel leftBox, rightBox;
     private Box centerBox, container;
 
@@ -30,9 +29,6 @@ public class MatchScorers extends MatchFrames {
 		JLayeredPane layeredPane = getLayeredPane();
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
-		
-		homeScorers = new ArrayList<>();
-		awayScorers = new ArrayList<>();
 		
 		centerBox = Box.createVerticalBox();
 		container = Box.createHorizontalBox();
@@ -70,6 +66,13 @@ public class MatchScorers extends MatchFrames {
         });
         
         setVisible(true);
+	}
+
+	@Override
+	public void populateMatchFramesContentForNewMatch() {
+		super.populateMatchFramesContentForNewMatch();
+		displayGoalScorers("Home", getMatch().getHomeScorers());
+		displayGoalScorers("Away", getMatch().getAwayScorers());
 	}
 
 	@Override
@@ -158,22 +161,6 @@ public class MatchScorers extends MatchFrames {
             box.add(result);
 	        containScorerSections();
 		}
-	}
-
-	public ArrayList<String> getHomeScorers() {
-		return homeScorers;
-	}
-
-	public void setHomeScorers(ArrayList<String> homeScorers) {
-		this.homeScorers = homeScorers;
-	}
-
-	public ArrayList<String> getAwayScorers() {
-		return awayScorers;
-	}
-
-	public void setAwayScorers(ArrayList<String> awayScorers) {
-		this.awayScorers = awayScorers;
 	}
 
 	@Override
