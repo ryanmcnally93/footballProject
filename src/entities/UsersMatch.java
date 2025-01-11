@@ -1,5 +1,4 @@
 package entities;
-import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.Timer;
@@ -10,34 +9,21 @@ import people.Footballer;
 import people.Goalkeeper;
 import main.GameWindow;
 import visuals.MatchPages.*;
-import visuals.ScheduleFrames.Scheduler;
 
 public class UsersMatch extends Match {
-	
-	private int homeAllShots;
-	private int homeShotsOn;
-	private int awayAllShots;
-	private int awayShotsOn;
-    private GameWindow window;
+
+	private GameWindow window;
 	private final Timer delayTimer = new Timer();
 	private String currentPageName;
-	
+
 	public UsersMatch() {};
 	
 	public UsersMatch(Team home, Team away) {
 		super(home, away);
-		this.homeAllShots = 0;
-		this.homeShotsOn = 0;
-		this.awayAllShots = 0;
-		this.awayShotsOn = 0;
 	}
 
 	public UsersMatch(Team home, Team away, League league, LocalDateTime dateTime) {
 		super(home, away, league, dateTime);
-		this.homeAllShots = 0;
-		this.homeShotsOn = 0;
-		this.awayAllShots = 0;
-		this.awayShotsOn = 0;
 		setSpeed("slowest");
 	}
 
@@ -58,13 +44,7 @@ public class UsersMatch extends Match {
 
 	@Override
 	public void updateShotsOnScreen(Footballer player) {
-		if(findTeam(player).equals("Away")) {
-			this.awayShotsOn++;
-			this.awayAllShots++;
-		} else {
-			this.homeShotsOn++;
-			this.homeAllShots++;
-		}
+		super.updateShotsOnScreen(player);
 		getScheduler().getStatsPanel().updateShotsOnBar(getHomeShotsOn(), getAwayShotsOn());
 		getScheduler().getStatsPanel().updateAllShotsBar(getHomeAllShots(), getAwayAllShots());
 	}
@@ -110,13 +90,13 @@ public class UsersMatch extends Match {
 
 	@Override
 	public void displayHomeGoalOnScreen(Footballer player) {
-		appendToTeamScorers(player, getTimer().getTime(), "Home");
+		super.displayHomeGoalOnScreen(player);
 		getScheduler().getEventsPanel().addHomeEvents(getTimer().getTime(), player, "goal");
 	}
 	
 	@Override
 	public void displayAwayGoalOnScreen(Footballer player) {
-		appendToTeamScorers(player, getTimer().getTime(), "Away");
+		super.displayAwayGoalOnScreen(player);
 		getScheduler().getEventsPanel().addAwayEvents(getTimer().getTime(), player, "goal");
 	}
 	
@@ -131,16 +111,12 @@ public class UsersMatch extends Match {
 
 	@Override
 	public void updateRatingsPage(Footballer player){
-		for (JPanel page : getScheduler().getMatchFramesMap().values()) {
-			if (page instanceof MatchRatings) {
-				((MatchRatings) page).updateLine(player);
-				((MatchRatings) page).updateBox(player);
-			}
-		}
+		getScheduler().getRatingsPanel().updateLine(player);
+		getScheduler().getRatingsPanel().updateBox(player);
 	}
 	
 	@Override
-	public void addTimerForScreen(Footballer enemy) {
+	public void delayKickoffAfterGoal(Footballer enemy) {
 		int delay = 7000;
 		UsersMatch match = this;
 		this.delayTimer.schedule(new TimerTask() {
@@ -154,7 +130,8 @@ public class UsersMatch extends Match {
 	}
 	
 	@Override
-	public void displaySavesToScreen(Footballer player, Goalkeeper thisFoeGk) {
+	public void createGoalkeeperSaveEvent(Footballer player, Goalkeeper thisFoeGk) {
+		super.createGoalkeeperSaveEvent(player, thisFoeGk);
 		if(findTeam(player).equals("Away")) {
 			getScheduler().getEventsPanel().addAwayEvents(getTimer().getTime(), player, "save");
 		} else {
@@ -164,6 +141,9 @@ public class UsersMatch extends Match {
 		
 	@Override
 	public void continueButtonOnScreen() {
+		if (getSimulated()) {
+			return;
+		}
 		int numberOfFinishedMatches = 0;
 		int numberOfActualMatches = getSameDayMatches().size();
 		while(numberOfFinishedMatches != numberOfActualMatches){
@@ -192,38 +172,6 @@ public class UsersMatch extends Match {
 	}
 
 	// Getters & Setters
-
-	public int getHomeAllShots() {
-		return homeAllShots;
-	}
-
-	public void setHomeAllShots(int homeAllShots) {
-		this.homeAllShots = homeAllShots;
-	}
-
-	public int getHomeShotsOn() {
-		return homeShotsOn;
-	}
-
-	public void setHomeShotsOn(int homeShotsOn) {
-		this.homeShotsOn = homeShotsOn;
-	}
-
-	public int getAwayAllShots() {
-		return awayAllShots;
-	}
-
-	public void setAwayAllShots(int awayAllShots) {
-		this.awayAllShots = awayAllShots;
-	}
-
-	public int getAwayShotsOn() {
-		return awayShotsOn;
-	}
-
-	public void setAwayShotsOn(int awayShotsOn) {
-		this.awayShotsOn = awayShotsOn;
-	}
 
 	public GameWindow getWindow() {
 		return window;

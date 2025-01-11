@@ -166,6 +166,7 @@ public class Footballer extends Individual {
 
 	public void newMatchReset() {
 		setStamina(100);
+		setGoalsThisMatch(0);
 		setDuelsPercentageThisMatch(0);
 		setSavesThisMatch(0);
 		setDuelsPercentageThisMatch(0);

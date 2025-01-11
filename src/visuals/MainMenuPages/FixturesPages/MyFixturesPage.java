@@ -1,4 +1,5 @@
 package visuals.MainMenuPages.FixturesPages;
+import entities.Match;
 import entities.UsersMatch;
 import visuals.CustomizedElements.MatchLineOnFixturesPages;
 import visuals.CustomizedElements.PlayerAchievementLine;
@@ -10,6 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -47,26 +49,34 @@ public class MyFixturesPage extends MainMenuPageTemplate {
 
     public void addFixtureLine(UsersMatch child) {
         MatchLineOnFixturesPages matchLine = new MatchLineOnFixturesPages(child);
-        matchLine.addMouseListener(new MouseAdapter() {
+        updateMatchLineListener(matchLine, child);
+        lines.add(matchLine);
+    }
+
+    public void updateMatchLineListener(MatchLineOnFixturesPages line, UsersMatch matchToView) {
+        if (line.getMouseListeners().length > 1) {
+            MouseListener[] listeners = line.getMouseListeners();
+            line.removeMouseListener(listeners[listeners.length - 1]);
+        }
+        line.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 for (Map.Entry<String, JPanel> page : getScheduler().getMatchFramesMap().entrySet()) {
                     MatchFrames frame = (MatchFrames) page.getValue();
-                    child.setScheduler(getScheduler());
-                    frame.setMatch(child);
+                    matchToView.setScheduler(getScheduler());
+                    frame.setMatch(matchToView);
                     frame.setFromScheduler(true);
                 }
                 // Provide back button for the first viewed MatchPage when viewing through main menu
-                if (child.isMatchHasPlayed()) {
+                if (matchToView.isMatchHasPlayed()) {
                     getScheduler().getStatsPanel().getFooterPanel().getBackButtonBox().add(getScheduler().getStatsPanel().getBackButton());
                 } else {
                     getScheduler().getTablePanel().getFooterPanel().getBackButtonBox().add(getScheduler().getTablePanel().getBackButton());
                 }
-                getScheduler().setMatch(child);
-                getScheduler().displayMatchFrames(child);
+                getScheduler().setMatch(matchToView);
+                getScheduler().displayMatchFrames(matchToView);
             }
         });
-        lines.add(matchLine);
     }
 
     public void organiseMyFixtures() {
@@ -84,9 +94,9 @@ public class MyFixturesPage extends MainMenuPageTemplate {
         centerBox.repaint();
     }
 
-    public MatchLineOnFixturesPages getLine(UsersMatch match) {
+    public MatchLineOnFixturesPages getLine(Match match) {
         for (MatchLineOnFixturesPages eachLine : lines) {
-            if (eachLine.getMatch() == match) {
+            if (eachLine.getMatch().toString().equals(match.toString())) {
                 return eachLine;
             }
         }

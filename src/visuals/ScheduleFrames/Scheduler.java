@@ -420,22 +420,18 @@ public class Scheduler extends GamePanel {
 					public void mouseClicked(MouseEvent e) {
 						southMiddle.remove(simGame);
 						southMiddle.remove(playGame);
-						// Run as normal match method
-						Match todaysMatch = (league.getFixtures().get(event.getMatch().toString()));
-						if (todaysMatch != null) {
-							Match child = new Match(todaysMatch.getHome(), todaysMatch.getAway(), league, todaysMatch.getDateTime());
-							league.getFixtures().put(todaysMatch.toString(), child);
-							// This is the only time a scheduler is passed to a match
-							// So on at fulltime check, will run some tasks on this scheduler
-							child.startMatch(thissch, true, "instant");
+						if (event.getMatch() != null) {
+							// Change back to a normal match as this is not being shown to user
+							Match convertedMatch = new Match(event.getMatch());
+							convertedMatch.startMatch(thissch, "instant");
 
-							for(Match eachMatch : todaysMatch.getSameDayMatches()){
+							for(Match eachMatch : event.getMatch().getSameDayMatches()){
 								CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
 							}
-							for(Match eachMatch : todaysMatch.getLaterMatches()){
-								CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
-							}
+							myFixtures.getLine(event.getMatch()).gameComplete();
+							myFixtures.updateMatchLineListener(myFixtures.getLine(event.getMatch()), event.getMatch());
 						}
+
 						event.setRemoveEvent(true);
 						showTodaysEvents(todaysEvents);
 					}
@@ -524,6 +520,9 @@ public class Scheduler extends GamePanel {
 		matchFramesLayout.show(matchFramesPages, "Stats");
 		match.setCurrentPageName("Stats");
 		addSpeedometer(getStatsPanel().getSpeedometerBox());
+		if (getStatsPanel().getFooterPanel().getMiddleBox().isAncestorOf(getStatsPanel().getPlayButton())) {
+			getStatsPanel().getFooterPanel().getMiddleBox().remove(getStatsPanel().getPlayButton());
+		}
 	}
 
 	public void removePage(String pageName, Map<String, JPanel> cardMap, JPanel cardPanel) {

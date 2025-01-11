@@ -312,7 +312,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 			continueButton.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					continueToScheduler();
+					getMatch().continueToScheduler();
 				}
 			});
 		}
@@ -321,7 +321,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		Action contAction = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				continueToScheduler();
+				getMatch().continueToScheduler();
 			}
 		};
 
@@ -340,35 +340,6 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		match.getScheduler().getTacticsLayout().show(match.getScheduler().getTacticsPages(), "First Team");
 		match.getScheduler().getWindow().revalidate();
 		match.getScheduler().getWindow().repaint();
-
-	}
-
-	public void continueToScheduler(){
-		for (Map.Entry<String, JPanel> eachPage : match.getScheduler().getMatchFramesMap().entrySet()) {
-			MatchFrames matchPage = (MatchFrames) eachPage.getValue();
-			matchPage.removeMatchFramesContentWhenLeavingMatch();
-			matchPage.getFooterPanel().getMiddleBox().remove(matchPage.getContinueButton());
-		}
-		match.getScheduler().getStatsPanel().getFooterPanel().getMiddleBox().add(match.getScheduler().getStatsPanel().getPlayButton());
-		match.getScheduler().getMyFixtures().getLine(match).gameComplete();
-		match.getScheduler().getWindow().getContentPane().removeAll();
-		match.getScheduler().displayPage(match.getScheduler().getWindow());
-		match.getScheduler().refreshMessages();
-
-		match.getLeague().getPlayerLeaderboard().updateLinesInTableLogic("Goals");
-
-		match.getScheduler().getWindow().revalidate();
-		match.getScheduler().getWindow().repaint();
-		// Play whatever later matches we have
-		if(!match.getLaterMatches().isEmpty()){
-			for(Match eachMatch : match.getLaterMatches()){
-				CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
-			}
-		}
-		// Set the back button on tactics cardmap to normal
-		for (Map.Entry<String, JPanel> eachTacticsPage : match.getScheduler().getTacticsMap().entrySet()) {
-			((MainMenuPageTemplate) eachTacticsPage.getValue()).setFromScheduler(true);
-		}
 	}
 
     public class PlayGame extends AbstractAction {

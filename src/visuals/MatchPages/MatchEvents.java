@@ -123,7 +123,7 @@ public class MatchEvents extends MatchFrames {
 		} else {
 			ArrayList<MatchEvent> events = getMatch().getMatchEvents();
 			for (MatchEvent event : events) {
-				if (event.getHomeOrAway().equals("home")) {
+				if (event.getHomeOrAway().equals("Home")) {
 					addEvents(String.valueOf(event.getMinute()), event.getPlayer(), event.getEventType(), leftIcons, leftLabels, middleLabels, rightIcons, rightLabels, middleBox, event.getHomeOrAway(), false);
 				} else {
 					addEvents(String.valueOf(event.getMinute()), event.getPlayer(), event.getEventType(), rightIcons, rightLabels, middleLabels, leftIcons, leftLabels, middleBox, event.getHomeOrAway(), false);
@@ -290,11 +290,6 @@ public class MatchEvents extends MatchFrames {
 		label.setBackground(Color.YELLOW);
 		label.setOpaque(true);
 		getScroller().getViewport().scrollRectToVisible(label.getBounds());
-
-		// Add to the match's events array, so we can repopulate page later
-		if (newEvent) {
-			getMatch().getMatchEvents().add(new MatchEvent(homeOrAway, type, player, roundedUp));
-		}
 	}
 
     public void addRow() {

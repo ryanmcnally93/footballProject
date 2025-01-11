@@ -8,12 +8,22 @@ import java.util.concurrent.CompletableFuture;
 import people.Footballer;
 import people.Goalkeeper;
 import visuals.CustomizedElements.PlayerAchievementLine;
+import visuals.CustomizedElements.PlayerStatsBoxOnRatingsPage;
+import visuals.CustomizedElements.PlayerStatsLineOnRatingsPage;
 import visuals.CustomizedElements.TeamAchievementLine;
+import visuals.MainMenuPages.MainMenuPageTemplate;
+import visuals.MatchPages.MatchFrames;
 import visuals.ScheduleFrames.Events;
 import visuals.ScheduleFrames.Scheduler;
 
+import javax.swing.*;
+
 public class Match {
-	
+
+	protected int homeAllShots;
+	protected int homeShotsOn;
+	protected int awayAllShots;
+	protected int awayShotsOn;
 	private Team home;
 	private Team away;
 	private String stadium;
@@ -34,9 +44,43 @@ public class Match {
 	private ArrayList<String> homeScorers, awayScorers;
 	private boolean matchHasPlayed = false;
 	private ArrayList<MatchEvent> matchEvents;
-	
+	private ArrayList<PlayerStatsLineOnRatingsPage> firstTeamsPlayersLines, secondTeamsPlayersLines;
+	private ArrayList<PlayerStatsBoxOnRatingsPage> firstTeamsPlayersBoxes, secondTeamsPlayersBoxes;
+	private UsersMatch simulatedMatch;
+
 	public Match() {}
-	
+
+	public Match(UsersMatch simulatedMatch) {
+		this.simulatedMatch = simulatedMatch;
+		this.home = simulatedMatch.getHome();
+		this.away = simulatedMatch.getAway();
+		this.stadium = simulatedMatch.getHome().getStadium();
+		this.homeTeam = simulatedMatch.getHome().getFirstTeam();
+		this.awayTeam = simulatedMatch.getAway().getFirstTeam();
+		this.homegk = simulatedMatch.getHome().getGoalkeeper();
+		this.awaygk = simulatedMatch.getAway().getGoalkeeper();
+		this.awayScore = 0;
+		this.homeScore = 0;
+		this.league = simulatedMatch.getLeague();
+		this.dateTime = simulatedMatch.getDateTime();
+		this.timer = new MatchTimer();
+		this.homeScorers = new ArrayList<>();
+		this.awayScorers = new ArrayList<>();
+		this.earlierMatches = simulatedMatch.getEarlierMatches();
+		this.sameDayMatches = simulatedMatch.getSameDayMatches();
+		this.laterMatches = simulatedMatch.getLaterMatches();
+		this.homeAllShots = 0;
+		this.homeShotsOn = 0;
+		this.awayAllShots = 0;
+		this.awayShotsOn = 0;
+		simulated = true;
+		this.matchEvents = new ArrayList<>();
+		this.firstTeamsPlayersLines = new ArrayList<>();
+		this.secondTeamsPlayersLines = new ArrayList<>();
+		this.firstTeamsPlayersBoxes = new ArrayList<>();
+		this.secondTeamsPlayersBoxes = new ArrayList<>();
+	}
+
 	public Match(Team home, Team away) {
 		this.home = home;
 		this.away = away;
@@ -53,6 +97,10 @@ public class Match {
 		this.earlierMatches = new ArrayList<>();
 		this.sameDayMatches = new ArrayList<>();
 		this.laterMatches = new ArrayList<>();
+		this.homeAllShots = 0;
+		this.homeShotsOn = 0;
+		this.awayAllShots = 0;
+		this.awayShotsOn = 0;
 	}
 
 	public Match(Team home, Team away, League league) {
@@ -92,6 +140,10 @@ public class Match {
 		this.earlierMatches = new ArrayList<>();
 		this.sameDayMatches = new ArrayList<>();
 		this.laterMatches = new ArrayList<>();
+		this.homeAllShots = 0;
+		this.homeShotsOn = 0;
+		this.awayAllShots = 0;
+		this.awayShotsOn = 0;
 	}
 
 	public void updateAllMatchesPage(){
@@ -108,7 +160,7 @@ public class Match {
 		// Inserted game time was 0
 
 		while(getTimer().isPaused()){
-			System.out.println(getTimer().isPaused());
+			System.out.println("This match is paused...");
 			displayTacticsButton();
 			try {
 				Thread.sleep(1000);
@@ -179,7 +231,7 @@ public class Match {
 							}
 							league.getLeagueTable().getLine(getAway()).addGoalsConceded();
 							// This stops sameday matches scoring 1000 goals!
-							if(backgroundGame) {
+							if (backgroundGame) {
 								try {
 									Thread.sleep(5000);
 								} catch (InterruptedException e) {
@@ -220,10 +272,10 @@ public class Match {
 
 						if (findTeam(player).equals("Home")) {
 							Footballer awayStriker = awayTeam.get("ST");
-							addTimerForScreen(awayStriker);
+							delayKickoffAfterGoal(awayStriker);
 						} else {
 							Footballer homeStriker = homeTeam.get("ST");
-							addTimerForScreen(homeStriker);
+							delayKickoffAfterGoal(homeStriker);
 						}
 						
 						
@@ -232,7 +284,7 @@ public class Match {
 						
 						System.out.println("Keeper saved the shot");
 						
-						displaySavesToScreen(player, thisFoeGk);
+						createGoalkeeperSaveEvent(player, thisFoeGk);
 						if (findTeam(player).equals("Home")) {
 							Footballer awayStriker = awayTeam.get("ST");
 							startRun(awayStriker);
@@ -300,9 +352,15 @@ public class Match {
 		callUpdateTableVisually();
 	}
 
-	public void displaySavesToScreen(Footballer player, Goalkeeper thisFoeGk) {}
+	public void createGoalkeeperSaveEvent(Footballer player, Goalkeeper thisFoeGk) {
+		if(findTeam(player).equals("Away")) {
+			getMatchEvents().add(new MatchEvent("Away", "save", player, findRoundedInt(getTimer().getTime())));
+		} else {
+			getMatchEvents().add(new MatchEvent("Home", "save", player, findRoundedInt(getTimer().getTime())));
+		}
+	}
 
-	public void addTimerForScreen(Footballer enemy) {
+	public void delayKickoffAfterGoal(Footballer enemy) {
 		Timer timer = new Timer();
 		int delay = 0;
 		Match match = this;
@@ -318,10 +376,12 @@ public class Match {
 
 	public void displayAwayGoalOnScreen(Footballer player) {
 		appendToTeamScorers(player, getTimer().getTime(), "Away");
+		getMatchEvents().add(new MatchEvent("Away", "goal", player, findRoundedInt(getTimer().getTime())));
 	}
 
 	public void displayHomeGoalOnScreen(Footballer player) {
 		appendToTeamScorers(player, getTimer().getTime(), "Home");
+		getMatchEvents().add(new MatchEvent("Home", "goal", player, findRoundedInt(getTimer().getTime())));
 	}
 
 	public void appendToTeamScorers(Footballer player, String time, String side){
@@ -387,7 +447,15 @@ public class Match {
 
 	public void goalAlertOnScreen(Footballer player) {}
 
-	public void updateShotsOnScreen(Footballer player) {}
+	public void updateShotsOnScreen(Footballer player) {
+		if(findTeam(player).equals("Away")) {
+			this.awayShotsOn++;
+			this.awayAllShots++;
+		} else {
+			this.homeShotsOn++;
+			this.homeAllShots++;
+		}
+	}
 
 	public boolean isInMiddleOfMatch(){
 		return !getTimer().getTime().equals("90:00") && !getTimer().getTime().equals("00:00");
@@ -470,23 +538,10 @@ public class Match {
 					Events simulatedResult = new Events("Result", getScore(), getDateTime().plusHours(2));
 					System.out.println("Adding an event in match class (for simulated matches)");
 					scheduler.getEvents().add(simulatedResult);
-					// Give 1st place message if user is now 1st
-					if(league.getLeagueTable().getLine(scheduler.getTeam()).getPosition() == 1) {
-						scheduler.addFirstPositionMessage();
-					}
-					if(getLaterMatches() != null){
-						System.out.println("Playing todays Later Matches");
-						for(Match eachMatch : getLaterMatches()){
-							CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
-						}
-					}
-					scheduler.refreshMessages();
+
+					continueToScheduler();
 					simulated = false;
 				}
-				// Refresh messages once match is played
-				scheduler.getEventContainer().repaint();
-				scheduler.getSouth().revalidate();
-				scheduler.getSouth().repaint();
 			}
 			
 			continueButtonOnScreen();
@@ -495,6 +550,64 @@ public class Match {
 			System.out.println("Full time checked, but it is " + getTimer().getTime());
 	    	return false;
 	    }
+	}
+
+	public void continueToScheduler() {
+		if (!simulated) {
+			for (Map.Entry<String, JPanel> eachPage : getScheduler().getMatchFramesMap().entrySet()) {
+				MatchFrames matchPage = (MatchFrames) eachPage.getValue();
+				matchPage.removeMatchFramesContentWhenLeavingMatch();
+				matchPage.getFooterPanel().getMiddleBox().remove(matchPage.getContinueButton());
+			}
+			getScheduler().getStatsPanel().getFooterPanel().getMiddleBox().add(getScheduler().getStatsPanel().getPlayButton());
+		}
+		// Give 1st place message if user is now 1st
+		if(getLeague().getLeagueTable().getLine(getScheduler().getTeam()).getPosition() == 1) {
+			getScheduler().addFirstPositionMessage();
+		}
+
+		getScheduler().getMyFixtures().getLine(this).gameComplete();
+		getScheduler().getWindow().getContentPane().removeAll();
+		getScheduler().displayPage(getScheduler().getWindow());
+		getScheduler().refreshMessages();
+
+		getLeague().getPlayerLeaderboard().updateLinesInTableLogic("Goals");
+
+		getScheduler().getWindow().revalidate();
+		getScheduler().getWindow().repaint();
+		// Play whatever later matches we have
+		if(getLaterMatches() != null && !getLaterMatches().isEmpty()){
+			System.out.println("Playing todays Later Matches");
+			for(Match eachMatch : getLaterMatches()){
+				CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
+			}
+		}
+		// Set the back button on tactics cardmap to normal
+		for (Map.Entry<String, JPanel> eachTacticsPage : getScheduler().getTacticsMap().entrySet()) {
+			((MainMenuPageTemplate) eachTacticsPage.getValue()).setFromScheduler(true);
+		}
+
+		if (simulatedMatch != null) {
+			giveSimulatedMatchAttributesOfThis();
+		}
+	}
+
+	public void giveSimulatedMatchAttributesOfThis() {
+		simulatedMatch.setHomeScore(homeScore);
+		simulatedMatch.setAwayScore(awayScore);
+		simulatedMatch.setHomeShotsOn(homeShotsOn);
+		simulatedMatch.setAwayShotsOn(awayShotsOn);
+		simulatedMatch.setHomeAllShots(homeAllShots);
+		simulatedMatch.setAwayAllShots(awayAllShots);
+		simulatedMatch.setMatchEvents(matchEvents);
+		simulatedMatch.setFirstTeamsPlayersLines(firstTeamsPlayersLines);
+		simulatedMatch.setSecondTeamsPlayersLines(secondTeamsPlayersLines);
+		simulatedMatch.setFirstTeamsPlayersBoxes(firstTeamsPlayersBoxes);
+		simulatedMatch.setSecondTeamsPlayersBoxes(secondTeamsPlayersBoxes);
+		simulatedMatch.setHomeScorers(homeScorers);
+		simulatedMatch.setAwayScorers(awayScorers);
+		simulatedMatch.setMatchHasPlayed(true);
+		simulatedMatch.setTimer(getTimer());
 	}
 
 	public void callUpdateTableVisually() {};
@@ -519,9 +632,8 @@ public class Match {
 	public void replacePlayButtonWithPauseButton() {};
 
 	// For simulated matches
-	public void startMatch(Scheduler scheduler, Boolean bool, String speed) {
+	public void startMatch(Scheduler scheduler, String speed) {
 		this.scheduler = scheduler;
-		this.simulated = bool;
 		this.speed = speed;
 		addMatchPlayed();
 		initialSetup();
@@ -632,10 +744,6 @@ public class Match {
 
 	public Goalkeeper getAwaygk() {
 		return awaygk;
-	}
-
-	public static void main(String[] args) {
-		
 	}
 
 	public String getScore(){
@@ -766,5 +874,93 @@ public class Match {
 
 	public void setMatchEvents(ArrayList<MatchEvent> matchEvents) {
 		this.matchEvents = matchEvents;
+	}
+
+	public ArrayList<PlayerStatsLineOnRatingsPage> getFirstTeamsPlayersLines() {
+		return firstTeamsPlayersLines;
+	}
+
+	public void setFirstTeamsPlayersLines(ArrayList<PlayerStatsLineOnRatingsPage> firstTeamsPlayersLines) {
+		this.firstTeamsPlayersLines = firstTeamsPlayersLines;
+	}
+
+	public ArrayList<PlayerStatsLineOnRatingsPage> getSecondTeamsPlayersLines() {
+		return secondTeamsPlayersLines;
+	}
+
+	public void setSecondTeamsPlayersLines(ArrayList<PlayerStatsLineOnRatingsPage> secondTeamsPlayersLines) {
+		this.secondTeamsPlayersLines = secondTeamsPlayersLines;
+	}
+
+	public ArrayList<PlayerStatsBoxOnRatingsPage> getFirstTeamsPlayersBoxes() {
+		return firstTeamsPlayersBoxes;
+	}
+
+	public void setFirstTeamsPlayersBoxes(ArrayList<PlayerStatsBoxOnRatingsPage> firstTeamsPlayersBoxes) {
+		this.firstTeamsPlayersBoxes = firstTeamsPlayersBoxes;
+	}
+
+	public ArrayList<PlayerStatsBoxOnRatingsPage> getSecondTeamsPlayersBoxes() {
+		return secondTeamsPlayersBoxes;
+	}
+
+	public void setSecondTeamsPlayersBoxes(ArrayList<PlayerStatsBoxOnRatingsPage> secondTeamsPlayersBoxes) {
+		this.secondTeamsPlayersBoxes = secondTeamsPlayersBoxes;
+	}
+
+	public int getHomeAllShots() {
+		return homeAllShots;
+	}
+
+	public void setHomeAllShots(int homeAllShots) {
+		this.homeAllShots = homeAllShots;
+	}
+
+	public int getHomeShotsOn() {
+		return homeShotsOn;
+	}
+
+	public void setHomeShotsOn(int homeShotsOn) {
+		this.homeShotsOn = homeShotsOn;
+	}
+
+	public int getAwayAllShots() {
+		return awayAllShots;
+	}
+
+	public void setAwayAllShots(int awayAllShots) {
+		this.awayAllShots = awayAllShots;
+	}
+
+	public int getAwayShotsOn() {
+		return awayShotsOn;
+	}
+
+	public void setAwayShotsOn(int awayShotsOn) {
+		this.awayShotsOn = awayShotsOn;
+	}
+
+	public void setMatchHasPlayed(boolean matchHasPlayed) {
+		this.matchHasPlayed = matchHasPlayed;
+	}
+
+	public void setEarlierMatches(ArrayList<Match> earlierMatches) {
+		this.earlierMatches = earlierMatches;
+	}
+
+	public void setSameDayMatches(ArrayList<Match> sameDayMatches) {
+		this.sameDayMatches = sameDayMatches;
+	}
+
+	public void setLaterMatches(ArrayList<Match> laterMatches) {
+		this.laterMatches = laterMatches;
+	}
+
+	public UsersMatch getSimulatedMatch() {
+		return simulatedMatch;
+	}
+
+	public void setSimulatedMatch(UsersMatch simulatedMatch) {
+		this.simulatedMatch = simulatedMatch;
 	}
 }
