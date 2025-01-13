@@ -158,9 +158,9 @@ public class FirstTeamPage extends MainMenuPageTemplate {
     }
 
     public void swapPlayerPositionsLogically(PlayerStatsLineOnRatingsPage line1, PlayerStatsLineOnRatingsPage line2) {
-        String firstLinePosition = line1.getPos().getText();
-        line1.getPos().setText(line2.getPos().getText());
-        line2.getPos().setText(firstLinePosition);
+        String firstLinePosition = line1.getPosLabel().getText();
+        line1.getPosLabel().setText(line2.getPosLabel().getText());
+        line2.getPosLabel().setText(firstLinePosition);
 
         // Need to update MatchRatings page
     }
@@ -227,7 +227,7 @@ public class FirstTeamPage extends MainMenuPageTemplate {
 
     // Could this be in adult class? repeated code
     public PlayerStatsLineOnRatingsPage createRatingLine(Footballer player) {
-        PlayerStatsLineOnRatingsPage newLine = new PlayerStatsLineOnRatingsPage(player);
+        PlayerStatsLineOnRatingsPage newLine = new PlayerStatsLineOnRatingsPage();
         listOfLines.add(newLine);
         newLine.addMouseListener(new MouseAdapter() {
             @Override

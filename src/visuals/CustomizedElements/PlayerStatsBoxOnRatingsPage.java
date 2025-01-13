@@ -12,7 +12,7 @@ public class PlayerStatsBoxOnRatingsPage extends RoundedPanel {
     private JLabel name, saves, shotsOn, shotsOff, offsides, successfulPasses, failedPasses, duelsWon, duelsLost, fouls, substituted, yellowCard, goals, assists, redCard, injury;
     private Box mainBox, leftBox, rightBox;
 
-    public PlayerStatsBoxOnRatingsPage(Footballer player){
+    public PlayerStatsBoxOnRatingsPage(){
         super(20);
 
         setBackground(Color.LIGHT_GRAY);
@@ -22,7 +22,7 @@ public class PlayerStatsBoxOnRatingsPage extends RoundedPanel {
         setBorder(new EmptyBorder(0, 0, 10, 0));
         setBorder(Color.BLACK, 2);
 
-        name = new JLabel(player.getName());
+        name = new JLabel();
         setPermanentWidthAndHeight(name, 250, 30);
         name.setHorizontalAlignment(SwingConstants.CENTER);
         add(name);

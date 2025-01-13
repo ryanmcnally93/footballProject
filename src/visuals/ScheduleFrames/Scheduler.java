@@ -429,7 +429,6 @@ public class Scheduler extends GamePanel {
 								CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
 							}
 							myFixtures.getLine(event.getMatch()).gameComplete();
-							myFixtures.updateMatchLineListener(myFixtures.getLine(event.getMatch()), event.getMatch());
 						}
 
 						event.setRemoveEvent(true);

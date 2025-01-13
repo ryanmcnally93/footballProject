@@ -118,10 +118,12 @@ public class UsersMatch extends Match {
 	@Override
 	public void delayKickoffAfterGoal(Footballer enemy) {
 		int delay = 7000;
+		System.out.println("Delaying Kickoff after goal for UsersMatch");
 		UsersMatch match = this;
 		this.delayTimer.schedule(new TimerTask() {
 		    @Override
 		    public void run() {
+				System.out.println("Delay has finished, going to start a run now");
 				if(!match.fullTimeCheck()){
 					match.startRun(enemy);
 				}
