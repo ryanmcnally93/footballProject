@@ -209,16 +209,27 @@ public class MatchRatings extends MatchFrames {
         // Create a flag to track the current state
         final boolean[] showingFirstTeam = {true};
 
+        boolean away;
+        away = firstTeam == getMatch().getAway();
+
         switchTeamInView.addActionListener(e -> {
             if (showingFirstTeam[0]) {
                 // Show the second team
                 title.setText(secondTeam.getName().toUpperCase());
-                updateLinesAndBox(secondTeam.getFirstTeam(), secondTeam);
+                if (away) {
+                    updateLinesAndBox(getMatch().getHomeTeam(), secondTeam);
+                } else {
+                    updateLinesAndBox(getMatch().getAwayTeam(), secondTeam);
+                }
                 switchTeamInView.setText(firstTeam.getName()); // Button now toggles back to first team
             } else {
                 // Show the first team
                 title.setText(firstTeam.getName().toUpperCase());
-                updateLinesAndBox(firstTeam.getFirstTeam(), firstTeam);
+                if (away) {
+                    updateLinesAndBox(getMatch().getAwayTeam(), firstTeam);
+                } else {
+                    updateLinesAndBox(getMatch().getHomeTeam(), firstTeam);
+                }
                 switchTeamInView.setText(secondTeam.getName()); // Button now toggles back to second team
             }
 
@@ -288,11 +299,6 @@ public class MatchRatings extends MatchFrames {
     }
 
     public void refreshLines() {
-
-        // Player position labels aren't updating when we leave tactics page?
-        // And the positions don't reset after the match?
-        // I think when we change the firstTeam of a match, it changes the firstTeam of a team
-
         if (playerStatsLines.getFirst().getPlayer() == getMatch().getHomegk()) {
             updateLinesAndBox(getMatch().getHomeTeam(), getMatch().getHome());
         } else {
