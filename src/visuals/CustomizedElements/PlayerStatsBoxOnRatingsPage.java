@@ -306,4 +306,28 @@ public class PlayerStatsBoxOnRatingsPage extends RoundedPanel {
     public void updateFocus(PlayerStatsBoxOnRatingsPage thisLine) {
 
     }
+
+    public void setPlayerStats(Footballer player) {
+        setName(player.getName());
+
+        setShotsOn(String.valueOf(player.getShotsOnTargetThisMatch()));
+        setShotsOff(String.valueOf(player.getShotsOffTargetThisMatch()));
+
+        setDuelsWon(String.valueOf(player.getDuelsWonThisMatch()));
+        setDuelsLost(String.valueOf(player.getDuelsLostThisMatch()));
+
+        setSuccessfulPasses(String.valueOf(player.getSuccessfulPassesThisMatch()));
+        setFailedPasses(String.valueOf(player.getFailedPassesThisMatch()));
+
+        setYellowCard(String.valueOf(player.getYellowCardThisMatch()));
+        setRedCard(String.valueOf(player.getRedCardThisMatch()));
+
+        setGoals(String.valueOf(player.getGoalsThisMatch()));
+        setAssists(String.valueOf(player.getAssistsThisMatch()));
+
+        setOffsides(String.valueOf(player.getOffsidesThisMatch()));
+        setFouls(String.valueOf(player.getFoulsThisMatch()));
+        setSubstituted(String.valueOf(player.getSubstitutedThisMatch()));
+        setInjury(String.valueOf(player.getInjuryTimeThisMatch()));
+    }
 }
