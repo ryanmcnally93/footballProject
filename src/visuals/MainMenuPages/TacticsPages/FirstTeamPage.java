@@ -19,6 +19,7 @@ public class FirstTeamPage extends MainMenuPageTemplate {
 
     private JPanel mainPanel;
     private Box centerBox;
+    private JPanel titleLine;
     private ArrayList<PlayerStatsLineOnRatingsPage> listOfLines;
     private PlayerStatsLineOnRatingsPage firstClickedLine = null;
     private PlayerStatsLineOnRatingsPage secondClickedLine = null;
@@ -37,61 +38,9 @@ public class FirstTeamPage extends MainMenuPageTemplate {
         mainPanel.add(centerBox);
 
         // Create title line
-        // This is repeated code from Match Ratings, could it be in adult class?
-        JPanel line = new JPanel();
-        line.setBackground(Color.LIGHT_GRAY);
-        line.setOpaque(true);
+        createTitleLine();
 
-        JLabel pos = new JLabel("POS");
-        pos.setFont(new Font("Menlo", Font.BOLD, 12));
-        pos.setHorizontalAlignment(SwingConstants.CENTER);
-        setPermanentWidth(pos, 30);
-
-        JLabel name = new JLabel("PLAYER NAME");
-        name.setFont(new Font("Menlo", Font.BOLD, 12));
-        setPermanentWidth(name, 130);
-
-        JLabel saves = new JLabel("SAVES");
-        saves.setFont(new Font("Menlo", Font.BOLD, 12));
-        saves.setHorizontalAlignment(SwingConstants.CENTER);
-        setPermanentWidth(saves, 50);
-
-        JLabel passingAccuracy = new JLabel("PASSES");
-        passingAccuracy.setFont(new Font("Menlo", Font.BOLD, 12));
-        passingAccuracy.setHorizontalAlignment(SwingConstants.CENTER);
-        setPermanentWidth(passingAccuracy, 50);
-
-        JLabel shootingAccuracy = new JLabel("SHOTS");
-        shootingAccuracy.setFont(new Font("Menlo", Font.BOLD, 12));
-        shootingAccuracy.setHorizontalAlignment(SwingConstants.CENTER);
-        setPermanentWidth(shootingAccuracy, 50);
-
-        JLabel duelsWon = new JLabel("DUELS");
-        duelsWon.setFont(new Font("Menlo", Font.BOLD, 12));
-        duelsWon.setHorizontalAlignment(SwingConstants.CENTER);
-        setPermanentWidth(duelsWon, 50);
-
-        JLabel fitness = new JLabel("FITNESS");
-        fitness.setFont(new Font("Menlo", Font.BOLD, 12));
-        fitness.setHorizontalAlignment(SwingConstants.CENTER);
-        setPermanentWidth(fitness, 50);
-
-        JLabel rating = new JLabel("RATING");
-        rating.setFont(new Font("Menlo", Font.BOLD, 12));
-        rating.setHorizontalAlignment(SwingConstants.CENTER);
-        setPermanentWidth(rating, 50);
-
-        line.add(pos);
-        line.add(name);
-        line.add(duelsWon);
-        line.add(passingAccuracy);
-        line.add(shootingAccuracy);
-        line.add(fitness);
-        line.add(rating);
-        setPermanentHeight(line, 30);
-        centerBox.add(line);
-
-        createPlayerBoxes();
+        chooseLinesToView(scheduler.getTeam().getFormation().getPositionOrder());
 
         mainPanel.setBounds(35, 70, 730, 440);
         mainPanel.setBackground(Color.LIGHT_GRAY);
@@ -100,17 +49,21 @@ public class FirstTeamPage extends MainMenuPageTemplate {
         setVisible(true);
     }
 
-    public void createPlayerBoxes() {
-        java.util.List<String> positionOrder = Arrays.asList(
-                "GK", "RB", "CB1", "CB2",
-                "LB", "CM1", "CAM", "CM2", "RW", "ST", "LW");
+    public void createTitleLine() {
+        titleLine = new JPanel();
+        titleLine.setBackground(Color.LIGHT_GRAY);
+        titleLine.setOpaque(true);
 
-        // Sort keys based on custom order
-        List<String> sortedPositions = new ArrayList<>(getScheduler().getTeam().getFirstTeam().keySet());
-        sortedPositions.sort(Comparator.comparingInt(positionOrder::indexOf));
+        addLabelToTitleLine("POS", 30, titleLine);
+        addLabelToTitleLine("PLAYER NAME", 130, titleLine);
+        addLabelToTitleLine("DUELS", 50, titleLine);
+        addLabelToTitleLine("PASSES", 50, titleLine);
+        addLabelToTitleLine("SHOTS", 50, titleLine);
+        addLabelToTitleLine("FITNESS", 50, titleLine);
+        addLabelToTitleLine("RATING", 50, titleLine);
 
-        chooseLinesToView(sortedPositions);
-
+        setPermanentHeight(titleLine, 30);
+        centerBox.add(titleLine);
     }
 
     public void chooseLinesToView(List<String> sortedPositions) {
@@ -158,11 +111,32 @@ public class FirstTeamPage extends MainMenuPageTemplate {
     }
 
     public void swapPlayerPositionsLogically(PlayerStatsLineOnRatingsPage line1, PlayerStatsLineOnRatingsPage line2) {
+        // If we are outside a match, this should effect our first team
+        if (isFromScheduler()) {
+            line1.getPlayer().setPositionPlaced(line2.getPosLabel().getText());
+            getScheduler().getTeam().getFirstTeam().put(line2.getPosLabel().getText(), line1.getPlayer());
+            line2.getPlayer().setPositionPlaced(line1.getPosLabel().getText());
+            getScheduler().getTeam().getFirstTeam().put(line1.getPosLabel().getText(), line2.getPlayer());
+        } else {
+            // Need to update the match's teams rather than the actual first team
+            // UPDATE VISUALLY!
+            if (getScheduler().getRatingsPanel().getMatch().getHomeTeam() == getScheduler().getTeam().getFirstTeam()) {
+                line1.getPlayer().setPositionPlaced(line2.getPosLabel().getText());
+                getScheduler().getRatingsPanel().getMatch().getHomeTeam().put(line2.getPosLabel().getText(), line1.getPlayer());
+                line2.getPlayer().setPositionPlaced(line1.getPosLabel().getText());
+                getScheduler().getRatingsPanel().getMatch().getHomeTeam().put(line1.getPosLabel().getText(), line2.getPlayer());
+            } else {
+                line1.getPlayer().setPositionPlaced(line2.getPosLabel().getText());
+                getScheduler().getRatingsPanel().getMatch().getAwayTeam().put(line2.getPosLabel().getText(), line1.getPlayer());
+                line2.getPlayer().setPositionPlaced(line1.getPosLabel().getText());
+                getScheduler().getRatingsPanel().getMatch().getAwayTeam().put(line1.getPosLabel().getText(), line2.getPlayer());
+            }
+        }
+
+        // Updates the position label on our line now that it has moved
         String firstLinePosition = line1.getPosLabel().getText();
         line1.getPosLabel().setText(line2.getPosLabel().getText());
         line2.getPosLabel().setText(firstLinePosition);
-
-        // Need to update MatchRatings page
     }
 
     public void swapPlayerPositionsVisually(PlayerStatsLineOnRatingsPage line1, PlayerStatsLineOnRatingsPage line2) {
@@ -228,6 +202,7 @@ public class FirstTeamPage extends MainMenuPageTemplate {
     // Could this be in adult class? repeated code
     public PlayerStatsLineOnRatingsPage createRatingLine(Footballer player) {
         PlayerStatsLineOnRatingsPage newLine = new PlayerStatsLineOnRatingsPage();
+        newLine.updateLine(player);
         listOfLines.add(newLine);
         newLine.addMouseListener(new MouseAdapter() {
             @Override

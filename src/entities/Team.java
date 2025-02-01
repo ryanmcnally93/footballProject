@@ -17,6 +17,7 @@ public class Team {
 	private String stadium;
 	private Color primaryColour;
 	private Color secondaryColour;
+	private Formation formation;
 	
 	public Team(String name, Manager manager, Map<String, Footballer> players, long budget, String stadium, Color primaryColour, Color secondaryColour) {
 		this.name = name;
@@ -27,6 +28,7 @@ public class Team {
 		this.primaryColour = primaryColour;
 		this.secondaryColour = secondaryColour;
 		this.players = players;
+		this.formation = new Formation(4, 3, 3);
 
 		for(Map.Entry<String, Footballer> each : players.entrySet()){
 			Footballer thisPlayer = each.getValue();
@@ -106,5 +108,17 @@ public class Team {
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	public Formation getFormation() {
+		return formation;
+	}
+
+	public void setFormation(Formation formation) {
+		this.formation = formation;
+	}
+
+	public void getFirstTeamInOrder() {
+
 	}
 }

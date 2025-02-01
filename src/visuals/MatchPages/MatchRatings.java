@@ -4,8 +4,8 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -25,14 +25,8 @@ public class MatchRatings extends MatchFrames {
     private int lineInView;
     private InputMap inputMap;
     private ActionMap actionMap;
-    private ImageIcon icon;
-    private BufferedImage bufferedScaledImage;
     private JLabel title;
     private JButton switchTeamInView;
-    private List<String> positionOrder = Arrays.asList(
-            "GK", "RB", "CB1", "CB2",
-            "LB", "CM1", "CAM", "CM2", "RW", "ST", "LW");
-    private List<String> sortedPositions;
 
 	public MatchRatings(CardLayout layout, JPanel pages, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
 		super(layout, pages, speedometer, buttons);
@@ -80,22 +74,6 @@ public class MatchRatings extends MatchFrames {
 
         setupKeyBindings();
 
-        // This is for the football image
-        BufferedImage image = null;
-        try {
-            image = ImageIO.read(new File("/Users/admin/Desktop/footballProject/src/visuals/images/ratings_page_goal.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if(image != null) {
-            Image scaledImage = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-            bufferedScaledImage = new BufferedImage(20, 20, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2d = bufferedScaledImage.createGraphics();
-            g2d.drawImage(scaledImage, 0, 0, null);
-            g2d.dispose();
-            icon = new ImageIcon(bufferedScaledImage);
-        }
-
         setVisible(true);
 	}
 
@@ -130,29 +108,21 @@ public class MatchRatings extends MatchFrames {
         actionMap.put("DOWN", downAction);
     }
 
-    private void createTitleLine() {
+    public void createTitleLine() {
         titleLine = new JPanel();
         titleLine.setBackground(Color.LIGHT_GRAY);
         titleLine.setOpaque(true);
 
-        addLabelToTitleLine("POS", 30);
-        addLabelToTitleLine("PLAYER NAME", 130);
-        addLabelToTitleLine("DUELS", 50);
-        addLabelToTitleLine("PASSES", 50);
-        addLabelToTitleLine("SHOTS", 50);
-        addLabelToTitleLine("FITNESS", 50);
-        addLabelToTitleLine("RATING", 50);
+        addLabelToTitleLine("POS", 30, titleLine);
+        addLabelToTitleLine("PLAYER NAME", 130, titleLine);
+        addLabelToTitleLine("DUELS", 50, titleLine);
+        addLabelToTitleLine("PASSES", 50, titleLine);
+        addLabelToTitleLine("SHOTS", 50, titleLine);
+        addLabelToTitleLine("FITNESS", 50, titleLine);
+        addLabelToTitleLine("RATING", 50, titleLine);
 
         setPermanentHeight(titleLine, 30);
         centerBox.add(titleLine);
-    }
-
-    private void addLabelToTitleLine(String text, int width) {
-        JLabel label = new JLabel(text);
-        label.setFont(new Font("Menlo", Font.BOLD, 12));
-        label.setHorizontalAlignment(SwingConstants.CENTER);
-        setPermanentWidth(label, width);
-        titleLine.add(label);
     }
 
     @Override
@@ -165,8 +135,7 @@ public class MatchRatings extends MatchFrames {
 
         title.setText(usersTeam.getName().toUpperCase());
 
-        setSortedPositions();
-        updateLinesAndBox(getPlayers("User"));
+        updateLinesAndBox(usersTeam.getFirstTeam(), usersTeam);
 
         switchTeamInView.setText(oppositionsTeam.getName());
 
@@ -185,28 +154,6 @@ public class MatchRatings extends MatchFrames {
         updateFocus();
     }
 
-    public void setSortedPositions() {
-        if (sortedPositions == null) {
-            sortedPositions = new ArrayList<>(getMatch().getHomeTeam().keySet());
-        }
-    }
-
-    public Map<String, Footballer> getPlayers(String team) {
-        if (getMatch().getScheduler().getTeam() == getMatch().getHome()) {
-            if (team.equals("User")) {
-                return getMatch().getHomeTeam();
-            } else {
-                return getMatch().getAwayTeam();
-            }
-        } else {
-            if (team.equals("User")) {
-                return getMatch().getAwayTeam();
-            } else {
-                return getMatch().getHomeTeam();
-            }
-        }
-    }
-
     public Team getTeam(String team) {
         if (getMatch().getScheduler().getTeam() == getMatch().getHome()) {
             if (team.equals("User")) {
@@ -223,21 +170,29 @@ public class MatchRatings extends MatchFrames {
         }
     }
 
-    public void updateLinesAndBox(Map<String, Footballer> team) {
-        setSortedPositions();
-        // Sort keys based on custom order
-        sortedPositions.sort(Comparator.comparingInt(positionOrder::indexOf));
-
-        // Creating users lines and boxes
-        for (int i = 0; i < sortedPositions.size(); i++) {
-            Footballer player = team.get(sortedPositions.get(i));
-            updateLine(playerStatsLines.get(i), player);
+    public void updateLinesAndBox(Map<String, Footballer> players, Team team) {
+        if (getMatch().isMatchHasPlayed()) {
+            for (int i = 0; i < team.getFormation().getPositionOrder().size(); i++) {
+                Footballer player = players.get(team.getFormation().getPositionOrder().get(i));
+                playerStatsLines.get(i).updateLineWhenMatchFinished(player, players, getMatch());
+            }
+        } else {
+            // Creating users lines and boxes
+            for (int i = 0; i < team.getFormation().getPositionOrder().size(); i++) {
+                Footballer player = players.get(team.getFormation().getPositionOrder().get(i));
+                playerStatsLines.get(i).updateLine(player);
+            }
+            updateBox(players.get("GK"));
         }
-        updateBox(team.get("GK"));
 
         // Users Players Mouse Event Listeners
         for (int i = 0; i < playerStatsLines.size(); i++) {
             final int index = i;
+            // Remove last mouse listener before adding a new one
+            if (playerStatsLines.get(i).getMouseListeners().length == 1) {
+                MouseListener[] listeners = playerStatsLines.get(i).getMouseListeners();
+                playerStatsLines.get(i).removeMouseListener(listeners[listeners.length - 1]);
+            }
             playerStatsLines.get(i).addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -258,24 +213,12 @@ public class MatchRatings extends MatchFrames {
             if (showingFirstTeam[0]) {
                 // Show the second team
                 title.setText(secondTeam.getName().toUpperCase());
-
-                for (int i = 0; i < sortedPositions.size(); i++) {
-                    Footballer player = secondTeam.getPlayers().get(sortedPositions.get(i));
-                    updateLine(playerStatsLines.get(i), player);
-                }
-                updateBox(secondTeam.getPlayers().get("GK"));
-
+                updateLinesAndBox(secondTeam.getFirstTeam(), secondTeam);
                 switchTeamInView.setText(firstTeam.getName()); // Button now toggles back to first team
             } else {
                 // Show the first team
                 title.setText(firstTeam.getName().toUpperCase());
-
-                for (int i = 0; i < sortedPositions.size(); i++) {
-                    Footballer player = firstTeam.getPlayers().get(sortedPositions.get(i));
-                    updateLine(playerStatsLines.get(i), player);
-                }
-                updateBox(firstTeam.getPlayers().get("GK"));
-
+                updateLinesAndBox(firstTeam.getFirstTeam(), firstTeam);
                 switchTeamInView.setText(secondTeam.getName()); // Button now toggles back to second team
             }
 
@@ -306,41 +249,10 @@ public class MatchRatings extends MatchFrames {
         }
     }
 
-    public void updateLine(PlayerStatsLineOnRatingsPage line, Footballer player){
-        line.setPlayer(player);
-        line.getNameLabel().setText(player.getName());
-        line.getPosLabel().setText(player.getLikedPosition());
-        // This is for the football image
-        if(player.getGoalsThisMatch() == 1) {
-            line.getNameAsJLabel().setIcon(icon);
-            line.getNameAsJLabel().setHorizontalTextPosition(SwingConstants.LEFT);
-        } else if (player.getGoalsThisMatch() > 1) {
-            ImageWithText multipleGoals = new ImageWithText(bufferedScaledImage, String.valueOf(player.getGoalsThisMatch()), 0.4f);
-            line.getNameAsJLabel().setIcon(multipleGoals);
-            line.getNameAsJLabel().setHorizontalTextPosition(SwingConstants.LEFT);
-        } else {
-            line.getNameAsJLabel().setIcon(null);
-        }
-
-//        line.setSaves(String.valueOf(player.getSavesThisMatch()));
-        line.setFitnessLabel(player.getStamina() + "%");
-
-        player.updateDuelsPercentageThisMatch();
-        line.setDuelsWonLabel(player.getDuelsPercentageThisMatch() + "%");
-
-        player.updatePassingAccuracyThisMatch();
-        line.setPassingAccuracyLabel(player.getPassingAccuracyThisMatch() + "%");
-
-        player.updateShotAccuracyThisMatch();
-        line.setShootingAccuracyLabel(player.getShotAccuracyThisMatch() + "%");
-
-        line.setRatingLabel(String.valueOf(10));
-    }
-
     public void updateLine(Footballer player) {
         for (PlayerStatsLineOnRatingsPage line : playerStatsLines) {
             if (line.getPlayerName().equals(player.getName())) {
-                updateLine(line, player);
+                line.updateLine(player);
             }
         }
     }
@@ -375,4 +287,16 @@ public class MatchRatings extends MatchFrames {
         return "Ratings";
     }
 
+    public void refreshLines() {
+
+        // Player position labels aren't updating when we leave tactics page?
+        // And the positions don't reset after the match?
+        // I think when we change the firstTeam of a match, it changes the firstTeam of a team
+
+        if (playerStatsLines.getFirst().getPlayer() == getMatch().getHomegk()) {
+            updateLinesAndBox(getMatch().getHomeTeam(), getMatch().getHome());
+        } else {
+            updateLinesAndBox(getMatch().getAwayTeam(), getMatch().getAway());
+        }
+    }
 }

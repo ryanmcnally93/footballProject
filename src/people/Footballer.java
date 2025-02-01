@@ -13,6 +13,7 @@ public class Footballer extends Individual {
 	public int defence;
 	public String likedPosition;
 	private Team team;
+	public String positionPlaced;
 
 	private int savesThisMatch = 0;
 	private int duelsPercentageThisMatch = 0;
@@ -45,12 +46,22 @@ public class Footballer extends Individual {
 		this.stamina = 100;
 	}
 	
+	public Footballer(String name, int age, int attack, int defence, int stamina, String position, String positionPlaced) {
+		super(name,age);
+		this.attack = attack;
+		this.defence = defence;
+		this.stamina = stamina;
+		this.likedPosition = position;
+		this.positionPlaced = positionPlaced;
+	}
+
 	public Footballer(String name, int age, int attack, int defence, int stamina, String position) {
 		super(name,age);
 		this.attack = attack;
 		this.defence = defence;
 		this.stamina = stamina;
 		this.likedPosition = position;
+		this.positionPlaced = position;
 	}
 	
 	public int getStamina() {
@@ -343,5 +354,13 @@ public class Footballer extends Individual {
 
 	public void setInjuredThisMatch(boolean injuredThisMatch) {
 		this.injuredThisMatch = injuredThisMatch;
+	}
+
+	public String getPositionPlaced() {
+		return positionPlaced;
+	}
+
+	public void setPositionPlaced(String positionPlaced) {
+		this.positionPlaced = positionPlaced;
 	}
 }

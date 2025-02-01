@@ -5,8 +5,6 @@ import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
 
 public class CardmapMainPageTemplate extends GamePanel {
 
@@ -217,6 +215,14 @@ public class CardmapMainPageTemplate extends GamePanel {
             layout.next(pages);
             moveButtonsWithUser_Forwards();
         }
+    }
+
+    public void addLabelToTitleLine(String text, int width, JPanel titleLine) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Menlo", Font.BOLD, 12));
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        setPermanentWidth(label, width);
+        titleLine.add(label);
     }
 
     public void moveButtonsWithUser_Forwards() {}

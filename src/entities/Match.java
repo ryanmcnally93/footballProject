@@ -1,10 +1,10 @@
 package entities;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import people.Footballer;
 import people.Goalkeeper;
 import visuals.CustomizedElements.PlayerAchievementLine;
@@ -47,6 +47,7 @@ public class Match {
 	private ArrayList<PlayerStatsLineOnRatingsPage> firstTeamsPlayersLines, secondTeamsPlayersLines;
 	private ArrayList<PlayerStatsBoxOnRatingsPage> firstTeamsPlayersBoxes, secondTeamsPlayersBoxes;
 	private UsersMatch simulatedMatch;
+	private Map<Footballer, Integer> homeRatings, awayRatings;
 
 	public Match() {}
 
@@ -55,8 +56,8 @@ public class Match {
 		this.home = simulatedMatch.getHome();
 		this.away = simulatedMatch.getAway();
 		this.stadium = simulatedMatch.getHome().getStadium();
-		this.homeTeam = simulatedMatch.getHome().getFirstTeam();
-		this.awayTeam = simulatedMatch.getAway().getFirstTeam();
+		this.homeTeam = new HashMap<>(simulatedMatch.getHome().getFirstTeam());
+		this.awayTeam = new HashMap<>(simulatedMatch.getAway().getFirstTeam());
 		this.homegk = simulatedMatch.getHome().getGoalkeeper();
 		this.awaygk = simulatedMatch.getAway().getGoalkeeper();
 		this.awayScore = 0;
@@ -75,18 +76,16 @@ public class Match {
 		this.awayShotsOn = 0;
 		simulated = true;
 		this.matchEvents = new ArrayList<>();
-		this.firstTeamsPlayersLines = new ArrayList<>();
-		this.secondTeamsPlayersLines = new ArrayList<>();
-		this.firstTeamsPlayersBoxes = new ArrayList<>();
-		this.secondTeamsPlayersBoxes = new ArrayList<>();
+		this.homeRatings = new HashMap<>();
+		this.awayRatings = new HashMap<>();
 	}
 
 	public Match(Team home, Team away) {
 		this.home = home;
 		this.away = away;
 		this.stadium = home.getStadium();
-		this.homeTeam = home.getFirstTeam();
-		this.awayTeam = away.getFirstTeam();
+		this.homeTeam = new HashMap<>(home.getFirstTeam());
+		this.awayTeam = new HashMap<>(away.getFirstTeam());
 		this.homegk = home.getGoalkeeper();
 		this.awaygk = away.getGoalkeeper();
 		this.awayScore = 0;
@@ -101,14 +100,16 @@ public class Match {
 		this.homeShotsOn = 0;
 		this.awayAllShots = 0;
 		this.awayShotsOn = 0;
+		this.homeRatings = new HashMap<>();
+		this.awayRatings = new HashMap<>();
 	}
 
 	public Match(Team home, Team away, League league) {
 		this.home = home;
 		this.away = away;
 		this.stadium = home.getStadium();
-		this.homeTeam = home.getFirstTeam();
-		this.awayTeam = away.getFirstTeam();
+		this.homeTeam = new HashMap<>(home.getFirstTeam());
+		this.awayTeam = new HashMap<>(away.getFirstTeam());
 		this.homegk = home.getGoalkeeper();
 		this.awaygk = away.getGoalkeeper();
 		this.awayScore = 0;
@@ -120,14 +121,16 @@ public class Match {
 		this.earlierMatches = new ArrayList<>();
 		this.sameDayMatches = new ArrayList<>();
 		this.laterMatches = new ArrayList<>();
+		this.homeRatings = new HashMap<>();
+		this.awayRatings = new HashMap<>();
 	}
-	
+
 	public Match(Team home, Team away, League league, LocalDateTime dateTime) {
 		this.home = home;
 		this.away = away;
 		this.stadium = home.getStadium();
-		this.homeTeam = home.getFirstTeam();
-		this.awayTeam = away.getFirstTeam();
+		this.homeTeam = new HashMap<>(home.getFirstTeam());
+		this.awayTeam = new HashMap<>(away.getFirstTeam());
 		this.homegk = home.getGoalkeeper();
 		this.awaygk = away.getGoalkeeper();
 		this.awayScore = 0;
@@ -144,6 +147,8 @@ public class Match {
 		this.homeShotsOn = 0;
 		this.awayAllShots = 0;
 		this.awayShotsOn = 0;
+		this.homeRatings = new HashMap<>();
+		this.awayRatings = new HashMap<>();
 	}
 
 	public void updateAllMatchesPage(){
@@ -222,13 +227,19 @@ public class Match {
 							this.homeScore++;
 							displayHomeGoalOnScreen(player);
 							league.getLeagueTable().getLine(getHome()).addGoalsScored();
-							for(PlayerAchievementLine line : league.getPlayerLeaderboard().getPlayerAchievements()){
-								if(line.getPlayer() == player){
+
+							// This may be accessed by multiple games at once, this stops concurrent modification errors
+							List<PlayerAchievementLine> achievements = new CopyOnWriteArrayList<>(league.getPlayerLeaderboard().getPlayerAchievements());
+							for (PlayerAchievementLine line : achievements) {
+								if (line.getPlayer() == player) {
 									line.addToGoals();
-									player.addGoalToThisMatch();
 									break;
-								};
+								}
 							}
+
+							player.addGoalToThisMatch();
+							player.setRatingThisMatch(10);
+							System.out.println(player.getName() + "'s rating has been set to 10");
 							league.getLeagueTable().getLine(getAway()).addGoalsConceded();
 							// This stops sameday matches scoring 1000 goals!
 							if (backgroundGame) {
@@ -246,10 +257,12 @@ public class Match {
 							for(PlayerAchievementLine line : league.getPlayerLeaderboard().getPlayerAchievements()){
 								if(line.getPlayer() == player){
 									line.addToGoals();
-									player.addGoalToThisMatch();
 									break;
 								};
 							}
+							player.addGoalToThisMatch();
+							player.setRatingThisMatch(10);
+							System.out.println(player.getName() + "'s rating has been set to 10");
 							league.getLeagueTable().getLine(getHome()).addGoalsConceded();
 							// This stops sameday matches scoring 1000 goals!
 							if(backgroundGame) {
@@ -498,6 +511,7 @@ public class Match {
 	}
 	
 	public boolean takeShot(Footballer player, Goalkeeper gk) {
+		System.out.println(player.getName() + " is having a crack!");
 		int overall = player.attack + gk.getKeeping();
 		float odds = overall / 100.0F;
 		float perc = player.attack / odds;
@@ -530,7 +544,10 @@ public class Match {
 			}
 
 			System.out.println("*****" + getHome().getName() + " " + getHomeScore() + " - " + getAwayScore() + " " + getAway().getName() + "*****");
-			matchHasPlayed = true;
+			if (!(this instanceof UsersMatch)) {
+				matchHasPlayed = true;
+				saveRatingsAndRefreshPlayerData();
+			}
 			if(scheduler != null){
 				scheduler.getEventContainer().removeAll();
 				// We only want this on a simulated match
@@ -560,6 +577,14 @@ public class Match {
 				matchPage.getFooterPanel().getMiddleBox().remove(matchPage.getContinueButton());
 			}
 			getScheduler().getStatsPanel().getFooterPanel().getMiddleBox().add(getScheduler().getStatsPanel().getPlayButton());
+			saveRatingsAndRefreshPlayerData();
+			for (Map.Entry<String, Footballer> eachPlayer : scheduler.getTeam().getFirstTeam().entrySet()) {
+				// this player was switched during game, need to set his position placed back to normal
+				if (!eachPlayer.getKey().equals(eachPlayer.getValue().getPositionPlaced())) {
+					eachPlayer.getValue().setPositionPlaced(eachPlayer.getKey());
+				}
+			}
+			scheduler.getFirstTeam().chooseLinesToView(scheduler.getTeam().getFormation().getPositionOrder());
 		}
 		// Give 1st place message if user is now 1st
 		if(getLeague().getLeagueTable().getLine(getScheduler().getTeam()).getPosition() == 1) {
@@ -582,6 +607,7 @@ public class Match {
 				CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
 			}
 		}
+
 		// Set the back button on tactics cardmap to normal
 		for (Map.Entry<String, JPanel> eachTacticsPage : getScheduler().getTacticsMap().entrySet()) {
 			((MainMenuPageTemplate) eachTacticsPage.getValue()).setFromScheduler(true);
@@ -590,6 +616,33 @@ public class Match {
 		if (simulatedMatch != null) {
 			giveSimulatedMatchAttributesOfThis();
 		}
+		matchHasPlayed = true;
+	}
+
+	public void saveRatingsAndRefreshPlayerData() {
+		// Set all the player ratings for this match, so we can view later
+		for (Map.Entry<String, Footballer> eachPlayer : getHomeTeam().entrySet()) {
+			Footballer player = eachPlayer.getValue();
+			System.out.println(player.getName() + "'s rating on checking is " + player.getRatingThisMatch());
+			homeRatings.put(player, player.getRatingThisMatch());
+		}
+		for (Map.Entry<String, Footballer> eachPlayer : getAwayTeam().entrySet()) {
+			Footballer player = eachPlayer.getValue();
+			System.out.println(player.getName() + "'s rating on checking is " + player.getRatingThisMatch());
+			awayRatings.put(player, player.getRatingThisMatch());
+		}
+
+		for(Map.Entry<String, Footballer> each : getHomeTeam().entrySet()) {
+			Footballer player = each.getValue();
+			player.newMatchReset();
+		}
+		getHomegk().newMatchReset();
+
+		for(Map.Entry<String, Footballer> each : getAwayTeam().entrySet()) {
+			Footballer player = each.getValue();
+			player.newMatchReset();
+		}
+		getAwaygk().newMatchReset();
 	}
 
 	public void giveSimulatedMatchAttributesOfThis() {
@@ -600,12 +653,10 @@ public class Match {
 		simulatedMatch.setHomeAllShots(homeAllShots);
 		simulatedMatch.setAwayAllShots(awayAllShots);
 		simulatedMatch.setMatchEvents(matchEvents);
-		simulatedMatch.setFirstTeamsPlayersLines(firstTeamsPlayersLines);
-		simulatedMatch.setSecondTeamsPlayersLines(secondTeamsPlayersLines);
-		simulatedMatch.setFirstTeamsPlayersBoxes(firstTeamsPlayersBoxes);
-		simulatedMatch.setSecondTeamsPlayersBoxes(secondTeamsPlayersBoxes);
 		simulatedMatch.setHomeScorers(homeScorers);
 		simulatedMatch.setAwayScorers(awayScorers);
+		simulatedMatch.setHomeRatings(homeRatings);
+		simulatedMatch.setAwayRatings(awayRatings);
 		simulatedMatch.setMatchHasPlayed(true);
 		simulatedMatch.setTimer(getTimer());
 	}
@@ -647,18 +698,6 @@ public class Match {
 	}
 
 	public void initialSetup(){
-		for(Map.Entry<String, Footballer> each : getHomeTeam().entrySet()) {
-			Footballer player = each.getValue();
-			player.newMatchReset();
-		}
-		getHomegk().newMatchReset();
-
-		for(Map.Entry<String, Footballer> each : getAwayTeam().entrySet()) {
-			Footballer player = each.getValue();
-			player.newMatchReset();
-		}
-		getAwaygk().newMatchReset();
-
 		Footballer homeStriker = homeTeam.get("ST");
 		startTimer();
 		startRun(homeStriker);
@@ -876,38 +915,6 @@ public class Match {
 		this.matchEvents = matchEvents;
 	}
 
-	public ArrayList<PlayerStatsLineOnRatingsPage> getFirstTeamsPlayersLines() {
-		return firstTeamsPlayersLines;
-	}
-
-	public void setFirstTeamsPlayersLines(ArrayList<PlayerStatsLineOnRatingsPage> firstTeamsPlayersLines) {
-		this.firstTeamsPlayersLines = firstTeamsPlayersLines;
-	}
-
-	public ArrayList<PlayerStatsLineOnRatingsPage> getSecondTeamsPlayersLines() {
-		return secondTeamsPlayersLines;
-	}
-
-	public void setSecondTeamsPlayersLines(ArrayList<PlayerStatsLineOnRatingsPage> secondTeamsPlayersLines) {
-		this.secondTeamsPlayersLines = secondTeamsPlayersLines;
-	}
-
-	public ArrayList<PlayerStatsBoxOnRatingsPage> getFirstTeamsPlayersBoxes() {
-		return firstTeamsPlayersBoxes;
-	}
-
-	public void setFirstTeamsPlayersBoxes(ArrayList<PlayerStatsBoxOnRatingsPage> firstTeamsPlayersBoxes) {
-		this.firstTeamsPlayersBoxes = firstTeamsPlayersBoxes;
-	}
-
-	public ArrayList<PlayerStatsBoxOnRatingsPage> getSecondTeamsPlayersBoxes() {
-		return secondTeamsPlayersBoxes;
-	}
-
-	public void setSecondTeamsPlayersBoxes(ArrayList<PlayerStatsBoxOnRatingsPage> secondTeamsPlayersBoxes) {
-		this.secondTeamsPlayersBoxes = secondTeamsPlayersBoxes;
-	}
-
 	public int getHomeAllShots() {
 		return homeAllShots;
 	}
@@ -962,5 +969,21 @@ public class Match {
 
 	public void setSimulatedMatch(UsersMatch simulatedMatch) {
 		this.simulatedMatch = simulatedMatch;
+	}
+
+	public Map<Footballer, Integer> getHomeRatings() {
+		return homeRatings;
+	}
+
+	public void setHomeRatings(Map<Footballer, Integer> homeRatings) {
+		this.homeRatings = homeRatings;
+	}
+
+	public Map<Footballer, Integer> getAwayRatings() {
+		return awayRatings;
+	}
+
+	public void setAwayRatings(Map<Footballer, Integer> awayRatings) {
+		this.awayRatings = awayRatings;
 	}
 }

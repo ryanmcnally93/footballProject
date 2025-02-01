@@ -330,14 +330,13 @@ This worked on occasion, but also failed from time to time.
 
 ### Unfixed Bugs
 
-1. Simulate needs to do all the stuff continue does
-2. MatchRatings needs to update with new positions 
-3. Table missing on main menu page (This cardmap refactor may fix this, have all 4 cardmaps been refactored now?)
-4. Give Tactics CardMap ability to add captain changing, and add a player view button (Broken link for now)
-5. Make UsersMatch go to tactics or confirm selection before going to MatchFrames 
-6. Update Bugs 
-7. Write tests 
-8. Add some images to pages / decorate some things or work on match logic
+1. MatchRatings needs to update with new positions 
+2. Table missing on main menu page (This cardmap refactor may fix this, have all 4 cardmaps been refactored now?)
+3. Give Tactics CardMap ability to add captain changing, and add a player view button (Broken link for now)
+4. Make UsersMatch go to tactics or confirm selection before going to MatchFrames 
+5. Update Bugs 
+6. Write tests 
+7. Add some images to pages / decorate some things or work on match logic
 
 ### Responsive Design
 
