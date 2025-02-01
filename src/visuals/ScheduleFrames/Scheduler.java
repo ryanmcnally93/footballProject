@@ -45,8 +45,8 @@ public class Scheduler extends GamePanel {
 	private ArrayList<Match> laterMatches, sameDayMatches;
 	// Main Menu & MatchFrames Layouts, CardMap & Pages
 	private CardLayout leaderboardsLayout, fixturesLayout, tacticsLayout, matchFramesLayout;
-	private Map<String, JPanel> tacticsMap, fixturesMap, matchFramesMap;
-	private JPanel tacticsPages, fixturesPages, matchFramesPages;
+	private Map<String, JPanel> leaderboardsMap, tacticsMap, fixturesMap, matchFramesMap;
+	private JPanel leaderboardsPages, tacticsPages, fixturesPages, matchFramesPages;
 	// Main Menu Pages
 	private LeagueTablePage leaguePage;
 	private TopGoalscorersPage goals;
@@ -152,20 +152,25 @@ public class Scheduler extends GamePanel {
 		mainMenu = new MainMenu(window, this);
 
 		leaderboardsLayout = new CardLayout();
-		JPanel firstPages = new JPanel(leaderboardsLayout);
-		leaguePage = new LeagueTablePage(leaderboardsLayout, firstPages, this, true);
-		goals = new TopGoalscorersPage(leaderboardsLayout, firstPages, this, true);
-		assists = new TopAssistsPage(leaderboardsLayout, firstPages, this, true);
-		firstPages.add(leaguePage, "League Table");
-		firstPages.add(goals, "Top Goals");
-		firstPages.add(assists, "Top Assists");
+		leaderboardsPages = new JPanel(leaderboardsLayout);
+		leaguePage = new LeagueTablePage(leaderboardsLayout, leaderboardsPages, this, true);
+		goals = new TopGoalscorersPage(leaderboardsLayout, leaderboardsPages, this, true);
+		assists = new TopAssistsPage(leaderboardsLayout, leaderboardsPages, this, true);
+		leaderboardsPages.add(leaguePage, "League Table");
+		leaderboardsPages.add(goals, "Top Goals");
+		leaderboardsPages.add(assists, "Top Assists");
+
+		leaderboardsMap = new HashMap<>();
+		leaderboardsMap.put("League Table", leaguePage);
+		leaderboardsMap.put("Top Goals", goals);
+		leaderboardsMap.put("Top Assists", assists);
 
 		ArrayList<JButton> firstButtons = new ArrayList<>();
 		firstButtons.add(getMainMenu().getLeagueTableButton());
 		firstButtons.add(getMainMenu().getGoalscorersButton());
 		firstButtons.add(getMainMenu().getAssistsButton());
 
-		addListeners(firstButtons, firstPages, leaderboardsLayout);
+		addListeners(firstButtons, leaderboardsPages, leaderboardsLayout);
 
 		fixturesLayout = new CardLayout();
 		fixturesPages = new JPanel(fixturesLayout);
@@ -1215,5 +1220,17 @@ public class Scheduler extends GamePanel {
 
 	public void setMatchFramesLayout(CardLayout matchFramesLayout) {
 		this.matchFramesLayout = matchFramesLayout;
+	}
+
+	public Map<String, JPanel> getLeaderboardsMap() {
+		return leaderboardsMap;
+	}
+
+	public JPanel getLeaderboardsPages() {
+		return leaderboardsPages;
+	}
+
+	public Map<String, JPanel> getFixturesMap() {
+		return fixturesMap;
 	}
 }

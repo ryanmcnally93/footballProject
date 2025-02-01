@@ -36,7 +36,18 @@ public class LeagueTablePage extends MainMenuPageTemplate {
         mainPanel.setBounds(0, 80, 800, 420);
         mainPanel.setBackground(Color.LIGHT_GRAY);
 
-        getLayeredPane().add(mainPanel);
+        getLayeredPane().add(mainPanel, JLayeredPane.DEFAULT_LAYER);
+        setVisible(true);
     }
 
+    public void updateTableVisually() {
+        centerBox.removeAll();
+        table = getScheduler().getLeague().getLeagueTable();
+        centerBox.add(table);
+        Box padding = Box.createVerticalBox();
+        padding.add(Box.createVerticalStrut(20));  // 20 pixels of padding, adjust as needed
+        centerBox.add(padding);
+        centerBox.revalidate();
+        centerBox.repaint();
+    }
 }

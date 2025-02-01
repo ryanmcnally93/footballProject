@@ -617,6 +617,9 @@ public class Match {
 			giveSimulatedMatchAttributesOfThis();
 		}
 		matchHasPlayed = true;
+		if (this instanceof UsersMatch) {
+			callUpdateTableVisually();
+		}
 	}
 
 	public void saveRatingsAndRefreshPlayerData() {

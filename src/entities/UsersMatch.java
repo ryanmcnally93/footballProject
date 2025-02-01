@@ -35,6 +35,9 @@ public class UsersMatch extends Match {
 	@Override
 	public void callUpdateTableVisually() {
 		getScheduler().getTablePanel().updateTableVisually();
+		if (isMatchHasPlayed()) {
+			getScheduler().getLeaguePage().updateTableVisually();
+		}
 	};
 
 	@Override
