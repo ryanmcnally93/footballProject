@@ -221,6 +221,9 @@ public class CardmapMainPageTemplate extends GamePanel {
         JLabel label = new JLabel(text);
         label.setFont(new Font("Menlo", Font.BOLD, 12));
         label.setHorizontalAlignment(SwingConstants.CENTER);
+        if (text.equals("RAT.")) {
+            label.setToolTipText("RATING");
+        }
         setPermanentWidth(label, width);
         titleLine.add(label);
     }

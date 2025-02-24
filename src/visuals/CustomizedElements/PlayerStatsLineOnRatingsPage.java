@@ -14,6 +14,7 @@ import java.util.Map;
 public class PlayerStatsLineOnRatingsPage extends RoundedPanel {
 
     private JLabel nameLabel, savesLabel, duelsWonLabel, passingAccuracyLabel, shootingAccuracyLabel, fitnessLabel, ratingLabel, posLabel;
+    private CircledLabel captaincyLabel;
     private Footballer player;
     private ImageIcon icon;
     private BufferedImage bufferedScaledImage;
@@ -23,12 +24,16 @@ public class PlayerStatsLineOnRatingsPage extends RoundedPanel {
 
         setBackground(Color.LIGHT_GRAY);
 
+        captaincyLabel = new CircledLabel("");
+        setPermanentWidth(captaincyLabel, 18);
+        captaincyLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
         posLabel = new JLabel("N/A");
         setPermanentWidth(posLabel, 30);
         posLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         nameLabel = new JLabel("N/A");
-        setPermanentWidth(nameLabel, 130);
+        setPermanentWidth(nameLabel, 127);
 
         savesLabel = new JLabel("N/A");
         setPermanentWidth(savesLabel, 50);
@@ -51,9 +56,10 @@ public class PlayerStatsLineOnRatingsPage extends RoundedPanel {
         fitnessLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         ratingLabel = new JLabel("N/A");
-        setPermanentWidth(ratingLabel, 50);
+        setPermanentWidth(ratingLabel, 35);
         ratingLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
+        add(captaincyLabel);
         add(posLabel);
         add(nameLabel);
         add(duelsWonLabel);
@@ -81,6 +87,20 @@ public class PlayerStatsLineOnRatingsPage extends RoundedPanel {
         setPermanentHeight(this, 30);
         revalidate();
         repaint();
+    }
+
+    public void addCaptaincy() {
+        this.captaincyLabel.setText("C");
+        this.captaincyLabel.addCircle();
+        this.captaincyLabel.revalidate();
+        this.captaincyLabel.repaint();
+    }
+
+    public void removeCaptaincy() {
+        this.captaincyLabel.setText("");
+        this.captaincyLabel.removeCircle();
+        this.captaincyLabel.revalidate();
+        this.captaincyLabel.repaint();
     }
 
     public String getPlayerName() {
@@ -295,6 +315,20 @@ public class PlayerStatsLineOnRatingsPage extends RoundedPanel {
         player.updateShotAccuracyThisMatch();
         setShootingAccuracyLabel(player.getShotAccuracyThisMatch() + "%");
 
+        if (player.getTeam().getCaptain().equals(player)) {
+            addCaptaincy();
+        } else if (getCaptaincyLabel().getText().equals("C")) {
+            removeCaptaincy();
+        }
+
         setRatingLabel(String.valueOf(10));
+    }
+
+    public CircledLabel getCaptaincyLabel() {
+        return captaincyLabel;
+    }
+
+    public void setCaptaincyLabel(CircledLabel captaincyLabel) {
+        this.captaincyLabel = captaincyLabel;
     }
 }

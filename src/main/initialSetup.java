@@ -541,26 +541,46 @@ public class initialSetup {
 	Color LIGHT_BLUE = new Color(173, 216, 230);
 
 	Team Arsenol = new Team("Arsenol", Arteta, arsenolFirst, 45000000, "Arsenol Stadium", Color.RED, Color.WHITE);
+	Arsenol.setCaptain(ovegaard);
 	Team Totenham = new Team("Totenham", Mourinho, totenhamFirst, 45000000, "Totenham Stadium", Color.WHITE, Color.BLUE);
+	Totenham.setCaptain(maddisom);
 	Team Newcostle = new Team("Newcostle", howe, newcostleFirst, 45000000, "Newcostle Stadium", Color.BLACK, Color.WHITE);
+	Newcostle.setCaptain(tonalo);
 	Team VanCity = new Team("Van City", guardiola, vanCityFirst, 45000000, "Van City Stadium", LIGHT_BLUE, Color.WHITE);
+	VanCity.setCaptain(deBruyan);
 	Team Chelsee = new Team("Chelsee", lampard, chelseeFirst, 45000000, "Chelsee Stadium", Color.BLUE, Color.WHITE);
+	Chelsee.setCaptain(caicede);
 	Team ActonVilla = new Team("Acton Villa", emery, actonVillaFirst, 45000000, "Acton Park", CLARET, Color.BLUE);
+	ActonVilla.setCaptain(watkinz);
 	Team TanUtd = new Team("Tan United", tenHag, tanUtdFirst, 45000000, "New Trafford Stadium", Color.RED, Color.WHITE);
+	TanUtd.setCaptain(bruno);
 	Team Liverpule = new Team("Liverpule", klopp, liverpuleFirst, 45000000, "Liverpule Stadium", Color.RED, Color.YELLOW);
+	Liverpule.setCaptain(vanDikl);
 	Team EastHam = new Team("East Ham", moyes, eastHamFirst, 45000000, "East Ham Stadium", CLARET, Color.WHITE);
+	EastHam.setCaptain(wardPrewse);
 	Team Leicestor = new Team("Leicestor", viera, leicestorFirst, 45000000, "Leicestor Stadium", Color.BLUE, Color.WHITE);
+	Leicestor.setCaptain(castagna);
 	Team Wolves = new Team("Wolves", hodgson, wolvesFirst, 45000000, "Wolves Stadium", Color.ORANGE, Color.WHITE);
+	Wolves.setCaptain(neves);
 	Team Upswitch = new Team("Upswitch", smithe, upswitchFirst, 45000000, "Upswitch Stadium", Color.BLUE, Color.WHITE);
+	Upswitch.setCaptain(evens);
 	Team Fullham = new Team("Fullham", dyche, fullhamFirst, 45000000, "Fullham Stadium", Color.WHITE, Color.BLACK);
+	Fullham.setCaptain(palhinh);
 	Team Evertun = new Team("Evertun", pochettino, evertunFirst, 45000000, "Evertun Stadium", Color.BLUE, Color.BLUE);
+	Evertun.setCaptain(tarkowsky);
 	Team Brighten = new Team("Brighten", Ehowe, brightenFirst, 45000000, "Brighten Stadium", Color.BLUE, Color.BLACK);
+	Brighten.setCaptain(lamptey);
 	Team NottinghamWoods = new Team("Nottingham Woods", cooper, nottinghamWoodsFirst, 45000000, "Woods Stadium", Color.RED, Color.WHITE);
+	NottinghamWoods.setCaptain(pereira);
 	Team Palace = new Team("Palace", edwards, palaceFirst, 45000000, "Palace Stadium", Color.BLUE, Color.RED);
+	Palace.setCaptain(hughes);
 	Team Bornmouth = new Team("Bornmouth", oneil, bornmouthFirst, 45000000, "Bornmouth Stadium", Color.RED, Color.BLACK);
+	Bornmouth.setCaptain(lerme);
 	Team Burntford = new Team("Burntford", mcnally, burntfordFirst, 45000000, "Burntford Stadium", Color.RED, Color.WHITE);
+	Burntford.setCaptain(norgaard);
 	Team Southamton = new Team("Southamton", gibbs, southamtonFirst, 45000000, "Southamton Stadium", Color.RED, Color.WHITE);
-	
+	Southamton.setCaptain(bednarek);
+
 	Map<String, Team> preTeams = new HashMap<>();
 	preTeams.put("Arsenol", Arsenol);
 	preTeams.put("Totenham", Totenham);

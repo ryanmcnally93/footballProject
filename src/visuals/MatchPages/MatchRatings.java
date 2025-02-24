@@ -77,7 +77,7 @@ public class MatchRatings extends MatchFrames {
             public void actionPerformed(ActionEvent e) {
                 if (lineInView > 0) {
                     lineInView--;
-                    updateFocus();
+                    turnClickedLineYellow();
                 }
             }
         };
@@ -87,7 +87,7 @@ public class MatchRatings extends MatchFrames {
             public void actionPerformed(ActionEvent e) {
                 if (lineInView < playerStatsLines.size() - 1) {
                     lineInView++;
-                    updateFocus();
+                    turnClickedLineYellow();
                 }
             }
         };
@@ -107,13 +107,14 @@ public class MatchRatings extends MatchFrames {
         titleLine.setBackground(Color.LIGHT_GRAY);
         titleLine.setOpaque(true);
 
+        addLabelToTitleLine("", 18, titleLine);
         addLabelToTitleLine("POS", 30, titleLine);
-        addLabelToTitleLine("PLAYER NAME", 130, titleLine);
+        addLabelToTitleLine("PLAYER NAME", 127, titleLine);
         addLabelToTitleLine("DUELS", 50, titleLine);
         addLabelToTitleLine("PASSES", 50, titleLine);
         addLabelToTitleLine("SHOTS", 50, titleLine);
         addLabelToTitleLine("FITNESS", 50, titleLine);
-        addLabelToTitleLine("RATING", 50, titleLine);
+        addLabelToTitleLine("RAT.", 35, titleLine);
 
         setPermanentHeight(titleLine, 30);
         centerBox.add(titleLine);
@@ -138,7 +139,7 @@ public class MatchRatings extends MatchFrames {
         centerBox.remove(switchTeamInView);
         centerBox.add(switchTeamInView);
 
-        updateFocus();
+        turnClickedLineYellow();
         centerBox.revalidate();
         centerBox.repaint();
     }
@@ -183,7 +184,7 @@ public class MatchRatings extends MatchFrames {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     lineInView = index;
-                    updateFocus(index);
+                    turnClickedLineYellow();
                 }
             });
         }
@@ -206,17 +207,17 @@ public class MatchRatings extends MatchFrames {
 
             showingFirstTeam[0] = !showingFirstTeam[0];
 
-            updateFocus(lineInView);
+            turnClickedLineYellow(lineInView);
             centerBox.revalidate();
             centerBox.repaint();
         });
     }
 
-    private void updateFocus() {
-        playerStatsLines.forEach(line -> updateFocus(playerStatsLines.indexOf(line)));
+    private void turnClickedLineYellow() {
+        playerStatsLines.forEach(line -> turnClickedLineYellow(playerStatsLines.indexOf(line)));
     }
 
-    public void updateFocus(int i) {
+    public void turnClickedLineYellow(int i) {
         PlayerStatsLineOnRatingsPage line = playerStatsLines.get(i);
         line.setBackground(i == lineInView ? Color.YELLOW : Color.LIGHT_GRAY);
         if (i == lineInView) {

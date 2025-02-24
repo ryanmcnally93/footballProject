@@ -18,6 +18,7 @@ public class Team {
 	private Color primaryColour;
 	private Color secondaryColour;
 	private Formation formation;
+	private Footballer captain;
 	
 	public Team(String name, Manager manager, Map<String, Footballer> players, long budget, String stadium, Color primaryColour, Color secondaryColour) {
 		this.name = name;
@@ -118,7 +119,11 @@ public class Team {
 		this.formation = formation;
 	}
 
-	public void getFirstTeamInOrder() {
+	public Footballer getCaptain() {
+		return captain;
+	}
 
+	public void setCaptain(Footballer captain) {
+		this.captain = captain;
 	}
 }

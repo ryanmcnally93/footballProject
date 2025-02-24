@@ -330,12 +330,11 @@ This worked on occasion, but also failed from time to time.
 
 ### Unfixed Bugs
 
-1. Table missing on main menu page (This cardmap refactor may fix this, have all 4 cardmaps been refactored now?)
-2. Give Tactics CardMap ability to add captain changing, and add a player view button (Broken link for now)
-3. Make UsersMatch go to tactics or confirm selection before going to MatchFrames 
-4. Update Bugs 
-5. Write tests 
-6. Add some images to pages / decorate some things or work on match logic
+1. Give Tactics CardMap ability to add captain changing, and add a player view button (Broken link for now)
+2. Make UsersMatch go to tactics or confirm selection before going to MatchFrames 
+3. Update Bugs 
+4. Write tests 
+5. Add some images to pages / decorate some things or work on match logic
 
 ### Responsive Design
 

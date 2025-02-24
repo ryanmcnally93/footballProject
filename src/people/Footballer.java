@@ -1,12 +1,7 @@
 package people;
 
-// Update Character like in vehicle speed
-// Make startrun smaller using more methods
-// Call more functions from other .java?
-
 import entities.Team;
 
-// Players are called Characters, because that's how we started
 public class Footballer extends Individual {
 	
 	public int attack;
@@ -38,8 +33,6 @@ public class Footballer extends Individual {
 	private boolean injuredThisMatch;
 
 	public int stamina;
-
-	// Define Player Characteristics
 	
 	public Footballer(String name, int age) {
 		super(name,age);
@@ -363,4 +356,5 @@ public class Footballer extends Individual {
 	public void setPositionPlaced(String positionPlaced) {
 		this.positionPlaced = positionPlaced;
 	}
+
 }
