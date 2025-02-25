@@ -4,7 +4,6 @@ import java.awt.event.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import entities.Match;
@@ -118,7 +117,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		getTacticsButton().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				viewTacticsDuringMatch();
+				match.getScheduler().viewTacticsPages(false, null);
 			}
 		});
 
@@ -252,6 +251,8 @@ public class MatchFrames extends CardmapMainPageTemplate {
 				page.getFooterPanel().getMiddleBox().add(page.getPlayButton());
 			}
 		}
+
+		// Back button moving
 		if (page.isFromScheduler()) {
 			if (!page.getFooterPanel().getBackButtonBox().isAncestorOf(page.getBackButton())) {
 				page.getFooterPanel().getBackButtonBox().add(page.getBackButton());
@@ -329,17 +330,6 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		getFooterPanel().getMiddleBox().add(continueButton);
 		getFooterPanel().getButtonBox().revalidate();
 		getFooterPanel().getButtonBox().repaint();
-	}
-
-	public void viewTacticsDuringMatch() {
-		match.getScheduler().getWindow().getContentPane().removeAll();
-		for (Map.Entry<String, JPanel> eachTacticsPage : match.getScheduler().getTacticsMap().entrySet()) {
-			((MainMenuPageTemplate) eachTacticsPage.getValue()).setFromScheduler(false);
-		}
-		match.getScheduler().getWindow().getContentPane().add(match.getScheduler().getTacticsPages(), BorderLayout.CENTER);
-		match.getScheduler().getTacticsLayout().show(match.getScheduler().getTacticsPages(), "First Team");
-		match.getScheduler().getWindow().revalidate();
-		match.getScheduler().getWindow().repaint();
 	}
 
     public class PlayGame extends AbstractAction {

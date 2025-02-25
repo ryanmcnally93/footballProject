@@ -330,10 +330,9 @@ This worked on occasion, but also failed from time to time.
 
 ### Unfixed Bugs
 
-1. Make UsersMatch go to tactics or confirm selection before going to MatchFrames 
-2. Update Bugs 
-3. Write tests 
-4. Add some images to pages / decorate some things or work on match logic
+1. Update Bugs 
+2. Write tests 
+3. Add some images to pages / decorate some things or work on match logic
 
 ### Responsive Design
 

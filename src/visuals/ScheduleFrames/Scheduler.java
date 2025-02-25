@@ -20,6 +20,7 @@ import visuals.MainMenuPages.FixturesPages.ResultsPage;
 import visuals.MainMenuPages.LeaderboardPages.LeagueTablePage;
 import visuals.MainMenuPages.LeaderboardPages.TopAssistsPage;
 import visuals.MainMenuPages.LeaderboardPages.TopGoalscorersPage;
+import visuals.MainMenuPages.MainMenuPageTemplate;
 import visuals.MainMenuPages.TacticsPages.FirstTeamPage;
 import visuals.MainMenuPages.TacticsPages.FormationPage;
 import visuals.MainMenuPages.TacticsPages.MatchRolesPage;
@@ -401,16 +402,10 @@ public class Scheduler extends GamePanel {
 			// This is a match event
 			if (event.getType().equals("Match")) {
 				playGame = new JButton("Play");
-				Scheduler sch = this;
 				playGame.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						for (Map.Entry<String, JPanel> page : getMatchFramesMap().entrySet()) {
-							MatchFrames frame = (MatchFrames) page.getValue();
-							event.getMatch().setScheduler(sch);
-							frame.setMatch(event.getMatch());
-						}
-						sch.displayMatchFrames(event.getMatch());
+						viewTacticsPages(true, event);
 						event.setRemoveEvent(true);
 					}
 				});
@@ -517,6 +512,18 @@ public class Scheduler extends GamePanel {
 		currentPage.getFooterPanel().getMiddleBox().add(currentPage.getResumeButton());
 		currentPage.displayTacticsButton();
 		addSpeedometer(currentPage.getSpeedometerBox());
+	}
+
+	public void viewTacticsPages(boolean beforeMatch, Events event) {
+		getWindow().getContentPane().removeAll();
+		for (Map.Entry<String, JPanel> eachTacticsPage : getTacticsMap().entrySet()) {
+			((MainMenuPageTemplate) eachTacticsPage.getValue()).setFromScheduler(beforeMatch);
+			((MainMenuPageTemplate) eachTacticsPage.getValue()).setEvent(event);
+		}
+		getWindow().getContentPane().add(getTacticsPages(), BorderLayout.CENTER);
+		getTacticsLayout().show(getTacticsPages(), "First Team");
+		getWindow().revalidate();
+		getWindow().repaint();
 	}
 
 	public void viewMatchFramesWhenMatchPlayed() {

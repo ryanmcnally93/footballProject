@@ -11,8 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 public class FirstTeamPage extends MainMenuPageTemplate {
@@ -224,5 +222,4 @@ public class FirstTeamPage extends MainMenuPageTemplate {
         });
         return newLine;
     }
-
 }
