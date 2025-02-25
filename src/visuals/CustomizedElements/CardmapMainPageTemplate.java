@@ -50,7 +50,7 @@ public class CardmapMainPageTemplate extends GamePanel {
             setLayout(new BorderLayout());
             setBackground(Color.LIGHT_GRAY);
             title = new JLabel("", SwingConstants.CENTER);
-            title.setFont(new Font("Menlo", Font.BOLD, 30));
+            title.setFont(getBebasNeueFont());
             title.setForeground(new Color(0, 51, 204));
             add(title, BorderLayout.CENTER);
         }

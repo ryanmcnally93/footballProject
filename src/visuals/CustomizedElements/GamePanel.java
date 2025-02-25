@@ -3,6 +3,8 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
+import java.io.File;
+import java.io.IOException;
 
 public abstract class GamePanel extends JPanel {
     private static final long serialVersionUID = -8911764479146802449L;
@@ -13,6 +15,16 @@ public abstract class GamePanel extends JPanel {
 
     protected void addGameMouseListener(MouseAdapter mouseAdapter) {
         addMouseListener(mouseAdapter);
+    }
+
+    public Font getBebasNeueFont() {
+        try {
+            File fontFile = new File("./src/visuals/Fonts/BebasNeue-Regular.ttf");
+            return Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(Font.BOLD, 30f);
+        } catch (FontFormatException | IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void appendEastAndWest(JPanel mainPanel){

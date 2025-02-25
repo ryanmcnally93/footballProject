@@ -46,25 +46,46 @@ This is a non-profit, just for fun game.
 ## UX
 ### User Stories
 
-#### Managers
+#### Managers wanting to start small
 
-- Include example of a user story.
+- Need to be able to improve the teams form in order to win prizes that can lead to better players.
+- Need to be able to improve players individually as money will not be easy to come by.
+- Need bigger job offers when form is going well.
+- Should be tricky to get results against bigger teams.
+
+#### Managers wanting to start big
+
+- Will have more options at their tips in terms of players/facilities & staff quality.
+- But this comes with a higher expectation of performance, poor form can lead to being fired.
+- Should be able to sign better players easier.
+- Should have more power but have a lot of responsibility with sometimes overwhelming options.
+
+#### All managers
+
+- Should have full control of their club, from its players and tactics, to its stadium builds, staffing and training.
+- Should be able to move around the various pages easily, with buttons that clearly indicate where the user will travel to.
+- Should be given tips by the coach's on which players to put where and how to get the most out of their team.
+- Should see a fair result in matches considering the options they've made, this will be difficult and require a lot of thought and logic around the players decision making.
 
 ### Design Choices
 
-The game will use colours specific to the teams currently selected or playing, along with original football imagery. The navigation needs to be possible through keystrokes and mouse clicks for ease of use.
+The game will use colours specific to the teams currently selected or playing, along with original football imagery. The navigation will be possible through keystrokes and mouse clicks for ease of use.
 
 #### Fonts
 
-- Include explanation of font used.
+- I chose the all-caps Bebas Neue Regular font for titles as it is popular amongst football games as is strong and eye-catching.
 
 [//]: # (<img src="" width="50%" alt="The fonts used" style="display: inherit; ">)
 
 #### Icons
 
-- No icons have been used yet
+- For player lines on the ratings page, this is the image used to illustrate a goal. The opacity is updated with a number to represent multiple goals.
 
-[//]: # (<img src="" width="50%" alt="Icons Used" style="display: inherit; ">)
+<img src="./src/visuals/Images/ratings_page_goal.png" width="10%" alt="Football" style="display: inherit; ">
+
+- For clickable button icons, I've opted for a transparent up arrow inside a circle. I'm also going to update the cursor where used to make it more obvious that is clickable.
+
+<img src="./src/visuals/Images/playerViewIcon.png" width="10%" alt="Up Arrow" style="display: inherit; ">
 
 #### Colours
 
@@ -74,14 +95,15 @@ The game will use colours specific to the teams currently selected or playing, a
 
 #### Styling
 
-- App 'scheduler' will have an office type feel.
-- 'Match frames' should have a grassroots football feel to them.
+- App 'scheduler' will have an office type feel, this could change dependant on level of football played or country.
+- 'Match frames' should be tailored to the competition level, from grassroots football themes to Champions League feels to them.
+- 'Tactics frames' should have changing room themes.
 
 [//]: # (<img src="" width="50%" alt="Styling used" style="display: inherit; ">)
 
 #### Backgrounds & Images
 
-- Include explanations of images chosen.
+- None used yet.
 
 [//]: # (<img src="" width="70%" alt="Example of a background used" style="display: inherit; ">)
 
@@ -93,13 +115,18 @@ I created these wireframes using [Name of app](Link).
 
 ### Java Swing
 
-- Include explanation of use of Java Swing
+- Having never used Java for front end before, this was my first experience using Java Swing. A lot of the issues I faced in the bugs section reflect the issues I faced and how I overcame them.
+- I used customized JPanels on top of one-another for different levels of control.
+
+[//]: # (<img src="" width="50%" alt="Java Swing" style="display: inherit; ">)
+
+- I used JLabels for headers and names/scores, with JButtons used alongside mouse and key listeners.
 
 [//]: # (<img src="" width="50%" alt="Java Swing" style="display: inherit; ">)
 
 ### Cards & Navigation
 
-Include explanation of page navigation.
+- I learned using CardLayout with JPanels was a great way of switching through pages and keeping or moving content across too.
 
 ### Q & A of Consumers
 

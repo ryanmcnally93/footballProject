@@ -1,4 +1,5 @@
 package visuals.ScheduleFrames;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -89,7 +90,7 @@ public class Scheduler extends GamePanel {
         header = new JPanel();
         header.setPreferredSize(new Dimension(800, 80));
         JLabel title = new JLabel(team.getName() + " - " + user.getName() + " " + season.getYearFrom() + "/" + season.getYearTo(), SwingConstants.CENTER);
-        title.setFont(new Font("Menlo", Font.BOLD, 30));
+        title.setFont(getBebasNeueFont());
         header.add(title);
         mainPanel.add(header, BorderLayout.NORTH);
         

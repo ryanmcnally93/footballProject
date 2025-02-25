@@ -1,4 +1,5 @@
 package main;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -36,13 +37,12 @@ public class StartPage extends GamePanel {
     	setLayout(new BorderLayout());
     	
     	// Header
-    	
     	JPanel north = new JPanel();
     	north.setPreferredSize(new Dimension(800,80));
     	north.setLayout(new BorderLayout());
         north.setBackground(Color.LIGHT_GRAY);
         title = new JLabel("Type your name", SwingConstants.CENTER);
-        title.setFont(new Font("Menlo", Font.BOLD, 30));
+        title.setFont(getBebasNeueFont());
         title.setForeground(new Color(0, 51, 204));
         north.add(title, BorderLayout.CENTER);
         add(north, BorderLayout.NORTH);
@@ -50,7 +50,6 @@ public class StartPage extends GamePanel {
     	appendEastAndWest(this);
         
         // Center Box
-        
         centerBox = new JPanel();
         centerBox.setBackground(Color.LIGHT_GRAY);
         
