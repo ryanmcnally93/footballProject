@@ -330,12 +330,10 @@ This worked on occasion, but also failed from time to time.
 
 ### Unfixed Bugs
 
-1. Add a player view button (Broken link for now)
-2. Add Captaincy and fake link to tactics page and firstTeam page
-3. Make UsersMatch go to tactics or confirm selection before going to MatchFrames 
-4. Update Bugs 
-5. Write tests 
-6. Add some images to pages / decorate some things or work on match logic
+1. Make UsersMatch go to tactics or confirm selection before going to MatchFrames 
+2. Update Bugs 
+3. Write tests 
+4. Add some images to pages / decorate some things or work on match logic
 
 ### Responsive Design
 

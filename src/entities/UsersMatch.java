@@ -114,7 +114,7 @@ public class UsersMatch extends Match {
 
 	@Override
 	public void updateRatingsPage(Footballer player){
-		getScheduler().getRatingsPanel().updateLine(player);
+		getScheduler().getRatingsPanel().updateLineAfterMatchEvent(player);
 		getScheduler().getRatingsPanel().updateBox(player);
 	}
 	

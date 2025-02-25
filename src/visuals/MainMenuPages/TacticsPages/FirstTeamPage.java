@@ -129,8 +129,7 @@ public class FirstTeamPage extends MainMenuPageTemplate {
             getScheduler().getTeam().getFirstTeam().put(line1.getPosLabel().getText(), line2.getPlayer());
         } else {
             // Need to update the match's teams rather than the actual first team
-            // UPDATE VISUALLY!
-            if (getScheduler().getRatingsPanel().getMatch().getHomeTeam() == getScheduler().getTeam().getFirstTeam()) {
+            if (getScheduler().getRatingsPanel().getMatch().getHome().getName().equals(getScheduler().getTeam().getName())) {
                 line1.getPlayer().setPositionPlaced(line2.getPosLabel().getText());
                 getScheduler().getRatingsPanel().getMatch().getHomeTeam().put(line2.getPosLabel().getText(), line1.getPlayer());
                 line2.getPlayer().setPositionPlaced(line1.getPosLabel().getText());

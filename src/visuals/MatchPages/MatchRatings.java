@@ -226,7 +226,7 @@ public class MatchRatings extends MatchFrames {
         }
     }
 
-    public void updateLine(Footballer player) {
+    public void updateLineAfterMatchEvent(Footballer player) {
         playerStatsLines.stream()
                 .filter(line -> line.getPlayerName().equals(player.getName()))
                 .forEach(line -> line.updateLine(player));
@@ -241,7 +241,7 @@ public class MatchRatings extends MatchFrames {
         return "Ratings";
     }
 
-    public void refreshLines() {
+    public void updateLinesAfterTacticsChange() {
         if (playerStatsLines.get(0).getPlayer() == getMatch().getHomegk()) {
             updateLinesAndBox(getMatch().getHomeTeam(), getMatch().getHome());
         } else {

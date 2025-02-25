@@ -513,7 +513,7 @@ public class Scheduler extends GamePanel {
 
 	public void viewMatchAfterTacticsPageViewed() {
 		MatchFrames currentPage = (MatchFrames) matchFramesMap.get(match.getCurrentPageName());
-		ratingsPanel.refreshLines();
+		ratingsPanel.updateLinesAfterTacticsChange();
 		currentPage.getFooterPanel().getMiddleBox().add(currentPage.getResumeButton());
 		currentPage.displayTacticsButton();
 		addSpeedometer(currentPage.getSpeedometerBox());
