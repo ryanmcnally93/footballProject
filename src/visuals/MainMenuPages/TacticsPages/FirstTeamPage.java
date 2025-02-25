@@ -54,6 +54,7 @@ public class FirstTeamPage extends MainMenuPageTemplate {
         titleLine.setBackground(Color.LIGHT_GRAY);
         titleLine.setOpaque(true);
 
+        addLabelToTitleLine("", 30, titleLine);
         addLabelToTitleLine("POS", 30, titleLine);
         addLabelToTitleLine("PLAYER NAME", 130, titleLine);
         addLabelToTitleLine("DUELS", 50, titleLine);
@@ -78,18 +79,24 @@ public class FirstTeamPage extends MainMenuPageTemplate {
             for (String position : sortedPositions) {
                 Footballer player = getScheduler().getTeam().getFirstTeam().get(position);
                 PlayerStatsLineOnRatingsPage newLine = createRatingLine(player);
+                setPermanentWidth(newLine.getNameAsJLabel(), 200);
+                newLine.addPlayerViewButton();
                 centerBox.add(newLine);
             }
         } else if (getMatch().getHome() == getScheduler().getTeam()) {
             for (String position : sortedPositions) {
                 Footballer player = getMatch().getHomeTeam().get(position);
                 PlayerStatsLineOnRatingsPage newLine = createRatingLine(player);
+                setPermanentWidth(newLine.getNameAsJLabel(), 200);
+                newLine.addPlayerViewButton();
                 centerBox.add(newLine);
             }
         } else if (getMatch().getAway() == getScheduler().getTeam()) {
             for (String position : sortedPositions) {
                 Footballer player = getMatch().getAwayTeam().get(position);
                 PlayerStatsLineOnRatingsPage newLine = createRatingLine(player);
+                setPermanentWidth(newLine.getNameAsJLabel(), 200);
+                newLine.addPlayerViewButton();
                 centerBox.add(newLine);
             }
         }
@@ -100,6 +107,9 @@ public class FirstTeamPage extends MainMenuPageTemplate {
             // First click: highlight the line
             firstClickedLine = clickedLine;
             firstClickedLine.setBackground(Color.YELLOW); // Highlight color
+            if (firstClickedLine.getPlayerViewButton() != null) {
+                firstClickedLine.getPlayerViewButton().setBackground(Color.YELLOW);
+            }
             firstClickedLine.setOpaque(true);
             firstClickedLine.repaint();
         } else if (secondClickedLine == null && clickedLine != firstClickedLine) {
@@ -176,6 +186,9 @@ public class FirstTeamPage extends MainMenuPageTemplate {
 
                     // Reset the state
                     firstClickedLine.setBackground(Color.LIGHT_GRAY);
+                    if (firstClickedLine.getPlayerViewButton() != null) {
+                        firstClickedLine.getPlayerViewButton().setBackground(Color.LIGHT_GRAY);
+                    }
                     firstClickedLine = null;
                     secondClickedLine = null;
                     return;

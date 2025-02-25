@@ -9,15 +9,18 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 
 public class PlayerStatsLineOnRatingsPage extends RoundedPanel {
 
     private JLabel nameLabel, savesLabel, duelsWonLabel, passingAccuracyLabel, shootingAccuracyLabel, fitnessLabel, ratingLabel, posLabel;
     private CircledLabel captaincyLabel;
+    private JButton playerViewButton;
     private Footballer player;
     private ImageIcon icon;
     private BufferedImage bufferedScaledImage;
+    private ImageIcon playerViewIcon = new ImageIcon("./src/visuals/images/playerViewIcon.png");
 
     public PlayerStatsLineOnRatingsPage (){
         super(20);
@@ -71,7 +74,7 @@ public class PlayerStatsLineOnRatingsPage extends RoundedPanel {
         // This is for the football image
         BufferedImage image = null;
         try {
-            image = ImageIO.read(new File("/Users/admin/Desktop/footballProject/src/visuals/images/ratings_page_goal.png"));
+            image = ImageIO.read(new File("./src/visuals/images/ratings_page_goal.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -330,5 +333,36 @@ public class PlayerStatsLineOnRatingsPage extends RoundedPanel {
 
     public void setCaptaincyLabel(CircledLabel captaincyLabel) {
         this.captaincyLabel = captaincyLabel;
+    }
+
+    public void addPlayerViewButton() {
+        Image image = playerViewIcon.getImage().getScaledInstance(18, 18, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(image);
+        playerViewButton = new JButton(resizedIcon);
+        playerViewButton.setBackground(getBackground());
+        playerViewButton.setOpaque(true);
+        playerViewButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        playerViewButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        setPermanentWidthAndHeight(playerViewButton, 18, 18);
+        add(playerViewButton);
+        revalidate();
+        repaint();
+    }
+
+    public void removePlayerViewButton() {
+        if (playerViewButton != null) {
+            Arrays.asList(getComponents()).remove(playerViewButton);
+            playerViewButton = null;
+            revalidate();
+            repaint();
+        }
+    }
+
+    public JButton getPlayerViewButton() {
+        return playerViewButton;
+    }
+
+    public void setPlayerViewButton(JButton playerViewButton) {
+        this.playerViewButton = playerViewButton;
     }
 }
