@@ -1,7 +1,6 @@
 # Football Management Game
 
-[//]: # (Multiple device image)
-[//]: # (<img src="" width="100%" alt="" style="display: inherit; ">)
+[//]: # (<img src="" width="100%" alt="Multiple device image of completed game" style="display: inherit; ">)
 
 This is a personal project I started working on whilst an Academy student in Version 1 Birmingham. Inspired by various other football management games with a number of original ideas for a better experience.
 
@@ -75,7 +74,7 @@ The game will use colours specific to the teams currently selected or playing, a
 
 - I chose the all-caps Bebas Neue Regular font for titles as it is popular amongst football games as is strong and eye-catching.
 
-[//]: # (<img src="" width="50%" alt="The fonts used" style="display: inherit; ">)
+<img src="./src/visuals/ReadmeImages/main_font.png" width="30%" alt="Football" style="display: inherit; ">
 
 #### Icons
 
@@ -90,8 +89,9 @@ The game will use colours specific to the teams currently selected or playing, a
 #### Colours
 
 - The colours I want to use, exclusive of the teams colours, will be professional greys and dark blues.
+- Team colours will be used on progress bars and kit colours shown for players. When the primary colour of the home team matches the secondary colour of the opponent, the primary colour of the opponent is used instead.
 
-[//]: # (<img src="" width="50%" alt="Colours Chosen" style="display: inherit; ">)
+<img src="./src/visuals/ReadmeImages/team_colours.png" width="40%" alt="The colours of the progress bars are determined by the teams" style="display: inherit; ">
 
 #### Styling
 
@@ -99,19 +99,31 @@ The game will use colours specific to the teams currently selected or playing, a
 - 'Match frames' should be tailored to the competition level, from grassroots football themes to Champions League feels to them.
 - 'Tactics frames' should have changing room themes.
 
-[//]: # (<img src="" width="50%" alt="Styling used" style="display: inherit; ">)
-
 #### Backgrounds & Images
 
 - None used yet.
 
 [//]: # (<img src="" width="70%" alt="Example of a background used" style="display: inherit; ">)
 
-### Wireframes
+### Wireframes / Prototypes
 
-I created these wireframes using [Name of app](Link).
+- Admittedly, when first creting this game I was going off ideas from other football management games I'd played as a child. I wasn't following a set of ideas, but more just thinking, what would be a cool feature to have and where is best for it to live?
 
-[//]: # (<img src="" width="50%" alt="Images of wireframes" style="display: inherit; ">)
+  - This did cause me to have to sit back at times and re-think big ideas. For example, my matches layout was going to be a few pages, one which had my fixtures, one which has all fixtures, and so on. When creating however, as I was creating these pages I decided a better approach would be to use one page for fixtures/results, and add filters to alter the page as required. This is an idea I decided to use on player achievements too.
+
+- Once my original excitement to produce the next best feature calmed a little, I decided to look at what I have and what I wanted next. I create some great wireframes for each page of my game using [Figma](https://www.figma.com/).
+
+#### Start Page
+
+<p align="center">
+<img src="./src/visuals/ReadmeImages/start_page_type_name.png" style="max-width: 40%; margin: 0 10px 10px 0;" alt="The colours of the progress bars are determined by the teams" style="display: inherit; ">
+<img src="./src/visuals/ReadmeImages/start_page_pick_country.png" style="max-width: 40%; margin: 0 10px 10px 0;" alt="The colours of the progress bars are determined by the teams" style="display: inherit; ">
+</p>
+
+<p align="center">
+<img src="./src/visuals/ReadmeImages/start_page_pick_league.png" style="max-width: 40%; margin: 0 10px 10px 0;" alt="The colours of the progress bars are determined by the teams" style="display: inherit; ">
+<img src="./src/visuals/ReadmeImages/start_page_pick_team.png" style="max-width: 40%; margin: 0 10px 10px 0;" alt="The colours of the progress bars are determined by the teams" style="display: inherit; ">
+</p>
 
 ### Java Swing
 
@@ -120,11 +132,14 @@ I created these wireframes using [Name of app](Link).
 
 [//]: # (<img src="" width="50%" alt="Java Swing" style="display: inherit; ">)
 
-- I used JLabels for headers and names/scores, with JButtons used alongside mouse and key listeners.
+- I used JLabels for headers and names/scores, including customized JLabel's with a circle round the letter for the 'C' captain label. I also used both normal and customized JButtons with mouse and key listeners for navigation.
 
 [//]: # (<img src="" width="50%" alt="Java Swing" style="display: inherit; ">)
 
-### Cards & Navigation
+- One issue I didn't resolve was the resizing of the window and its elements. This was extremely difficult as when I wanted to restrict the height of the window, it altered the width, and vice versa. I struggled even when using online AI tools such as ChatGPT.
+  - I decided to keep the window one size throughout, leaving the door open for responsive design in the future should I decide this game will be played on multiple devices. 
+
+#### Cards & Navigation
 
 - I learned using CardLayout with JPanels was a great way of switching through pages and keeping or moving content across too.
 
@@ -357,9 +372,10 @@ This worked on occasion, but also failed from time to time.
 
 ### Unfixed Bugs
 
-1. Update Bugs 
-2. Write tests 
-3. Add some images to pages / decorate some things or work on match logic
+1. Update Wireframes, Swing usage, Q&A, Roadmap, Features, Responsive Design attempts, Credits
+2. Update Bugs 
+3. Write tests 
+4. Use the wireframes to continue to create the game, using BDD and TDD.
 
 ### Responsive Design
 
@@ -389,13 +405,18 @@ This worked on occasion, but also failed from time to time.
 
 ### Media
 
+#### Font
+
+- BebasNeue-Regular.ttf
+
 #### Images
 
-- Images borrowed.
+- Football image on Ratings page
+- Player View Icon
 
 ### Acknowledgements
 
-- Explanations of people who have helped with this project
+- Thank you to Chester Gardner of WeAreTechGlobal for inspiring this project start with an assignment in my academy.
 
 This readme.md will be spellchecked using the spell checker extension for Chrome.
 
