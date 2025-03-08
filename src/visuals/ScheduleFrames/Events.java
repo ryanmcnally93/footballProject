@@ -1,10 +1,12 @@
 package visuals.ScheduleFrames;
+import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 import javax.swing.*;
 
 import entities.UsersMatch;
 import entities.Team;
 import people.Footballer;
+import visuals.SchedulerMessageApp.SpeechBubbleGenerator;
 
 public class Events {
 
@@ -22,7 +24,7 @@ public class Events {
 	// The user has a match
 	public Events(UsersMatch match) {
 		this.date = match.getDateTime();
-		this.description = new JLabel(match.getHome().getName() + " vs " + match.getAway().getName(), SwingConstants.CENTER);
+		this.description = new JLabel(match.getHome().getName() + " vs " + match.getAway().getName());
 		this.type = "Match";
 		this.title  = new JLabel();
 		this.match = match;
@@ -32,8 +34,8 @@ public class Events {
 	public Events(String person, String message, LocalDateTime dateTime){
 		this.date = dateTime;
 		this.removeEvent = false;
-		String text = "<html><body style='width: %1spx; text-align: center;'>" + message + "</body></html>";
-		this.description = new JLabel(String.format(text, 400), SwingConstants.CENTER);
+//		String text = "<html><body style='width: %1spx; text-align: center;'>" + message + "</body></html>";
+		this.description = SpeechBubbleGenerator.createSpeechBubbleReceived(message);
 		if(person.equals("Chairman")){
 			this.type = "Chairman Message";
 			this.title = new JLabel("Chairman");

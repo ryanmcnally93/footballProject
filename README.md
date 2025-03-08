@@ -25,7 +25,7 @@ This is a non-profit, just for fun game.
 - [UX](#ux)
     * [User Stories](#user-stories)
     * [Design Choices](#design-choices)
-    * [Wireframes](#wireframes)
+    * [Wireframes - Prototypes](#wireframes---prototypes)
     * [Java Swing](#java-swing)
     * [Cards & Navigation](#cards--navigation)
     * [Q & A of Consumers](#q--a-of-consumers)
@@ -105,7 +105,7 @@ The game will use colours specific to the teams currently selected or playing, a
 
 [//]: # (<img src="" width="70%" alt="Example of a background used" style="display: inherit; ">)
 
-### Wireframes / Prototypes
+### Wireframes - Prototypes
 
 - Admittedly, when first creting this game I was going off ideas from other football management games I'd played as a child. I wasn't following a set of ideas, but more just thinking, what would be a cool feature to have and where is best for it to live?
 
@@ -372,7 +372,7 @@ This worked on occasion, but also failed from time to time.
 
 ### Unfixed Bugs
 
-1. Update Wireframes, Swing usage, Q&A, Roadmap, Features, Responsive Design attempts, Credits
+1. Update Wireframes, Roadmap, Features, Swing usage, Q&A, Responsive Design attempts, Credits
 2. Update Bugs 
 3. Write tests 
 4. Use the wireframes to continue to create the game, using BDD and TDD.
