@@ -125,6 +125,13 @@ The game will use colours specific to the teams currently selected or playing, a
 <img src="./src/visuals/ReadmeImages/start_page_pick_team.png" style="max-width: 40%; margin: 0 10px 10px 0;" alt="The colours of the progress bars are determined by the teams" style="display: inherit; ">
 </p>
 
+#### Scheduler
+
+<p align="center">
+<img src="./src/visuals/ReadmeImages/scheduler_table.png" style="max-width: 40%; margin: 0 10px 10px 0;" alt="The colours of the progress bars are determined by the teams" style="display: inherit; ">
+<img src="./src/visuals/ReadmeImages/scheduler_wall.png" style="max-width: 40%; margin: 0 10px 10px 0;" alt="The colours of the progress bars are determined by the teams" style="display: inherit; ">
+</p>
+
 ### Java Swing
 
 - Having never used Java for front end before, this was my first experience using Java Swing. A lot of the issues I faced in the bugs section reflect the issues I faced and how I overcame them.
