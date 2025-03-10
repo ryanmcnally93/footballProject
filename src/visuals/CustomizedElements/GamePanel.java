@@ -17,7 +17,7 @@ public abstract class GamePanel extends JPanel {
         addMouseListener(mouseAdapter);
     }
 
-    public Font getBebasNeueFont() {
+    public static Font getBebasNeueFont() {
         try {
             File fontFile = new File("./src/visuals/Fonts/BebasNeue-Regular.ttf");
             return Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(Font.BOLD, 30f);
