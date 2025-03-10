@@ -27,6 +27,16 @@ public abstract class GamePanel extends JPanel {
         }
     }
 
+    public static Font getBebasNeueFontWithSize(float size) {
+        try {
+            File fontFile = new File("./src/visuals/Fonts/BebasNeue-Regular.ttf");
+            return Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(Font.BOLD, size);
+        } catch (FontFormatException | IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public void appendEastAndWest(JPanel mainPanel){
         appendEastAndWest(mainPanel, 100);
     }

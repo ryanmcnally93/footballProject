@@ -20,6 +20,11 @@ public class CustomizedTitle extends JLabel {
         addOpaqueBackground();
     }
 
+    public void setFontSize(float size) {
+        setFont(GamePanel.getBebasNeueFontWithSize(size));
+        addOpaqueBackground();
+    }
+
     public void addOpaqueBackground() {
         FontMetrics fm = getFontMetrics(getFont());
         int textWidth = fm.stringWidth(getText());

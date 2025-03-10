@@ -19,15 +19,14 @@ import java.awt.event.ActionEvent;
 public class StartPage extends GamePanel {
 
     private static final long serialVersionUID = 4432562427445474607L;
-    private JPanel centerBox, teamsBox, south;
-    private CustomizedTitle title;
+    private JPanel centerBox, teamsBox, leftFooterBox, middleFooterBox, rightFooterBox;
     private initialSetup setup;
     private CustomizedButton country, submitButton;
     private String name;
 	private Image backgroundImage;
 	private CustomizedTextField nameField;
-	private Box mainContentBox, buttonBox, leftFooterBox, middleFooterBox, rightFooterBox;
-	private CustomizedTitle chosenCountry, chosenLeague;
+	private Box mainContentBox, buttonBox, south;
+	private CustomizedTitle title, chosenCountry, chosenLeague;
 
     public StartPage(initialSetup setup) {
     	this.setup = setup;
@@ -82,19 +81,21 @@ public class StartPage extends GamePanel {
         
         add(centerBox, BorderLayout.CENTER);
 
-		south = new JPanel();
+		south = Box.createHorizontalBox();
 		south.setPreferredSize(new Dimension(800,80));
-		south.setLayout(new BoxLayout(south, BoxLayout.X_AXIS));
 		south.setOpaque(false);
 
-		leftFooterBox = Box.createHorizontalBox();
-		leftFooterBox.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+		leftFooterBox = new JPanel();
+		leftFooterBox.setBorder(BorderFactory.createEmptyBorder(13,10,0,0));
+		leftFooterBox.setOpaque(false);
 		setPermanentWidthAndHeight(leftFooterBox, 266, 80);
-		middleFooterBox = Box.createHorizontalBox();
-		middleFooterBox.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+		middleFooterBox = new JPanel();
+		middleFooterBox.setBorder(BorderFactory.createEmptyBorder(13,10,0,0));
+		middleFooterBox.setOpaque(false);
 		setPermanentWidthAndHeight(middleFooterBox, 268, 80);
-		rightFooterBox = Box.createHorizontalBox();
-		rightFooterBox.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+		rightFooterBox = new JPanel();
+		rightFooterBox.setBorder(BorderFactory.createEmptyBorder(13,10,0,0));
+		rightFooterBox.setOpaque(false);
 		setPermanentWidthAndHeight(rightFooterBox, 266, 80);
 
 		south.add(leftFooterBox);
@@ -154,6 +155,7 @@ public class StartPage extends GamePanel {
         mainContentBox.removeAll();
 
         CustomizedTitle chosenName = new CustomizedTitle(userInput, SwingConstants.LEFT);
+		chosenName.setFontSize(20f);
         leftFooterBox.add(Box.createHorizontalGlue());
 		leftFooterBox.add(chosenName);
 		CustomizedButton firstEditButton = new CustomizedButton("Edit");
@@ -218,6 +220,7 @@ public class StartPage extends GamePanel {
 		mainContentBox.removeAll();
 
 		chosenCountry = new CustomizedTitle(country, SwingConstants.CENTER);
+		chosenCountry.setFontSize(20f);
 		middleFooterBox.add(Box.createHorizontalGlue());
 		middleFooterBox.add(chosenCountry);
 		CustomizedButton secondEditButton = new CustomizedButton("Edit");
@@ -292,7 +295,8 @@ public class StartPage extends GamePanel {
 	public void leaguePick(String league) {
     	mainContentBox.removeAll();
 
-		chosenLeague = new CustomizedTitle(league, SwingConstants.RIGHT);
+		chosenLeague = new CustomizedTitle(league, SwingConstants.CENTER);
+		chosenLeague.setFontSize(20f);
 		rightFooterBox.add(Box.createHorizontalGlue());
 		rightFooterBox.add(chosenLeague);
 		CustomizedButton thirdEditButton = new CustomizedButton("Edit");
@@ -331,6 +335,7 @@ public class StartPage extends GamePanel {
 	}
 
 	private void viewTeamPickPage() {
+		mainContentBox.add(Box.createVerticalGlue());
 		// Assuming setup.getPremierLeague().getTeams() returns a Map
 		Map<String, Team> teams = setup.getSeason().getPremLeague().getTeams();
 		for (Map.Entry<String, Team> each : teams.entrySet()) {
@@ -345,6 +350,7 @@ public class StartPage extends GamePanel {
 				}
 			});
 		}
+		mainContentBox.add(Box.createVerticalGlue());
 		mainContentBox.revalidate();
 		mainContentBox.repaint();
 
