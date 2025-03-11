@@ -8,8 +8,6 @@ import java.awt.event.ActionEvent;
 
 public class CardmapMainPageTemplate extends GamePanel {
 
-    private static final String RIGHT = "Next Page";
-    private static final String LEFT = "Previous Page";
     private JLayeredPane layeredPane;
     private CardLayout layout;
     private JPanel pages;
@@ -106,28 +104,6 @@ public class CardmapMainPageTemplate extends GamePanel {
             addKeyListeners();
         }
 
-        public void addKeyListeners() {
-            InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-            ActionMap actionMap = getActionMap();
-
-            inputMap.put(KeyStroke.getKeyStroke("LEFT"), LEFT);
-            actionMap.put(LEFT, new MatchFrames.leftClick());
-
-            inputMap.put(KeyStroke.getKeyStroke("RIGHT"), RIGHT);
-            actionMap.put(RIGHT, new MatchFrames.rightClick());
-        }
-
-        public void removeKeyListeners() {
-            InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-            ActionMap actionMap = getActionMap();
-
-            inputMap.remove(KeyStroke.getKeyStroke("LEFT"));
-            actionMap.remove(LEFT);
-
-            inputMap.remove(KeyStroke.getKeyStroke("RIGHT"));
-            actionMap.remove(RIGHT);
-        }
-
         public void addLeftAndRightActionListeners() {
             prevButton.addActionListener(e -> {
                 layout.previous(pages);
@@ -209,7 +185,12 @@ public class CardmapMainPageTemplate extends GamePanel {
         this.footerPanel = footerPanel;
     }
 
-    public class rightClick extends AbstractAction {
+    @Override
+    protected AbstractAction getRightClickAction() {
+        return new CustomRightClick();
+    }
+
+    public class CustomRightClick extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
             layout.next(pages);
@@ -232,7 +213,12 @@ public class CardmapMainPageTemplate extends GamePanel {
 
     public void moveButtonsWithUser_Backwards() {}
 
-    public class leftClick extends AbstractAction {
+    @Override
+    protected AbstractAction getLeftClickAction() {
+        return new CustomLeftClick();
+    }
+
+    public class CustomLeftClick extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
             layout.previous(pages);

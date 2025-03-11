@@ -1,7 +1,10 @@
 package visuals.CustomizedElements;
+import visuals.MatchPages.MatchFrames;
+
 import javax.swing.*;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.io.File;
 import java.io.IOException;
@@ -10,11 +13,19 @@ public abstract class GamePanel extends JPanel {
     private static final long serialVersionUID = -8911764479146802449L;
     private Box east;
     private Box west;
+    private static final String RIGHT = "Next Page";
+    private static final String LEFT = "Previous Page";
 
-    public GamePanel() {};
+    public GamePanel() {
+        addKeyListeners();
+    };
 
     protected void addGameMouseListener(MouseAdapter mouseAdapter) {
         addMouseListener(mouseAdapter);
+    }
+
+    public static Color getCharcoal() {
+        return new Color(0x36, 0x45, 0x4F);
     }
 
     public static Font getBebasNeueFont() {
@@ -95,6 +106,12 @@ public abstract class GamePanel extends JPanel {
         box.setMaximumSize(new Dimension(width, box.getMaximumSize().height));
     }
 
+    public void setPermanentWidthAndHeight(JComponent box, int width, int height){
+        box.setPreferredSize(new Dimension(width, height));
+        box.setMinimumSize(new Dimension(width, height));
+        box.setMaximumSize(new Dimension(width, height));
+    }
+
     public void setPermanentWidth(JPanel box, int width){
         box.setPreferredSize(new Dimension(width, box.getPreferredSize().height));
         box.setMinimumSize(new Dimension(width, box.getMinimumSize().height));
@@ -141,6 +158,50 @@ public abstract class GamePanel extends JPanel {
         box.setPreferredSize(new Dimension(width, box.getPreferredSize().height));
         box.setMinimumSize(new Dimension(width, box.getMinimumSize().height));
         box.setMaximumSize(new Dimension(width, box.getMaximumSize().height));
+    }
+
+    public void addKeyListeners() {
+        InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = getActionMap();
+
+        inputMap.put(KeyStroke.getKeyStroke("LEFT"), LEFT);
+        actionMap.put(LEFT, getLeftClickAction());
+
+        inputMap.put(KeyStroke.getKeyStroke("RIGHT"), RIGHT);
+        actionMap.put(RIGHT, getRightClickAction());
+    }
+
+    protected AbstractAction getRightClickAction() {
+        return new RightClick();
+    }
+
+    public class RightClick extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Default: Do nothing
+        }
+    }
+
+    protected AbstractAction getLeftClickAction() {
+        return new LeftClick();
+    }
+
+    public class LeftClick extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Default: Do nothing
+        }
+    }
+
+    public void removeKeyListeners() {
+        InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = getActionMap();
+
+        inputMap.remove(KeyStroke.getKeyStroke("LEFT"));
+        actionMap.remove(LEFT);
+
+        inputMap.remove(KeyStroke.getKeyStroke("RIGHT"));
+        actionMap.remove(RIGHT);
     }
 
     public Box getWest() {

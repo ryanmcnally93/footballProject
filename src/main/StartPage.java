@@ -3,15 +3,14 @@ package main;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
+import java.util.Comparator;
 import java.util.Map;
 import javax.swing.*;
 
 import entities.Team;
 import entities.User;
-import visuals.CustomizedElements.CustomizedButton;
-import visuals.CustomizedElements.CustomizedTextField;
-import visuals.CustomizedElements.CustomizedTitle;
-import visuals.CustomizedElements.GamePanel;
+import visuals.CustomizedElements.*;
 import visuals.ScheduleFrames.Scheduler;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -27,6 +26,8 @@ public class StartPage extends GamePanel {
 	private CustomizedTextField nameField;
 	private Box mainContentBox, buttonBox, south;
 	private CustomizedTitle title, chosenCountry, chosenLeague;
+	private CustomizedOptionField teamField;
+	private String chosenName;
 
     public StartPage(initialSetup setup) {
     	this.setup = setup;
@@ -55,7 +56,7 @@ public class StartPage extends GamePanel {
         centerBox.setOpaque(false);
         
         mainContentBox = Box.createVerticalBox();
-        mainContentBox.setPreferredSize(new Dimension(450, 120));
+        mainContentBox.setPreferredSize(new Dimension(450, 180));
 		mainContentBox.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 		mainContentBox.add(Box.createVerticalGlue());
 
@@ -67,6 +68,8 @@ public class StartPage extends GamePanel {
 		buttonBox.add(Box.createHorizontalGlue()); // Pushes button to center
 		buttonBox.add(submitButton);
 		buttonBox.add(Box.createHorizontalGlue()); // Keeps it centered
+
+		mainContentBox.add(Box.createVerticalStrut(5));
 		mainContentBox.add(buttonBox);
         mainContentBox.add(Box.createVerticalGlue());
         centerBox.add(mainContentBox);
@@ -76,6 +79,9 @@ public class StartPage extends GamePanel {
             public void actionPerformed(ActionEvent e) {
             	name=nameField.getText();
             	submitName(nameField);
+				submitButton.setBackground(Color.WHITE);
+				submitButton.setForeground(GamePanel.getCharcoal());
+				submitButton.repaint();
             }
         });
         
@@ -151,23 +157,10 @@ public class StartPage extends GamePanel {
 
 	public void submitName(CustomizedTextField nameField) {
     	// Save the name then remove the namebox and submit button
-		String userInput = nameField.getText();
+		chosenName = nameField.getText();
         mainContentBox.removeAll();
 
-        CustomizedTitle chosenName = new CustomizedTitle(userInput, SwingConstants.LEFT);
-		chosenName.setFontSize(20f);
-        leftFooterBox.add(Box.createHorizontalGlue());
-		leftFooterBox.add(chosenName);
-		CustomizedButton firstEditButton = new CustomizedButton("Edit");
-		leftFooterBox.add(firstEditButton);
-		leftFooterBox.add(Box.createHorizontalGlue());
-
-		firstEditButton.addActionListener(new ActionListener() {
-        	@Override
-        	public void actionPerformed(ActionEvent e) {
-        		editName();
-        	}
-        });
+		populateLeftFooterBox(chosenName);
 
 		if (chosenCountry == null) {
 			viewCountryPickPage();
@@ -178,6 +171,23 @@ public class StartPage extends GamePanel {
 		}
     }
 
+	private void populateLeftFooterBox(String userInput) {
+		CustomizedTitle chosenName = new CustomizedTitle(userInput, SwingConstants.LEFT);
+		chosenName.setFontSize(20f);
+		leftFooterBox.add(Box.createHorizontalGlue());
+		leftFooterBox.add(chosenName);
+		CustomizedButton firstEditButton = new CustomizedButton("Edit", 18);
+		leftFooterBox.add(firstEditButton);
+		leftFooterBox.add(Box.createHorizontalGlue());
+
+		firstEditButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				editName();
+			}
+		});
+	}
+
 	private void viewCountryPickPage() {
 		mainContentBox.add(Box.createVerticalGlue());
 
@@ -185,11 +195,17 @@ public class StartPage extends GamePanel {
 		Box secondRowOfCountries = Box.createHorizontalBox();
 
 		country = new CustomizedButton("England");
+		setPermanentWidth(country, 140);
 		CustomizedButton Spain = new CustomizedButton("Spain");
+		setPermanentWidth(Spain, 140);
 		CustomizedButton Germany = new CustomizedButton("Germany");
+		setPermanentWidth(Germany, 140);
 		CustomizedButton USA = new CustomizedButton("USA");
+		setPermanentWidth(USA, 140);
 		CustomizedButton France = new CustomizedButton("France");
+		setPermanentWidth(France, 140);
 		CustomizedButton Italy = new CustomizedButton("Italy");
+		setPermanentWidth(Italy, 140);
 
 		country.addMouseListener(new MouseAdapter() {
 			@Override
@@ -199,12 +215,16 @@ public class StartPage extends GamePanel {
 		});
 
 		firstRowOfCountries.add(Spain);
+		firstRowOfCountries.add(Box.createHorizontalStrut(5));
 		firstRowOfCountries.add(country);
+		firstRowOfCountries.add(Box.createHorizontalStrut(5));
 		firstRowOfCountries.add(Germany);
 		mainContentBox.add(firstRowOfCountries);
 
 		secondRowOfCountries.add(USA);
+		secondRowOfCountries.add(Box.createHorizontalStrut(5));
 		secondRowOfCountries.add(France);
+		secondRowOfCountries.add(Box.createHorizontalStrut(5));
 		secondRowOfCountries.add(Italy);
 		mainContentBox.add(secondRowOfCountries);
 
@@ -223,11 +243,14 @@ public class StartPage extends GamePanel {
 		chosenCountry.setFontSize(20f);
 		middleFooterBox.add(Box.createHorizontalGlue());
 		middleFooterBox.add(chosenCountry);
-		CustomizedButton secondEditButton = new CustomizedButton("Edit");
+		CustomizedButton secondEditButton = new CustomizedButton("Edit", 18);
 
 		secondEditButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (leftFooterBox.getComponents().length == 0) {
+					populateLeftFooterBox(chosenName);
+				}
 				editCountry();
 			}
 		});
@@ -267,14 +290,23 @@ public class StartPage extends GamePanel {
 		mainContentBox.add(Box.createVerticalGlue());
 		Box firstRowOfLeagues = Box.createHorizontalBox();
 		Box secondRowOfLeagues = Box.createHorizontalBox();
-		JButton prem = new JButton("Premier League");
-		JButton championship = new JButton("Championship");
-		JButton leagueOne = new JButton("League One");
-		JButton leagueTwo = new JButton("League Two");
+		CustomizedButton prem = new CustomizedButton("Premier League", 24);
+		setPermanentWidth(prem, 180);
+		CustomizedButton championship = new CustomizedButton("Championship", 24);
+		setPermanentWidth(championship, 180);
+		CustomizedButton leagueOne = new CustomizedButton("League One", 24);
+		setPermanentWidth(leagueOne, 180);
+		CustomizedButton leagueTwo = new CustomizedButton("League Two", 24);
+		setPermanentWidth(leagueTwo, 180);
+
 		firstRowOfLeagues.add(prem);
+		firstRowOfLeagues.add(Box.createHorizontalStrut(5));
 		firstRowOfLeagues.add(championship);
+
 		secondRowOfLeagues.add(leagueOne);
+		secondRowOfLeagues.add(Box.createHorizontalStrut(5));
 		secondRowOfLeagues.add(leagueTwo);
+
 		mainContentBox.add(firstRowOfLeagues);
 		mainContentBox.add(secondRowOfLeagues);
 		mainContentBox.add(Box.createVerticalGlue());
@@ -299,11 +331,14 @@ public class StartPage extends GamePanel {
 		chosenLeague.setFontSize(20f);
 		rightFooterBox.add(Box.createHorizontalGlue());
 		rightFooterBox.add(chosenLeague);
-		CustomizedButton thirdEditButton = new CustomizedButton("Edit");
+		CustomizedButton thirdEditButton = new CustomizedButton("Edit", 18);
 
 		thirdEditButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (leftFooterBox.getComponents().length == 0) {
+					populateLeftFooterBox(chosenName);
+				}
 				editLeague();
 			}
 		});
@@ -337,19 +372,35 @@ public class StartPage extends GamePanel {
 	private void viewTeamPickPage() {
 		mainContentBox.add(Box.createVerticalGlue());
 		// Assuming setup.getPremierLeague().getTeams() returns a Map
-		Map<String, Team> teams = setup.getSeason().getPremLeague().getTeams();
-		for (Map.Entry<String, Team> each : teams.entrySet()) {
-			Team current = each.getValue();
-			JButton teamButton = new JButton(current.getName());
-			mainContentBox.add(teamButton);
+		List<String> newTeams = setup.getSeason().getPremLeague().getTeams()
+				.values()
+				.stream()
+				.sorted(Comparator.comparing(Team::getName))
+				.map(Team::getName)
+				.toList();
 
-			teamButton.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					teamPick(current);
-				}
-			});
-		}
+		teamField = new CustomizedOptionField(newTeams, 400);
+		setPermanentWidthAndHeight(teamField, 400, 50);
+
+		mainContentBox.add(teamField);
+		mainContentBox.add(Box.createVerticalStrut(5));
+
+		CustomizedButton startButton = new CustomizedButton("Start");
+		buttonBox = Box.createHorizontalBox();
+		buttonBox.add(Box.createHorizontalGlue());
+		buttonBox.add(startButton);
+		buttonBox.add(Box.createHorizontalGlue());
+		mainContentBox.add(buttonBox);
+
+		startButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String teamName = teamField.getTeamName();
+				Team chosenTeam = setup.getSeason().getPremLeague().getTeams().get(teamName);
+				startGameWithChosenTeam(chosenTeam);
+			}
+		});
+
 		mainContentBox.add(Box.createVerticalGlue());
 		mainContentBox.revalidate();
 		mainContentBox.repaint();
@@ -358,7 +409,7 @@ public class StartPage extends GamePanel {
 		title.addOpaqueBackground();
 	}
 
-	public void teamPick(Team team) {
+	public void startGameWithChosenTeam(Team team) {
     	User user = new User(name, 18, 40000);
     	Map<String, Team> cardMap = setup.getSeason().getPremLeague().getTeams();
     	((Team) cardMap.get(team.getName())).setManager(user);
@@ -375,6 +426,34 @@ public class StartPage extends GamePanel {
     public void displayPage() {
     	setup.getWindow().getContentPane().add(this, BorderLayout.CENTER);
     }
+
+	@Override
+	protected AbstractAction getRightClickAction() {
+		return new CustomRightClick();
+	}
+
+	public class CustomRightClick extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (teamField != null) {
+				teamField.moveForward();
+			}
+		}
+	}
+
+	@Override
+	protected AbstractAction getLeftClickAction() {
+		return new CustomLeftClick();
+	}
+
+	public class CustomLeftClick extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (teamField != null) {
+				teamField.moveBackward();
+			}
+		}
+	}
 
 	public JPanel getCenterBox() {
 		return centerBox;

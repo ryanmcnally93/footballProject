@@ -673,7 +673,7 @@ public class Scheduler extends GamePanel {
 		tablePanel.getFooterPanel().getButtonBox().remove(tablePanel.getFooterPanel().getPrevButton());
 		tablePanel.getStadiumAndAttendance().setText(removeCharactersAfterColon(tablePanel.getStadiumAndAttendance().getText()));
 		tablePanel.getHeaderPanel().setTitle(match.getHome().getName() + " vs " + match.getAway().getName());
-		tablePanel.getFooterPanel().removeKeyListeners();
+		tablePanel.removeKeyListeners();
 	}
 
 	public void showEventsDescription(Events event) {

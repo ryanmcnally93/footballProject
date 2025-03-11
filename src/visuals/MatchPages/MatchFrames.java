@@ -179,7 +179,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		// Set attendance back to default value 6000, change later
 		tablePanel.getStadiumAndAttendance().setText(tablePanel.getStadiumAndAttendance() + " 6000");
 		tablePanel.getHeaderPanel().setTitle(match.getHome().getName() + " " + match.getHomeScore() + " - " + match.getAwayScore() + " " + match.getAway().getName());
-		footer.addKeyListeners();
+		tablePanel.addKeyListeners();
 		tablePanel.getSpeedometerBox().removeAll();
 		removeOtherMatchFramesAttributes_WhenFromScheduler();
 	}
