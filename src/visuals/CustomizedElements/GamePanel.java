@@ -61,6 +61,18 @@ public abstract class GamePanel extends JPanel {
         mainPanel.add(east, BorderLayout.EAST);
     }
 
+    public static ImageIcon getOppositeImage(ImageIcon icon) {
+        if (icon.getDescription().equals("Down")) {
+            return new ImageIcon("./src/visuals/Images/down_arrow_darkbg.png", "DownDark");
+        } else if (icon.getDescription().equals("DownDark")) {
+            return new ImageIcon("./src/visuals/Images/down_arrow.png", "Down");
+        } else if (icon.getDescription().equals("Up")) {
+            return new ImageIcon("./src/visuals/Images/up_arrow_darkbg.png", "UpDark");
+        } else {
+            return new ImageIcon("./src/visuals/Images/up_arrow.png", "Up");
+        }
+    }
+
     public JScrollPane makeScroller(Box container){
         JScrollPane scroller = new JScrollPane(container);
         scroller.getViewport().setBackground(Color.LIGHT_GRAY);

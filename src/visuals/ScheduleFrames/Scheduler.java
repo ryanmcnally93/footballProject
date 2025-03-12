@@ -70,6 +70,8 @@ public class Scheduler extends GamePanel {
 	// Match Components
 	private Speedometer speedometer;
 	private CustomizedButton pauseButton, resumeButton, tacticsButton;
+	// Visuals
+	private Image backgroundImage;
 	
 	// New Game Constructor
 	public Scheduler(User user, Team team, League league) {
@@ -79,6 +81,9 @@ public class Scheduler extends GamePanel {
 		this.league = league;
 		this.events = new ArrayList<Events>();
 		this.season = league.getSeason();
+
+		ImageIcon image = new ImageIcon("./src/visuals/Images/main_scheduler.jpeg");
+		backgroundImage = image.getImage().getScaledInstance(800, 800, Image.SCALE_SMOOTH);
 
 		layeredPane = new JLayeredPane();
 		setPermanentWidthAndHeight(layeredPane, 800, 600);
@@ -92,13 +97,16 @@ public class Scheduler extends GamePanel {
         JLabel title = new JLabel(team.getName() + " - " + user.getName() + " " + season.getYearFrom() + "/" + season.getYearTo(), SwingConstants.CENTER);
         title.setFont(getBebasNeueFont());
         header.add(title);
+		header.setOpaque(false);
         mainPanel.add(header, BorderLayout.NORTH);
         
         appendEastAndWest(mainPanel);
 
 		JPanel south = new JPanel(new BorderLayout());
 		south.setPreferredSize(new Dimension(800, 80));
+		south.setOpaque(false);
 		southMiddle = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		southMiddle.setOpaque(false);
 
 		String todaysDateFormatted = getTodaysDateWithGoodFormat();
 		todaysDate = new JLabel(todaysDateFormatted);
@@ -112,13 +120,16 @@ public class Scheduler extends GamePanel {
 		// Makes the southMiddle central
 		JPanel leftBlankBox = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		setPermanentWidth(leftBlankBox, 115);
+		leftBlankBox.setOpaque(false);
 		menuButton = new JButton("Main Menu");
 		menuBox.add(menuButton);
+		menuBox.setOpaque(false);
 
 		south.add(menuBox, BorderLayout.EAST);
 		south.add(southMiddle, BorderLayout.CENTER);
 		south.add(leftBlankBox, BorderLayout.WEST);
 		mainPanel.add(south, BorderLayout.SOUTH);
+		mainPanel.setOpaque(false);
 		
 		advance.addMouseListener(new MouseAdapter() {
 			@Override
@@ -142,12 +153,34 @@ public class Scheduler extends GamePanel {
 		Events youthCoachMessage = new Events("Youth Coach", "Welcome boss, I've put together a list of the top players in the academy for you to take a look at.", getDate());
 		events.add(youthCoachMessage);
 
+		ImageIcon downArrow = new ImageIcon("./src/visuals/Images/down_arrow.png", "Down");
+		CustomizedButton backgroundMover = new CustomizedButton(downArrow);
+		setPermanentWidthAndHeight(backgroundMover, 30, 30);
+
+		Box verticalBox = Box.createVerticalBox();
+		verticalBox.add(Box.createVerticalGlue());
+		verticalBox.add(Box.createVerticalStrut(15));
+		verticalBox.add(Box.createHorizontalStrut(15));
+		verticalBox.add(backgroundMover);
+		verticalBox.add(Box.createVerticalGlue());
+		verticalBox.setOpaque(true);
+		verticalBox.setBackground(Color.YELLOW);
+		getWest().add(verticalBox);
+
 		refreshMessages();
 
 		createMainMenu();
 
 		revalidate();
 		repaint();
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		if (backgroundImage != null) {
+			g.drawImage(backgroundImage, 0, -205, getWidth(), getHeight() + 205, this);
+		}
 	}
 
 	public void createMainMenu() {
@@ -644,7 +677,8 @@ public class Scheduler extends GamePanel {
 	public void addEmptySpeedometer(Box speedometerBox) {
 		JPanel emptySpeedometer = new JPanel();
 		emptySpeedometer.setPreferredSize(new Dimension(200, 20));
-		emptySpeedometer.setBackground(Color.LIGHT_GRAY);
+		emptySpeedometer.setOpaque(false);
+//		emptySpeedometer.setBackground(Color.LIGHT_GRAY);
 		emptySpeedometer.setBounds(400, 0, 200, 20);
 		if (speedometerBox.getComponents().length == 0) {
 			speedometerBox.add(emptySpeedometer);

@@ -7,7 +7,8 @@ import java.awt.event.MouseEvent;
 
 public class CustomizedButton extends JButton {
 
-	private static final long serialVersionUID = 2300144898005916497L;
+	private boolean hasImage;
+	private ImageIcon icon;
 
 	public CustomizedButton(String text) {
 		super(text);
@@ -23,14 +24,26 @@ public class CustomizedButton extends JButton {
 		init();
 	}
 
+	public CustomizedButton(ImageIcon image) {
+		super(image);
+		hasImage = true;
+		icon = image;
+		setFont(GamePanel.getBebasNeueFont());
+		setMargin(new Insets(7, 0, 0, 0));
+		init();
+	}
+
 	public void init() {
 		setForeground(GamePanel.getCharcoal()); // Dark text color
 		setBackground(Color.WHITE);
 		setFocusPainted(false);
 		setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-		if (getText().equals("<") || getText().equals(">") || getText().equals("∧") || getText().equals("∨")) {
-			setBorder(new EmptyBorder(4, 0,0,0));
+		if (getText().equals("<") || getText().equals(">")) {
+			setBorder(new EmptyBorder(4, 0, 0, 0));
+			setContentAreaFilled(false);
+		} else if (hasImage) {
+			setBorder(new EmptyBorder(0, 0, 0, 0));
 			setContentAreaFilled(false);
 		} else {
 			setBorderPainted(false);
@@ -43,15 +56,29 @@ public class CustomizedButton extends JButton {
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
+				if (hasImage) {
+					ImageIcon newIcon = GamePanel.getOppositeImage(icon);
+					setIcon(newIcon);
+					icon = newIcon;
+				} else {
+					setForeground(Color.WHITE);
+				}
 				setBackground(GamePanel.getCharcoal());
-				setForeground(Color.WHITE);
+				revalidate();
 				repaint();
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
+				if (hasImage) {
+					ImageIcon newIcon = GamePanel.getOppositeImage(icon);
+					setIcon(newIcon);
+					icon = newIcon;
+				} else {
+					setForeground(GamePanel.getCharcoal());
+				}
 				setBackground(Color.WHITE);
-				setForeground(GamePanel.getCharcoal());
+				revalidate();
 				repaint();
 			}
 		});

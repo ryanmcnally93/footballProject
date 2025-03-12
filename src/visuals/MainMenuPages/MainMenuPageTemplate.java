@@ -26,7 +26,8 @@ public class MainMenuPageTemplate extends CardmapMainPageTemplate {
 
         // This right box in the footer will help push the other elements central
         JPanel backButtonBox = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        backButtonBox.setBackground(Color.LIGHT_GRAY);
+        backButtonBox.setOpaque(false);
+//        backButtonBox.setBackground(Color.LIGHT_GRAY);
         setPermanentWidth(backButtonBox, 115);
 
         // This left box contains the back button, which we only want to view in the main menu's cardmaps
