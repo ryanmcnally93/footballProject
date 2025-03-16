@@ -1,8 +1,7 @@
 package visuals.ScheduleFrames;
 
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,6 +9,7 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
 import entities.*;
@@ -30,8 +30,9 @@ import visuals.MatchPages.*;
 public class Scheduler extends GamePanel {
 
 	private LocalDateTime date;
-	private JPanel eventsBox, southMiddle, menuBox, header;
-	private JButton advance, playGame, advanceToGame, simGame, menuButton, closeButton;
+	private JPanel eventsBox, southMiddle, menuBox, header, backgroundMoverPanel, trainingPanel, myTeamPanel, standingsPanel, playerSearchPanel, fixturesPanel, myClubPanel, myProfilePanel;
+	private TacticsPanel tacticsPanel;
+	private CustomizedButton advance, playGame, advanceToGame, simGame, menuButton, closeButton;
 	private Team team;
 	private User user;
 	private League league;
@@ -72,6 +73,8 @@ public class Scheduler extends GamePanel {
 	private CustomizedButton pauseButton, resumeButton, tacticsButton;
 	// Visuals
 	private Image backgroundImage;
+	private int backgroundImageHeight = -205;
+	private List<Component> movingComponents = new ArrayList<>();
 	
 	// New Game Constructor
 	public Scheduler(User user, Team team, League league) {
@@ -81,6 +84,8 @@ public class Scheduler extends GamePanel {
 		this.league = league;
 		this.events = new ArrayList<Events>();
 		this.season = league.getSeason();
+
+		this.setLayout(new BorderLayout());
 
 		ImageIcon image = new ImageIcon("./src/visuals/Images/main_scheduler.jpeg");
 		backgroundImage = image.getImage().getScaledInstance(800, 800, Image.SCALE_SMOOTH);
@@ -109,10 +114,12 @@ public class Scheduler extends GamePanel {
 		southMiddle.setOpaque(false);
 
 		String todaysDateFormatted = getTodaysDateWithGoodFormat();
-		todaysDate = new JLabel(todaysDateFormatted);
-		advance = new JButton("Advance");
-		southMiddle.add(todaysDate);
+		advance = new CustomizedButton("Advance", 16);
 		southMiddle.add(advance);
+
+		// SET BOUNDS AND LAYOUT
+		todaysDate = new CustomizedTitle(todaysDateFormatted);
+		layeredPane.add(todaysDate, JLayeredPane.PALETTE_LAYER);
 
 		menuBox = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		setPermanentWidth(menuBox, 115);
@@ -121,7 +128,7 @@ public class Scheduler extends GamePanel {
 		JPanel leftBlankBox = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		setPermanentWidth(leftBlankBox, 115);
 		leftBlankBox.setOpaque(false);
-		menuButton = new JButton("Main Menu");
+		menuButton = new CustomizedButton("Main Menu", 16);
 		menuBox.add(menuButton);
 		menuBox.setOpaque(false);
 
@@ -141,6 +148,10 @@ public class Scheduler extends GamePanel {
 		layeredPane.add(mainPanel, JLayeredPane.DEFAULT_LAYER);
 		add(layeredPane, BorderLayout.CENTER);
 
+		SwingUtilities.invokeLater(() -> {
+			System.out.println("Scheduler Bounds: " + this.getBounds());
+		});
+
 		menuButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -157,15 +168,140 @@ public class Scheduler extends GamePanel {
 		CustomizedButton backgroundMover = new CustomizedButton(downArrow);
 		setPermanentWidthAndHeight(backgroundMover, 30, 30);
 
-		Box verticalBox = Box.createVerticalBox();
-		verticalBox.add(Box.createVerticalGlue());
-		verticalBox.add(Box.createVerticalStrut(15));
-		verticalBox.add(Box.createHorizontalStrut(15));
-		verticalBox.add(backgroundMover);
-		verticalBox.add(Box.createVerticalGlue());
-		verticalBox.setOpaque(true);
-		verticalBox.setBackground(Color.YELLOW);
-		getWest().add(verticalBox);
+		backgroundMoverPanel = new JPanel();
+		backgroundMoverPanel.setLayout(null);
+		backgroundMoverPanel.setBounds(15, 305, 30, 30);
+		backgroundMoverPanel.setOpaque(false);
+		backgroundMoverPanel.add(backgroundMover);
+		movingComponents.add(backgroundMoverPanel);
+		backgroundMover.setBounds(0, 0, 30, 30);
+		layeredPane.add(backgroundMoverPanel, JLayeredPane.PALETTE_LAYER);
+
+		ImageIcon trainingIcon = new ImageIcon("./src/visuals/Images/training_icon.png", "Training");
+		CustomizedButton trainingButton = new CustomizedButton(trainingIcon);
+		setPermanentWidthAndHeight(trainingButton, 30, 30);
+
+		trainingPanel = new JPanel();
+		trainingPanel.setLayout(null);
+		trainingPanel.setBounds(33, 110, 41, 45);
+		trainingPanel.setOpaque(false);
+		trainingPanel.add(trainingButton);
+		movingComponents.add(trainingPanel);
+		trainingButton.setBounds(0,0,41,45);
+		layeredPane.add(trainingPanel, JLayeredPane.PALETTE_LAYER);
+		System.out.println(trainingButton.getBackground());
+
+		ImageIcon teamIcon = new ImageIcon("./src/visuals/Images/team_icon.png", "Team");
+		CustomizedButton teamButton = new CustomizedButton(teamIcon);
+		setPermanentWidthAndHeight(teamButton, 30, 30);
+
+		myTeamPanel = new JPanel();
+		myTeamPanel.setLayout(null);
+		myTeamPanel.setBounds(84, 64, 41, 36);
+		myTeamPanel.setOpaque(false);
+		myTeamPanel.add(teamButton);
+		movingComponents.add(myTeamPanel);
+		teamButton.setBounds(0,0,41,36);
+		layeredPane.add(myTeamPanel, JLayeredPane.PALETTE_LAYER);
+
+		tacticsPanel = new TacticsPanel();
+		tacticsPanel.setLayout(null);
+		tacticsPanel.setBounds(280, -49, 275, 190);
+		movingComponents.add(tacticsPanel);
+		tacticsPanel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (tacticsPanel.getShape().contains(e.getPoint())) {
+					addListeners(tacticsPanel, tacticsPages, tacticsLayout);
+				}
+			}
+		});
+		layeredPane.add(tacticsPanel, JLayeredPane.PALETTE_LAYER);
+
+		ImageIcon standingsIcon = new ImageIcon("./src/visuals/Images/standings_icon.png", "Standings");
+		CustomizedButton standingsButton = new CustomizedButton(standingsIcon);
+		setPermanentWidthAndHeight(standingsButton, 30, 30);
+
+		standingsPanel = new JPanel();
+		standingsPanel.setLayout(null);
+		standingsPanel.setBounds(145, 100, 50, 58);
+		standingsPanel.setOpaque(false);
+		standingsPanel.add(standingsButton);
+		movingComponents.add(standingsPanel);
+		standingsButton.setBounds(0,0,49,58);
+		layeredPane.add(standingsPanel, JLayeredPane.PALETTE_LAYER);
+
+		ImageIcon playerSearchIcon = new ImageIcon("./src/visuals/Images/player_search_icon.png", "PlayerSearch");
+		CustomizedButton playerSearchButton = new CustomizedButton(playerSearchIcon);
+		setPermanentWidthAndHeight(playerSearchButton, 30, 30);
+
+		playerSearchPanel = new JPanel();
+		playerSearchPanel.setLayout(null);
+		playerSearchPanel.setBounds(211, 164, 45, 54);
+		playerSearchPanel.setOpaque(false);
+		playerSearchPanel.add(playerSearchButton);
+		movingComponents.add(playerSearchPanel);
+		playerSearchButton.setBounds(0,0,45,54);
+		layeredPane.add(playerSearchPanel, JLayeredPane.PALETTE_LAYER);
+
+		ImageIcon myClubIcon = new ImageIcon("./src/visuals/Images/my_club_icon.png", "MyClub");
+		CustomizedButton myClubButton = new CustomizedButton(myClubIcon);
+		setPermanentWidthAndHeight(myClubButton, 30, 30);
+
+		myClubPanel = new JPanel();
+		myClubPanel.setLayout(null);
+		myClubPanel.setBounds(577, 100, 48, 56);
+		myClubPanel.setOpaque(false);
+		myClubPanel.add(myClubButton);
+		movingComponents.add(myClubPanel);
+		myClubButton.setBounds(0,0,48,56);
+		layeredPane.add(myClubPanel, JLayeredPane.PALETTE_LAYER);
+
+		ImageIcon fixturesIcon = new ImageIcon("./src/visuals/Images/fixtures_icon.png", "Fixtures");
+		CustomizedButton fixturesButton = new CustomizedButton(fixturesIcon);
+		setPermanentWidthAndHeight(fixturesButton, 30, 30);
+
+		fixturesPanel = new JPanel();
+		fixturesPanel.setLayout(null);
+		fixturesPanel.setBounds(643, 51, 45, 54);
+		fixturesPanel.setOpaque(false);
+		fixturesPanel.add(fixturesButton);
+		movingComponents.add(fixturesPanel);
+		fixturesButton.setBounds(0,0,45,54);
+		layeredPane.add(fixturesPanel, JLayeredPane.PALETTE_LAYER);
+
+		ImageIcon myProfileButtonIcon = new ImageIcon("./src/visuals/Images/my_profile_icon.png", "MyProfile");
+		CustomizedButton myProfileButton = new CustomizedButton(myProfileButtonIcon);
+		setPermanentWidthAndHeight(myProfileButton, 30, 30);
+
+		myProfilePanel = new JPanel();
+		myProfilePanel.setLayout(null);
+		myProfilePanel.setBounds(707, 157, 41, 62);
+		myProfilePanel.setOpaque(false);
+		myProfilePanel.add(myProfileButton);
+		movingComponents.add(myProfilePanel);
+		myProfileButton.setBounds(0,0,41,62);
+		layeredPane.add(myProfilePanel, JLayeredPane.PALETTE_LAYER);
+
+		backgroundMover.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String direction = backgroundMover.getOtherIcon().getDescription();
+				if (direction.equals("Down") || direction.equals("DownDark")) {
+					moveContentDown();
+					ImageIcon upArrow = new ImageIcon("./src/visuals/Images/up_arrow_darkbg.png", "UpDark");
+					backgroundMover.setIcon(upArrow);
+					backgroundMover.setOtherIcon(upArrow);
+                } else {
+					moveContentUp();
+					ImageIcon downArrow = new ImageIcon("./src/visuals/Images/down_arrow_darkbg.png", "DownDark");
+					backgroundMover.setIcon(downArrow);
+					backgroundMover.setOtherIcon(downArrow);
+                }
+                backgroundMover.revalidate();
+                backgroundMover.repaint();
+            }
+		});
 
 		refreshMessages();
 
@@ -175,11 +311,63 @@ public class Scheduler extends GamePanel {
 		repaint();
 	}
 
+	public void moveContentUp() {
+		moveContent(-205);
+	}
+
+	public void moveContent(int moveBy) {
+		int totalSteps = 30;
+		int delay = 20;
+		int startBackgroundY = backgroundImageHeight;
+
+		List<Integer> startPositions = new ArrayList<>();
+
+		// Capture initial Y positions of all components
+		for (Component comp : movingComponents) {
+			startPositions.add(comp.getY());
+		}
+
+		Timer timer = new Timer(delay, new ActionListener() {
+			int step = 0;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (step > totalSteps) {
+					((Timer) e.getSource()).stop();
+					return;
+				}
+
+				// Interpolate positions
+				double t = (double) step / totalSteps;
+
+				backgroundImageHeight = (int) (startBackgroundY + t * moveBy);
+
+				for (int i = 0; i < movingComponents.size(); i++) {
+					Component comp = movingComponents.get(i);
+					int startY = startPositions.get(i);
+					int newY = (int) (startY + t * moveBy);
+					comp.setBounds(comp.getX(), newY, comp.getWidth(), comp.getHeight());
+					comp.revalidate();
+					comp.repaint();
+				}
+
+				repaint();
+				step++;
+			}
+		});
+
+		timer.start();
+	}
+
+	public void moveContentDown() {
+		moveContent(205);
+	}
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		if (backgroundImage != null) {
-			g.drawImage(backgroundImage, 0, -205, getWidth(), getHeight() + 205, this);
+			g.drawImage(backgroundImage, 0, backgroundImageHeight, getWidth(), getHeight() + 205, this);
 		}
 	}
 
@@ -200,13 +388,6 @@ public class Scheduler extends GamePanel {
 		leaderboardsMap.put("Top Goals", goals);
 		leaderboardsMap.put("Top Assists", assists);
 
-		ArrayList<JButton> firstButtons = new ArrayList<>();
-		firstButtons.add(getMainMenu().getLeagueTableButton());
-		firstButtons.add(getMainMenu().getGoalscorersButton());
-		firstButtons.add(getMainMenu().getAssistsButton());
-
-		addListeners(firstButtons, leaderboardsPages, leaderboardsLayout);
-
 		fixturesLayout = new CardLayout();
 		fixturesPages = new JPanel(fixturesLayout);
 		allFixtures = new AllFixturesPage(fixturesLayout, fixturesPages, this, true);
@@ -220,13 +401,6 @@ public class Scheduler extends GamePanel {
 		fixturesMap.put("All Fixtures", allFixtures);
 		fixturesMap.put("My Fixtures", myFixtures);
 		fixturesMap.put("Results", results);
-
-		ArrayList<JButton> secondButtons = new ArrayList<>();
-		secondButtons.add(getMainMenu().getAllFixturesButton());
-		secondButtons.add(getMainMenu().getMyFixturesButton());
-		secondButtons.add(getMainMenu().getResultsButton());
-
-		addListeners(secondButtons, fixturesPages, fixturesLayout);
 
 		speedometer = new Speedometer();
 		ArrayList<CustomizedButton> buttons = new ArrayList<CustomizedButton>();
@@ -284,33 +458,31 @@ public class Scheduler extends GamePanel {
 		tacticsMap.put("First Team", firstTeam);
 		tacticsMap.put("Formation", formation);
 		tacticsMap.put("Match Roles", matchRoles);
-
-		ArrayList<JButton> thirdButtons = new ArrayList<>();
-		thirdButtons.add(getMainMenu().getFirstTeamButton());
-		thirdButtons.add(getMainMenu().getFormationButton());
-		thirdButtons.add(getMainMenu().getMatchRolesButton());
-
-		addListeners(thirdButtons, tacticsPages, tacticsLayout);
 	}
 
-	public void addListeners(ArrayList<JButton> buttons, JPanel pages, CardLayout thisLayout){
-		for(JButton button : buttons){
-			button.addMouseListener(new MouseAdapter(){
+	public void addListeners(JComponent component, JPanel pages, CardLayout thisLayout){
+			component.addMouseListener(new MouseAdapter(){
 				@Override
 				public void mouseClicked(MouseEvent e){
 					window.getContentPane().removeAll();
 					window.getContentPane().add(pages, BorderLayout.CENTER);
-					thisLayout.show(pages, button.getText());
+					if (component instanceof JButton) {
+						thisLayout.show(pages, ((JButton) component).getText());
+					} else {
+						// This is the Tactics Panel click
+						thisLayout.show(pages, "First Team");
+						tacticsPanel.setHovered(false);
+						tacticsPanel.removeFootballIcon();
+					}
 					window.revalidate();
 					window.repaint();
 				}
 			});
-		}
 	}
 
 	public void triggerMenu(){
 		menuBox.remove(menuButton);
-		closeButton = new JButton("Close Menu");
+		closeButton = new CustomizedButton("Close Menu", 16);
 		menuBox.add(closeButton);
 		setPermanentWidthAndHeight(mainMenu, layeredPane.getWidth(), layeredPane.getHeight());
 		layeredPane.add(mainMenu, JLayeredPane.PALETTE_LAYER);
@@ -435,7 +607,7 @@ public class Scheduler extends GamePanel {
 
 			// This is a match event
 			if (event.getType().equals("Match")) {
-				playGame = new JButton("Play");
+				playGame = new CustomizedButton("Play", 16);
 				playGame.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
@@ -447,7 +619,7 @@ public class Scheduler extends GamePanel {
 				southMiddle.add(playGame);
 
 				// This is the simulate match button and its functionality
-				simGame = new JButton("Simulate");
+				simGame = new CustomizedButton("Simulate", 16);
 				Scheduler thissch = this;
 				simGame.addMouseListener(new MouseAdapter() {
 					@Override
@@ -473,7 +645,7 @@ public class Scheduler extends GamePanel {
 				southMiddle.add(simGame);
 			} else {
 				// This is not a match event
-				JButton dismiss = new JButton("Dismiss");
+				CustomizedButton dismiss = new CustomizedButton("Dismiss", 16);
 				dismiss.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
@@ -780,7 +952,7 @@ public class Scheduler extends GamePanel {
 
 		// This will produce a skip to first match button when on 9th June
 		if(date.toLocalDate().isEqual(LocalDate.of(year,06,9))){
-			advanceToGame = new JButton("Skip to Matchday");
+			advanceToGame = new CustomizedButton("Skip to Matchday", 16);
 			advanceToGame.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -948,11 +1120,11 @@ public class Scheduler extends GamePanel {
 		this.eventsBox = eventsBox;
 	}
 
-	public JButton getAdvance() {
+	public CustomizedButton getAdvance() {
 		return advance;
 	}
 
-	public void setAdvance(JButton advance) {
+	public void setAdvance(CustomizedButton advance) {
 		this.advance = advance;
 	}
 
@@ -1012,43 +1184,43 @@ public class Scheduler extends GamePanel {
 		this.menuBox = menuBox;
 	}
 
-	public JButton getPlayGame() {
+	public CustomizedButton getPlayGame() {
 		return playGame;
 	}
 
-	public void setPlayGame(JButton playGame) {
+	public void setPlayGame(CustomizedButton playGame) {
 		this.playGame = playGame;
 	}
 
-	public JButton getAdvanceToGame() {
+	public CustomizedButton getAdvanceToGame() {
 		return advanceToGame;
 	}
 
-	public void setAdvanceToGame(JButton advanceToGame) {
+	public void setAdvanceToGame(CustomizedButton advanceToGame) {
 		this.advanceToGame = advanceToGame;
 	}
 
-	public JButton getSimGame() {
+	public CustomizedButton getSimGame() {
 		return simGame;
 	}
 
-	public void setSimGame(JButton simGame) {
+	public void setSimGame(CustomizedButton simGame) {
 		this.simGame = simGame;
 	}
 
-	public JButton getMenuButton() {
+	public CustomizedButton getMenuButton() {
 		return menuButton;
 	}
 
-	public void setMenuButton(JButton menuButton) {
+	public void setMenuButton(CustomizedButton menuButton) {
 		this.menuButton = menuButton;
 	}
 
-	public JButton getCloseButton() {
+	public CustomizedButton getCloseButton() {
 		return closeButton;
 	}
 
-	public void setCloseButton(JButton closeButton) {
+	public void setCloseButton(CustomizedButton closeButton) {
 		this.closeButton = closeButton;
 	}
 

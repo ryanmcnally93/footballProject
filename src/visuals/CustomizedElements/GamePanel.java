@@ -68,8 +68,39 @@ public abstract class GamePanel extends JPanel {
             return new ImageIcon("./src/visuals/Images/down_arrow.png", "Down");
         } else if (icon.getDescription().equals("Up")) {
             return new ImageIcon("./src/visuals/Images/up_arrow_darkbg.png", "UpDark");
-        } else {
+        } else if (icon.getDescription().equals("UpDark")) {
             return new ImageIcon("./src/visuals/Images/up_arrow.png", "Up");
+        } else if (icon.getDescription().equals("Training")) {
+            return new ImageIcon("./src/visuals/Images/training_icon_darkbg.png", "TrainingDark");
+        } else if (icon.getDescription().equals("TrainingDark")) {
+            return new ImageIcon("./src/visuals/Images/training_icon.png", "Training");
+        } else if (icon.getDescription().equals("Team")) {
+            return new ImageIcon("./src/visuals/Images/team_icon_darkbg.png", "TeamDark");
+        } else if (icon.getDescription().equals("TeamDark")) {
+            return new ImageIcon("./src/visuals/Images/team_icon.png", "Team");
+        } else if (icon.getDescription().equals("Standings")) {
+            return new ImageIcon("./src/visuals/Images/standings_icon_darkbg.png", "StandingsDark");
+        } else if (icon.getDescription().equals("StandingsDark")) {
+            return new ImageIcon("./src/visuals/Images/standings_icon.png", "Standings");
+        } else if (icon.getDescription().equals("PlayerSearchDark")) {
+            return new ImageIcon("./src/visuals/Images/player_search_icon.png", "PlayerSearch");
+        } else if (icon.getDescription().equals("PlayerSearch")) {
+            return new ImageIcon("./src/visuals/Images/player_search_icon_darkbg.png", "PlayerSearchDark");
+        } else if (icon.getDescription().equals("MyClub")) {
+            return new ImageIcon("./src/visuals/Images/my_club_icon_darkbg.png", "MyClubDark");
+        } else if (icon.getDescription().equals("MyClubDark")) {
+            return new ImageIcon("./src/visuals/Images/my_club_icon.png", "MyClub");
+        } else if (icon.getDescription().equals("FixturesDark")) {
+            return new ImageIcon("./src/visuals/Images/fixtures_icon.png", "Fixtures");
+        } else if (icon.getDescription().equals("Fixtures")) {
+            return new ImageIcon("./src/visuals/Images/fixtures_icon_darkbg.png", "FixturesDark");
+        } else if (icon.getDescription().equals("MyProfile")) {
+            return new ImageIcon("./src/visuals/Images/my_profile_icon_darkbg.png", "MyProfileDark");
+        } else if (icon.getDescription().equals("MyProfileDark")) {
+            return new ImageIcon("./src/visuals/Images/my_profile_icon.png", "MyProfile");
+        } else {
+            System.out.println("ERROR: getOppositeImage() is unable to determine which image should be shown! Icon description is: " + icon.getDescription() + ".");
+            throw new RuntimeException();
         }
     }
 

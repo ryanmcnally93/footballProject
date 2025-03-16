@@ -101,5 +101,12 @@ public class CustomizedButton extends JButton {
 		g2.dispose();
 		super.paintComponent(g);
 	}
-	
+
+	public void setOtherIcon(ImageIcon icon) {
+		this.icon = icon;
+	}
+
+	public ImageIcon getOtherIcon() {
+		return icon;
+	}
 }

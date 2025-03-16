@@ -21,7 +21,6 @@ public class MainMenu extends GamePanel {
 
     private Scheduler scheduler;
     private GameWindow window;
-    private JButton leagueTableButton, goalscorersButton, assistsButton, allFixturesButton, myFixturesButton, resultsButton, firstTeamButton, formationButton, matchRolesButton;
 
     public MainMenu(GameWindow newWindow, Scheduler scheduler) {
         this.window = newWindow;
@@ -34,33 +33,10 @@ public class MainMenu extends GamePanel {
 
         Box container = Box.createVerticalBox();
 
-        // Make the row of buttons
-        Box firstRow = Box.createHorizontalBox();
-        leagueTableButton = new JButton("League Table");
-        goalscorersButton = new JButton("Top Goals");
-        assistsButton = new JButton("Top Assists");
-        makeMenuRow(firstRow, leagueTableButton, goalscorersButton, assistsButton);
-
-        Box secondRow = Box.createHorizontalBox();
-        allFixturesButton = new JButton("All Fixtures");
-        myFixturesButton = new JButton("My Fixtures");
-        resultsButton = new JButton("Results");
-        makeMenuRow(secondRow, allFixturesButton, myFixturesButton, resultsButton);
-
-        Box thirdRow = Box.createHorizontalBox();
-        firstTeamButton = new JButton("First Team");
-        formationButton = new JButton("Formation");
-        matchRolesButton = new JButton("Match Roles");
-        makeMenuRow(thirdRow, firstTeamButton, formationButton, matchRolesButton);
-
-        setPermanentWidthAndHeight(firstRow, 200, 40);
-        setPermanentWidthAndHeight(secondRow, 200, 40);
-        setPermanentWidthAndHeight(thirdRow, 200, 40);
+        Box firstRow = makeMenuRow(new JButton(), new JButton(), new JButton());
 
         container.add(Box.createVerticalGlue());
         container.add(firstRow);
-        container.add(secondRow);
-        container.add(thirdRow);
         container.add(Box.createVerticalGlue());
 
         mainPanel.add(container);
@@ -68,7 +44,8 @@ public class MainMenu extends GamePanel {
         repaint();
     }
 
-    public void makeMenuRow(Box row, JButton buttonOne, JButton buttonTwo, JButton buttonThree){
+    public Box makeMenuRow(JButton buttonOne, JButton buttonTwo, JButton buttonThree){
+        Box row = Box.createHorizontalBox();
         CardLayout layout = new CardLayout();
         JPanel buttonBox = new JPanel(layout);
 
@@ -109,77 +86,7 @@ public class MainMenu extends GamePanel {
             layout.next(buttonBox);
         });
 
-    }
-
-    public JButton getFirstTeamButton() {
-        return firstTeamButton;
-    }
-
-    public void setFirstTeamButton(JButton firstTeamButton) {
-        this.firstTeamButton = firstTeamButton;
-    }
-
-    public JButton getLeagueTableButton() {
-        return leagueTableButton;
-    }
-
-    public void setLeagueTableButton(JButton leagueTableButton) {
-        this.leagueTableButton = leagueTableButton;
-    }
-
-    public JButton getGoalscorersButton() {
-        return goalscorersButton;
-    }
-
-    public void setGoalscorersButton(JButton goalscorersButton) {
-        this.goalscorersButton = goalscorersButton;
-    }
-
-    public JButton getAssistsButton() {
-        return assistsButton;
-    }
-
-    public void setAssistsButton(JButton assistsButton) {
-        this.assistsButton = assistsButton;
-    }
-
-    public JButton getAllFixturesButton() {
-        return allFixturesButton;
-    }
-
-    public void setAllFixturesButton(JButton allFixturesButton) {
-        this.allFixturesButton = allFixturesButton;
-    }
-
-    public JButton getMyFixturesButton() {
-        return myFixturesButton;
-    }
-
-    public void setMyFixturesButton(JButton myFixturesButton) {
-        this.myFixturesButton = myFixturesButton;
-    }
-
-    public JButton getResultsButton() {
-        return resultsButton;
-    }
-
-    public void setResultsButton(JButton resultsButton) {
-        this.resultsButton = resultsButton;
-    }
-
-    public JButton getFormationButton() {
-        return formationButton;
-    }
-
-    public void setFormationButton(JButton formationButton) {
-        this.formationButton = formationButton;
-    }
-
-    public JButton getMatchRolesButton() {
-        return matchRolesButton;
-    }
-
-    public void setMatchRolesButton(JButton matchRolesButton) {
-        this.matchRolesButton = matchRolesButton;
+        setPermanentWidthAndHeight(row, 200, 40);
+        return row;
     }
 }

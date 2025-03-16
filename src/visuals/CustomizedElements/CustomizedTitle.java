@@ -20,6 +20,10 @@ public class CustomizedTitle extends JLabel {
         addOpaqueBackground();
     }
 
+    public CustomizedTitle(String text) {
+        new CustomizedTitle(text, SwingConstants.CENTER);
+    }
+
     public void setFontSize(float size) {
         setFont(GamePanel.getBebasNeueFontWithSize(size));
         addOpaqueBackground();
