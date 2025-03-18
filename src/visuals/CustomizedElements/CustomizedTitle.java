@@ -6,7 +6,7 @@ import java.awt.geom.RoundRectangle2D;
 
 public class CustomizedTitle extends JLabel {
 
-    private float opacity = 0.5f;
+    private float opacity = 0.7f;
     private int cornerRadius = 10;
     private int padding = 10;
 
@@ -21,7 +21,7 @@ public class CustomizedTitle extends JLabel {
     }
 
     public CustomizedTitle(String text) {
-        new CustomizedTitle(text, SwingConstants.CENTER);
+        this(text, SwingConstants.CENTER);
     }
 
     public void setFontSize(float size) {

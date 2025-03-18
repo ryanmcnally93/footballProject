@@ -30,14 +30,14 @@ import visuals.MatchPages.*;
 public class Scheduler extends GamePanel {
 
 	private LocalDateTime date;
-	private JPanel eventsBox, southMiddle, menuBox, header, backgroundMoverPanel, trainingPanel, myTeamPanel, standingsPanel, playerSearchPanel, fixturesPanel, myClubPanel, myProfilePanel;
+	private JPanel eventsBox, southMiddle, menuBox, header, backgroundMoverPanel, datePanel;
 	private TacticsPanel tacticsPanel;
-	private CustomizedButton advance, playGame, advanceToGame, simGame, menuButton, closeButton;
+	private CustomizedButton playGame, advanceToGame, simGame, menuButton, closeButton, backgroundMover, trainingButton, playerSearchButton, standingsButton, teamButton, myClubButton, fixturesButton, myProfileButton;
+	private CustomizedTitle todaysDate, teamName, userName;
 	private Team team;
 	private User user;
 	private League league;
 	private ArrayList<Events> events;
-	private JLabel todaysDate;
 	private JPanel mainPanel;
 	private GameWindow window;
 	private Box eventContainer;
@@ -75,6 +75,7 @@ public class Scheduler extends GamePanel {
 	private Image backgroundImage;
 	private int backgroundImageHeight = -205;
 	private List<Component> movingComponents = new ArrayList<>();
+	private MessageViewer messageViewer;
 	
 	// New Game Constructor
 	public Scheduler(User user, Team team, League league) {
@@ -84,7 +85,6 @@ public class Scheduler extends GamePanel {
 		this.league = league;
 		this.events = new ArrayList<Events>();
 		this.season = league.getSeason();
-
 		this.setLayout(new BorderLayout());
 
 		ImageIcon image = new ImageIcon("./src/visuals/Images/main_scheduler.jpeg");
@@ -96,192 +96,90 @@ public class Scheduler extends GamePanel {
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
 		mainPanel.setBounds(0, 0, 800, 600);
+		mainPanel.setOpaque(false);
 
-        header = new JPanel();
-        header.setPreferredSize(new Dimension(800, 80));
-        JLabel title = new JLabel(team.getName() + " - " + user.getName() + " " + season.getYearFrom() + "/" + season.getYearTo(), SwingConstants.CENTER);
-        title.setFont(getBebasNeueFont());
-        header.add(title);
+		header = new JPanel(new BorderLayout());
+		header.setPreferredSize(new Dimension(800, 80));
 		header.setOpaque(false);
-        mainPanel.add(header, BorderLayout.NORTH);
+
+		// Left-side panel
+		JPanel teamNamePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		teamNamePanel.setOpaque(false);
+		teamName = new CustomizedTitle(team.getName());
+		teamName.setFontSize(20);
+		teamNamePanel.add(teamName);
+
+		// Right-side panel
+		JPanel userNamePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		userNamePanel.setOpaque(false);
+		userName = new CustomizedTitle(user.getName());
+		userName.setFontSize(20);
+		userNamePanel.add(userName);
+
+		// Add to header
+		header.add(teamNamePanel, BorderLayout.WEST);
+		header.add(userNamePanel, BorderLayout.EAST);
+
+		mainPanel.add(header, BorderLayout.NORTH);
         
         appendEastAndWest(mainPanel);
 
 		JPanel south = new JPanel(new BorderLayout());
-		south.setPreferredSize(new Dimension(800, 80));
-		south.setOpaque(false);
-		southMiddle = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		southMiddle.setOpaque(false);
+		south.setOpaque(true);
+		movingComponents.add(south);
+		southMiddle = new JPanel(null);
+		southMiddle.setOpaque(true);
+		southMiddle.setBackground(Color.GREEN);
 
-		String todaysDateFormatted = getTodaysDateWithGoodFormat();
-		advance = new CustomizedButton("Advance", 16);
-		southMiddle.add(advance);
-
-		// SET BOUNDS AND LAYOUT
-		todaysDate = new CustomizedTitle(todaysDateFormatted);
-		layeredPane.add(todaysDate, JLayeredPane.PALETTE_LAYER);
+		messageViewer = new MessageViewer(this);
+		messageViewer.addAdvanceButton();
 
 		menuBox = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		setPermanentWidth(menuBox, 115);
 
-		// Makes the southMiddle central
-		JPanel leftBlankBox = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		setPermanentWidth(leftBlankBox, 115);
-		leftBlankBox.setOpaque(false);
+		datePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		setPermanentWidth(datePanel, 115);
+		datePanel.setOpaque(false);
+
+		String todaysDateFormatted = getTodaysDateWithGoodFormat();
+		todaysDate = new CustomizedTitle(todaysDateFormatted);
+		todaysDate.setFontSize(16);
+		datePanel.add(todaysDate);
+
 		menuButton = new CustomizedButton("Main Menu", 16);
 		menuBox.add(menuButton);
 		menuBox.setOpaque(false);
 
 		south.add(menuBox, BorderLayout.EAST);
 		south.add(southMiddle, BorderLayout.CENTER);
-		south.add(leftBlankBox, BorderLayout.WEST);
-		mainPanel.add(south, BorderLayout.SOUTH);
-		mainPanel.setOpaque(false);
-		
-		advance.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				addDay();
-			}
-		});
+		south.add(datePanel, BorderLayout.WEST);
+		south.setBounds(0, 422, 800, 180);
+		layeredPane.add(south, JLayeredPane.PALETTE_LAYER);
 
 		layeredPane.add(mainPanel, JLayeredPane.DEFAULT_LAYER);
 		add(layeredPane, BorderLayout.CENTER);
-
-		SwingUtilities.invokeLater(() -> {
-			System.out.println("Scheduler Bounds: " + this.getBounds());
-		});
-
-		menuButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				triggerMenu();
-			}
-		});
 
 		Events chairmanMessage = new Events("Chairman", "Welcome to " + team.getName() + " FC! We've been preparing for your arrival for some time and wish you the best of luck for the season ahead.", getDate());
 		events.add(chairmanMessage);
 		Events youthCoachMessage = new Events("Youth Coach", "Welcome boss, I've put together a list of the top players in the academy for you to take a look at.", getDate());
 		events.add(youthCoachMessage);
 
-		ImageIcon downArrow = new ImageIcon("./src/visuals/Images/down_arrow.png", "Down");
-		CustomizedButton backgroundMover = new CustomizedButton(downArrow);
-		setPermanentWidthAndHeight(backgroundMover, 30, 30);
+		createMovingButtons();
+		addMouseListeners();
+		refreshMessages();
+		createMainMenu();
 
-		backgroundMoverPanel = new JPanel();
-		backgroundMoverPanel.setLayout(null);
-		backgroundMoverPanel.setBounds(15, 305, 30, 30);
-		backgroundMoverPanel.setOpaque(false);
-		backgroundMoverPanel.add(backgroundMover);
-		movingComponents.add(backgroundMoverPanel);
-		backgroundMover.setBounds(0, 0, 30, 30);
-		layeredPane.add(backgroundMoverPanel, JLayeredPane.PALETTE_LAYER);
+		revalidate();
+		repaint();
+	}
 
-		ImageIcon trainingIcon = new ImageIcon("./src/visuals/Images/training_icon.png", "Training");
-		CustomizedButton trainingButton = new CustomizedButton(trainingIcon);
-		setPermanentWidthAndHeight(trainingButton, 30, 30);
-
-		trainingPanel = new JPanel();
-		trainingPanel.setLayout(null);
-		trainingPanel.setBounds(33, 110, 41, 45);
-		trainingPanel.setOpaque(false);
-		trainingPanel.add(trainingButton);
-		movingComponents.add(trainingPanel);
-		trainingButton.setBounds(0,0,41,45);
-		layeredPane.add(trainingPanel, JLayeredPane.PALETTE_LAYER);
-		System.out.println(trainingButton.getBackground());
-
-		ImageIcon teamIcon = new ImageIcon("./src/visuals/Images/team_icon.png", "Team");
-		CustomizedButton teamButton = new CustomizedButton(teamIcon);
-		setPermanentWidthAndHeight(teamButton, 30, 30);
-
-		myTeamPanel = new JPanel();
-		myTeamPanel.setLayout(null);
-		myTeamPanel.setBounds(84, 64, 41, 36);
-		myTeamPanel.setOpaque(false);
-		myTeamPanel.add(teamButton);
-		movingComponents.add(myTeamPanel);
-		teamButton.setBounds(0,0,41,36);
-		layeredPane.add(myTeamPanel, JLayeredPane.PALETTE_LAYER);
-
-		tacticsPanel = new TacticsPanel();
-		tacticsPanel.setLayout(null);
-		tacticsPanel.setBounds(280, -49, 275, 190);
-		movingComponents.add(tacticsPanel);
-		tacticsPanel.addMouseListener(new MouseAdapter() {
+	private void addMouseListeners() {
+		menuButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (tacticsPanel.getShape().contains(e.getPoint())) {
-					addListeners(tacticsPanel, tacticsPages, tacticsLayout);
-				}
+				triggerMenu();
 			}
 		});
-		layeredPane.add(tacticsPanel, JLayeredPane.PALETTE_LAYER);
-
-		ImageIcon standingsIcon = new ImageIcon("./src/visuals/Images/standings_icon.png", "Standings");
-		CustomizedButton standingsButton = new CustomizedButton(standingsIcon);
-		setPermanentWidthAndHeight(standingsButton, 30, 30);
-
-		standingsPanel = new JPanel();
-		standingsPanel.setLayout(null);
-		standingsPanel.setBounds(145, 100, 50, 58);
-		standingsPanel.setOpaque(false);
-		standingsPanel.add(standingsButton);
-		movingComponents.add(standingsPanel);
-		standingsButton.setBounds(0,0,49,58);
-		layeredPane.add(standingsPanel, JLayeredPane.PALETTE_LAYER);
-
-		ImageIcon playerSearchIcon = new ImageIcon("./src/visuals/Images/player_search_icon.png", "PlayerSearch");
-		CustomizedButton playerSearchButton = new CustomizedButton(playerSearchIcon);
-		setPermanentWidthAndHeight(playerSearchButton, 30, 30);
-
-		playerSearchPanel = new JPanel();
-		playerSearchPanel.setLayout(null);
-		playerSearchPanel.setBounds(211, 164, 45, 54);
-		playerSearchPanel.setOpaque(false);
-		playerSearchPanel.add(playerSearchButton);
-		movingComponents.add(playerSearchPanel);
-		playerSearchButton.setBounds(0,0,45,54);
-		layeredPane.add(playerSearchPanel, JLayeredPane.PALETTE_LAYER);
-
-		ImageIcon myClubIcon = new ImageIcon("./src/visuals/Images/my_club_icon.png", "MyClub");
-		CustomizedButton myClubButton = new CustomizedButton(myClubIcon);
-		setPermanentWidthAndHeight(myClubButton, 30, 30);
-
-		myClubPanel = new JPanel();
-		myClubPanel.setLayout(null);
-		myClubPanel.setBounds(577, 100, 48, 56);
-		myClubPanel.setOpaque(false);
-		myClubPanel.add(myClubButton);
-		movingComponents.add(myClubPanel);
-		myClubButton.setBounds(0,0,48,56);
-		layeredPane.add(myClubPanel, JLayeredPane.PALETTE_LAYER);
-
-		ImageIcon fixturesIcon = new ImageIcon("./src/visuals/Images/fixtures_icon.png", "Fixtures");
-		CustomizedButton fixturesButton = new CustomizedButton(fixturesIcon);
-		setPermanentWidthAndHeight(fixturesButton, 30, 30);
-
-		fixturesPanel = new JPanel();
-		fixturesPanel.setLayout(null);
-		fixturesPanel.setBounds(643, 51, 45, 54);
-		fixturesPanel.setOpaque(false);
-		fixturesPanel.add(fixturesButton);
-		movingComponents.add(fixturesPanel);
-		fixturesButton.setBounds(0,0,45,54);
-		layeredPane.add(fixturesPanel, JLayeredPane.PALETTE_LAYER);
-
-		ImageIcon myProfileButtonIcon = new ImageIcon("./src/visuals/Images/my_profile_icon.png", "MyProfile");
-		CustomizedButton myProfileButton = new CustomizedButton(myProfileButtonIcon);
-		setPermanentWidthAndHeight(myProfileButton, 30, 30);
-
-		myProfilePanel = new JPanel();
-		myProfilePanel.setLayout(null);
-		myProfilePanel.setBounds(707, 157, 41, 62);
-		myProfilePanel.setOpaque(false);
-		myProfilePanel.add(myProfileButton);
-		movingComponents.add(myProfilePanel);
-		myProfileButton.setBounds(0,0,41,62);
-		layeredPane.add(myProfilePanel, JLayeredPane.PALETTE_LAYER);
 
 		backgroundMover.addMouseListener(new MouseAdapter() {
 			@Override
@@ -292,23 +190,59 @@ public class Scheduler extends GamePanel {
 					ImageIcon upArrow = new ImageIcon("./src/visuals/Images/up_arrow_darkbg.png", "UpDark");
 					backgroundMover.setIcon(upArrow);
 					backgroundMover.setOtherIcon(upArrow);
-                } else {
+				} else {
 					moveContentUp();
 					ImageIcon downArrow = new ImageIcon("./src/visuals/Images/down_arrow_darkbg.png", "DownDark");
 					backgroundMover.setIcon(downArrow);
 					backgroundMover.setOtherIcon(downArrow);
-                }
-                backgroundMover.revalidate();
-                backgroundMover.repaint();
-            }
+				}
+				backgroundMover.revalidate();
+				backgroundMover.repaint();
+			}
 		});
 
-		refreshMessages();
+		tacticsPanel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (tacticsPanel.getShape().contains(e.getPoint())) {
+					addCardmapListener(tacticsPanel, tacticsPages, tacticsLayout);
+				}
+			}
+		});
+	}
 
-		createMainMenu();
+	private void createMovingButtons() {
+		backgroundMover = createMovingButton("./src/visuals/Images/down_arrow.png", "Down", 15, 305, 30, 30);
+		trainingButton = createMovingButton("./src/visuals/Images/training_icon.png", "Training", 33, 110, 41, 45);
+		teamButton = createMovingButton("./src/visuals/Images/team_icon.png", "Team", 84, 64, 41, 36);
 
-		revalidate();
-		repaint();
+		tacticsPanel = new TacticsPanel();
+		tacticsPanel.setLayout(null);
+		tacticsPanel.setBounds(280, -49, 275, 190);
+		movingComponents.add(tacticsPanel);
+		layeredPane.add(tacticsPanel, JLayeredPane.PALETTE_LAYER);
+
+		standingsButton = createMovingButton("./src/visuals/Images/standings_icon.png", "Standings", 145, 100, 50, 58);
+		playerSearchButton = createMovingButton("./src/visuals/Images/player_search_icon.png", "PlayerSearch", 211, 164, 45, 54);
+		myClubButton = createMovingButton("./src/visuals/Images/my_club_icon.png", "MyClub", 577, 100, 48, 56);
+		fixturesButton = createMovingButton("./src/visuals/Images/fixtures_icon.png", "Fixtures", 643, 51, 45, 54);
+		myProfileButton = createMovingButton("./src/visuals/Images/my_profile_icon.png", "MyProfile", 707, 157, 41, 62);
+	}
+
+	private CustomizedButton createMovingButton(String url, String description, int x, int y, int width, int height) {
+		ImageIcon buttonIcon = new ImageIcon(url, description);
+		CustomizedButton button = new CustomizedButton(buttonIcon);
+		setPermanentWidthAndHeight(button, 30, 30);
+
+		JPanel thisPanel = new JPanel();
+		thisPanel.setLayout(null);
+		thisPanel.setBounds(x, y, width, height);
+		thisPanel.setOpaque(false);
+		thisPanel.add(button);
+		movingComponents.add(thisPanel);
+		button.setBounds(0,0,width, height);
+		layeredPane.add(thisPanel, JLayeredPane.PALETTE_LAYER);
+		return button;
 	}
 
 	public void moveContentUp() {
@@ -371,6 +305,7 @@ public class Scheduler extends GamePanel {
 		}
 	}
 
+	// Needs reviewing
 	public void createMainMenu() {
 		mainMenu = new MainMenu(window, this);
 
@@ -460,24 +395,24 @@ public class Scheduler extends GamePanel {
 		tacticsMap.put("Match Roles", matchRoles);
 	}
 
-	public void addListeners(JComponent component, JPanel pages, CardLayout thisLayout){
-			component.addMouseListener(new MouseAdapter(){
-				@Override
-				public void mouseClicked(MouseEvent e){
-					window.getContentPane().removeAll();
-					window.getContentPane().add(pages, BorderLayout.CENTER);
-					if (component instanceof JButton) {
-						thisLayout.show(pages, ((JButton) component).getText());
-					} else {
-						// This is the Tactics Panel click
-						thisLayout.show(pages, "First Team");
-						tacticsPanel.setHovered(false);
-						tacticsPanel.removeFootballIcon();
-					}
-					window.revalidate();
-					window.repaint();
+	public void addCardmapListener(JComponent component, JPanel pages, CardLayout thisLayout){
+		component.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseClicked(MouseEvent e){
+				window.getContentPane().removeAll();
+				window.getContentPane().add(pages, BorderLayout.CENTER);
+				if (component instanceof JButton) {
+					thisLayout.show(pages, ((JButton) component).getText());
+				} else {
+					// This is the Tactics Panel click
+					thisLayout.show(pages, "First Team");
+					tacticsPanel.setHovered(false);
+					tacticsPanel.removeFootballIcon();
 				}
-			});
+				window.revalidate();
+				window.repaint();
+			}
+		});
 	}
 
 	public void triggerMenu(){
@@ -571,9 +506,7 @@ public class Scheduler extends GamePanel {
 				southMiddle.remove(simGame);
 				// We don't want the advance button when messages are present
 				// Let's check there isn't already an advance button
-				if(!southMiddle.isAncestorOf(advance)){
-					southMiddle.add(advance);
-				}
+				messageViewer.addAdvanceButton();
 			}
 
 		}
@@ -603,7 +536,7 @@ public class Scheduler extends GamePanel {
 		// Let's look through todays events that are left
 		for(Events event : todaysEvents){
 			showEventsDescription(event);
-			southMiddle.remove(advance);
+			messageViewer.removeAdvanceButton();
 
 			// This is a match event
 			if (event.getType().equals("Match")) {
@@ -651,7 +584,7 @@ public class Scheduler extends GamePanel {
 					public void mouseClicked(MouseEvent e) {
 						eventContainer.removeAll();
 						southMiddle.remove(dismiss);
-						southMiddle.add(advance);
+						messageViewer.addAdvanceButton();
 						event.setRemoveEvent(true);
 						showTodaysEvents(todaysEvents);
 						eventContainer.repaint();
@@ -850,7 +783,6 @@ public class Scheduler extends GamePanel {
 		JPanel emptySpeedometer = new JPanel();
 		emptySpeedometer.setPreferredSize(new Dimension(200, 20));
 		emptySpeedometer.setOpaque(false);
-//		emptySpeedometer.setBackground(Color.LIGHT_GRAY);
 		emptySpeedometer.setBounds(400, 0, 200, 20);
 		if (speedometerBox.getComponents().length == 0) {
 			speedometerBox.add(emptySpeedometer);
@@ -907,9 +839,9 @@ public class Scheduler extends GamePanel {
 		descriptionBox.add(Box.createHorizontalGlue());
 		eventContainer.add(descriptionBox);
 
-		mainPanel.add(eventContainer, BorderLayout.CENTER);
-		mainPanel.revalidate();
-		mainPanel.repaint();
+		southMiddle.add(eventContainer, BorderLayout.CENTER);
+		southMiddle.revalidate();
+		southMiddle.repaint();
 	}
 	
 	public void addDay() {
@@ -927,6 +859,7 @@ public class Scheduler extends GamePanel {
 
 		String todaysDateFormatted = getTodaysDateWithGoodFormat();
 		todaysDate.setText(todaysDateFormatted);
+		refreshDateLabelSize();
 
 		int year = 2023 + season.getNumber();
 
@@ -1005,6 +938,13 @@ public class Scheduler extends GamePanel {
 		refreshMessages();
 	}
 
+	private void refreshDateLabelSize() {
+		todaysDate.addOpaqueBackground();
+		datePanel.setBounds(10, 532, (int) todaysDate.getPreferredSize().getWidth(), (int) todaysDate.getPreferredSize().getHeight());
+		todaysDate.setBounds(0,0,(int) todaysDate.getPreferredSize().getWidth(), (int) todaysDate.getPreferredSize().getHeight());
+
+	}
+
 	private void sortMatchesByTime(ArrayList<Match> matchArray) {
 		matchArray.sort(new Comparator<Match>() {
 			@Override
@@ -1049,7 +989,6 @@ public class Scheduler extends GamePanel {
 	}
 	
 	public void setMatchdays() {
-
 		List<String> keysToReplace = new ArrayList<>();
 		
 		// This makes a note of which matches need to be changed, and puts to array
@@ -1118,14 +1057,6 @@ public class Scheduler extends GamePanel {
 
 	public void setEventsBox(JPanel eventsBox) {
 		this.eventsBox = eventsBox;
-	}
-
-	public CustomizedButton getAdvance() {
-		return advance;
-	}
-
-	public void setAdvance(CustomizedButton advance) {
-		this.advance = advance;
 	}
 
 	public Team getTeam() {
@@ -1240,11 +1171,11 @@ public class Scheduler extends GamePanel {
 		this.mainPanel = mainPanel;
 	}
 
-	public JLabel getTodaysDate() {
+	public CustomizedTitle getTodaysDate() {
 		return todaysDate;
 	}
 
-	public void setTodaysDate(JLabel todaysDate) {
+	public void setTodaysDate(CustomizedTitle todaysDate) {
 		this.todaysDate = todaysDate;
 	}
 
