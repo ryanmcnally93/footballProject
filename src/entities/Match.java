@@ -254,12 +254,17 @@ public class Match {
 							this.awayScore++;
 							displayAwayGoalOnScreen(player);
 							league.getLeagueTable().getLine(getAway()).addGoalsScored();
-							for(PlayerAchievementLine line : league.getPlayerLeaderboard().getPlayerAchievements()){
-								if(line.getPlayer() == player){
+
+							Iterator<PlayerAchievementLine> iterator = league.getPlayerLeaderboard().getPlayerAchievements().iterator();
+							while (iterator.hasNext()) {
+								PlayerAchievementLine line = iterator.next();
+								if (line.getPlayer() == player) {
 									line.addToGoals();
+									iterator.remove();
 									break;
-								};
+								}
 							}
+
 							player.addGoalToThisMatch();
 							player.setRatingThisMatch(10);
 							System.out.println(player.getName() + "'s rating has been set to 10");

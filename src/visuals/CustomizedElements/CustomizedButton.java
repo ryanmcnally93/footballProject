@@ -5,10 +5,15 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import static visuals.CustomizedElements.GamePanel.getGreenCharcoal;
+
 public class CustomizedButton extends JButton {
 
 	private boolean hasImage;
 	private ImageIcon icon;
+	private Color primaryColor = Color.WHITE;
+	private Color secondaryColor = getGreenCharcoal();
+	private Color hoverColor;
 
 	public CustomizedButton(String text) {
 		super(text);
@@ -34,8 +39,9 @@ public class CustomizedButton extends JButton {
 	}
 
 	public void init() {
-		setForeground(GamePanel.getCharcoal()); // Dark text color
-		setBackground(Color.WHITE);
+		setForeground(secondaryColor); // Dark text color
+		setBackground(primaryColor);
+		hoverColor = secondaryColor;
 		setFocusPainted(false);
 		setCursor(new Cursor(Cursor.HAND_CURSOR));
 
@@ -61,9 +67,10 @@ public class CustomizedButton extends JButton {
 					setIcon(newIcon);
 					icon = newIcon;
 				} else {
-					setForeground(Color.WHITE);
+					setForeground(primaryColor);
 				}
-				setBackground(GamePanel.getCharcoal());
+				setBackground(secondaryColor);
+				hoverColor = primaryColor;
 				revalidate();
 				repaint();
 			}
@@ -75,9 +82,10 @@ public class CustomizedButton extends JButton {
 					setIcon(newIcon);
 					icon = newIcon;
 				} else {
-					setForeground(GamePanel.getCharcoal());
+					setForeground(secondaryColor);
 				}
-				setBackground(Color.WHITE);
+				setBackground(primaryColor);
+				hoverColor = secondaryColor;
 				revalidate();
 				repaint();
 			}
@@ -94,7 +102,7 @@ public class CustomizedButton extends JButton {
 		g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
 
 		// Draw border
-		g2.setColor(GamePanel.getCharcoal());
+		g2.setColor(hoverColor);
 		g2.setStroke(new BasicStroke(2));  // Set border thickness
 		g2.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, 10, 10);
 

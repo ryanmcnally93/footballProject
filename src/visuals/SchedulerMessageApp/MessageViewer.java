@@ -23,8 +23,12 @@ public class MessageViewer extends GamePanel {
     private Box buttonContainer;
     private JPanel messageContainer;
     private Image backgroundImage;
+    private Events event;
+    private ArrayList<Events> todaysEvents;
+    private boolean isWaitingForEventToUpdate = true;
 
     public MessageViewer(Scheduler scheduler) {
+        this.scheduler = scheduler;
         setPermanentWidthAndHeight(this, 600, 210);
         setOpaque(false);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -32,25 +36,7 @@ public class MessageViewer extends GamePanel {
         ImageIcon image = new ImageIcon("./src/visuals/Images/message_viewer_tablet.png");
         backgroundImage = image.getImage().getScaledInstance(600, 210, Image.SCALE_SMOOTH);
 
-        this.scheduler = scheduler;
-
-        advance = new CustomizedButton("Advance", 16);
-        advance.setAlignmentX(Component.CENTER_ALIGNMENT);
-        advance.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                scheduler.addDay();
-            }
-        });
-
-        playGame = new CustomizedButton("Play", 16);
-        playGame.setAlignmentX(Component.CENTER_ALIGNMENT);
-        simGame = new CustomizedButton("Simulate", 16);
-        simGame.setAlignmentX(Component.CENTER_ALIGNMENT);
-        dismiss = new CustomizedButton("Dismiss", 16);
-        dismiss.setAlignmentX(Component.CENTER_ALIGNMENT);
-        advanceToGame = new CustomizedButton("Skip to Matchday", 16);
-        advanceToGame.setAlignmentX(Component.CENTER_ALIGNMENT);
+        createButtonsAndListeners();
 
         messageContainer = new JPanel(new BorderLayout());
         messageContainer.setOpaque(false);
@@ -64,6 +50,92 @@ public class MessageViewer extends GamePanel {
         setPermanentWidthAndHeight(buttonContainer, 250, 40);
         add(buttonContainer);
         buttonContainer.add(Box.createHorizontalGlue());
+    }
+
+    private void createButtonsAndListeners() {
+        advance = new CustomizedButton("Advance", 16);
+        advance.setAlignmentX(Component.CENTER_ALIGNMENT);
+        advance.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                scheduler.addDay();
+            }
+        });
+
+        playGame = new CustomizedButton("Play", 16);
+        playGame.setAlignmentX(Component.CENTER_ALIGNMENT);
+        playGame.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                scheduler.viewTacticsPages(true, event);
+                event.setRemoveEvent(true);
+            }
+        });
+
+        simGame = new CustomizedButton("Simulate", 16);
+        simGame.setAlignmentX(Component.CENTER_ALIGNMENT);
+        simGame.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                removeSimGameButton();
+                removePlayGameButton();
+                if (event.getMatch() != null) {
+                    // Change back to a normal match as this is not being shown to user
+                    Match convertedMatch = new Match(event.getMatch());
+                    convertedMatch.startMatch(scheduler, "instant");
+
+                    System.out.println("REACHED THE SIMGAME LINE AND BOOLEAN IS " + String.valueOf(isWaitingForEventToUpdate).toUpperCase());
+                    for(Match eachMatch : event.getMatch().getSameDayMatches()){
+                        CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
+                    }
+                    scheduler.getMyFixtures().getLine(event.getMatch()).gameComplete();
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            isWaitingForEventToUpdate = false;
+                        }
+                    });
+                }
+
+                event.setRemoveEvent(true);
+                scheduler.showTodaysEvents(todaysEvents);
+            }
+        });
+
+        dismiss = new CustomizedButton("Dismiss", 16);
+        dismiss.setAlignmentX(Component.CENTER_ALIGNMENT);
+        dismiss.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                removeDismissButton();
+                addAdvanceButton();
+
+                messageContainer.removeAll();
+                event.setRemoveEvent(true);
+                scheduler.showTodaysEvents(todaysEvents);
+
+                revalidate();
+                repaint();
+            }
+        });
+
+        advanceToGame = new CustomizedButton("Skip to Matchday", 16);
+        advanceToGame.setAlignmentX(Component.CENTER_ALIGNMENT);
+        advanceToGame.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int counter = 0;
+                while (counter == 0) {
+                    scheduler.addDay();
+                    for (Events each : todaysEvents) {
+                        if (each.getDate().toLocalDate().equals(scheduler.getDate().toLocalDate())) {
+                            counter++;
+                        }
+                    }
+                }
+                removeAdvanceToGameButton();
+            }
+        });
     }
 
     @Override
@@ -82,34 +154,12 @@ public class MessageViewer extends GamePanel {
     }
 
     public void addAdvanceToGameButton(ArrayList<Events> events) {
+        this.todaysEvents = events;
         // Check to see if this is already visible
         if (!buttonContainer.isAncestorOf(advanceToGame)) {
             buttonContainer.add(advanceToGame);
             buttonContainer.add(Box.createHorizontalGlue());
         }
-
-        // Remove previous listener
-        MouseListener[] listeners = advanceToGame.getMouseListeners();
-        for (int i = listeners.length - 1; i >= 0; i--) {
-            advanceToGame.removeMouseListener(listeners[i]);
-        }
-
-        // Update with this event
-        advanceToGame.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int counter = 0;
-                while(counter == 0){
-                    scheduler.addDay();
-                    for(Events each : events) {
-                        if (each.getDate().toLocalDate().equals(scheduler.getDate().toLocalDate())) {
-                            counter++;
-                        }
-                    }
-                }
-                removeAdvanceToGameButton();
-            }
-        });
     }
 
     public void removeAdvanceToGameButton() {
@@ -159,33 +209,33 @@ public class MessageViewer extends GamePanel {
     }
 
     public void addDismissButton(Events event, ArrayList<Events> todaysEvents) {
+        // If we are adding a dismiss button after a match, we need to be sure
+        // that all the background matches have been completed otherwise we will
+        // reset the event, and still try to call event.getMatch() somewhere else
+        if (event.getType().equals("Result")) {
+            isWaitingForEventToUpdate = true;
+            Timer timer = new Timer(250, e -> {
+                if (!isWaitingForEventToUpdate) {
+                    ((Timer) e.getSource()).stop();
+                    addDismissButtonAfterChecks(event, todaysEvents);
+                }
+            });
+            timer.start();
+        } else {
+            addDismissButtonAfterChecks(event, todaysEvents);
+        }
+    }
+
+    public void addDismissButtonAfterChecks(Events event, ArrayList<Events> todaysEvents) {
+        this.event = event;
+        this.todaysEvents = todaysEvents;
         // Check to see if this is already visible
         if (!buttonContainer.isAncestorOf(dismiss)) {
             buttonContainer.add(dismiss);
             buttonContainer.add(Box.createHorizontalGlue());
         }
-
-        // Remove previous listener
-        MouseListener[] listeners = dismiss.getMouseListeners();
-        for (int i = listeners.length - 1; i >= 0; i--) {
-            dismiss.removeMouseListener(listeners[i]);
-        }
-
-        // Update with this event
-        dismiss.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                removeDismissButton();
-                addAdvanceButton();
-
-                messageContainer.removeAll();
-                event.setRemoveEvent(true);
-                scheduler.showTodaysEvents(todaysEvents);
-
-                revalidate();
-                repaint();
-            }
-        });
+        buttonContainer.revalidate();
+        buttonContainer.repaint();
     }
 
     public void removeDismissButton() {
@@ -195,26 +245,12 @@ public class MessageViewer extends GamePanel {
     }
 
     public void addPlayGameButton(Events event) {
+        this.event = event;
         // Check to see if this is already visible
         if (!buttonContainer.isAncestorOf(playGame)) {
             buttonContainer.add(playGame);
             buttonContainer.add(Box.createHorizontalGlue());
         }
-
-        // Remove previous listener
-        MouseListener[] listeners = playGame.getMouseListeners();
-        for (int i = listeners.length - 1; i >= 0; i--) {
-            playGame.removeMouseListener(listeners[i]);
-        }
-
-        // Update with this event
-        playGame.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                scheduler.viewTacticsPages(true, event);
-                event.setRemoveEvent(true);
-            }
-        });
     }
 
     public void removePlayGameButton() {
@@ -224,39 +260,13 @@ public class MessageViewer extends GamePanel {
     }
 
     public void addSimGameButton(Events event, ArrayList<Events> todaysEvents) {
+        this.event = event;
+        this.todaysEvents = todaysEvents;
         // Check to see if this is already visible
         if (!buttonContainer.isAncestorOf(simGame)) {
             buttonContainer.add(simGame);
             buttonContainer.add(Box.createHorizontalGlue());
         }
-
-        // Remove previous listener
-        MouseListener[] listeners = simGame.getMouseListeners();
-        for (int i = listeners.length - 1; i >= 0; i--) {
-            simGame.removeMouseListener(listeners[i]);
-        }
-
-        // Update with this event
-        simGame.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                removeSimGameButton();
-                removePlayGameButton();
-                if (event.getMatch() != null) {
-                    // Change back to a normal match as this is not being shown to user
-                    Match convertedMatch = new Match(event.getMatch());
-                    convertedMatch.startMatch(scheduler, "instant");
-
-                    for(Match eachMatch : event.getMatch().getSameDayMatches()){
-                        CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
-                    }
-                    scheduler.getMyFixtures().getLine(event.getMatch()).gameComplete();
-                }
-
-                event.setRemoveEvent(true);
-                scheduler.showTodaysEvents(todaysEvents);
-            }
-        });
     }
 
     public void removeSimGameButton() {

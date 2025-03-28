@@ -85,13 +85,13 @@ public class CustomizedOptionField extends JComponent {
 		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 
 		// Draw border
-		g2.setColor(GamePanel.getCharcoal());
+		g2.setColor(GamePanel.getGreenCharcoal());
 		g2.setStroke(new BasicStroke(2));  // Set border thickness
 		g2.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, 10, 10);
 
 		// Draw text
 		g2.setFont(GamePanel.getBebasNeueFont());
-		g2.setColor(GamePanel.getCharcoal());
+		g2.setColor(GamePanel.getGreenCharcoal());
 
 		FontMetrics fm = g2.getFontMetrics();
 		int textWidth = fm.stringWidth(options.get(currentOption));

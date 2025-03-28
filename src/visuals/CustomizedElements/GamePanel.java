@@ -24,6 +24,10 @@ public abstract class GamePanel extends JPanel {
     }
 
     public static Color getCharcoal() {
+        return new Color(0x36, 0x6A, 0x4F);
+    }
+
+    public static Color getGreenCharcoal() {
         return new Color(0x36, 0x45, 0x4F);
     }
 
