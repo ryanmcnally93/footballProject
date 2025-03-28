@@ -20,8 +20,8 @@ public class SpeechBubbleGenerator {
 
     public static JLabel createSpeechBubble(String message, boolean isReceivedMessage) {
         received = isReceivedMessage;
-        int padding = 20;
-        int fontSize = 16;
+        int padding = 10;
+        int fontSize = 14;
         Font font = new Font("Arial", Font.PLAIN, fontSize);
 
         // Create a temporary image to measure text size

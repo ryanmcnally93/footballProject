@@ -1,5 +1,4 @@
 package visuals.ScheduleFrames;
-import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 import javax.swing.*;
 
@@ -80,7 +79,7 @@ public class Events {
 		this.player = player;
 	}
 
-	public JLabel getTitle() {
+	public JLabel getSender() {
 		return title;
 	}
 

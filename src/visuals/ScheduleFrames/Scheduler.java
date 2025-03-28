@@ -32,7 +32,7 @@ public class Scheduler extends GamePanel {
 	private LocalDateTime date;
 	private JPanel eventsBox, southMiddle, menuBox, header, backgroundMoverPanel, datePanel;
 	private TacticsPanel tacticsPanel;
-	private CustomizedButton playGame, advanceToGame, simGame, menuButton, closeButton, backgroundMover, trainingButton, playerSearchButton, standingsButton, teamButton, myClubButton, fixturesButton, myProfileButton;
+	private CustomizedButton menuButton, closeButton, backgroundMover, trainingButton, playerSearchButton, standingsButton, teamButton, myClubButton, fixturesButton, myProfileButton;
 	private CustomizedTitle todaysDate, teamName, userName;
 	private Team team;
 	private User user;
@@ -40,7 +40,6 @@ public class Scheduler extends GamePanel {
 	private ArrayList<Events> events;
 	private JPanel mainPanel;
 	private GameWindow window;
-	private Box eventContainer;
 	private UsersMatch match;
 	private JLayeredPane layeredPane;
 	private MainMenu mainMenu;
@@ -125,35 +124,37 @@ public class Scheduler extends GamePanel {
         appendEastAndWest(mainPanel);
 
 		JPanel south = new JPanel(new BorderLayout());
-		south.setOpaque(true);
+		south.setOpaque(false);
 		movingComponents.add(south);
-		southMiddle = new JPanel(null);
-		southMiddle.setOpaque(true);
-		southMiddle.setBackground(Color.GREEN);
+		southMiddle = new JPanel(new BorderLayout());
+		southMiddle.setOpaque(false);
 
 		messageViewer = new MessageViewer(this);
 		messageViewer.addAdvanceButton();
+		southMiddle.add(messageViewer, BorderLayout.CENTER);
 
-		menuBox = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		menuBox = new JPanel(new BorderLayout());
 		setPermanentWidth(menuBox, 115);
 
-		datePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		datePanel = new JPanel(new BorderLayout());
 		setPermanentWidth(datePanel, 115);
 		datePanel.setOpaque(false);
 
 		String todaysDateFormatted = getTodaysDateWithGoodFormat();
 		todaysDate = new CustomizedTitle(todaysDateFormatted);
 		todaysDate.setFontSize(16);
-		datePanel.add(todaysDate);
+		datePanel.add(todaysDate, BorderLayout.SOUTH);
+		datePanel.setBorder(new EmptyBorder(0,10,10,0));
 
 		menuButton = new CustomizedButton("Main Menu", 16);
-		menuBox.add(menuButton);
+		menuBox.add(menuButton, BorderLayout.SOUTH);
 		menuBox.setOpaque(false);
+		menuBox.setBorder(new EmptyBorder(0,0,10,10));
 
 		south.add(menuBox, BorderLayout.EAST);
 		south.add(southMiddle, BorderLayout.CENTER);
 		south.add(datePanel, BorderLayout.WEST);
-		south.setBounds(0, 422, 800, 180);
+		south.setBounds(0, 372, 800, 200);
 		layeredPane.add(south, JLayeredPane.PALETTE_LAYER);
 
 		layeredPane.add(mainPanel, JLayeredPane.DEFAULT_LAYER);
@@ -502,8 +503,8 @@ public class Scheduler extends GamePanel {
 		// This only runs if there is a usersmatch
 		if(match != null) {
 			if(match.getTimer().getTime().equals("90:00")) {
-				southMiddle.remove(playGame);
-				southMiddle.remove(simGame);
+				messageViewer.removePlayGameButton();
+				messageViewer.removeSimGameButton();
 				// We don't want the advance button when messages are present
 				// Let's check there isn't already an advance button
 				messageViewer.addAdvanceButton();
@@ -535,68 +536,21 @@ public class Scheduler extends GamePanel {
 
 		// Let's look through todays events that are left
 		for(Events event : todaysEvents){
-			showEventsDescription(event);
+			messageViewer.displayEvent(event);
 			messageViewer.removeAdvanceButton();
 
 			// This is a match event
 			if (event.getType().equals("Match")) {
-				playGame = new CustomizedButton("Play", 16);
-				playGame.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseClicked(MouseEvent e) {
-						viewTacticsPages(true, event);
-						event.setRemoveEvent(true);
-					}
-				});
 				System.out.println("Adding a new playgame button");
-				southMiddle.add(playGame);
+				messageViewer.addPlayGameButton(event);
 
 				// This is the simulate match button and its functionality
-				simGame = new CustomizedButton("Simulate", 16);
-				Scheduler thissch = this;
-				simGame.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseClicked(MouseEvent e) {
-						southMiddle.remove(simGame);
-						southMiddle.remove(playGame);
-						if (event.getMatch() != null) {
-							// Change back to a normal match as this is not being shown to user
-							Match convertedMatch = new Match(event.getMatch());
-							convertedMatch.startMatch(thissch, "instant");
-
-							for(Match eachMatch : event.getMatch().getSameDayMatches()){
-								CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
-							}
-							myFixtures.getLine(event.getMatch()).gameComplete();
-						}
-
-						event.setRemoveEvent(true);
-						showTodaysEvents(todaysEvents);
-					}
-				});
 				System.out.println("Adding a simgame button");
-				southMiddle.add(simGame);
+				messageViewer.addSimGameButton(event, todaysEvents);
 			} else {
 				// This is not a match event
-				CustomizedButton dismiss = new CustomizedButton("Dismiss", 16);
-				dismiss.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseClicked(MouseEvent e) {
-						eventContainer.removeAll();
-						southMiddle.remove(dismiss);
-						messageViewer.addAdvanceButton();
-						event.setRemoveEvent(true);
-						showTodaysEvents(todaysEvents);
-						eventContainer.repaint();
-						southMiddle.revalidate();
-						southMiddle.repaint();
-					}
-				});
-				// Only need 1 dismiss button
-				if (!southMiddle.isAncestorOf(dismiss)) {
-					System.out.println("Adding a dismiss button");
-					southMiddle.add(dismiss);
-				}
+				System.out.println("Adding a dismiss button");
+				messageViewer.addDismissButton(event, todaysEvents);
 				break;
 			}
 		}
@@ -813,36 +767,6 @@ public class Scheduler extends GamePanel {
 		tablePanel.getHeaderPanel().setTitle(match.getHome().getName() + " vs " + match.getAway().getName());
 		tablePanel.removeKeyListeners();
 	}
-
-	public void showEventsDescription(Events event) {
-		eventContainer = Box.createVerticalBox();
-		eventContainer.setPreferredSize(new Dimension(600,40));
-
-		// Add margin bottom
-		eventContainer.setBorder(new EmptyBorder(0,0,20,0));
-
-		// This pushes everything to the bottom
-		eventContainer.add(Box.createVerticalGlue());
-
-		Box titleBox = Box.createHorizontalBox();
-		titleBox.add(Box.createHorizontalGlue());
-		JLabel title = event.getTitle();
-		titleBox.add(title);
-		titleBox.add(Box.createHorizontalGlue());
-		titleBox.setBorder(new EmptyBorder(0,0,10,0));
-		eventContainer.add(titleBox);
-
-		Box descriptionBox = Box.createHorizontalBox();
-		descriptionBox.add(Box.createHorizontalGlue());
-		JLabel description = event.getDescription();
-		descriptionBox.add(description);
-		descriptionBox.add(Box.createHorizontalGlue());
-		eventContainer.add(descriptionBox);
-
-		southMiddle.add(eventContainer, BorderLayout.CENTER);
-		southMiddle.revalidate();
-		southMiddle.repaint();
-	}
 	
 	public void addDay() {
 		this.laterMatches = new ArrayList<>();
@@ -853,7 +777,7 @@ public class Scheduler extends GamePanel {
 		// Need ones that aren't finished
 //		System.out.println("All Fixtures: " + league.getFixtures());
 //		System.out.println("Fixtures Size: " + league.getFixtures().size());
-		eventContainer.removeAll();
+		messageViewer.removeMessage();
 		mainPanel.repaint();
 		date = date.plusDays(1);
 
@@ -885,23 +809,7 @@ public class Scheduler extends GamePanel {
 
 		// This will produce a skip to first match button when on 9th June
 		if(date.toLocalDate().isEqual(LocalDate.of(year,06,9))){
-			advanceToGame = new CustomizedButton("Skip to Matchday", 16);
-			advanceToGame.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					int counter = 0;
-					while(counter == 0){
-						addDay();
-						for(Events each : events) {
-							if (each.getDate().toLocalDate().equals(getDate().toLocalDate())) {
-								counter++;
-							}
-						}
-					}
-					southMiddle.remove(advanceToGame);
-				}
-			});
-			southMiddle.add(advanceToGame);
+			messageViewer.addAdvanceToGameButton(events);
 		}
 
 		ArrayList<Match> todaysGames = getAllOfTodaysMatches();
@@ -1075,28 +983,12 @@ public class Scheduler extends GamePanel {
 		this.user = user;
 	}
 
-	public Box getEventContainer() {
-		return eventContainer;
-	}
-
-	public void setEventContainer(Box eventContainer) {
-		this.eventContainer = eventContainer;
-	}
-
 	public ArrayList<Events> getEvents() {
 		return events;
 	}
 
 	public void setEvents(ArrayList<Events> events) {
 		this.events = events;
-	}
-
-	public JPanel getSouth() {
-		return southMiddle;
-	}
-
-	public void setSouth(JPanel south) {
-		this.southMiddle = south;
 	}
 
 	public JPanel getSouthMiddle() {
@@ -1113,30 +1005,6 @@ public class Scheduler extends GamePanel {
 
 	public void setMenuBox(JPanel menuBox) {
 		this.menuBox = menuBox;
-	}
-
-	public CustomizedButton getPlayGame() {
-		return playGame;
-	}
-
-	public void setPlayGame(CustomizedButton playGame) {
-		this.playGame = playGame;
-	}
-
-	public CustomizedButton getAdvanceToGame() {
-		return advanceToGame;
-	}
-
-	public void setAdvanceToGame(CustomizedButton advanceToGame) {
-		this.advanceToGame = advanceToGame;
-	}
-
-	public CustomizedButton getSimGame() {
-		return simGame;
-	}
-
-	public void setSimGame(CustomizedButton simGame) {
-		this.simGame = simGame;
 	}
 
 	public CustomizedButton getMenuButton() {
@@ -1377,5 +1245,13 @@ public class Scheduler extends GamePanel {
 
 	public Map<String, JPanel> getFixturesMap() {
 		return fixturesMap;
+	}
+
+	public MessageViewer getMessageViewer() {
+		return messageViewer;
+	}
+
+	public void setMessageViewer(MessageViewer messageViewer) {
+		this.messageViewer = messageViewer;
 	}
 }

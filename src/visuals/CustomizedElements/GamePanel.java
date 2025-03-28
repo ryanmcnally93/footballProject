@@ -1,8 +1,7 @@
 package visuals.CustomizedElements;
-import visuals.MatchPages.MatchFrames;
 
 import javax.swing.*;
-
+import javafx.scene.image.ImageView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;

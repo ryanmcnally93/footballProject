@@ -549,7 +549,7 @@ public class Match {
 				saveRatingsAndRefreshPlayerData();
 			}
 			if(scheduler != null){
-				scheduler.getEventContainer().removeAll();
+				scheduler.getMessageViewer().removeMessage();
 				// We only want this on a simulated match
 				if(simulated) {
 					Events simulatedResult = new Events("Result", getScore(), getDateTime().plusHours(2));
