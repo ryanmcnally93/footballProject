@@ -1,6 +1,8 @@
-package visuals.CustomizedElements;
+package visuals.SchedulerMessageApp;
 
 import entities.Match;
+import visuals.CustomizedElements.CustomizedButton;
+import visuals.CustomizedElements.GamePanel;
 import visuals.ScheduleFrames.Events;
 import visuals.ScheduleFrames.Scheduler;
 

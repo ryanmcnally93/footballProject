@@ -26,6 +26,7 @@ import visuals.MainMenuPages.TacticsPages.FirstTeamPage;
 import visuals.MainMenuPages.TacticsPages.FormationPage;
 import visuals.MainMenuPages.TacticsPages.MatchRolesPage;
 import visuals.MatchPages.*;
+import visuals.SchedulerMessageApp.MessageViewer;
 
 public class Scheduler extends GamePanel {
 
