@@ -134,21 +134,27 @@ public class Scheduler extends GamePanel {
 		messageViewer.addAdvanceButton();
 		southMiddle.add(messageViewer, BorderLayout.CENTER);
 
-		menuBox = new JPanel(new BorderLayout());
-		setPermanentWidth(menuBox, 115);
+		menuBox = new JPanel();
+		setPermanentWidth(menuBox, 155);
 
-		datePanel = new JPanel(new BorderLayout());
-		setPermanentWidth(datePanel, 115);
+		datePanel = new JPanel();
+		setPermanentWidth(datePanel, 154);
 		datePanel.setOpaque(false);
 
 		String todaysDateFormatted = getTodaysDateWithGoodFormat();
 		todaysDate = new CustomizedTitle(todaysDateFormatted);
 		todaysDate.setFontSize(16);
-		datePanel.add(todaysDate, BorderLayout.SOUTH);
+		datePanel.add(Box.createVerticalStrut(320));
+		datePanel.add(Box.createHorizontalGlue());
+		datePanel.add(todaysDate);
+		datePanel.add(Box.createHorizontalGlue());
 		datePanel.setBorder(new EmptyBorder(0,10,10,0));
 
 		menuButton = new CustomizedButton("Main Menu", 16);
-		menuBox.add(menuButton, BorderLayout.SOUTH);
+		menuBox.add(Box.createVerticalStrut(320));
+		menuBox.add(Box.createHorizontalGlue());
+		menuBox.add(menuButton);
+		menuBox.add(Box.createHorizontalGlue());
 		menuBox.setOpaque(false);
 		menuBox.setBorder(new EmptyBorder(0,0,10,10));
 

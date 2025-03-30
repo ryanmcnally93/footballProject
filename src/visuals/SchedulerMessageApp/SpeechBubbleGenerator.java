@@ -1,6 +1,7 @@
 package visuals.SchedulerMessageApp;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
@@ -46,25 +47,75 @@ public class SpeechBubbleGenerator {
 
         // Draw speech bubble
         if (received) {
+            // Draw shape
             g2d.setColor(new Color(204, 255, 204)); // Light green bubble
-            g2d.fill(new RoundRectangle2D.Float(0, 0, bubbleWidth, bubbleHeight - 20, 20, 20));
+            RoundRectangle2D shape = new RoundRectangle2D.Float(0, 0, bubbleWidth, bubbleHeight - 20, 20, 20);
+            g2d.fill(shape);
 
+            // Set border
+            g2d.setColor(Color.BLACK);
+            g2d.setStroke(new BasicStroke(1));
+            g2d.drawRoundRect((int) shape.getX(), (int) shape.getY(),
+                    (int) shape.getWidth() - 1, (int) shape.getHeight(),
+                    (int) shape.getArcWidth(), (int) shape.getArcHeight());
+
+            // Create Flick
+            g2d.setColor(new Color(204, 255, 204));
             Path2D.Float flick = new Path2D.Float();
             flick.moveTo(bubbleWidth - 30, bubbleHeight - 20);
             flick.lineTo(bubbleWidth, bubbleHeight);
             flick.lineTo(bubbleWidth - 10, bubbleHeight - 20);
             flick.closePath();
             g2d.fill(flick);
-        } else {
-            g2d.setColor(new Color(173, 216, 230)); // Light blue bubble
-            g2d.fill(new RoundRectangle2D.Float(0, 0, bubbleWidth, bubbleHeight - 20, 20, 20));
 
+            // Flicks border
+            Path2D.Float border = new Path2D.Float();
+            border.moveTo(bubbleWidth - 30, bubbleHeight - 20);
+            border.lineTo(bubbleWidth, bubbleHeight);
+            border.lineTo(bubbleWidth - 10, bubbleHeight - 20);
+            g2d.setColor(Color.BLACK);
+            g2d.setStroke(new BasicStroke(1));
+            g2d.draw(border);
+
+            // Remove line between flick and bubble
+            g2d.setColor(new Color(204, 255, 204));
+            g2d.setStroke(new BasicStroke(1));
+            g2d.drawLine(bubbleWidth - 28, bubbleHeight - 21, bubbleWidth - 10, bubbleHeight - 21);
+        } else {
+            // Draw Shape
+            g2d.setColor(new Color(173, 216, 230)); // Light blue bubble
+            RoundRectangle2D shape = new RoundRectangle2D.Float(0, 0, bubbleWidth, bubbleHeight - 20, 20, 20);
+            g2d.fill(shape);
+
+            // Draw Border
+            g2d.setColor(Color.BLACK);
+            g2d.setStroke(new BasicStroke(1));
+            g2d.drawRoundRect((int) shape.getX(), (int) shape.getY(),
+                    (int) shape.getWidth() - 1, (int) shape.getHeight(),
+                    (int) shape.getArcWidth(), (int) shape.getArcHeight());
+
+            // Create Flick
+            g2d.setColor(new Color(173, 216, 230));
             Path2D.Float flick = new Path2D.Float();
             flick.moveTo(30, bubbleHeight - 20);
             flick.lineTo(0, bubbleHeight);
             flick.lineTo(10, bubbleHeight - 20);
             flick.closePath();
             g2d.fill(flick);
+
+            // Flicks border
+            Path2D.Float border = new Path2D.Float();
+            border.moveTo(30, bubbleHeight - 20);
+            border.lineTo(0, bubbleHeight);
+            border.lineTo(10, bubbleHeight - 20);
+            g2d.setColor(Color.BLACK);
+            g2d.setStroke(new BasicStroke(1));
+            g2d.draw(border);
+
+            // Remove line between flick and bubble
+            g2d.setColor(new Color(173, 216, 230));
+            g2d.setStroke(new BasicStroke(1));
+            g2d.drawLine(28, bubbleHeight - 21, 10, bubbleHeight - 21);
         }
 
         // Draw wrapped text

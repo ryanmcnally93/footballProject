@@ -29,18 +29,18 @@ public class MessageViewer extends GamePanel {
 
     public MessageViewer(Scheduler scheduler) {
         this.scheduler = scheduler;
-        setPermanentWidthAndHeight(this, 600, 210);
+        setPermanentWidthAndHeight(this, 491, 208);
         setOpaque(false);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         ImageIcon image = new ImageIcon("./src/visuals/Images/message_viewer_tablet.png");
-        backgroundImage = image.getImage().getScaledInstance(600, 210, Image.SCALE_SMOOTH);
+        backgroundImage = image.getImage().getScaledInstance(491, 208, Image.SCALE_SMOOTH);
 
         createButtonsAndListeners();
 
         messageContainer = new JPanel(new BorderLayout());
         messageContainer.setOpaque(false);
-        setPermanentWidthAndHeight(messageContainer, 600, 155);
+        setPermanentWidthAndHeight(messageContainer, 491, 155);
         messageContainer.setBorder(new EmptyBorder(20,30,0,30));
         add(messageContainer);
 
@@ -144,7 +144,7 @@ public class MessageViewer extends GamePanel {
 
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setColor(getCharcoal()); // Or set a custom color for the rounded corners
+        g2d.setColor(new Color(235, 235, 235)); // Or set a custom color for the rounded corners
         Shape roundedRectangle = new RoundRectangle2D.Float(2, 2, getWidth() - 4, getHeight(), 55, 55);
         g2d.fill(roundedRectangle);
 
@@ -190,14 +190,14 @@ public class MessageViewer extends GamePanel {
         JLabel sender = event.getSender();
         sender.setOpaque(false);
         sender.setBorder(new EmptyBorder(5,10,0,0));
-        sender.setForeground(Color.WHITE);
-        setPermanentWidthAndHeight(sender,600, sender.getPreferredSize().height + 5);
+        sender.setForeground(getGreenCharcoal());
+        setPermanentWidthAndHeight(sender,491, sender.getPreferredSize().height + 5);
         messageContainer.add(sender, BorderLayout.NORTH);
 
         JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
-        setPermanentWidthAndHeight(separator,600, 1);
-        separator.setBackground(Color.WHITE);
-        separator.setForeground(Color.WHITE);
+        setPermanentWidthAndHeight(separator,491, 1);
+        separator.setBackground(getGreenCharcoal());
+        separator.setForeground(getGreenCharcoal());
         messageContainer.add(separator, BorderLayout.CENTER);
 
         JLabel description = event.getDescription();
