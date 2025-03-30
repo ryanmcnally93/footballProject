@@ -1,4 +1,5 @@
 package visuals.ScheduleFrames;
+import java.awt.*;
 import java.time.LocalDateTime;
 import javax.swing.*;
 
@@ -6,6 +7,8 @@ import entities.UsersMatch;
 import entities.Team;
 import people.Footballer;
 import visuals.SchedulerMessageApp.SpeechBubbleGenerator;
+
+import static visuals.CustomizedElements.GamePanel.getBebasNeueFont;
 
 public class Events {
 
@@ -23,9 +26,16 @@ public class Events {
 	// The user has a match
 	public Events(UsersMatch match) {
 		this.date = match.getDateTime();
-		this.description = new JLabel(match.getHome().getName() + " vs " + match.getAway().getName());
+		JLabel matchTitle = new JLabel(match.getHome().getName() + " vs " + match.getAway().getName(), SwingConstants.CENTER);
+		matchTitle.setOpaque(false);
+		matchTitle.setForeground(Color.WHITE);
+		matchTitle.setPreferredSize(new Dimension(200, 90));
+		matchTitle.setMinimumSize(new Dimension(200, 90));
+		matchTitle.setMaximumSize(new Dimension(200, 90));
+		matchTitle.setFont(getBebasNeueFont());
+		this.description = matchTitle;
 		this.type = "Match";
-		this.title  = new JLabel();
+		this.title  = new JLabel("Matchday");
 		this.match = match;
 		this.removeEvent = false;
 	}
@@ -33,7 +43,6 @@ public class Events {
 	public Events(String person, String message, LocalDateTime dateTime){
 		this.date = dateTime;
 		this.removeEvent = false;
-//		String text = "<html><body style='width: %1spx; text-align: center;'>" + message + "</body></html>";
 		this.description = SpeechBubbleGenerator.createSpeechBubbleReceived(message);
 		if(person.equals("Chairman")){
 			this.type = "Chairman Message";
@@ -44,6 +53,14 @@ public class Events {
 		} else if (person.equals("Result")) {
 			this.type = ("Result");
 			this.title = new JLabel("Result");
+			JLabel matchTitle = new JLabel(message, SwingConstants.CENTER);
+			matchTitle.setOpaque(false);
+			matchTitle.setForeground(Color.WHITE);
+			matchTitle.setPreferredSize(new Dimension(200, 90));
+			matchTitle.setMinimumSize(new Dimension(200, 90));
+			matchTitle.setMaximumSize(new Dimension(200, 90));
+			matchTitle.setFont(getBebasNeueFont());
+			this.description = matchTitle;
 		}
 	}
 

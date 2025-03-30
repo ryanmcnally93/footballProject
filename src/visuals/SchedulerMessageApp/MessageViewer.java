@@ -41,7 +41,7 @@ public class MessageViewer extends GamePanel {
         messageContainer = new JPanel(new BorderLayout());
         messageContainer.setOpaque(false);
         setPermanentWidthAndHeight(messageContainer, 600, 155);
-        messageContainer.setBorder(new EmptyBorder(20,20,0,0));
+        messageContainer.setBorder(new EmptyBorder(20,30,0,30));
         add(messageContainer);
 
         buttonContainer = Box.createHorizontalBox();
@@ -192,17 +192,17 @@ public class MessageViewer extends GamePanel {
         sender.setBorder(new EmptyBorder(5,10,0,0));
         sender.setForeground(Color.WHITE);
         setPermanentWidthAndHeight(sender,600, sender.getPreferredSize().height + 5);
+        messageContainer.add(sender, BorderLayout.NORTH);
 
         JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
-        // Not working?
-        setPermanentWidthAndHeight(separator, 300, 1);
+        setPermanentWidthAndHeight(separator,600, 1);
         separator.setBackground(Color.WHITE);
         separator.setForeground(Color.WHITE);
-
-        messageContainer.add(sender, BorderLayout.NORTH);
         messageContainer.add(separator, BorderLayout.CENTER);
+
         JLabel description = event.getDescription();
         description.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         messageContainer.add(description, BorderLayout.SOUTH);
         messageContainer.revalidate();
         messageContainer.repaint();
