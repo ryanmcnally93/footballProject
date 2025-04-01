@@ -9,6 +9,7 @@ import people.Footballer;
 import visuals.SchedulerMessageApp.SpeechBubbleGenerator;
 
 import static visuals.CustomizedElements.GamePanel.getBebasNeueFont;
+import static visuals.CustomizedElements.GamePanel.getCharcoal;
 
 public class Events {
 
@@ -28,7 +29,7 @@ public class Events {
 		this.date = match.getDateTime();
 		JLabel matchTitle = new JLabel(match.getHome().getName() + " vs " + match.getAway().getName(), SwingConstants.CENTER);
 		matchTitle.setOpaque(false);
-		matchTitle.setForeground(Color.WHITE);
+		matchTitle.setForeground(getCharcoal());
 		matchTitle.setPreferredSize(new Dimension(200, 90));
 		matchTitle.setMinimumSize(new Dimension(200, 90));
 		matchTitle.setMaximumSize(new Dimension(200, 90));
@@ -55,7 +56,7 @@ public class Events {
 			this.title = new JLabel("Result");
 			JLabel matchTitle = new JLabel(message, SwingConstants.CENTER);
 			matchTitle.setOpaque(false);
-			matchTitle.setForeground(Color.WHITE);
+			matchTitle.setForeground(getCharcoal());
 			matchTitle.setPreferredSize(new Dimension(200, 90));
 			matchTitle.setMinimumSize(new Dimension(200, 90));
 			matchTitle.setMaximumSize(new Dimension(200, 90));

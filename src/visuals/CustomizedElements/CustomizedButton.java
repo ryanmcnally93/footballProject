@@ -5,14 +5,15 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import static visuals.CustomizedElements.GamePanel.getGreenCharcoal;
+import static visuals.CustomizedElements.GamePanel.getCharcoal;
+import static visuals.CustomizedElements.GamePanel.getOppositeImage;
 
 public class CustomizedButton extends JButton {
 
-	private boolean hasImage;
+	private boolean hasImage, hasHoverEffect;
 	private ImageIcon icon;
 	private Color primaryColor = Color.WHITE;
-	private Color secondaryColor = getGreenCharcoal();
+	private Color secondaryColor = getCharcoal();
 	private Color hoverColor;
 
 	public CustomizedButton(String text) {
@@ -55,15 +56,18 @@ public class CustomizedButton extends JButton {
 			setBorderPainted(false);
 		}
 
-		addHoverEffect();
+		if (!hasHoverEffect) {
+			addHoverEffect();
+		}
 	}
 
 	private void addHoverEffect() {
+		hasHoverEffect = true;
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				if (hasImage) {
-					ImageIcon newIcon = GamePanel.getOppositeImage(icon);
+					ImageIcon newIcon = getOppositeImage(icon);
 					setIcon(newIcon);
 					icon = newIcon;
 				} else {
@@ -78,7 +82,7 @@ public class CustomizedButton extends JButton {
 			@Override
 			public void mouseExited(MouseEvent e) {
 				if (hasImage) {
-					ImageIcon newIcon = GamePanel.getOppositeImage(icon);
+					ImageIcon newIcon = getOppositeImage(icon);
 					setIcon(newIcon);
 					icon = newIcon;
 				} else {
@@ -116,5 +120,14 @@ public class CustomizedButton extends JButton {
 
 	public ImageIcon getOtherIcon() {
 		return icon;
+	}
+
+	public void triggerColorReverse() {
+		ImageIcon oppositeImage = getOppositeImage((ImageIcon) getIcon());
+		icon = oppositeImage;
+		setIcon(oppositeImage);
+		this.init();
+		this.revalidate();
+		this.repaint();
 	}
 }

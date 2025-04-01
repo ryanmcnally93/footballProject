@@ -80,7 +80,7 @@ public class StartPage extends GamePanel {
             	name=nameField.getText();
             	submitName(nameField);
 				submitButton.setBackground(Color.WHITE);
-				submitButton.setForeground(GamePanel.getGreenCharcoal());
+				submitButton.setForeground(GamePanel.getCharcoal());
 				submitButton.repaint();
             }
         });

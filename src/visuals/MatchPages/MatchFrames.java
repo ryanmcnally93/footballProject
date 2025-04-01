@@ -309,7 +309,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 
 	public void createContinueButton() {
 		// Adding the continue button
-		if (continueButton.getMouseListeners().length == 1) {
+		if (continueButton.getMouseListeners().length == 2) {
 			continueButton.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {

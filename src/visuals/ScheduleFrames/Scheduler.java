@@ -148,7 +148,7 @@ public class Scheduler extends GamePanel {
 		datePanel.add(Box.createHorizontalGlue());
 		datePanel.add(todaysDate);
 		datePanel.add(Box.createHorizontalGlue());
-		datePanel.setBorder(new EmptyBorder(0,10,10,0));
+		datePanel.setBorder(new EmptyBorder(0,-10,0,0));
 
 		menuButton = new CustomizedButton("Main Menu", 16);
 		menuBox.add(Box.createVerticalStrut(320));
@@ -156,7 +156,7 @@ public class Scheduler extends GamePanel {
 		menuBox.add(menuButton);
 		menuBox.add(Box.createHorizontalGlue());
 		menuBox.setOpaque(false);
-		menuBox.setBorder(new EmptyBorder(0,0,10,10));
+		menuBox.setBorder(new EmptyBorder(0,0,0,15));
 
 		south.add(menuBox, BorderLayout.EAST);
 		south.add(southMiddle, BorderLayout.CENTER);
@@ -172,10 +172,11 @@ public class Scheduler extends GamePanel {
 		Events youthCoachMessage = new Events("Youth Coach", "Welcome boss, I've put together a list of the top players in the academy for you to take a look at.", getDate());
 		events.add(youthCoachMessage);
 
+		createLayoutsMapsAndPages();
 		createMovingButtons();
 		addMouseListeners();
-		refreshMessages();
 		createMainMenu();
+		refreshMessages();
 
 		revalidate();
 		repaint();
@@ -209,14 +210,8 @@ public class Scheduler extends GamePanel {
 			}
 		});
 
-		tacticsPanel.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (tacticsPanel.getShape().contains(e.getPoint())) {
-					addCardmapListener(tacticsPanel, tacticsPages, tacticsLayout);
-				}
-			}
-		});
+		addCardmapListener(tacticsPanel, tacticsPages, tacticsLayout);
+		addCardmapListener(standingsButton, leaderboardsPages, leaderboardsLayout);
 	}
 
 	private void createMovingButtons() {
@@ -313,10 +308,8 @@ public class Scheduler extends GamePanel {
 		}
 	}
 
-	// Needs reviewing
-	public void createMainMenu() {
-		mainMenu = new MainMenu(window, this);
-
+	public void createLayoutsMapsAndPages() {
+		// Leaderboard Maps
 		leaderboardsLayout = new CardLayout();
 		leaderboardsPages = new JPanel(leaderboardsLayout);
 		leaguePage = new LeagueTablePage(leaderboardsLayout, leaderboardsPages, this, true);
@@ -331,6 +324,7 @@ public class Scheduler extends GamePanel {
 		leaderboardsMap.put("Top Goals", goals);
 		leaderboardsMap.put("Top Assists", assists);
 
+		// Fixtures Maps
 		fixturesLayout = new CardLayout();
 		fixturesPages = new JPanel(fixturesLayout);
 		allFixtures = new AllFixturesPage(fixturesLayout, fixturesPages, this, true);
@@ -345,10 +339,10 @@ public class Scheduler extends GamePanel {
 		fixturesMap.put("My Fixtures", myFixtures);
 		fixturesMap.put("Results", results);
 
+		// Create Components for Match Frames
 		speedometer = new Speedometer();
 		ArrayList<CustomizedButton> buttons = new ArrayList<CustomizedButton>();
 
-		// Add Pause and Resume Buttons here
 		pauseButton = new CustomizedButton("Pause");
 		pauseButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		buttons.add(pauseButton);
@@ -361,6 +355,7 @@ public class Scheduler extends GamePanel {
 		tacticsButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		buttons.add(tacticsButton);
 
+		// Match Frames Maps
 		matchFramesLayout = new CardLayout();
 		matchFramesPages = new JPanel(matchFramesLayout);
 		watchPanel = new MatchWatch(matchFramesLayout, matchFramesPages, speedometer, buttons);
@@ -388,6 +383,7 @@ public class Scheduler extends GamePanel {
 		matchFramesMap.put("Table", tablePanel);
 		matchFramesMap.put("Ratings", ratingsPanel);
 
+		// Tactics Maps
 		tacticsLayout = new CardLayout();
 		tacticsPages = new JPanel(tacticsLayout);
 		firstTeam = new FirstTeamPage(tacticsLayout, tacticsPages, this, true);
@@ -403,6 +399,11 @@ public class Scheduler extends GamePanel {
 		tacticsMap.put("Match Roles", matchRoles);
 	}
 
+	// Needs reviewing
+	public void createMainMenu() {
+		mainMenu = new MainMenu(window, this);
+	}
+
 	public void addCardmapListener(JComponent component, JPanel pages, CardLayout thisLayout){
 		component.addMouseListener(new MouseAdapter(){
 			@Override
@@ -411,11 +412,15 @@ public class Scheduler extends GamePanel {
 				window.getContentPane().add(pages, BorderLayout.CENTER);
 				if (component instanceof JButton) {
 					thisLayout.show(pages, ((JButton) component).getText());
+					CustomizedButton thisButton = ((CustomizedButton) component);
+					thisButton.triggerColorReverse();
 				} else {
 					// This is the Tactics Panel click
-					thisLayout.show(pages, "First Team");
-					tacticsPanel.setHovered(false);
-					tacticsPanel.removeFootballIcon();
+					if (tacticsPanel.getShape().contains(e.getPoint())) {
+						thisLayout.show(pages, "First Team");
+						tacticsPanel.setHovered(false);
+						tacticsPanel.removeFootballIcon();
+					}
 				}
 				window.revalidate();
 				window.repaint();

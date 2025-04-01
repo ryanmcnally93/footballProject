@@ -1,7 +1,6 @@
 package visuals.CustomizedElements;
 
 import javax.swing.*;
-import javafx.scene.image.ImageView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -23,11 +22,11 @@ public abstract class GamePanel extends JPanel {
         addMouseListener(mouseAdapter);
     }
 
-    public static Color getCharcoal() {
-        return new Color(0x36, 0x6A, 0x4F);
-    }
+//    public static Color getGreenCharcoal() {
+//        return new Color(0x36, 0x6A, 0x4F);
+//    }
 
-    public static Color getGreenCharcoal() {
+    public static Color getCharcoal() {
         return new Color(0x36, 0x45, 0x4F);
     }
 

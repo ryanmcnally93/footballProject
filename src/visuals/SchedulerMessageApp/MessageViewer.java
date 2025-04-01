@@ -11,7 +11,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
@@ -190,14 +189,14 @@ public class MessageViewer extends GamePanel {
         JLabel sender = event.getSender();
         sender.setOpaque(false);
         sender.setBorder(new EmptyBorder(5,10,0,0));
-        sender.setForeground(getGreenCharcoal());
+        sender.setForeground(getCharcoal());
         setPermanentWidthAndHeight(sender,491, sender.getPreferredSize().height + 5);
         messageContainer.add(sender, BorderLayout.NORTH);
 
         JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
         setPermanentWidthAndHeight(separator,491, 1);
-        separator.setBackground(getGreenCharcoal());
-        separator.setForeground(getGreenCharcoal());
+        separator.setBackground(getCharcoal());
+        separator.setForeground(getCharcoal());
         messageContainer.add(separator, BorderLayout.CENTER);
 
         JLabel description = event.getDescription();
