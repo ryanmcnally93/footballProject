@@ -1,9 +1,8 @@
 package visuals.MainMenuPages.FixturesPages;
 import entities.Match;
 import entities.UsersMatch;
+import visuals.CustomizedElements.MainPageTemplate;
 import visuals.CustomizedElements.MatchLineOnFixturesPages;
-import visuals.CustomizedElements.PlayerAchievementLine;
-import visuals.MainMenuPages.MainMenuPageTemplate;
 import visuals.MatchPages.MatchFrames;
 import visuals.ScheduleFrames.Scheduler;
 
@@ -12,21 +11,19 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
 
-public class MyFixturesPage extends MainMenuPageTemplate {
+public class FixturesPage extends MainPageTemplate {
 
     private JPanel mainPanel;
     private Box centerBox;
     private JScrollPane scroller;
     private ArrayList<MatchLineOnFixturesPages> lines;
 
-    public MyFixturesPage(CardLayout cardLayout, JPanel pages, Scheduler scheduler, boolean fromScheduler){
-        super(cardLayout, pages, scheduler, fromScheduler);
-        mainPanel = pages;
+    public FixturesPage(Scheduler scheduler) {
+        super(scheduler);
         getHeaderPanel().setTitle("My Fixtures");
         lines = new ArrayList<>();
 
@@ -44,7 +41,15 @@ public class MyFixturesPage extends MainMenuPageTemplate {
         mainPanel.setBackground(Color.LIGHT_GRAY);
         layeredPane.add(mainPanel, JLayeredPane.DEFAULT_LAYER);
 
+        getFooterPanel().addBackButton();
+        updateBackButtonFunctionality();
+
         setVisible(true);
+    }
+
+    @Override
+    public boolean isFromScheduler() {
+        return true;
     }
 
     public void addFixtureLine(UsersMatch child) {

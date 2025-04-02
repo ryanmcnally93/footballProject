@@ -1,21 +1,9 @@
 package visuals.CustomizedElements;
 import main.GameWindow;
-import visuals.MainMenuPages.FixturesPages.AllFixturesPage;
-import visuals.MainMenuPages.FixturesPages.MyFixturesPage;
-import visuals.MainMenuPages.FixturesPages.ResultsPage;
-import visuals.MainMenuPages.LeaderboardPages.LeagueTablePage;
-import visuals.MainMenuPages.LeaderboardPages.TopAssistsPage;
-import visuals.MainMenuPages.LeaderboardPages.TopGoalscorersPage;
-import visuals.MainMenuPages.TacticsPages.FirstTeamPage;
-import visuals.MainMenuPages.TacticsPages.FormationPage;
-import visuals.MainMenuPages.TacticsPages.MatchRolesPage;
 import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
 public class MainMenu extends GamePanel {
 

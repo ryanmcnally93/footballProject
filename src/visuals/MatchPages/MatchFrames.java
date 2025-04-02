@@ -48,7 +48,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 			public void mouseClicked(MouseEvent e) {
 				// THIS BACK BUTTON IS ONLY VISIBLE WHEN WE ARE FROM SCHEDULER
 				getMatch().getScheduler().getWindow().getContentPane().removeAll();
-				getMatch().getScheduler().getWindow().getContentPane().add(getMatch().getScheduler().getFixturesPages(), BorderLayout.CENTER);
+				getMatch().getScheduler().getWindow().getContentPane().add(getMatch().getScheduler().getFixturesPage(), BorderLayout.CENTER);
 				if (!getMatch().isMatchHasPlayed()) {
 					removeUnplayedMatchViewAttributes();
 				} else {

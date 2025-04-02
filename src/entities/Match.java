@@ -596,7 +596,7 @@ public class Match {
 			getScheduler().addFirstPositionMessage();
 		}
 
-		getScheduler().getMyFixtures().getLine(this).gameComplete();
+		getScheduler().getFixturesPage().getLine(this).gameComplete();
 		getScheduler().getWindow().getContentPane().removeAll();
 		getScheduler().displayPage(getScheduler().getWindow());
 		getScheduler().refreshMessages();

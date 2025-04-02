@@ -15,11 +15,8 @@ import javax.swing.border.EmptyBorder;
 import entities.*;
 import visuals.CustomizedElements.*;
 import main.GameWindow;
-import visuals.MainMenuPages.FixturesPages.AllFixturesPage;
-import visuals.MainMenuPages.FixturesPages.MyFixturesPage;
-import visuals.MainMenuPages.FixturesPages.ResultsPage;
+import visuals.MainMenuPages.FixturesPages.FixturesPage;
 import visuals.MainMenuPages.LeaderboardPages.LeagueTablePage;
-import visuals.MainMenuPages.LeaderboardPages.TopAssistsPage;
 import visuals.MainMenuPages.LeaderboardPages.TopGoalscorersPage;
 import visuals.MainMenuPages.MainMenuPageTemplate;
 import visuals.MainMenuPages.TacticsPages.FirstTeamPage;
@@ -47,16 +44,13 @@ public class Scheduler extends GamePanel {
 	private Season season;
 	private ArrayList<Match> laterMatches, sameDayMatches;
 	// Main Menu & MatchFrames Layouts, CardMap & Pages
-	private CardLayout leaderboardsLayout, fixturesLayout, tacticsLayout, matchFramesLayout;
-	private Map<String, JPanel> leaderboardsMap, tacticsMap, fixturesMap, matchFramesMap;
-	private JPanel leaderboardsPages, tacticsPages, fixturesPages, matchFramesPages;
+	private CardLayout standingsLayout, tacticsLayout, matchFramesLayout;
+	private Map<String, JPanel> standingsMap, tacticsMap, matchFramesMap;
+	private JPanel standingsPages, tacticsPages, matchFramesPages;
 	// Main Menu Pages
-	private LeagueTablePage leaguePage;
-	private TopGoalscorersPage goals;
-	private TopAssistsPage assists;
-	private AllFixturesPage allFixtures;
-	private MyFixturesPage myFixtures;
-	private ResultsPage results;
+	private LeagueTablePage teamStandings;
+	private TopGoalscorersPage playerStandings;
+	private FixturesPage fixturesPage;
 	private FirstTeamPage firstTeam;
 	private FormationPage formation;
 	private MatchRolesPage matchRoles;
@@ -211,7 +205,21 @@ public class Scheduler extends GamePanel {
 		});
 
 		addCardmapListener(tacticsPanel, tacticsPages, tacticsLayout);
-		addCardmapListener(standingsButton, leaderboardsPages, leaderboardsLayout);
+		addCardmapListener(standingsButton, standingsPages, standingsLayout);
+
+		fixturesButton.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseClicked(MouseEvent e){
+				window.getContentPane().removeAll();
+				window.getContentPane().add(fixturesPage, BorderLayout.CENTER);
+
+				fixturesButton.triggerColorReverse();
+
+				window.revalidate();
+				window.repaint();
+			}
+		});
+
 	}
 
 	private void createMovingButtons() {
@@ -309,35 +317,20 @@ public class Scheduler extends GamePanel {
 	}
 
 	public void createLayoutsMapsAndPages() {
-		// Leaderboard Maps
-		leaderboardsLayout = new CardLayout();
-		leaderboardsPages = new JPanel(leaderboardsLayout);
-		leaguePage = new LeagueTablePage(leaderboardsLayout, leaderboardsPages, this, true);
-		goals = new TopGoalscorersPage(leaderboardsLayout, leaderboardsPages, this, true);
-		assists = new TopAssistsPage(leaderboardsLayout, leaderboardsPages, this, true);
-		leaderboardsPages.add(leaguePage, "League Table");
-		leaderboardsPages.add(goals, "Top Goals");
-		leaderboardsPages.add(assists, "Top Assists");
+		// Standings Maps
+		standingsLayout = new CardLayout();
+		standingsPages = new JPanel(standingsLayout);
+		teamStandings = new LeagueTablePage(standingsLayout, standingsPages, this, true);
+		playerStandings = new TopGoalscorersPage(standingsLayout, standingsPages, this, true);
+		standingsPages.add(teamStandings, "Team Standings");
+		standingsPages.add(playerStandings, "Player Standings");
 
-		leaderboardsMap = new HashMap<>();
-		leaderboardsMap.put("League Table", leaguePage);
-		leaderboardsMap.put("Top Goals", goals);
-		leaderboardsMap.put("Top Assists", assists);
+		standingsMap = new HashMap<>();
+		standingsMap.put("Team Standings", teamStandings);
+		standingsMap.put("Player Standings", playerStandings);
 
-		// Fixtures Maps
-		fixturesLayout = new CardLayout();
-		fixturesPages = new JPanel(fixturesLayout);
-		allFixtures = new AllFixturesPage(fixturesLayout, fixturesPages, this, true);
-		myFixtures = new MyFixturesPage(fixturesLayout, fixturesPages, this, true);
-		results = new ResultsPage(fixturesLayout, fixturesPages, this, true);
-		fixturesPages.add(allFixtures, "All Fixtures");
-		fixturesPages.add(myFixtures, "My Fixtures");
-		fixturesPages.add(results, "Results");
-
-		fixturesMap = new HashMap<>();
-		fixturesMap.put("All Fixtures", allFixtures);
-		fixturesMap.put("My Fixtures", myFixtures);
-		fixturesMap.put("Results", results);
+		// Fixtures Page
+		fixturesPage = new FixturesPage(this);
 
 		// Create Components for Match Frames
 		speedometer = new Speedometer();
@@ -920,16 +913,15 @@ public class Scheduler extends GamePanel {
 		
 		// This overwrites each entry with a child UsersMatch
 		int k = 0;
-		MyFixturesPage myFixturesPage = (MyFixturesPage) fixturesMap.get("My Fixtures");
 		for (String key : keysToReplace) {
             Match adult = league.getFixtures().get(key);
             if (adult != null) {
                 UsersMatch child = new UsersMatch(adult.getHome(), adult.getAway(), league, adult.getDateTime()); // Create ChildClass instance
                 league.getFixtures().put(key, child); // Replace the entry in the map
-				myFixturesPage.addFixtureLine(child);
+				fixturesPage.addFixtureLine(child);
             }
         }
-		myFixturesPage.organiseMyFixtures();
+		fixturesPage.organiseMyFixtures();
 		System.out.println("Created " + k + "UserMatches");
 		
 		// This looks for UsersMatches and creates an event from it
@@ -1115,28 +1107,16 @@ public class Scheduler extends GamePanel {
 		this.sameDayMatches = sameDayMatches;
 	}
 
-	public CardLayout getLeaderboardsLayout() {
-		return leaderboardsLayout;
+	public CardLayout getStandingsLayout() {
+		return standingsLayout;
 	}
 
-	public void setLeaderboardsLayout(CardLayout leaderboardsLayout) {
-		this.leaderboardsLayout = leaderboardsLayout;
-	}
-
-	public CardLayout getFixturesLayout() {
-		return fixturesLayout;
-	}
-
-	public void setFixturesLayout(CardLayout fixturesLayout) {
-		this.fixturesLayout = fixturesLayout;
+	public void setStandingsLayout(CardLayout standingsLayout) {
+		this.standingsLayout = standingsLayout;
 	}
 
 	public CardLayout getTacticsLayout() {
 		return tacticsLayout;
-	}
-
-	public JPanel getFixturesPages() {
-		return fixturesPages;
 	}
 
 	public void setTacticsLayout(CardLayout tacticsLayout) {
@@ -1167,28 +1147,16 @@ public class Scheduler extends GamePanel {
 		this.tacticsPages = tacticsPages;
 	}
 
-	public LeagueTablePage getLeaguePage() {
-		return leaguePage;
+	public LeagueTablePage getTeamStandings() {
+		return teamStandings;
 	}
 
-	public TopGoalscorersPage getGoals() {
-		return goals;
+	public TopGoalscorersPage getPlayerStandings() {
+		return playerStandings;
 	}
 
-	public TopAssistsPage getAssists() {
-		return assists;
-	}
-
-	public AllFixturesPage getAllFixtures() {
-		return allFixtures;
-	}
-
-	public MyFixturesPage getMyFixtures() {
-		return myFixtures;
-	}
-
-	public ResultsPage getResults() {
-		return results;
+	public FixturesPage getFixturesPage() {
+		return fixturesPage;
 	}
 
 	public FirstTeamPage getFirstTeam() {
@@ -1247,16 +1215,12 @@ public class Scheduler extends GamePanel {
 		this.matchFramesLayout = matchFramesLayout;
 	}
 
-	public Map<String, JPanel> getLeaderboardsMap() {
-		return leaderboardsMap;
+	public Map<String, JPanel> getStandingsMap() {
+		return standingsMap;
 	}
 
-	public JPanel getLeaderboardsPages() {
-		return leaderboardsPages;
-	}
-
-	public Map<String, JPanel> getFixturesMap() {
-		return fixturesMap;
+	public JPanel getStandingsPages() {
+		return standingsPages;
 	}
 
 	public MessageViewer getMessageViewer() {

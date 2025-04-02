@@ -87,7 +87,7 @@ public class MessageViewer extends GamePanel {
                     for(Match eachMatch : event.getMatch().getSameDayMatches()){
                         CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
                     }
-                    scheduler.getMyFixtures().getLine(event.getMatch()).gameComplete();
+                    scheduler.getFixturesPage().getLine(event.getMatch()).gameComplete();
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {

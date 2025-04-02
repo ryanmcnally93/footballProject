@@ -36,7 +36,7 @@ public class UsersMatch extends Match {
 	public void callUpdateTableVisually() {
 		getScheduler().getTablePanel().updateTableVisually();
 		if (isMatchHasPlayed()) {
-			getScheduler().getLeaguePage().updateTableVisually();
+			getScheduler().getTeamStandings().updateTableVisually();
 		}
 	};
 
