@@ -15,10 +15,11 @@ import javax.swing.border.EmptyBorder;
 import entities.*;
 import visuals.CustomizedElements.*;
 import main.GameWindow;
-import visuals.MainMenuPages.FixturesPages.FixturesPage;
+import visuals.MainMenuPages.FixturesPage;
 import visuals.MainMenuPages.LeaderboardPages.LeagueTablePage;
 import visuals.MainMenuPages.LeaderboardPages.TopGoalscorersPage;
 import visuals.MainMenuPages.MainMenuPageTemplate;
+import visuals.MainMenuPages.PlayerSearchPage;
 import visuals.MainMenuPages.TacticsPages.FirstTeamPage;
 import visuals.MainMenuPages.TacticsPages.FormationPage;
 import visuals.MainMenuPages.TacticsPages.MatchRolesPage;
@@ -51,6 +52,7 @@ public class Scheduler extends GamePanel {
 	private LeagueTablePage teamStandings;
 	private TopGoalscorersPage playerStandings;
 	private FixturesPage fixturesPage;
+	private PlayerSearchPage playerSearchPage;
 	private FirstTeamPage firstTeam;
 	private FormationPage formation;
 	private MatchRolesPage matchRoles;
@@ -206,20 +208,23 @@ public class Scheduler extends GamePanel {
 
 		addCardmapListener(tacticsPanel, tacticsPages, tacticsLayout);
 		addCardmapListener(standingsButton, standingsPages, standingsLayout);
+		addSinglePageListener(fixturesButton, fixturesPage);
+		addSinglePageListener(playerSearchButton, playerSearchPage);
+	}
 
-		fixturesButton.addMouseListener(new MouseAdapter(){
+	private void addSinglePageListener(CustomizedButton button, MainPageTemplate page) {
+		button.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mouseClicked(MouseEvent e){
 				window.getContentPane().removeAll();
-				window.getContentPane().add(fixturesPage, BorderLayout.CENTER);
+				window.getContentPane().add(page, BorderLayout.CENTER);
 
-				fixturesButton.triggerColorReverse();
+				button.triggerColorReverse();
 
 				window.revalidate();
 				window.repaint();
 			}
 		});
-
 	}
 
 	private void createMovingButtons() {
@@ -329,8 +334,9 @@ public class Scheduler extends GamePanel {
 		standingsMap.put("Team Standings", teamStandings);
 		standingsMap.put("Player Standings", playerStandings);
 
-		// Fixtures Page
+		// Single Pages
 		fixturesPage = new FixturesPage(this);
+		playerSearchPage = new PlayerSearchPage(this);
 
 		// Create Components for Match Frames
 		speedometer = new Speedometer();

@@ -1,4 +1,4 @@
-package visuals.MainMenuPages.FixturesPages;
+package visuals.MainMenuPages;
 import entities.Match;
 import entities.UsersMatch;
 import visuals.CustomizedElements.MainPageTemplate;
