@@ -1,4 +1,4 @@
-package visuals.MainMenuPages.LeaderboardPages;
+package visuals.MainMenuPages.StandingsPages;
 import visuals.CustomizedElements.LeagueTable;
 import visuals.MainMenuPages.MainMenuPageTemplate;
 import visuals.ScheduleFrames.Scheduler;

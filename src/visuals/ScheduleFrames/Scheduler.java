@@ -15,11 +15,19 @@ import javax.swing.border.EmptyBorder;
 import entities.*;
 import visuals.CustomizedElements.*;
 import main.GameWindow;
-import visuals.MainMenuPages.FixturesPage;
-import visuals.MainMenuPages.LeaderboardPages.LeagueTablePage;
-import visuals.MainMenuPages.LeaderboardPages.TopGoalscorersPage;
-import visuals.MainMenuPages.MainMenuPageTemplate;
-import visuals.MainMenuPages.PlayerSearchPage;
+import visuals.MainMenuPages.*;
+import visuals.MainMenuPages.MyClubPages.BudgetPage;
+import visuals.MainMenuPages.MyClubPages.FacilitiesPage;
+import visuals.MainMenuPages.MyClubPages.StaffPage;
+import visuals.MainMenuPages.MyProfilePages.ObjectivesPage;
+import visuals.MainMenuPages.MyProfilePages.RecordPage;
+import visuals.MainMenuPages.MyProfilePages.TrophyPage;
+import visuals.MainMenuPages.StandingsPages.LeagueTablePage;
+import visuals.MainMenuPages.StandingsPages.TopGoalscorersPage;
+import visuals.MainMenuPages.SinglePages.FixturesPage;
+import visuals.MainMenuPages.SinglePages.MyTeamPage;
+import visuals.MainMenuPages.SinglePages.PlayerSearchPage;
+import visuals.MainMenuPages.SinglePages.TrainingPage;
 import visuals.MainMenuPages.TacticsPages.FirstTeamPage;
 import visuals.MainMenuPages.TacticsPages.FormationPage;
 import visuals.MainMenuPages.TacticsPages.MatchRolesPage;
@@ -28,31 +36,48 @@ import visuals.SchedulerMessageApp.MessageViewer;
 
 public class Scheduler extends GamePanel {
 
+	// Scheduler Components
 	private LocalDateTime date;
-	private JPanel eventsBox, southMiddle, menuBox, header, backgroundMoverPanel, datePanel;
+	private JPanel eventsBox, southMiddle, menuBox, header, datePanel, mainPanel;
 	private TacticsPanel tacticsPanel;
-	private CustomizedButton menuButton, closeButton, backgroundMover, trainingButton, playerSearchButton, standingsButton, teamButton, myClubButton, fixturesButton, myProfileButton;
+	private CustomizedButton menuButton, closeButton, backgroundMover, trainingButton, playerSearchButton, standingsButton, myTeamButton, myClubButton, fixturesButton, myProfileButton;
 	private CustomizedTitle todaysDate, teamName, userName;
-	private Team team;
-	private User user;
-	private League league;
-	private ArrayList<Events> events;
-	private JPanel mainPanel;
-	private GameWindow window;
-	private UsersMatch match;
 	private JLayeredPane layeredPane;
 	private MainMenu mainMenu;
+	private Image backgroundImage;
+	private int backgroundImageHeight = -205;
+	private List<Component> movingComponents = new ArrayList<>();
+	private MessageViewer messageViewer;
+	// Entities
+	private User user;
+	private Team team;
+	private League league;
+	private ArrayList<Events> events;
+	private GameWindow window;
+	private UsersMatch match;
 	private Season season;
 	private ArrayList<Match> laterMatches, sameDayMatches;
 	// Main Menu & MatchFrames Layouts, CardMap & Pages
-	private CardLayout standingsLayout, tacticsLayout, matchFramesLayout;
-	private Map<String, JPanel> standingsMap, tacticsMap, matchFramesMap;
-	private JPanel standingsPages, tacticsPages, matchFramesPages;
-	// Main Menu Pages
+	private CardLayout standingsLayout, tacticsLayout, matchFramesLayout, myClubLayout, myProfileLayout;
+	private Map<String, JPanel> standingsMap, tacticsMap, matchFramesMap, myClubMap, myProfileMap;
+	private JPanel standingsPages, tacticsPages, matchFramesPages, myClubPages, myProfilePages;
+	// Single Pages
+	private FixturesPage fixturesPage;
+	private MyTeamPage myTeamPage;
+	private PlayerSearchPage playerSearchPage;
+	private TrainingPage trainingPage;
+	// My Club Pages
+	private StaffPage staffPage;
+	private FacilitiesPage facilitiesPage;
+	private BudgetPage budgetPage;
+	// My Profile Pages
+	private ObjectivesPage objectivesPage;
+	private RecordPage recordPage;
+	private TrophyPage trophyPage;
+	// Standings Pages
 	private LeagueTablePage teamStandings;
 	private TopGoalscorersPage playerStandings;
-	private FixturesPage fixturesPage;
-	private PlayerSearchPage playerSearchPage;
+	// Tactics Pages
 	private FirstTeamPage firstTeam;
 	private FormationPage formation;
 	private MatchRolesPage matchRoles;
@@ -64,14 +89,9 @@ public class Scheduler extends GamePanel {
 	private MatchAllMatches allMatchesPanel;
 	private MatchTable tablePanel;
 	private MatchRatings ratingsPanel;
-	// Match Components
+	// Match Frames Components
 	private Speedometer speedometer;
 	private CustomizedButton pauseButton, resumeButton, tacticsButton;
-	// Visuals
-	private Image backgroundImage;
-	private int backgroundImageHeight = -205;
-	private List<Component> movingComponents = new ArrayList<>();
-	private MessageViewer messageViewer;
 	
 	// New Game Constructor
 	public Scheduler(User user, Team team, League league) {
@@ -208,8 +228,12 @@ public class Scheduler extends GamePanel {
 
 		addCardmapListener(tacticsPanel, tacticsPages, tacticsLayout);
 		addCardmapListener(standingsButton, standingsPages, standingsLayout);
+		addCardmapListener(myClubButton, myClubPages, myClubLayout);
+		addCardmapListener(myProfileButton, myProfilePages, myProfileLayout);
 		addSinglePageListener(fixturesButton, fixturesPage);
 		addSinglePageListener(playerSearchButton, playerSearchPage);
+		addSinglePageListener(trainingButton, trainingPage);
+		addSinglePageListener(myTeamButton, myTeamPage);
 	}
 
 	private void addSinglePageListener(CustomizedButton button, MainPageTemplate page) {
@@ -230,7 +254,7 @@ public class Scheduler extends GamePanel {
 	private void createMovingButtons() {
 		backgroundMover = createMovingButton("./src/visuals/Images/down_arrow.png", "Down", 15, 305, 30, 30);
 		trainingButton = createMovingButton("./src/visuals/Images/training_icon.png", "Training", 33, 110, 41, 45);
-		teamButton = createMovingButton("./src/visuals/Images/team_icon.png", "Team", 84, 64, 41, 36);
+		myTeamButton = createMovingButton("./src/visuals/Images/team_icon.png", "Team", 84, 64, 41, 36);
 
 		tacticsPanel = new TacticsPanel();
 		tacticsPanel.setLayout(null);
@@ -322,6 +346,12 @@ public class Scheduler extends GamePanel {
 	}
 
 	public void createLayoutsMapsAndPages() {
+		// Single Pages
+		fixturesPage = new FixturesPage(this);
+		playerSearchPage = new PlayerSearchPage(this);
+		myTeamPage = new MyTeamPage(this);
+		trainingPage = new TrainingPage(this);
+
 		// Standings Maps
 		standingsLayout = new CardLayout();
 		standingsPages = new JPanel(standingsLayout);
@@ -334,9 +364,50 @@ public class Scheduler extends GamePanel {
 		standingsMap.put("Team Standings", teamStandings);
 		standingsMap.put("Player Standings", playerStandings);
 
-		// Single Pages
-		fixturesPage = new FixturesPage(this);
-		playerSearchPage = new PlayerSearchPage(this);
+		// Tactics Maps
+		tacticsLayout = new CardLayout();
+		tacticsPages = new JPanel(tacticsLayout);
+		firstTeam = new FirstTeamPage(tacticsLayout, tacticsPages, this, true);
+		formation = new FormationPage(tacticsLayout, tacticsPages, this, true);
+		matchRoles = new MatchRolesPage(tacticsLayout, tacticsPages, this, true);
+		tacticsPages.add(firstTeam, "First Team");
+		tacticsPages.add(formation, "Formation");
+		tacticsPages.add(matchRoles, "Match Roles");
+
+		tacticsMap = new HashMap<>();
+		tacticsMap.put("First Team", firstTeam);
+		tacticsMap.put("Formation", formation);
+		tacticsMap.put("Match Roles", matchRoles);
+
+		// My Club Maps
+		myClubLayout = new CardLayout();
+		myClubPages = new JPanel(myClubLayout);
+		staffPage = new StaffPage(myClubLayout, myClubPages, this, true);
+		facilitiesPage = new FacilitiesPage(myClubLayout, myClubPages, this, true);
+		budgetPage = new BudgetPage(myClubLayout, myClubPages, this, true);
+		myClubPages.add(staffPage, "Staff");
+		myClubPages.add(facilitiesPage, "Facilities");
+		myClubPages.add(budgetPage, "Budget");
+
+		myClubMap = new HashMap<>();
+		myClubMap.put("Staff", staffPage);
+		myClubMap.put("Facilities", facilitiesPage);
+		myClubMap.put("Budget", budgetPage);
+
+		// My Profile Maps
+		myProfileLayout = new CardLayout();
+		myProfilePages = new JPanel(myProfileLayout);
+		objectivesPage = new ObjectivesPage(myProfileLayout, myProfilePages, this, true);
+		recordPage = new RecordPage(myProfileLayout, myProfilePages, this, true);
+		trophyPage = new TrophyPage(myProfileLayout, myProfilePages, this, true);
+		myProfilePages.add(objectivesPage, "Objectives");
+		myProfilePages.add(recordPage, "Record");
+		myProfilePages.add(trophyPage, "Trophies");
+
+		myProfileMap = new HashMap<>();
+		myProfileMap.put("Objectives", objectivesPage);
+		myProfileMap.put("Record", recordPage);
+		myProfileMap.put("Trophies", trophyPage);
 
 		// Create Components for Match Frames
 		speedometer = new Speedometer();
@@ -381,24 +452,8 @@ public class Scheduler extends GamePanel {
 		matchFramesMap.put("All Matches", allMatchesPanel);
 		matchFramesMap.put("Table", tablePanel);
 		matchFramesMap.put("Ratings", ratingsPanel);
-
-		// Tactics Maps
-		tacticsLayout = new CardLayout();
-		tacticsPages = new JPanel(tacticsLayout);
-		firstTeam = new FirstTeamPage(tacticsLayout, tacticsPages, this, true);
-		formation = new FormationPage(tacticsLayout, tacticsPages, this, true);
-		matchRoles = new MatchRolesPage(tacticsLayout, tacticsPages, this, true);
-		tacticsPages.add(firstTeam, "First Team");
-		tacticsPages.add(formation, "Formation");
-		tacticsPages.add(matchRoles, "Match Roles");
-
-		tacticsMap = new HashMap<>();
-		tacticsMap.put("First Team", firstTeam);
-		tacticsMap.put("Formation", formation);
-		tacticsMap.put("Match Roles", matchRoles);
 	}
 
-	// Needs reviewing
 	public void createMainMenu() {
 		mainMenu = new MainMenu(window, this);
 	}

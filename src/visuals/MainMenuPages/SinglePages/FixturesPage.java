@@ -1,4 +1,4 @@
-package visuals.MainMenuPages;
+package visuals.MainMenuPages.SinglePages;
 import entities.Match;
 import entities.UsersMatch;
 import visuals.CustomizedElements.MainPageTemplate;

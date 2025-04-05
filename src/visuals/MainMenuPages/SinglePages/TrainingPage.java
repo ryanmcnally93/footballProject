@@ -1,4 +1,4 @@
-package visuals.MainMenuPages;
+package visuals.MainMenuPages.SinglePages;
 
 import visuals.CustomizedElements.MainPageTemplate;
 import visuals.ScheduleFrames.Scheduler;
@@ -6,15 +6,15 @@ import visuals.ScheduleFrames.Scheduler;
 import javax.swing.*;
 import java.awt.*;
 
-public class PlayerSearchPage extends MainPageTemplate {
+public class TrainingPage extends MainPageTemplate {
 
     private JPanel mainPanel;
     private Box centerBox;
     private JScrollPane scroller;
 
-    public PlayerSearchPage(Scheduler scheduler) {
+    public TrainingPage(Scheduler scheduler) {
         super(scheduler);
-        getHeaderPanel().setTitle("Player Search");
+        getHeaderPanel().setTitle("Training");
 
         JLayeredPane layeredPane = getLayeredPane();
         mainPanel = new JPanel();
