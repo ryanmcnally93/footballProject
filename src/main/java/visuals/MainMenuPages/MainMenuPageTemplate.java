@@ -1,9 +1,10 @@
-package main.java.visuals.MainMenuPages;
-import main.java.entities.UsersMatch;
-import main.java.visuals.CustomizedElements.CardmapMainPageTemplate;
-import main.java.visuals.MatchPages.MatchFrames;
-import main.java.visuals.ScheduleFrames.Events;
-import main.java.visuals.ScheduleFrames.Scheduler;
+package visuals.MainMenuPages;
+
+import entities.UsersMatch;
+import visuals.CustomizedElements.CardmapMainPageTemplate;
+import visuals.MatchPages.MatchFrames;
+import visuals.ScheduleFrames.Events;
+import visuals.ScheduleFrames.Scheduler;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;

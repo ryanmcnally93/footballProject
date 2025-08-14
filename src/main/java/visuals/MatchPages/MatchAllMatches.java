@@ -1,14 +1,14 @@
-package main.java.visuals.MatchPages;
-import java.awt.*;
-import java.util.ArrayList;
+package visuals.MatchPages;
+
+import entities.Match;
+import visuals.CustomizedElements.CustomizedButton;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
-
-import main.java.entities.Match;
-import main.java.visuals.CustomizedElements.CustomizedButton;
+import java.awt.*;
+import java.util.ArrayList;
 
 public class MatchAllMatches extends MatchFrames {
 

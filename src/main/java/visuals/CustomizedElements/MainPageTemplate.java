@@ -1,7 +1,7 @@
-package main.java.visuals.CustomizedElements;
+package visuals.CustomizedElements;
 
-import main.java.visuals.MainMenuPages.MainMenuPageTemplate;
-import main.java.visuals.ScheduleFrames.Scheduler;
+import visuals.MainMenuPages.MainMenuPageTemplate;
+import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;

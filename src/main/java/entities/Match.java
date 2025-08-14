@@ -1,22 +1,22 @@
-package main.java.entities;
+package entities;
+
+import people.Footballer;
+import people.Goalkeeper;
+import visuals.CustomizedElements.PlayerAchievementLine;
+import visuals.CustomizedElements.PlayerStatsBoxOnRatingsPage;
+import visuals.CustomizedElements.PlayerStatsLineOnRatingsPage;
+import visuals.CustomizedElements.TeamAchievementLine;
+import visuals.MainMenuPages.MainMenuPageTemplate;
+import visuals.ScheduleFrames.Events;
+import visuals.ScheduleFrames.Scheduler;
+import visuals.MatchPages.MatchFrames;
+
+import javax.swing.*;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.Timer;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import main.java.people.Footballer;
-import main.java.people.Goalkeeper;
-import main.java.visuals.CustomizedElements.PlayerAchievementLine;
-import main.java.visuals.CustomizedElements.PlayerStatsBoxOnRatingsPage;
-import main.java.visuals.CustomizedElements.PlayerStatsLineOnRatingsPage;
-import main.java.visuals.CustomizedElements.TeamAchievementLine;
-import main.java.visuals.MainMenuPages.MainMenuPageTemplate;
-import main.java.visuals.MatchPages.MatchFrames;
-import main.java.visuals.ScheduleFrames.Events;
-import main.java.visuals.ScheduleFrames.Scheduler;
-
-import javax.swing.*;
 
 public class Match {
 
