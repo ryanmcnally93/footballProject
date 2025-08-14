@@ -1,15 +1,16 @@
-package main.java.visuals.ScheduleFrames;
+package visuals.ScheduleFrames;
+
+import entities.Team;
+import entities.UsersMatch;
+import people.Footballer;
+import visuals.SchedulerMessageApp.SpeechBubbleGenerator;
+
+import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDateTime;
-import javax.swing.*;
 
-import main.java.entities.UsersMatch;
-import main.java.entities.Team;
-import main.java.people.Footballer;
-import main.java.visuals.SchedulerMessageApp.SpeechBubbleGenerator;
-
-import static main.java.visuals.CustomizedElements.GamePanel.getBebasNeueFont;
-import static main.java.visuals.CustomizedElements.GamePanel.getCharcoal;
+import static visuals.CustomizedElements.GamePanel.getBebasNeueFont;
+import static visuals.CustomizedElements.GamePanel.getCharcoal;
 
 public class Events {
 

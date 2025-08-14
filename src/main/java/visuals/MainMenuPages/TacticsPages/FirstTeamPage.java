@@ -1,8 +1,9 @@
-package main.java.visuals.MainMenuPages.TacticsPages;
-import main.java.people.Footballer;
-import main.java.visuals.CustomizedElements.PlayerStatsLineOnRatingsPage;
-import main.java.visuals.MainMenuPages.MainMenuPageTemplate;
-import main.java.visuals.ScheduleFrames.Scheduler;
+package visuals.MainMenuPages.TacticsPages;
+
+import people.Footballer;
+import visuals.CustomizedElements.PlayerStatsLineOnRatingsPage;
+import visuals.MainMenuPages.MainMenuPageTemplate;
+import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
 import java.awt.*;

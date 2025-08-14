@@ -1,6 +1,6 @@
-package main.java.people;
+package people;
 
-import main.java.entities.Team;
+import entities.Team;
 
 public class Footballer extends Individual {
 	

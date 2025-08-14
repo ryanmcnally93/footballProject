@@ -1,10 +1,11 @@
-package main.java.visuals.MainMenuPages.SinglePages;
-import main.java.entities.Match;
-import main.java.entities.UsersMatch;
-import main.java.visuals.CustomizedElements.MainPageTemplate;
-import main.java.visuals.CustomizedElements.MatchLineOnFixturesPages;
-import main.java.visuals.MatchPages.MatchFrames;
-import main.java.visuals.ScheduleFrames.Scheduler;
+package visuals.MainMenuPages.SinglePages;
+
+import entities.Match;
+import entities.UsersMatch;
+import visuals.CustomizedElements.MainPageTemplate;
+import visuals.CustomizedElements.MatchLineOnFixturesPages;
+import visuals.MatchPages.MatchFrames;
+import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
 import java.awt.*;
