@@ -1,4 +1,4 @@
-package main.java.gameSetup;
+package gameSetup;
 
 import javax.swing.SwingUtilities;
 

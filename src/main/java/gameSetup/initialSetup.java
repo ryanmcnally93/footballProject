@@ -1,13 +1,14 @@
-package main.java.gameSetup;
-import java.awt.Color;
+package gameSetup;
+
+import entities.Season;
+import entities.Team;
+import people.Footballer;
+import people.Goalkeeper;
+import people.Manager;
+
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
-
-import main.java.entities.Season;
-import main.java.entities.Team;
-import main.java.people.Footballer;
-import main.java.people.Goalkeeper;
-import main.java.people.Manager;
 
 @SuppressWarnings("TextBlockMigration")
 public class initialSetup {
