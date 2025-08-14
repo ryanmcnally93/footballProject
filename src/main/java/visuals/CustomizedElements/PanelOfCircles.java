@@ -1,4 +1,5 @@
-package main.java.visuals.CustomizedElements;
+package visuals.CustomizedElements;
+
 import java.awt.*;
 import java.util.ArrayList;
 

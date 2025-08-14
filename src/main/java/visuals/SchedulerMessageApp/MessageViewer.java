@@ -1,10 +1,10 @@
-package main.java.visuals.SchedulerMessageApp;
+package visuals.SchedulerMessageApp;
 
-import main.java.entities.Match;
-import main.java.visuals.CustomizedElements.CustomizedButton;
-import main.java.visuals.CustomizedElements.GamePanel;
-import main.java.visuals.ScheduleFrames.Events;
-import main.java.visuals.ScheduleFrames.Scheduler;
+import entities.Match;
+import visuals.CustomizedElements.CustomizedButton;
+import visuals.CustomizedElements.GamePanel;
+import visuals.ScheduleFrames.Events;
+import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -32,7 +32,7 @@ public class MessageViewer extends GamePanel {
         setOpaque(false);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        ImageIcon image = new ImageIcon("./src/visuals/Images/message_viewer_tablet.png");
+        ImageIcon image = new ImageIcon("./src/main/java/visuals/Images/message_viewer_tablet.png");
         backgroundImage = image.getImage().getScaledInstance(491, 208, Image.SCALE_SMOOTH);
 
         createButtonsAndListeners();

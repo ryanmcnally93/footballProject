@@ -1,14 +1,16 @@
-package main.java.visuals.CustomizedElements;
+package visuals.CustomizedElements;
+
+import entities.League;
+import entities.Team;
+import people.Footballer;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
-import javax.swing.*;
-import main.java.entities.League;
-import main.java.entities.Team;
-import main.java.people.Footballer;
 
 public class PlayerLeaderboards extends GamePanel {
 

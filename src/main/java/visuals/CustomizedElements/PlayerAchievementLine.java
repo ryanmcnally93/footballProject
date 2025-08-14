@@ -1,5 +1,6 @@
-package main.java.visuals.CustomizedElements;
-import main.java.people.Footballer;
+package visuals.CustomizedElements;
+
+import people.Footballer;
 
 public class PlayerAchievementLine {
 

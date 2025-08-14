@@ -1,7 +1,7 @@
-package main.java.visuals.CustomizedElements;
+package visuals.CustomizedElements;
 
-import main.java.entities.Match;
-import main.java.people.Footballer;
+import entities.Match;
+import people.Footballer;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -20,7 +20,7 @@ public class PlayerStatsLineOnRatingsPage extends RoundedPanel {
     private Footballer player;
     private ImageIcon icon;
     private BufferedImage bufferedScaledImage;
-    private ImageIcon playerViewIcon = new ImageIcon("./src/visuals/images/playerViewIcon.png");
+    private ImageIcon playerViewIcon = new ImageIcon("./src/main/java/visuals/images/playerViewIcon.png");
 
     public PlayerStatsLineOnRatingsPage (){
         super(20);
@@ -74,7 +74,7 @@ public class PlayerStatsLineOnRatingsPage extends RoundedPanel {
         // This is for the football image
         BufferedImage image = null;
         try {
-            image = ImageIO.read(new File("./src/visuals/images/ratings_page_goal.png"));
+            image = ImageIO.read(new File("./src/main/java/visuals/images/ratings_page_goal.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

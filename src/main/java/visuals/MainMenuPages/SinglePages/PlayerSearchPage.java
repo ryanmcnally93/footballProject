@@ -1,7 +1,7 @@
-package main.java.visuals.MainMenuPages.SinglePages;
+package visuals.MainMenuPages.SinglePages;
 
-import main.java.visuals.CustomizedElements.MainPageTemplate;
-import main.java.visuals.ScheduleFrames.Scheduler;
+import visuals.CustomizedElements.MainPageTemplate;
+import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
 import java.awt.*;
