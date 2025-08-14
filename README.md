@@ -379,7 +379,6 @@ This worked on occasion, but also failed from time to time.
 
 ### Unfixed Bugs
 
-0. Add button listeners to their respective pages (Remove some cardmaps?)
 1. Update Wireframes, Roadmap, Features, Swing usage, Q&A, Responsive Design attempts, Credits
 2. Update Bugs 
 3. Write tests 

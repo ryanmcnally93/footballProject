@@ -2,3 +2,6 @@
 /bin
 /out
 footballProject.iml
+.DS_Store
+target/
+src/.DS_Store
