@@ -1,6 +1,7 @@
-package main.java.visuals.MainMenuPages.TacticsPages;
-import main.java.visuals.MainMenuPages.MainMenuPageTemplate;
-import main.java.visuals.ScheduleFrames.Scheduler;
+package visuals.MainMenuPages.TacticsPages;
+
+import visuals.MainMenuPages.MainMenuPageTemplate;
+import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
 import java.awt.*;

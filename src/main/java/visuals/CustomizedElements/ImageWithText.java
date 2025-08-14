@@ -1,4 +1,5 @@
-package main.java.visuals.CustomizedElements;
+package visuals.CustomizedElements;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;

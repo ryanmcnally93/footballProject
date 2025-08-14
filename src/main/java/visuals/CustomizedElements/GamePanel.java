@@ -1,4 +1,4 @@
-package main.java.visuals.CustomizedElements;
+package visuals.CustomizedElements;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,7 +32,7 @@ public abstract class GamePanel extends JPanel {
 
     public static Font getBebasNeueFont() {
         try {
-            File fontFile = new File("./src/visuals/Fonts/BebasNeue-Regular.ttf");
+            File fontFile = new File("./src/main/java/visuals/Fonts/BebasNeue-Regular.ttf");
             return Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(Font.BOLD, 30f);
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
@@ -42,7 +42,7 @@ public abstract class GamePanel extends JPanel {
 
     public static Font getBebasNeueFontWithSize(float size) {
         try {
-            File fontFile = new File("./src/visuals/Fonts/BebasNeue-Regular.ttf");
+            File fontFile = new File("./src/main/java/visuals/Fonts/BebasNeue-Regular.ttf");
             return Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(Font.BOLD, size);
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
@@ -65,41 +65,41 @@ public abstract class GamePanel extends JPanel {
 
     public static ImageIcon getOppositeImage(ImageIcon icon) {
         if (icon.getDescription().equals("Down")) {
-            return new ImageIcon("./src/visuals/Images/down_arrow_darkbg.png", "DownDark");
+            return new ImageIcon("./src/main/java/visuals/Images/down_arrow_darkbg.png", "DownDark");
         } else if (icon.getDescription().equals("DownDark")) {
-            return new ImageIcon("./src/visuals/Images/down_arrow.png", "Down");
+            return new ImageIcon("./src/main/java/visuals/Images/down_arrow.png", "Down");
         } else if (icon.getDescription().equals("Up")) {
-            return new ImageIcon("./src/visuals/Images/up_arrow_darkbg.png", "UpDark");
+            return new ImageIcon("./src/main/java/visuals/Images/up_arrow_darkbg.png", "UpDark");
         } else if (icon.getDescription().equals("UpDark")) {
-            return new ImageIcon("./src/visuals/Images/up_arrow.png", "Up");
+            return new ImageIcon("./src/main/java/visuals/Images/up_arrow.png", "Up");
         } else if (icon.getDescription().equals("Training")) {
-            return new ImageIcon("./src/visuals/Images/training_icon_darkbg.png", "TrainingDark");
+            return new ImageIcon("./src/main/java/visuals/Images/training_icon_darkbg.png", "TrainingDark");
         } else if (icon.getDescription().equals("TrainingDark")) {
-            return new ImageIcon("./src/visuals/Images/training_icon.png", "Training");
+            return new ImageIcon("./src/main/java/visuals/Images/training_icon.png", "Training");
         } else if (icon.getDescription().equals("Team")) {
-            return new ImageIcon("./src/visuals/Images/team_icon_darkbg.png", "TeamDark");
+            return new ImageIcon("./src/main/java/visuals/Images/team_icon_darkbg.png", "TeamDark");
         } else if (icon.getDescription().equals("TeamDark")) {
-            return new ImageIcon("./src/visuals/Images/team_icon.png", "Team");
+            return new ImageIcon("./src/main/java/visuals/Images/team_icon.png", "Team");
         } else if (icon.getDescription().equals("Standings")) {
-            return new ImageIcon("./src/visuals/Images/standings_icon_darkbg.png", "StandingsDark");
+            return new ImageIcon("./src/main/java/visuals/Images/standings_icon_darkbg.png", "StandingsDark");
         } else if (icon.getDescription().equals("StandingsDark")) {
-            return new ImageIcon("./src/visuals/Images/standings_icon.png", "Standings");
+            return new ImageIcon("./src/main/java/visuals/Images/standings_icon.png", "Standings");
         } else if (icon.getDescription().equals("PlayerSearchDark")) {
-            return new ImageIcon("./src/visuals/Images/player_search_icon.png", "PlayerSearch");
+            return new ImageIcon("./src/main/java/visuals/Images/player_search_icon.png", "PlayerSearch");
         } else if (icon.getDescription().equals("PlayerSearch")) {
-            return new ImageIcon("./src/visuals/Images/player_search_icon_darkbg.png", "PlayerSearchDark");
+            return new ImageIcon("./src/main/java/visuals/Images/player_search_icon_darkbg.png", "PlayerSearchDark");
         } else if (icon.getDescription().equals("MyClub")) {
-            return new ImageIcon("./src/visuals/Images/my_club_icon_darkbg.png", "MyClubDark");
+            return new ImageIcon("./src/main/java/visuals/Images/my_club_icon_darkbg.png", "MyClubDark");
         } else if (icon.getDescription().equals("MyClubDark")) {
-            return new ImageIcon("./src/visuals/Images/my_club_icon.png", "MyClub");
+            return new ImageIcon("./src/main/java/visuals/Images/my_club_icon.png", "MyClub");
         } else if (icon.getDescription().equals("FixturesDark")) {
-            return new ImageIcon("./src/visuals/Images/fixtures_icon.png", "Fixtures");
+            return new ImageIcon("./src/main/java/visuals/Images/fixtures_icon.png", "Fixtures");
         } else if (icon.getDescription().equals("Fixtures")) {
-            return new ImageIcon("./src/visuals/Images/fixtures_icon_darkbg.png", "FixturesDark");
+            return new ImageIcon("./src/main/java/visuals/Images/fixtures_icon_darkbg.png", "FixturesDark");
         } else if (icon.getDescription().equals("MyProfile")) {
-            return new ImageIcon("./src/visuals/Images/my_profile_icon_darkbg.png", "MyProfileDark");
+            return new ImageIcon("./src/main/java/visuals/Images/my_profile_icon_darkbg.png", "MyProfileDark");
         } else if (icon.getDescription().equals("MyProfileDark")) {
-            return new ImageIcon("./src/visuals/Images/my_profile_icon.png", "MyProfile");
+            return new ImageIcon("./src/main/java/visuals/Images/my_profile_icon.png", "MyProfile");
         } else {
             System.out.println("ERROR: getOppositeImage() is unable to determine which image should be shown! Icon description is: " + icon.getDescription() + ".");
             throw new RuntimeException();

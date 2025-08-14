@@ -1,6 +1,7 @@
-package main.java.gameSetup;
-import java.awt.Dimension;
+package gameSetup;
+
 import javax.swing.*;
+import java.awt.*;
 
 public class GameWindow extends JFrame {
     private static final long serialVersionUID = 157462818597402652L;
