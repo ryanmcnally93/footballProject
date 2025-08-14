@@ -1,14 +1,21 @@
-package main.java.visuals.MatchPages;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
+package visuals.MatchPages;
 
-import main.java.entities.Team;
-import main.java.people.Footballer;
-import main.java.visuals.CustomizedElements.CustomizedButton;
-import main.java.visuals.CustomizedElements.PlayerStatsBoxOnRatingsPage;
-import main.java.visuals.CustomizedElements.PlayerStatsLineOnRatingsPage;
+import entities.Team;
+import people.Footballer;
+import visuals.CustomizedElements.CustomizedButton;
+import visuals.CustomizedElements.PlayerStatsBoxOnRatingsPage;
+import visuals.CustomizedElements.PlayerStatsLineOnRatingsPage;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class MatchRatings extends MatchFrames {
 

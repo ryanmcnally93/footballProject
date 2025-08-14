@@ -1,17 +1,20 @@
-package main.java.visuals.MatchPages;
+package visuals.MatchPages;
+
+import entities.Match;
+import entities.UsersMatch;
+import visuals.CustomizedElements.CardmapMainPageTemplate;
+import visuals.CustomizedElements.CustomizedButton;
+import visuals.CustomizedElements.SlidingPanel;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import main.java.entities.Match;
-import main.java.entities.UsersMatch;
-import main.java.visuals.CustomizedElements.CardmapMainPageTemplate;
-import main.java.visuals.CustomizedElements.CustomizedButton;
-import main.java.visuals.CustomizedElements.SlidingPanel;
-import main.java.visuals.MainMenuPages.MainMenuPageTemplate;
 
 public class MatchFrames extends CardmapMainPageTemplate {
 

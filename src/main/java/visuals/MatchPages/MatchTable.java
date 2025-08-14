@@ -1,13 +1,11 @@
-package main.java.visuals.MatchPages;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.util.ArrayList;
+package visuals.MatchPages;
+
+import visuals.CustomizedElements.CustomizedButton;
+import visuals.CustomizedElements.LeagueTable;
 
 import javax.swing.*;
-
-import main.java.visuals.CustomizedElements.CustomizedButton;
-import main.java.visuals.CustomizedElements.LeagueTable;
+import java.awt.*;
+import java.util.ArrayList;
 
 public class MatchTable extends MatchFrames {
 

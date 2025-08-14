@@ -1,16 +1,17 @@
-package main.java.visuals.MatchPages;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
+package visuals.MatchPages;
+
+import entities.MatchEvent;
+import people.Footballer;
+import visuals.CustomizedElements.CustomizedButton;
+
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
-
-import main.java.entities.MatchEvent;
-import main.java.people.Footballer;
-import main.java.visuals.CustomizedElements.CustomizedButton;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class MatchEvents extends MatchFrames {
 

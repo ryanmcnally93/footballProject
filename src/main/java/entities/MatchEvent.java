@@ -1,6 +1,6 @@
-package main.java.entities;
+package entities;
 
-import main.java.people.Footballer;
+import people.Footballer;
 
 public class MatchEvent {
 

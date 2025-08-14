@@ -1,6 +1,6 @@
-package main.java.visuals.CustomizedElements;
+package visuals.CustomizedElements;
 
-import main.java.entities.Match;
+import entities.Match;
 
 import javax.swing.*;
 import java.awt.*;

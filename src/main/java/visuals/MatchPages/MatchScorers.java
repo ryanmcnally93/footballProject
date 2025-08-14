@@ -1,21 +1,13 @@
-package main.java.visuals.MatchPages;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
+package visuals.MatchPages;
+
+import visuals.CustomizedElements.CustomizedButton;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import main.java.visuals.CustomizedElements.CustomizedButton;
 
 public class MatchScorers extends MatchFrames {
 

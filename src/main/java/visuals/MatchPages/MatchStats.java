@@ -1,18 +1,14 @@
-package main.java.visuals.MatchPages;
-import java.util.ArrayList;
+package visuals.MatchPages;
+
+import visuals.CustomizedElements.CustomProgressBar;
+import visuals.CustomizedElements.CustomizedButton;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-
-import javax.swing.Box;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
-
-import main.java.visuals.CustomizedElements.CustomProgressBar;
-import main.java.visuals.CustomizedElements.CustomizedButton;
+import java.util.ArrayList;
 
 public class MatchStats extends MatchFrames {
     private static final long serialVersionUID = 5937268249853937276L;

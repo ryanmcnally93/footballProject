@@ -1,5 +1,6 @@
-package main.java.entities;
-import main.java.visuals.MatchPages.MatchFrames;
+package entities;
+
+import visuals.MatchPages.MatchFrames;
 
 import javax.swing.*;
 import java.util.concurrent.CompletableFuture;

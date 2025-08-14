@@ -1,14 +1,10 @@
-package main.java.visuals.MatchPages;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.util.ArrayList;
-import javax.swing.Box;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
+package visuals.MatchPages;
 
-import main.java.visuals.CustomizedElements.CustomizedButton;
+import visuals.CustomizedElements.CustomizedButton;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
 
 public class MatchWatch extends MatchFrames {
 
