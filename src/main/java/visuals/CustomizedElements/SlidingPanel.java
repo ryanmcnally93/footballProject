@@ -1,9 +1,9 @@
-package main.java.visuals.CustomizedElements;
+package visuals.CustomizedElements;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.ImageObserver;
 
 public class SlidingPanel extends JPanel {
 	private int yPosition;

@@ -1,7 +1,7 @@
-package main.java.visuals.SchedulerMessageApp;
+package visuals.SchedulerMessageApp;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;

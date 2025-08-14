@@ -1,14 +1,15 @@
-package main.java.entities;
+package entities;
+
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.Timer;
 import java.util.concurrent.CompletableFuture;
 import javax.swing.*;
 
-import main.java.people.Footballer;
-import main.java.people.Goalkeeper;
-import main.java.gameSetup.GameWindow;
-import main.java.visuals.MatchPages.MatchFrames;
+import people.Footballer;
+import people.Goalkeeper;
+import gameSetup.GameWindow;
+import visuals.MatchPages.MatchFrames;
 
 public class UsersMatch extends Match {
 

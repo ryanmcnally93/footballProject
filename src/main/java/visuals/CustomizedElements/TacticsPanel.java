@@ -1,4 +1,4 @@
-package main.java.visuals.CustomizedElements;
+package visuals.CustomizedElements;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -20,7 +20,7 @@ public class TacticsPanel extends JPanel {
         BufferedImage image = null;
         ImageIcon football = null;
         try {
-            image = ImageIO.read(new File("./src/visuals/images/ratings_page_goal.png"));
+            image = ImageIO.read(new File("./src/main/java/visuals/images/ratings_page_goal.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

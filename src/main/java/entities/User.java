@@ -1,6 +1,6 @@
-package main.java.entities;
+package entities;
 
-import main.java.people.Manager;
+import people.Manager;
 
 public class User extends Manager {
 	

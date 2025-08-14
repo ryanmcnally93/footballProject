@@ -1,8 +1,9 @@
-package main.java.visuals.MatchPages;
-import main.java.entities.Match;
-import main.java.visuals.CustomizedElements.CustomizedButton;
-import main.java.visuals.CustomizedElements.GamePanel;
-import main.java.visuals.CustomizedElements.PanelOfCircles;
+package visuals.MatchPages;
+
+import entities.Match;
+import visuals.CustomizedElements.CustomizedButton;
+import visuals.CustomizedElements.GamePanel;
+import visuals.CustomizedElements.PanelOfCircles;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;

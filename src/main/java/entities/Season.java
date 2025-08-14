@@ -1,5 +1,5 @@
-package main.java.entities;
-import main.java.visuals.CustomizedElements.PlayerAchievementLine;
+package entities;
+
 import java.util.Map;
 
 public class Season {

@@ -1,6 +1,6 @@
-package main.java.visuals.CustomizedElements;
+package visuals.CustomizedElements;
 
-import main.java.entities.Team;
+import entities.Team;
 
 public class TeamAchievementLine {
 

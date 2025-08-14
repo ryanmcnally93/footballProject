@@ -1,9 +1,11 @@
-package main.java.entities;
-import java.awt.Color;
+package entities;
+
+import people.Footballer;
+import people.Goalkeeper;
+import people.Manager;
+
+import java.awt.*;
 import java.util.Map;
-import main.java.people.Footballer;
-import main.java.people.Goalkeeper;
-import main.java.people.Manager;
 
 public class Team {
 

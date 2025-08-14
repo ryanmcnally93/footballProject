@@ -1,7 +1,7 @@
-package main.java.visuals.MainMenuPages.MyClubPages;
+package visuals.MainMenuPages.MyClubPages;
 
-import main.java.visuals.MainMenuPages.MainMenuPageTemplate;
-import main.java.visuals.ScheduleFrames.Scheduler;
+import visuals.MainMenuPages.MainMenuPageTemplate;
+import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
 import java.awt.*;
