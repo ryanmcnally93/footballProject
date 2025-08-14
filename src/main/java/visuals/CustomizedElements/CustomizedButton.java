@@ -1,4 +1,4 @@
-package main.java.visuals.CustomizedElements;
+package visuals.CustomizedElements;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -6,8 +6,8 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import static main.java.visuals.CustomizedElements.GamePanel.getCharcoal;
-import static main.java.visuals.CustomizedElements.GamePanel.getOppositeImage;
+import static visuals.CustomizedElements.GamePanel.getCharcoal;
+import static visuals.CustomizedElements.GamePanel.getOppositeImage;
 
 public class CustomizedButton extends JButton {
 
