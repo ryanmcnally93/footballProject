@@ -1,6 +1,7 @@
-package main.java.visuals.CustomizedElements;
-import main.java.gameSetup.GameWindow;
-import main.java.visuals.ScheduleFrames.Scheduler;
+package visuals.CustomizedElements;
+
+import gameSetup.GameWindow;
+import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
 import java.awt.*;

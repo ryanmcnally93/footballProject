@@ -1,7 +1,8 @@
-package main.java.visuals.MainMenuPages.StandingsPages;
-import main.java.visuals.CustomizedElements.LeagueTable;
-import main.java.visuals.MainMenuPages.MainMenuPageTemplate;
-import main.java.visuals.ScheduleFrames.Scheduler;
+package visuals.MainMenuPages.StandingsPages;
+
+import visuals.CustomizedElements.LeagueTable;
+import visuals.MainMenuPages.MainMenuPageTemplate;
+import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
 import java.awt.*;

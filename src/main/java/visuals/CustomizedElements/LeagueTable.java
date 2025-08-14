@@ -1,15 +1,12 @@
-package main.java.visuals.CustomizedElements;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.util.ArrayList;
-import java.util.Comparator;
+package visuals.CustomizedElements;
+
+import entities.League;
+import entities.Team;
 
 import javax.swing.*;
-
-import main.java.entities.League;
-import main.java.entities.Team;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 public class LeagueTable extends GamePanel {
 

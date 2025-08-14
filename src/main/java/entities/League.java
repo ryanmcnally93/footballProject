@@ -1,7 +1,9 @@
-package main.java.entities;
-import main.java.visuals.CustomizedElements.LeagueTable;
-import main.java.visuals.CustomizedElements.PlayerLeaderboards;
-import main.java.visuals.CustomizedElements.TeamAchievementLine;
+package entities;
+
+import visuals.CustomizedElements.TeamAchievementLine;
+import visuals.CustomizedElements.LeagueTable;
+import visuals.CustomizedElements.PlayerLeaderboards;
+
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

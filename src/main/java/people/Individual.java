@@ -1,4 +1,4 @@
-package main.java.people;
+package people;
 
 public class Individual {
 	
