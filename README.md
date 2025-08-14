@@ -74,24 +74,24 @@ The game will use colours specific to the teams currently selected or playing, a
 
 - I chose the all-caps Bebas Neue Regular font for titles as it is popular amongst football games as is strong and eye-catching.
 
-<img src="./src/visuals/ReadmeImages/main_font.png" width="30%" alt="Football" style="display: inherit; ">
+<img src="./src/main/java/visuals/ReadmeImages/main_font.png" width="30%" alt="Football" style="display: inherit; ">
 
 #### Icons
 
 - For player lines on the ratings page, this is the image used to illustrate a goal. The opacity is updated with a number to represent multiple goals.
 
-<img src="./src/visuals/Images/ratings_page_goal.png" width="10%" alt="Football" style="display: inherit; ">
+<img src="./src/main/java/visuals/Images/ratings_page_goal.png" width="10%" alt="Football" style="display: inherit; ">
 
 - For clickable button icons, I've opted for a transparent up arrow inside a circle. I'm also going to update the cursor where used to make it more obvious that is clickable.
 
-<img src="./src/visuals/Images/playerViewIcon.png" width="10%" alt="Up Arrow" style="display: inherit; ">
+<img src="./src/main/java/visuals/Images/playerViewIcon.png" width="10%" alt="Up Arrow" style="display: inherit; ">
 
 #### Colours
 
 - The colours I want to use, exclusive of the teams colours, will be professional greys and dark blues.
 - Team colours will be used on progress bars and kit colours shown for players. When the primary colour of the home team matches the secondary colour of the opponent, the primary colour of the opponent is used instead.
 
-<img src="./src/visuals/ReadmeImages/team_colours.png" width="40%" alt="The colours of the progress bars are determined by the teams" style="display: inherit; ">
+<img src="./src/main/java/visuals/ReadmeImages/team_colours.png" width="40%" alt="The colours of the progress bars are determined by the teams" style="display: inherit; ">
 
 #### Styling
 
@@ -116,20 +116,20 @@ The game will use colours specific to the teams currently selected or playing, a
 #### Start Page
 
 <p align="center">
-<img src="./src/visuals/ReadmeImages/start_page_type_name.png" style="max-width: 40%; margin: 0 10px 10px 0;" alt="The colours of the progress bars are determined by the teams" style="display: inherit; ">
-<img src="./src/visuals/ReadmeImages/start_page_pick_country.png" style="max-width: 40%; margin: 0 10px 10px 0;" alt="The colours of the progress bars are determined by the teams" style="display: inherit; ">
+<img src="./src/main/java/visuals/ReadmeImages/start_page_type_name.png" style="max-width: 40%; margin: 0 10px 10px 0;" alt="The colours of the progress bars are determined by the teams" style="display: inherit; ">
+<img src="./src/main/java/visuals/ReadmeImages/start_page_pick_country.png" style="max-width: 40%; margin: 0 10px 10px 0;" alt="The colours of the progress bars are determined by the teams" style="display: inherit; ">
 </p>
 
 <p align="center">
-<img src="./src/visuals/ReadmeImages/start_page_pick_league.png" style="max-width: 40%; margin: 0 10px 10px 0;" alt="The colours of the progress bars are determined by the teams" style="display: inherit; ">
-<img src="./src/visuals/ReadmeImages/start_page_pick_team.png" style="max-width: 40%; margin: 0 10px 10px 0;" alt="The colours of the progress bars are determined by the teams" style="display: inherit; ">
+<img src="./src/main/java/visuals/ReadmeImages/start_page_pick_league.png" style="max-width: 40%; margin: 0 10px 10px 0;" alt="The colours of the progress bars are determined by the teams" style="display: inherit; ">
+<img src="./src/main/java/visuals/ReadmeImages/start_page_pick_team.png" style="max-width: 40%; margin: 0 10px 10px 0;" alt="The colours of the progress bars are determined by the teams" style="display: inherit; ">
 </p>
 
 #### Scheduler
 
 <p align="center">
-<img src="./src/visuals/ReadmeImages/scheduler_table.png" style="max-width: 40%; margin: 0 10px 10px 0;" alt="The colours of the progress bars are determined by the teams" style="display: inherit; ">
-<img src="./src/visuals/ReadmeImages/scheduler_wall.png" style="max-width: 40%; margin: 0 10px 10px 0;" alt="The colours of the progress bars are determined by the teams" style="display: inherit; ">
+<img src="./src/main/java/visuals/ReadmeImages/scheduler_table.png" style="max-width: 40%; margin: 0 10px 10px 0;" alt="The colours of the progress bars are determined by the teams" style="display: inherit; ">
+<img src="./src/main/java/visuals/ReadmeImages/scheduler_wall.png" style="max-width: 40%; margin: 0 10px 10px 0;" alt="The colours of the progress bars are determined by the teams" style="display: inherit; ">
 </p>
 
 ### Java Swing

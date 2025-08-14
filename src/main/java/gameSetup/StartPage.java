@@ -1,19 +1,23 @@
-package main.java.gameSetup;
+package gameSetup;
 
+import entities.Team;
+import entities.User;
+import visuals.CustomizedElements.CustomizedButton;
+import visuals.CustomizedElements.CustomizedOptionField;
+import visuals.CustomizedElements.CustomizedTextField;
+import visuals.CustomizedElements.CustomizedTitle;
+import visuals.CustomizedElements.GamePanel;
+import visuals.ScheduleFrames.Scheduler;
+
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
-import javax.swing.*;
-
-import main.java.entities.Team;
-import main.java.entities.User;
-import main.java.visuals.CustomizedElements.*;
-import main.java.visuals.ScheduleFrames.Scheduler;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class StartPage extends GamePanel {
 
@@ -31,7 +35,7 @@ public class StartPage extends GamePanel {
 
     public StartPage(initialSetup setup) {
     	this.setup = setup;
-		backgroundImage = new ImageIcon("./src/visuals/Images/start_page_main.jpg").getImage();
+		backgroundImage = new ImageIcon("./src/main/java/visuals/Images/start_page_main.jpg").getImage();
     	setLayout(new BorderLayout());
     	
     	// Header

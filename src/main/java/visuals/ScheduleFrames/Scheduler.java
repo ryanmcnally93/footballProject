@@ -1,38 +1,64 @@
-package main.java.visuals.ScheduleFrames;
+package visuals.ScheduleFrames;
 
+import entities.League;
+import entities.Match;
+import entities.Season;
+import entities.Team;
+import entities.User;
+import entities.UsersMatch;
+import gameSetup.GameWindow;
+import visuals.CustomizedElements.CardmapMainPageTemplate;
+import visuals.CustomizedElements.CustomizedButton;
+import visuals.CustomizedElements.CustomizedTitle;
+import visuals.CustomizedElements.GamePanel;
+import visuals.CustomizedElements.MainMenu;
+import visuals.CustomizedElements.MainPageTemplate;
+import visuals.CustomizedElements.TacticsPanel;
+import visuals.MainMenuPages.MainMenuPageTemplate;
+import visuals.MainMenuPages.MyClubPages.BudgetPage;
+import visuals.MainMenuPages.MyClubPages.FacilitiesPage;
+import visuals.MainMenuPages.MyClubPages.StaffPage;
+import visuals.MainMenuPages.MyProfilePages.ObjectivesPage;
+import visuals.MainMenuPages.MyProfilePages.RecordPage;
+import visuals.MainMenuPages.MyProfilePages.TrophyPage;
+import visuals.MainMenuPages.SinglePages.FixturesPage;
+import visuals.MainMenuPages.SinglePages.MyTeamPage;
+import visuals.MainMenuPages.SinglePages.PlayerSearchPage;
+import visuals.MainMenuPages.SinglePages.TrainingPage;
+import visuals.MainMenuPages.StandingsPages.LeagueTablePage;
+import visuals.MainMenuPages.StandingsPages.TopGoalscorersPage;
+import visuals.MainMenuPages.TacticsPages.FirstTeamPage;
+import visuals.MainMenuPages.TacticsPages.FormationPage;
+import visuals.MainMenuPages.TacticsPages.MatchRolesPage;
+import visuals.MatchPages.MatchAllMatches;
+import visuals.MatchPages.MatchEvents;
+import visuals.MatchPages.MatchFrames;
+import visuals.MatchPages.MatchRatings;
+import visuals.MatchPages.MatchScorers;
+import visuals.MatchPages.MatchStats;
+import visuals.MatchPages.MatchTable;
+import visuals.MatchPages.MatchWatch;
+import visuals.MatchPages.Speedometer;
+import visuals.SchedulerMessageApp.MessageViewer;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import javax.swing.*;
-import javax.swing.Timer;
-import javax.swing.border.EmptyBorder;
-
-import main.java.entities.*;
-import main.java.visuals.CustomizedElements.*;
-import main.java.gameSetup.GameWindow;
-import main.java.visuals.MainMenuPages.MainMenuPageTemplate;
-import main.java.visuals.MainMenuPages.MyClubPages.BudgetPage;
-import main.java.visuals.MainMenuPages.MyClubPages.FacilitiesPage;
-import main.java.visuals.MainMenuPages.MyClubPages.StaffPage;
-import main.java.visuals.MainMenuPages.MyProfilePages.ObjectivesPage;
-import main.java.visuals.MainMenuPages.MyProfilePages.RecordPage;
-import main.java.visuals.MainMenuPages.MyProfilePages.TrophyPage;
-import main.java.visuals.MainMenuPages.StandingsPages.LeagueTablePage;
-import main.java.visuals.MainMenuPages.StandingsPages.TopGoalscorersPage;
-import main.java.visuals.MainMenuPages.SinglePages.FixturesPage;
-import main.java.visuals.MainMenuPages.SinglePages.MyTeamPage;
-import main.java.visuals.MainMenuPages.SinglePages.PlayerSearchPage;
-import main.java.visuals.MainMenuPages.SinglePages.TrainingPage;
-import main.java.visuals.MainMenuPages.TacticsPages.FirstTeamPage;
-import main.java.visuals.MainMenuPages.TacticsPages.FormationPage;
-import main.java.visuals.MainMenuPages.TacticsPages.MatchRolesPage;
-import main.java.visuals.MatchPages.*;
-import main.java.visuals.SchedulerMessageApp.MessageViewer;
 
 public class Scheduler extends GamePanel {
 
@@ -103,7 +129,7 @@ public class Scheduler extends GamePanel {
 		this.season = league.getSeason();
 		this.setLayout(new BorderLayout());
 
-		ImageIcon image = new ImageIcon("./src/visuals/Images/main_scheduler.jpeg");
+		ImageIcon image = new ImageIcon("./src/main/java/visuals/Images/main_scheduler.jpeg");
 		backgroundImage = image.getImage().getScaledInstance(800, 800, Image.SCALE_SMOOTH);
 
 		layeredPane = new JLayeredPane();
@@ -212,12 +238,12 @@ public class Scheduler extends GamePanel {
 				String direction = backgroundMover.getOtherIcon().getDescription();
 				if (direction.equals("Down") || direction.equals("DownDark")) {
 					moveContentDown();
-					ImageIcon upArrow = new ImageIcon("./src/visuals/Images/up_arrow_darkbg.png", "UpDark");
+					ImageIcon upArrow = new ImageIcon("./src/main/java/visuals/Images/up_arrow_darkbg.png", "UpDark");
 					backgroundMover.setIcon(upArrow);
 					backgroundMover.setOtherIcon(upArrow);
 				} else {
 					moveContentUp();
-					ImageIcon downArrow = new ImageIcon("./src/visuals/Images/down_arrow_darkbg.png", "DownDark");
+					ImageIcon downArrow = new ImageIcon("./src/main/java/visuals/Images/down_arrow_darkbg.png", "DownDark");
 					backgroundMover.setIcon(downArrow);
 					backgroundMover.setOtherIcon(downArrow);
 				}
@@ -252,9 +278,9 @@ public class Scheduler extends GamePanel {
 	}
 
 	private void createMovingButtons() {
-		backgroundMover = createMovingButton("./src/visuals/Images/down_arrow.png", "Down", 15, 305, 30, 30);
-		trainingButton = createMovingButton("./src/visuals/Images/training_icon.png", "Training", 33, 110, 41, 45);
-		myTeamButton = createMovingButton("./src/visuals/Images/team_icon.png", "Team", 84, 64, 41, 36);
+		backgroundMover = createMovingButton("./src/main/java/visuals/Images/down_arrow.png", "Down", 15, 305, 30, 30);
+		trainingButton = createMovingButton("./src/main/java/visuals/Images/training_icon.png", "Training", 33, 110, 41, 45);
+		myTeamButton = createMovingButton("./src/main/java/visuals/Images/team_icon.png", "Team", 84, 64, 41, 36);
 
 		tacticsPanel = new TacticsPanel();
 		tacticsPanel.setLayout(null);
@@ -262,11 +288,11 @@ public class Scheduler extends GamePanel {
 		movingComponents.add(tacticsPanel);
 		layeredPane.add(tacticsPanel, JLayeredPane.PALETTE_LAYER);
 
-		standingsButton = createMovingButton("./src/visuals/Images/standings_icon.png", "Standings", 145, 100, 50, 58);
-		playerSearchButton = createMovingButton("./src/visuals/Images/player_search_icon.png", "PlayerSearch", 211, 164, 45, 54);
-		myClubButton = createMovingButton("./src/visuals/Images/my_club_icon.png", "MyClub", 577, 100, 48, 56);
-		fixturesButton = createMovingButton("./src/visuals/Images/fixtures_icon.png", "Fixtures", 643, 51, 45, 54);
-		myProfileButton = createMovingButton("./src/visuals/Images/my_profile_icon.png", "MyProfile", 707, 157, 41, 62);
+		standingsButton = createMovingButton("./src/main/java/visuals/Images/standings_icon.png", "Standings", 145, 100, 50, 58);
+		playerSearchButton = createMovingButton("./src/main/java/visuals/Images/player_search_icon.png", "PlayerSearch", 211, 164, 45, 54);
+		myClubButton = createMovingButton("./src/main/java/visuals/Images/my_club_icon.png", "MyClub", 577, 100, 48, 56);
+		fixturesButton = createMovingButton("./src/main/java/visuals/Images/fixtures_icon.png", "Fixtures", 643, 51, 45, 54);
+		myProfileButton = createMovingButton("./src/main/java/visuals/Images/my_profile_icon.png", "MyProfile", 707, 157, 41, 62);
 	}
 
 	private CustomizedButton createMovingButton(String url, String description, int x, int y, int width, int height) {
