@@ -22,7 +22,7 @@ public class Speedometer extends GamePanel {
         public Speedometer(){
             setLayout(null);
 
-            slowDown = new CustomizedButton("Slower");
+            slowDown = new CustomizedButton("Slower", 12);
             slowDown.setMargin(new Insets(0, 0, 0, 0));
             slowDown.setBounds(55, 0, 80, 20);
             add(slowDown);
@@ -31,7 +31,7 @@ public class Speedometer extends GamePanel {
             circles.setBounds(171, 0, 58, 20);
             add(circles);
 
-            speedUp = new CustomizedButton("Faster");
+            speedUp = new CustomizedButton("Faster", 12);
             speedUp.setMargin(new Insets(0, 0, 0, 0));
             speedUp.setBounds(265, 0, 80, 20);
             add(speedUp);

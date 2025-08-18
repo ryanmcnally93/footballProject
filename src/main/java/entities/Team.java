@@ -21,7 +21,9 @@ public class Team {
 	private Color secondaryColour;
 	private Formation formation;
 	private Footballer captain;
-	
+
+    public Team() {};
+
 	public Team(String name, Manager manager, Map<String, Footballer> players, long budget, String stadium, Color primaryColour, Color secondaryColour) {
 		this.name = name;
 		this.manager = manager;

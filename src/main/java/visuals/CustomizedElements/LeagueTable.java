@@ -18,7 +18,9 @@ public class LeagueTable extends GamePanel {
 	private JLabel title;
 	private JPanel tableContainer;
 	private Box titleRow;
-	
+
+    public LeagueTable() {};
+
 	public LeagueTable(League league) {
 		this.lines = new ArrayList<>();
 		this.league = league;

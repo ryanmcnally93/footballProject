@@ -439,15 +439,15 @@ public class Scheduler extends GamePanel {
 		speedometer = new Speedometer();
 		ArrayList<CustomizedButton> buttons = new ArrayList<CustomizedButton>();
 
-		pauseButton = new CustomizedButton("Pause");
+		pauseButton = new CustomizedButton("Pause", 12);
 		pauseButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		buttons.add(pauseButton);
 
-		resumeButton = new CustomizedButton("Resume");
+		resumeButton = new CustomizedButton("Resume", 12);
 		resumeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		buttons.add(resumeButton);
 
-		tacticsButton = new CustomizedButton("Tactics");
+		tacticsButton = new CustomizedButton("Tactics", 12);
 		tacticsButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		buttons.add(tacticsButton);
 

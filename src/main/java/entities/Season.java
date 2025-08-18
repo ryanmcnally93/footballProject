@@ -18,12 +18,14 @@ public class Season {
     // private Map<String, PlayerAchievementLine> playerAchievements;
     // private Map<String, TeamAchievementLine> teamAchievements;
 
+    public Season() {};
+
     public Season(Map<String, Team> preTeams){
         counter++;
         this.number = counter;
         this.yearFrom = 2023 + counter;
         this.yearTo = 2024 + counter;
-        premLeague = new League("Premia League", "England", 20, preTeams, 1, this);
+        premLeague = new League("Premia League", "England", preTeams, 1, this);
     }
 
     public int getNumber() {

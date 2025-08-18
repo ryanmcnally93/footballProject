@@ -16,6 +16,7 @@ public class CardmapMainPageTemplate extends MainPageTemplate {
 
         getFooterPanel().addLeftAndRightButtons();
         addLeftAndRightActionListeners();
+        addKeyListeners();
     }
 
     public void addLeftAndRightActionListeners() {

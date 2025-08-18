@@ -9,6 +9,8 @@ public class MatchEvent {
     private Footballer player;
     private int minute;
 
+    public MatchEvent() {};
+
     public MatchEvent(String homeOrAway, String eventType, Footballer player, int minute) {
         this.homeOrAway = homeOrAway;
         this.eventType = eventType;

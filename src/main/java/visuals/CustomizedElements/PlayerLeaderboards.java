@@ -21,6 +21,8 @@ public class PlayerLeaderboards extends GamePanel {
     private JPanel tableContainer;
 //    private Scheduler scheduler;
 
+    public PlayerLeaderboards() {};
+
     public PlayerLeaderboards(League league) {
 //        this.scheduler = scheduler;
         this.league = league;
@@ -29,10 +31,12 @@ public class PlayerLeaderboards extends GamePanel {
         // Creating initial player achievements page
         for(Map.Entry<String, Team> eachTeam : league.getTeams().entrySet()){
             Team thisTeam = eachTeam.getValue();
-            for(Map.Entry<String, Footballer> eachPlayer : thisTeam.getPlayers().entrySet()) {
-                Footballer thisPlayer = eachPlayer.getValue();
-                PlayerAchievementLine line = new PlayerAchievementLine(thisPlayer);
-                playerAchievements.add(line);
+            if (thisTeam.getPlayers() != null) {
+                for (Map.Entry<String, Footballer> eachPlayer : thisTeam.getPlayers().entrySet()) {
+                    Footballer thisPlayer = eachPlayer.getValue();
+                    PlayerAchievementLine line = new PlayerAchievementLine(thisPlayer);
+                    playerAchievements.add(line);
+                }
             }
         }
 

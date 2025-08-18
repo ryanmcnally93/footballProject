@@ -115,8 +115,8 @@ public class MainPageTemplate extends GamePanel {
         }
 
         public void addLeftAndRightButtons() {
-            prevButton = new CustomizedButton("Prev");
-            nextButton = new CustomizedButton("Next");
+            prevButton = new CustomizedButton("Prev", 12);
+            nextButton = new CustomizedButton("Next", 12);
 
             buttonBox = new JPanel(new FlowLayout(FlowLayout.CENTER));
             buttonBox.add(prevButton);

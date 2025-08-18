@@ -35,10 +35,10 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		this.pauseButton = buttons.getFirst();
 		this.resumeButton = buttons.get(1);
 		this.tacticsButton = buttons.get(2);
-		continueButton = new CustomizedButton("Continue");
+		continueButton = new CustomizedButton("Continue", 12);
 
 		// Adding play button
-		playButton = new CustomizedButton("Play");
+		playButton = new CustomizedButton("Play", 12);
 		playButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		playButton.addMouseListener(new MouseAdapter() {
 			@Override

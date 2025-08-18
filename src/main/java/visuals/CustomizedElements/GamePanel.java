@@ -14,9 +14,7 @@ public abstract class GamePanel extends JPanel {
     private static final String RIGHT = "Next Page";
     private static final String LEFT = "Previous Page";
 
-    public GamePanel() {
-        addKeyListeners();
-    };
+    public GamePanel() {};
 
     protected void addGameMouseListener(MouseAdapter mouseAdapter) {
         addMouseListener(mouseAdapter);

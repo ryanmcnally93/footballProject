@@ -117,6 +117,7 @@ public class StartPage extends GamePanel {
         setBackground(new Color(0, 0, 0, 140));
 		setOpaque(false);
         setVisible(true);
+        addKeyListeners();
     }
 
 	@Override
