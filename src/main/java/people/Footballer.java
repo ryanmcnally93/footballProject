@@ -33,7 +33,9 @@ public class Footballer extends Individual {
 	private boolean injuredThisMatch;
 
 	public int stamina;
-	
+
+    public Footballer() {};
+
 	public Footballer(String name, int age) {
 		super(name,age);
 		this.stamina = 100;

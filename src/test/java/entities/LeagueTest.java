@@ -6,15 +6,20 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import people.Footballer;
+import people.Goalkeeper;
 import visuals.CustomizedElements.LeagueTable;
 import visuals.CustomizedElements.PlayerLeaderboards;
 import visuals.CustomizedElements.TeamAchievementLine;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -155,6 +160,53 @@ public class LeagueTest {
     }
 
     @Test
+    public void testGetFixturesToString() {
+        setupTeams(2);
+        when(firstTeam.get("GK")).thenReturn(new Goalkeeper());
+        Match match = new Match(teams.get("A"), teams.get("Team 1"));
+        Match otherMatch = new Match(teams.get("Team 1"), teams.get("A"));
+        league.setFixtures(Map.of("1", match, "2", otherMatch));
+
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outContent));
+
+        league.getFixturesToString();
+
+        System.setOut(originalOut);
+        String printed = outContent.toString();
+
+        assertTrue(printed.contains("A vs Team 1"));
+        assertTrue(printed.contains("Team 1 vs A"));
+    }
+
+    @Test
+    public void testGetTeamFixturesToString() {
+        setupTeams(4);
+        when(firstTeam.get("GK")).thenReturn(new Goalkeeper());
+        Match match = new Match(teams.get("A"), teams.get("Team 1"));
+        Match otherMatch = new Match(teams.get("Team 1"), teams.get("A"));
+        Match thirdMatch = new Match(teams.get("Team 2"), teams.get("Team 3"));
+        league.setFixtures(Map.of("1", match, "2", otherMatch, "3", thirdMatch));
+
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outContent));
+
+        league.getTeamFixturesToString(teams.get("A"));
+
+        System.setOut(originalOut);
+        String printed = outContent.toString();
+
+        assertTrue(printed.contains("A vs Team 1"));
+        assertTrue(printed.contains("Team 1 vs A"));
+        assertFalse(printed.contains("Team 2 vs Team 3"));
+
+        String[] lines = printed.split("\\R");
+        assertEquals(2, lines.length, "Expected 2 printed lines");
+    }
+
+    @Test
     void testGettersAndSetters() {
         League league = new League();
         LeagueTable table = new LeagueTable();
@@ -195,6 +247,70 @@ public class LeagueTest {
         assertEquals(slots, league.getMatchWeeksSlots());
     }
 
+    @Test
+    public void testAssignSlotsToMatches_AllMatchesAssignedSlots() {
+        setupForAssignSlotsMethod();
+        league.assignSlotsToMatches();
+
+        Map<String, Match> week1Matches = league.getMatchWeeksMatches().get(1);
+
+        for (Match match : week1Matches.values()) {
+            assertNotNull(match.getDateTime(), "Match was not assigned a slot.");
+        }
+    }
+
+    @Test
+    public void testAssignSlotsToMatches_NoDuplicateSlots() {
+        setupForAssignSlotsMethod();
+        league.assignSlotsToMatches();
+
+        Map<String, Match> week1Matches = league.getMatchWeeksMatches().get(1);
+        Set<LocalDateTime> usedSlots = new HashSet<>();
+
+        for (Match match : week1Matches.values()) {
+            LocalDateTime matchDateTime = match.getDateTime();
+            assertNotNull(matchDateTime);
+            assertFalse(usedSlots.contains(matchDateTime), "Duplicate slot assigned!");
+            usedSlots.add(matchDateTime);
+        }
+    }
+
+    @Test
+    void testAssignSlotsToMatches_CreatesCorrectNumberOfAssignedSlots() {
+        setupForAssignSlotsMethod();
+        league.assignSlotsToMatches();
+
+        Map<String, Match> week1Matches = league.getMatchWeeksMatches().get(1);
+        assertEquals(2, week1Matches.size());
+
+        Set<LocalDateTime> usedSlots = new HashSet<>();
+        for (Match match : week1Matches.values()) {
+            usedSlots.add(match.getDateTime());
+        }
+
+        assertEquals(2, usedSlots.size(), "Each match should have a unique slot.");
+    }
+
+    @Test
+    void testSingleMatchAndSlot() {
+        setupTeams(2);
+        League singleMatchLeague = new League();
+
+        Map<String, Match> week1Matches = new HashMap<>();
+        week1Matches.put("1", new Match(teams.get("Team 1"), teams.get("A")));
+
+        Map<Integer, LocalDateTime> week1Slots = new HashMap<>();
+        week1Slots.put(1, LocalDateTime.of(2025, 8, 21, 18, 0));
+
+        singleMatchLeague.setMatchWeeksMatches(Map.of(1, week1Matches));
+        singleMatchLeague.setMatchWeeksSlots(Map.of(1, week1Slots));
+
+        singleMatchLeague.assignSlotsToMatches();
+
+        Match onlyMatch = singleMatchLeague.getMatchWeeksMatches().get(1).get("1");
+        assertEquals(LocalDateTime.of(2025, 8, 21, 18, 0), onlyMatch.getDateTime());
+    }
+
     private void setupTeams(int numberOfTeams) {
         teams = new HashMap<>();
         int teamCount = 0;
@@ -202,6 +318,7 @@ public class LeagueTest {
             teamCount++;
             Team currentTeam = new Team();
             currentTeam.setName("Team " + teamCount);
+            currentTeam.setStadium("Stadium " + teamCount);
             currentTeam.setFirstTeam(firstTeam);
             teams.put(currentTeam.getName(), currentTeam);
         }
@@ -212,13 +329,29 @@ public class LeagueTest {
         teams.put(firstTeamInAlphabet.getName(), firstTeamInAlphabet);
     }
 
-    // getTeamFixturesToString
-    //getFixturesToString
-    //findFirstSaturday
-    //normalWeekend
-    //assignDatetimesToWeekNumber
-    //assignSlotsToMatches
-    //createFixtures
-    //createMatchWeek
-    //assignFixturesToWeekNumber
+    private void setupForAssignSlotsMethod() {
+        setupTeams(4);
+        league = new League();
+
+        // Week 1 matches
+        Map<String, Match> week1Matches = new HashMap<>();
+        week1Matches.put("1", new Match(teams.get("A"), teams.get("Team 1")));
+        week1Matches.put("2", new Match(teams.get("Team 2"), teams.get("Team 3")));
+
+        // Week 1 slots
+        Map<Integer, LocalDateTime> week1Slots = new HashMap<>();
+        week1Slots.put(1, LocalDateTime.of(2025, 8, 20, 15, 0));
+        week1Slots.put(2, LocalDateTime.of(2025, 8, 20, 17, 0));
+
+        // Set up maps
+        Map<Integer, Map<String, Match>> matchWeeksMatches = new HashMap<>();
+        matchWeeksMatches.put(1, week1Matches);
+
+        Map<Integer, Map<Integer, LocalDateTime>> matchWeeksSlots = new HashMap<>();
+        matchWeeksSlots.put(1, week1Slots);
+
+        // Assuming setters or direct access
+        league.setMatchWeeksMatches(matchWeeksMatches);
+        league.setMatchWeeksSlots(matchWeeksSlots);
+    }
 }

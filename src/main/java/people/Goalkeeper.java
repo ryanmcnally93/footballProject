@@ -3,7 +3,9 @@ package people;
 public class Goalkeeper extends Footballer {
 
 	private int keeping;
-	
+
+    public Goalkeeper() {};
+
 	public Goalkeeper(String name, int age, int keeping) {
 		super(name, age);
 		this.keeping = keeping;

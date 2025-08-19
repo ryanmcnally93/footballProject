@@ -6,7 +6,9 @@ public class Individual {
 	private int age;
 	private int wealth;
 	private String[] trophiesWon;
-	
+
+    public Individual() {};
+
 	public Individual(String name, int age) {
 		setName(name);
 		setAge(age);
