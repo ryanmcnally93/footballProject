@@ -21,6 +21,7 @@ public class initialSetup {
 	Footballer jasus = new Footballer("Gabriel Jasus", 31, 180, 30, 100, "ST");
 	Footballer trossart = new Footballer("Leandro Trossart", 31, 200, 40, 100, "LW");
 	Footballer sake = new Footballer("Bukayo Sake", 31, 180, 65, 100, "RW");
+    Footballer saka = FootballerFactory.createPlayer("ST", "Technically Gifted", 86, 92, "Bukayo Saka");
 	Footballer parley = new Footballer("Thomas Parley", 31, 90, 180, 100, "CM", "CM1");
 	Footballer ovegaard = new Footballer("Martin Ovegaard", 31, 180, 120, 100, "CAM");
 	Footballer rire = new Footballer("Declan Rire", 31, 110, 190, 100, "CM", "CM2");
@@ -495,7 +496,7 @@ public class initialSetup {
 	arsenolFirst.put(rava.getPositionPlaced(), rava);
 	arsenolFirst.put(jasus.getPositionPlaced(), jasus);
 	arsenolFirst.put(trossart.getPositionPlaced(), trossart);
-	arsenolFirst.put(sake.getPositionPlaced(), sake);
+	arsenolFirst.put(sake.getPositionPlaced(), saka);
 	arsenolFirst.put(ovegaard.getPositionPlaced(), ovegaard);
 	arsenolFirst.put(parley.getPositionPlaced(), parley);
 	arsenolFirst.put(rire.getPositionPlaced(), rire);
