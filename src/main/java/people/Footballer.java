@@ -2,6 +2,8 @@ package people;
 
 import entities.Team;
 
+import java.util.Map;
+
 public class Footballer extends Individual {
 	
 	public int attack;
@@ -9,6 +11,7 @@ public class Footballer extends Individual {
 	public String likedPosition;
 	private Team team;
 	public String positionPlaced;
+    Map<String, Integer> attributes;
 
 	private int savesThisMatch = 0;
 	private int duelsPercentageThisMatch = 0;
@@ -58,7 +61,13 @@ public class Footballer extends Individual {
 		this.likedPosition = position;
 		this.positionPlaced = position;
 	}
-	
+
+    public Footballer(String name, String positionPlaced, String playerType, Map<String, Integer> attributes) {
+        super(name, attributes.get("Date Of Birth"));
+        this.attributes = attributes;
+        this.stamina = 100; // Need to change to Match Fitness
+    }
+
 	public int getStamina() {
 		return this.stamina;
 	}
