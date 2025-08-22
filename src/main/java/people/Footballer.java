@@ -5,7 +5,13 @@ import entities.Team;
 import java.util.Map;
 
 public class Footballer extends Individual {
-	
+
+    // Dribbling = Agility, Balance, Ball Control, Composure, Reactions
+    // Shooting = Finishing, Show Power, Long Shots, Volleys, Curve
+    // Defending = Aggression, Defensive Positioning, Standing Tackle, Sliding Tackle, Interceptions
+    // Passing = Vision, Crossing, Short Passing, Long Passing, Curve
+    // Value = Potential, Rating, Age (Derived from DOB)
+
 	public int attack;
 	public int defence;
 	public String likedPosition;
@@ -66,6 +72,8 @@ public class Footballer extends Individual {
         super(name, attributes.get("Date Of Birth"));
         this.attributes = attributes;
         this.stamina = 100; // Need to change to Match Fitness
+        this.likedPosition = positionPlaced;
+        this.positionPlaced = positionPlaced;
     }
 
 	public int getStamina() {
