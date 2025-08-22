@@ -18,7 +18,7 @@ public class initialSetup {
 	private GameWindow window;
 	
 	public initialSetup() {
-	Goalkeeper rava = new Goalkeeper("David Rava", 31, 150);
+	Goalkeeper rava = (Goalkeeper) FootballerFactory.createPlayer("GK", "Goalkeeper", 84, 88, "David Raya", LocalDate.of(1993, 6, 10));
 	Footballer jasus = new Footballer("Gabriel Jasus", 31, 180, 30, 100, "ST");
     Footballer trossart = FootballerFactory.createPlayer("LW", "Technically Gifted", 81, 84, "Leandro Trossard", LocalDate.of(1993, 6, 10));
 	Footballer saka = FootballerFactory.createPlayer("RW", "Technically Gifted", 86, 92, "Bukayo Saka", LocalDate.of(1993, 6, 10));

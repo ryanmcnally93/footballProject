@@ -1,6 +1,7 @@
 package gameSetup;
 
 import people.Footballer;
+import people.Goalkeeper;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -17,25 +18,102 @@ public class FootballerFactory {
     private static final List<String> GOALKEEPER_ATTRIBUTES = List.of("GK Diving", "GK Handling", "GK Kicking", "GK Positioning", "GK Reflexes", "GK 1-on-1");
     private static final List<String> MAIN_ATTRIBUTES = List.of("Rating", "Potential", "Wage", "Date Of Birth", "Height", "Weight", "Contract Length", "Form", "Morale", "Injury Proneness");
 
+    // do these weight distributions reflect our OVR weights correctly? Or will we create a player with an under or overwhelming ovr?
+
     private static final Map<String, Double> GK_OVR_WEIGHTS = Map.ofEntries(
+            Map.entry("GK Reflexes", 0.26),
+            Map.entry("GK Diving", 0.23),
+            Map.entry("GK Positioning", 0.20),
+            Map.entry("GK Handling", 0.15),
+            Map.entry("GK Kicking", 0.11),
+            Map.entry(GOALKEEPER_ATTRIBUTES.get(5), 0.05)   // GK 1-on-1
     );
 
     private static final Map<String, Double> GK_STAT_WEIGHTS = Map.ofEntries(
+            Map.entry(PHYSICAL_ATTRIBUTES.getFirst(), 0.02),  // Sprint Speed
+            Map.entry(PHYSICAL_ATTRIBUTES.get(1), 0.70),      // Strength
+            Map.entry(PHYSICAL_ATTRIBUTES.get(2), 0.03),      // Agility
+            Map.entry(PHYSICAL_ATTRIBUTES.get(3), 0.65),      // Balance
+            Map.entry(PHYSICAL_ATTRIBUTES.get(4), 0.02),      // Acceleration
+            Map.entry(PHYSICAL_ATTRIBUTES.get(5), 0.70),      // Stamina
+            Map.entry(TECHNICAL_ATTRIBUTES.getFirst(), 0.00), // Finishing
+            Map.entry(TECHNICAL_ATTRIBUTES.get(1), 0.20),     // Shot Power
+            Map.entry(TECHNICAL_ATTRIBUTES.get(2), 0.00),     // Long Shots
+            Map.entry(TECHNICAL_ATTRIBUTES.get(3), 0.00),     // Volleys
+            Map.entry(TECHNICAL_ATTRIBUTES.get(4), 0.00),     // Att. Positioning
+            Map.entry(TECHNICAL_ATTRIBUTES.get(5), 0.00),     // Heading Accuracy
+            Map.entry(TECHNICAL_ATTRIBUTES.get(6), 0.02),     // Penalties
+            Map.entry(TECHNICAL_ATTRIBUTES.get(7), 0.00),     // Crossing
+            Map.entry(TECHNICAL_ATTRIBUTES.get(8), 0.60),     // Short Passing
+            Map.entry(TECHNICAL_ATTRIBUTES.get(9), 0.70),     // Long Passing
+            Map.entry(TECHNICAL_ATTRIBUTES.get(10), 0.04),    // Curve
+            Map.entry(TECHNICAL_ATTRIBUTES.get(11), 0.04),    // Ball Control
+            Map.entry(TECHNICAL_ATTRIBUTES.get(12), 0.00),    // Free Kick Accuracy
+            Map.entry(TECHNICAL_ATTRIBUTES.get(13), 0.00),    // Def. Positioning
+            Map.entry(TECHNICAL_ATTRIBUTES.get(14), 0.02),    // Standing Tackle
+            Map.entry(TECHNICAL_ATTRIBUTES.get(15), 0.00),    // Sliding Tackle
+            Map.entry(MENTAL_ATTRIBUTES.getFirst(), 0.02),    // Vision
+            Map.entry(MENTAL_ATTRIBUTES.get(1), 0.75),        // Composure
+            Map.entry(MENTAL_ATTRIBUTES.get(2), 0.70),        // Reactions
+            Map.entry(MENTAL_ATTRIBUTES.get(3), 0.00),        // Interceptions
+            Map.entry(GOALKEEPER_ATTRIBUTES.getFirst(), 0.85),// GK Diving
+            Map.entry(GOALKEEPER_ATTRIBUTES.get(1), 0.80),    // GK Handling
+            Map.entry(GOALKEEPER_ATTRIBUTES.get(2), 0.70),    // GK Kicking
+            Map.entry(GOALKEEPER_ATTRIBUTES.get(3), 0.80),    // GK Positioning
+            Map.entry(GOALKEEPER_ATTRIBUTES.get(4), 0.90),    // GK Reflexes
+            Map.entry(GOALKEEPER_ATTRIBUTES.get(5), 0.65)     // GK 1-on-1
     );
 
     private static final Map<String, Double> CB_OVR_WEIGHTS = Map.ofEntries(
+            Map.entry("Standing Tackle", 0.18),
+            Map.entry("Sliding Tackle", 0.13),
+            Map.entry("Interceptions", 0.12),
+            Map.entry("Strength", 0.10),
+            Map.entry("Def. Positioning", 0.10),
+            Map.entry("Heading Accuracy", 0.09),
+            Map.entry("Jumping", 0.07),
+            Map.entry("Reactions", 0.07),
+            Map.entry("Composure", 0.06),
+            Map.entry("Short Passing", 0.04),
+            Map.entry("Aggression", 0.04)
     );
 
     private static final Map<String, Double> CB_STAT_WEIGHTS = Map.ofEntries(
     );
 
     private static final Map<String, Double> FULL_BACK_OVR_WEIGHTS = Map.ofEntries(
+            Map.entry("Standing Tackle", 0.12),
+            Map.entry("Sliding Tackle", 0.10),
+            Map.entry("Interceptions", 0.09),
+            Map.entry("Crossing", 0.10),
+            Map.entry("Short Passing", 0.08),
+            Map.entry("Ball Control", 0.08),
+            Map.entry("Acceleration", 0.08),
+            Map.entry("Sprint Speed", 0.08),
+            Map.entry("Stamina", 0.07),
+            Map.entry("Reactions", 0.07),
+            Map.entry("Agility", 0.05),
+            Map.entry("Balance", 0.04),
+            Map.entry("Vision", 0.04)
     );
 
     private static final Map<String, Double> FULL_BACK_STAT_WEIGHTS = Map.ofEntries(
     );
 
     private static final Map<String, Double> CM_OVR_WEIGHTS = Map.ofEntries(
+            Map.entry("Short Passing", 0.13),
+            Map.entry("Vision", 0.12),
+            Map.entry("Ball Control", 0.11),
+            Map.entry("Long Passing", 0.10),
+            Map.entry("Reactions", 0.09),
+            Map.entry("Stamina", 0.08),
+            Map.entry("Composure", 0.07),
+            Map.entry("Interceptions", 0.06),
+            Map.entry("Standing Tackle", 0.06),
+            Map.entry("Dribbling", 0.05),
+            Map.entry("Att. Positioning", 0.05),
+            Map.entry("Agility", 0.04),
+            Map.entry("Balance", 0.04)
     );
 
     private static final Map<String, Double> CM_STAT_WEIGHTS = Map.ofEntries(
@@ -177,6 +255,10 @@ public class FootballerFactory {
         int result = calculateOVR(attributes, ovrWeights);
 
         setMainAttributes(attributes, rating, potential, dateOfBirth);
+
+        if (position.equals("GK")) {
+            return new Goalkeeper(name, attributes);
+        }
 
         return new Footballer(name, position, type, attributes);
     }
