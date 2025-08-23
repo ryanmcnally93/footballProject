@@ -26,8 +26,8 @@ public class initialSetup {
 	Footballer ovegaard = new Footballer("Martin Ovegaard", 31, 180, 120, 100, "CAM");
 	Footballer rire = new Footballer("Declan Rire", 31, 110, 190, 100, "CM", "CM2");
 	Footballer tomiyasa = new Footballer("Takehiro Tomiyasa", 31, 45, 215, 100, "LB");
-	Footballer salima = new Footballer("William Salima", 31, 45, 260, 100, "CB", "CB1");
-	Footballer gabriel = new Footballer("Gabriel Magalhares", 31, 45, 245, 100, "CB", "CB2");
+	Footballer salima = FootballerFactory.createPlayer("CB1", "Physically Strong", 86, 93, "William Saliba", LocalDate.of(1993, 6, 10));
+	Footballer gabriel = FootballerFactory.createPlayer("CB2", "Physically Strong", 85, 89, "Gabriel Magalhares", LocalDate.of(1993, 6, 10));
 	Footballer whites = new Footballer("Ben Whites", 31, 75, 215, 100, "RB");
 	
 	Goalkeeper vicarios = new Goalkeeper("Guglielmo Vicarios", 31, 130);
