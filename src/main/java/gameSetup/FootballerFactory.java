@@ -174,22 +174,55 @@ public class FootballerFactory {
     );
 
     private static final Map<String, Double> CM_OVR_WEIGHTS = Map.ofEntries(
-            Map.entry("Short Passing", 0.13),
-            Map.entry("Vision", 0.12),
-            Map.entry("Ball Control", 0.11),
-            Map.entry("Long Passing", 0.10),
-            Map.entry("Reactions", 0.09),
-            Map.entry("Stamina", 0.08),
-            Map.entry("Composure", 0.07),
-            Map.entry("Interceptions", 0.06),
-            Map.entry("Standing Tackle", 0.06),
-            Map.entry("Dribbling", 0.05),
-            Map.entry("Att. Positioning", 0.05),
-            Map.entry("Agility", 0.04),
-            Map.entry("Balance", 0.04)
+            Map.entry(TECHNICAL_ATTRIBUTES.get(8), 0.13),     // Short Passing
+            Map.entry(MENTAL_ATTRIBUTES.getFirst(), 0.12),    // Vision
+            Map.entry(TECHNICAL_ATTRIBUTES.get(11), 0.12),    // Ball Control
+            Map.entry(TECHNICAL_ATTRIBUTES.get(9), 0.10),     // Long Passing
+            Map.entry(MENTAL_ATTRIBUTES.get(2), 0.10),        // Reactions
+            Map.entry(PHYSICAL_ATTRIBUTES.get(5), 0.08),      // Stamina
+            Map.entry(MENTAL_ATTRIBUTES.get(1), 0.08),        // Composure
+            Map.entry(MENTAL_ATTRIBUTES.get(3), 0.06),        // Interceptions
+            Map.entry(TECHNICAL_ATTRIBUTES.get(14), 0.06),    // Standing Tackle
+            Map.entry(TECHNICAL_ATTRIBUTES.get(13), 0.05),    // Def. Positioning
+            Map.entry(PHYSICAL_ATTRIBUTES.get(2), 0.05),      // Agility
+            Map.entry(PHYSICAL_ATTRIBUTES.get(3), 0.05)       // Balance
     );
 
     private static final Map<String, Double> CM_STAT_WEIGHTS = Map.ofEntries(
+            Map.entry(PHYSICAL_ATTRIBUTES.get(1), 0.70),      // Strength
+            Map.entry(TECHNICAL_ATTRIBUTES.get(1), 0.60),     // Shot Power
+            Map.entry(TECHNICAL_ATTRIBUTES.get(3), 0.60),     // Volleys
+            Map.entry(TECHNICAL_ATTRIBUTES.get(5), 0.50),     // Heading Accuracy
+            Map.entry(TECHNICAL_ATTRIBUTES.get(6), 0.40),     // Penalties
+            Map.entry(TECHNICAL_ATTRIBUTES.get(12), 0.60),    // Free Kick Accuracy
+            Map.entry(TECHNICAL_ATTRIBUTES.get(15), 0.50),    // Sliding Tackle
+            Map.entry(MENTAL_ATTRIBUTES.get(4), 0.50),        // Aggression
+            Map.entry(GOALKEEPER_ATTRIBUTES.getFirst(), 0.00),// GK Diving
+            Map.entry(GOALKEEPER_ATTRIBUTES.get(1), 0.00),    // GK Handling
+            Map.entry(GOALKEEPER_ATTRIBUTES.get(2), 0.00),    // GK Kicking
+            Map.entry(GOALKEEPER_ATTRIBUTES.get(3), 0.00),    // GK Positioning
+            Map.entry(GOALKEEPER_ATTRIBUTES.get(4), 0.00),    // GK Reflexes
+            Map.entry(GOALKEEPER_ATTRIBUTES.get(5), 0.00),    // GK 1-on-1
+            Map.entry(PHYSICAL_ATTRIBUTES.getFirst(), 0.65),  // Sprint Speed
+            Map.entry(TECHNICAL_ATTRIBUTES.get(7), 0.65),     // Crossing
+            Map.entry(PHYSICAL_ATTRIBUTES.get(4), 0.65),      // Acceleration
+            Map.entry(TECHNICAL_ATTRIBUTES.getFirst(), 0.60), // Finishing
+            Map.entry(TECHNICAL_ATTRIBUTES.get(4), 0.65),     // Att. Positioning
+            Map.entry(TECHNICAL_ATTRIBUTES.get(2), 0.65),     // Long Shots
+            Map.entry(TECHNICAL_ATTRIBUTES.get(10), 0.65),    // Curve
+
+            Map.entry(TECHNICAL_ATTRIBUTES.get(8), 0.90),     // Short Passing
+            Map.entry(MENTAL_ATTRIBUTES.getFirst(), 0.90),    // Vision
+            Map.entry(TECHNICAL_ATTRIBUTES.get(11), 0.80),    // Ball Control
+            Map.entry(TECHNICAL_ATTRIBUTES.get(9), 0.80),     // Long Passing
+            Map.entry(MENTAL_ATTRIBUTES.get(2), 0.80),        // Reactions
+            Map.entry(PHYSICAL_ATTRIBUTES.get(5), 0.95),      // Stamina
+            Map.entry(MENTAL_ATTRIBUTES.get(1), 0.80),        // Composure
+            Map.entry(MENTAL_ATTRIBUTES.get(3), 0.75),        // Interceptions
+            Map.entry(TECHNICAL_ATTRIBUTES.get(14), 0.75),    // Standing Tackle
+            Map.entry(TECHNICAL_ATTRIBUTES.get(13), 0.70),    // Def. Positioning
+            Map.entry(PHYSICAL_ATTRIBUTES.get(2), 0.70),      // Agility
+            Map.entry(PHYSICAL_ATTRIBUTES.get(3), 0.75)       // Balance
     );
 
     private static final Map<String, Double> CAM_OVR_WEIGHTS = Map.ofEntries(
@@ -209,6 +242,40 @@ public class FootballerFactory {
     );
 
     private static final Map<String, Double> CAM_STAT_WEIGHTS = Map.ofEntries(
+            Map.entry(PHYSICAL_ATTRIBUTES.get(1), 0.65),      // Strength
+            Map.entry(PHYSICAL_ATTRIBUTES.get(5), 0.95),      // Stamina
+            Map.entry(TECHNICAL_ATTRIBUTES.get(1), 0.60),     // Shot Power
+            Map.entry(TECHNICAL_ATTRIBUTES.get(3), 0.60),     // Volleys
+            Map.entry(TECHNICAL_ATTRIBUTES.get(5), 0.50),     // Heading Accuracy
+            Map.entry(TECHNICAL_ATTRIBUTES.get(6), 0.40),     // Penalties
+            Map.entry(TECHNICAL_ATTRIBUTES.get(12), 0.70),    // Free Kick Accuracy
+            Map.entry(TECHNICAL_ATTRIBUTES.get(13), 0.35),    // Def. Positioning
+            Map.entry(TECHNICAL_ATTRIBUTES.get(14), 0.30),    // Standing Tackle
+            Map.entry(TECHNICAL_ATTRIBUTES.get(15), 0.20),    // Sliding Tackle
+            Map.entry(MENTAL_ATTRIBUTES.get(3), 0.60),        // Interceptions
+            Map.entry(MENTAL_ATTRIBUTES.get(4), 0.20),        // Aggression
+            Map.entry(GOALKEEPER_ATTRIBUTES.getFirst(), 0.00),// GK Diving
+            Map.entry(GOALKEEPER_ATTRIBUTES.get(1), 0.00),    // GK Handling
+            Map.entry(GOALKEEPER_ATTRIBUTES.get(2), 0.00),    // GK Kicking
+            Map.entry(GOALKEEPER_ATTRIBUTES.get(3), 0.00),    // GK Positioning
+            Map.entry(GOALKEEPER_ATTRIBUTES.get(4), 0.00),    // GK Reflexes
+            Map.entry(GOALKEEPER_ATTRIBUTES.get(5), 0.00),    // GK 1-on-1
+            Map.entry(PHYSICAL_ATTRIBUTES.getFirst(), 0.75),  // Sprint Speed
+            Map.entry(TECHNICAL_ATTRIBUTES.get(7), 0.65),     // Crossing
+
+            Map.entry(TECHNICAL_ATTRIBUTES.get(9), 0.80),     // Long Passing
+            Map.entry(PHYSICAL_ATTRIBUTES.get(2), 0.75),      // Agility
+            Map.entry(PHYSICAL_ATTRIBUTES.get(3), 0.70),      // Balance
+            Map.entry(PHYSICAL_ATTRIBUTES.get(4), 0.75),      // Acceleration
+            Map.entry(MENTAL_ATTRIBUTES.getFirst(), 0.90),    // Vision
+            Map.entry(MENTAL_ATTRIBUTES.get(1), 0.80),        // Composure
+            Map.entry(MENTAL_ATTRIBUTES.get(2), 0.80),        // Reactions
+            Map.entry(TECHNICAL_ATTRIBUTES.getFirst(), 0.70), // Finishing
+            Map.entry(TECHNICAL_ATTRIBUTES.get(4), 0.75),     // Att. Positioning
+            Map.entry(TECHNICAL_ATTRIBUTES.get(8), 0.90),     // Short Passing
+            Map.entry(TECHNICAL_ATTRIBUTES.get(11), 0.80),    // Ball Control
+            Map.entry(TECHNICAL_ATTRIBUTES.get(2), 0.65),     // Long Shots
+            Map.entry(TECHNICAL_ATTRIBUTES.get(10), 0.65)     // Curve
     );
 
     private static final Map<String, Double> WINGER_OVR_WEIGHTS = Map.ofEntries(
@@ -228,39 +295,40 @@ public class FootballerFactory {
     );
 
     private static final Map<String, Double> WINGER_STAT_WEIGHTS = Map.ofEntries(
-            Map.entry(PHYSICAL_ATTRIBUTES.getFirst(), 0.95),  // Sprint Speed
             Map.entry(PHYSICAL_ATTRIBUTES.get(1), 0.40),      // Strength
-            Map.entry(PHYSICAL_ATTRIBUTES.get(2), 0.75),      // Agility
-            Map.entry(PHYSICAL_ATTRIBUTES.get(3), 0.70),      // Balance
-            Map.entry(PHYSICAL_ATTRIBUTES.get(4), 0.95),      // Acceleration
             Map.entry(PHYSICAL_ATTRIBUTES.get(5), 0.90),      // Stamina
-            Map.entry(TECHNICAL_ATTRIBUTES.getFirst(), 0.70), // Finishing
             Map.entry(TECHNICAL_ATTRIBUTES.get(1), 0.60),     // Shot Power
-            Map.entry(TECHNICAL_ATTRIBUTES.get(2), 0.45),     // Long Shots
             Map.entry(TECHNICAL_ATTRIBUTES.get(3), 0.30),     // Volleys
-            Map.entry(TECHNICAL_ATTRIBUTES.get(4), 0.80),     // Att. Positioning
             Map.entry(TECHNICAL_ATTRIBUTES.get(5), 0.40),     // Heading Accuracy
             Map.entry(TECHNICAL_ATTRIBUTES.get(6), 0.30),     // Penalties
-            Map.entry(TECHNICAL_ATTRIBUTES.get(7), 0.80),     // Crossing
-            Map.entry(TECHNICAL_ATTRIBUTES.get(8), 0.70),     // Short Passing
             Map.entry(TECHNICAL_ATTRIBUTES.get(9), 0.50),     // Long Passing
             Map.entry(TECHNICAL_ATTRIBUTES.get(10), 0.75),    // Curve
-            Map.entry(TECHNICAL_ATTRIBUTES.get(11), 0.80),    // Ball Control
             Map.entry(TECHNICAL_ATTRIBUTES.get(12), 0.50),    // Free Kick Accuracy
             Map.entry(TECHNICAL_ATTRIBUTES.get(13), 0.20),    // Def. Positioning
             Map.entry(TECHNICAL_ATTRIBUTES.get(14), 0.20),    // Standing Tackle
             Map.entry(TECHNICAL_ATTRIBUTES.get(15), 0.15),    // Sliding Tackle
-            Map.entry(MENTAL_ATTRIBUTES.getFirst(), 0.70),    // Vision
-            Map.entry(MENTAL_ATTRIBUTES.get(1), 0.85),        // Composure
-            Map.entry(MENTAL_ATTRIBUTES.get(2), 0.80),        // Reactions
             Map.entry(MENTAL_ATTRIBUTES.get(3), 0.20),        // Interceptions
-            Map.entry(MENTAL_ATTRIBUTES.get(4), 0.20),        // Interceptions
+            Map.entry(MENTAL_ATTRIBUTES.get(4), 0.20),        // Aggression
             Map.entry(GOALKEEPER_ATTRIBUTES.getFirst(), 0.00),// GK Diving
             Map.entry(GOALKEEPER_ATTRIBUTES.get(1), 0.00),    // GK Handling
             Map.entry(GOALKEEPER_ATTRIBUTES.get(2), 0.00),    // GK Kicking
             Map.entry(GOALKEEPER_ATTRIBUTES.get(3), 0.00),    // GK Positioning
             Map.entry(GOALKEEPER_ATTRIBUTES.get(4), 0.00),    // GK Reflexes
-            Map.entry(GOALKEEPER_ATTRIBUTES.get(5), 0.00)     // GK 1-on-1
+            Map.entry(GOALKEEPER_ATTRIBUTES.get(5), 0.00),    // GK 1-on-1
+
+            Map.entry(PHYSICAL_ATTRIBUTES.getFirst(), 0.95),  // Sprint Speed
+            Map.entry(PHYSICAL_ATTRIBUTES.get(2), 0.75),      // Agility
+            Map.entry(PHYSICAL_ATTRIBUTES.get(3), 0.70),      // Balance
+            Map.entry(PHYSICAL_ATTRIBUTES.get(4), 0.95),      // Acceleration
+            Map.entry(MENTAL_ATTRIBUTES.getFirst(), 0.70),    // Vision
+            Map.entry(MENTAL_ATTRIBUTES.get(1), 0.85),        // Composure
+            Map.entry(MENTAL_ATTRIBUTES.get(2), 0.80),        // Reactions
+            Map.entry(TECHNICAL_ATTRIBUTES.getFirst(), 0.70), // Finishing
+            Map.entry(TECHNICAL_ATTRIBUTES.get(2), 0.45),     // Long Shots
+            Map.entry(TECHNICAL_ATTRIBUTES.get(4), 0.80),     // Att. Positioning
+            Map.entry(TECHNICAL_ATTRIBUTES.get(7), 0.80),     // Crossing
+            Map.entry(TECHNICAL_ATTRIBUTES.get(8), 0.70),     // Short Passing
+            Map.entry(TECHNICAL_ATTRIBUTES.get(11), 0.80)     // Ball Control
     );
 
     private static final Map<String, Double> STRIKER_OVR_WEIGHTS = Map.ofEntries(
@@ -280,6 +348,40 @@ public class FootballerFactory {
     );
 
     private static final Map<String, Double> STRIKER_STAT_WEIGHTS = Map.ofEntries(
+            Map.entry(PHYSICAL_ATTRIBUTES.get(5), 0.90),      // Stamina
+            Map.entry(TECHNICAL_ATTRIBUTES.get(6), 0.80),     // Penalties
+            Map.entry(TECHNICAL_ATTRIBUTES.get(9), 0.50),     // Long Passing
+            Map.entry(TECHNICAL_ATTRIBUTES.get(10), 0.75),    // Curve
+            Map.entry(TECHNICAL_ATTRIBUTES.get(12), 0.65),    // Free Kick Accuracy
+            Map.entry(TECHNICAL_ATTRIBUTES.get(13), 0.15),    // Def. Positioning
+            Map.entry(TECHNICAL_ATTRIBUTES.get(14), 0.20),    // Standing Tackle
+            Map.entry(TECHNICAL_ATTRIBUTES.get(15), 0.15),    // Sliding Tackle
+            Map.entry(MENTAL_ATTRIBUTES.get(3), 0.20),        // Interceptions
+            Map.entry(MENTAL_ATTRIBUTES.get(4), 0.40),        // Aggression
+            Map.entry(GOALKEEPER_ATTRIBUTES.getFirst(), 0.00),// GK Diving
+            Map.entry(GOALKEEPER_ATTRIBUTES.get(1), 0.00),    // GK Handling
+            Map.entry(GOALKEEPER_ATTRIBUTES.get(2), 0.00),    // GK Kicking
+            Map.entry(GOALKEEPER_ATTRIBUTES.get(3), 0.00),    // GK Positioning
+            Map.entry(GOALKEEPER_ATTRIBUTES.get(4), 0.00),    // GK Reflexes
+            Map.entry(GOALKEEPER_ATTRIBUTES.get(5), 0.00),    // GK 1-on-1
+            Map.entry(MENTAL_ATTRIBUTES.getFirst(), 0.60),    // Vision
+            Map.entry(TECHNICAL_ATTRIBUTES.get(2), 0.75),     // Long Shots
+            Map.entry(TECHNICAL_ATTRIBUTES.get(7), 0.40),     // Crossing
+            Map.entry(TECHNICAL_ATTRIBUTES.get(8), 0.60),     // Short Passing
+
+            Map.entry(TECHNICAL_ATTRIBUTES.getFirst(), 0.95), // Finishing
+            Map.entry(TECHNICAL_ATTRIBUTES.get(4), 0.90),     // Att. Positioning
+            Map.entry(TECHNICAL_ATTRIBUTES.get(1), 0.85),     // Shot Power
+            Map.entry(TECHNICAL_ATTRIBUTES.get(11), 0.80),     // Ball Control
+            Map.entry(MENTAL_ATTRIBUTES.get(2), 0.80),        // Reactions
+            Map.entry(MENTAL_ATTRIBUTES.get(1), 0.85),        // Composure
+            Map.entry(TECHNICAL_ATTRIBUTES.get(5), 0.80),     // Heading Accuracy
+            Map.entry(TECHNICAL_ATTRIBUTES.get(3), 0.80),     // Volleys
+            Map.entry(PHYSICAL_ATTRIBUTES.getFirst(), 0.85),  // Sprint Speed
+            Map.entry(PHYSICAL_ATTRIBUTES.get(4), 0.85),      // Acceleration
+            Map.entry(PHYSICAL_ATTRIBUTES.get(1), 0.75),      // Strength
+            Map.entry(PHYSICAL_ATTRIBUTES.get(2), 0.75),      // Agility
+            Map.entry(PHYSICAL_ATTRIBUTES.get(3), 0.70)      // Balance
     );
 
     // Type is doing nothing for now
