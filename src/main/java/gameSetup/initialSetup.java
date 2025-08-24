@@ -19,347 +19,388 @@ public class initialSetup {
 	private GameWindow window;
 	
 	public initialSetup() {
-	Goalkeeper hermanson = new Goalkeeper("Mads Hermansan", 23, 130);
-	Footballer vardi = new Footballer("Jamie Vardy", 36, 180, 50, 100, "ST");
-	Footballer iheanachos = new Footballer("Kelechi Iheanacno", 26, 175, 55, 100, "RW");
-	Footballer madisonn = new Footballer("James Madisen", 27, 185, 60, 100, "LW");
-	Footballer ndidy = new Footballer("Wilfred Ndidr", 26, 165, 70, 100, "CM", "CM1");
-	Footballer soumara = new Footballer("Boubakary Soumara", 24, 160, 80, 100, "CM", "CM2");
-	Footballer dewburyHull = new Footballer("Kiernan Dewsbury-Hall", 25, 150, 85, 100, "CAM");
-	Footballer castagna = new Footballer("Timothy Castanre", 28, 70, 190, 100, "LB");
-	Footballer fase = new Footballer("Wout Fas", 25, 55, 220, 100, "CB", "CB1");
-	Footballer soutar = new Footballer("Harry Souttqr", 24, 50, 230, 100, "CB", "CB2");
-	Footballer riccardo = new Footballer("Ricardo Pereirz", 29, 80, 195, 100, "RB");
+        Map<String, Team> preTeams = new HashMap<>();
+        preTeams.put("Arsenol", createArsenal());
+        preTeams.put("Totenham", createTottenham());
+        preTeams.put("Liverpule", createLiverpool());
+        preTeams.put("Newcostle", createNewcastle());
+        preTeams.put("Tan United", createManUtd());
+        preTeams.put("Van City", createManCity());
+        preTeams.put("Acton Villa", createAstonVilla());
+        preTeams.put("Chelsee", createChelsea());
+        preTeams.put("East Ham", createWestHam());
+        preTeams.put("Leicestor", createLeicester());
+        preTeams.put("Wolves", createWolves());
+        preTeams.put("Upswitch", createIpswich());
+        preTeams.put("Fullham", createFulham());
+        preTeams.put("Evertun", createEverton());
+        preTeams.put("Brighten", createBrighton());
+        preTeams.put("Nottingham Woods", createNottinghamForest());
+        preTeams.put("Palace", createCrystalPalace());
+        preTeams.put("Bornmouth", createBournemouth());
+        preTeams.put("Burntford", createBrentford());
+        preTeams.put("Southamton", createSouthampton());
 
-	Goalkeeper waltom = new Goalkeeper("Christian Waltom", 28, 140);
-	Footballer broadhed = new Footballer("Ellis Broadhed", 25, 175, 50, 100, "ST");
-	Footballer burnz = new Footballer("Janoi Burnz", 26, 180, 55, 100, "RW");
-	Footballer clark = new Footballer("Conor Clark", 24, 170, 60, 100, "LW");
-	Footballer evens = new Footballer("Lee Evens", 28, 160, 65, 100, "CM", "CM1");
-	Footballer morsy = new Footballer("Sam Morsy", 31, 150, 80, 100, "CM", "CM2");
-	Footballer luongo = new Footballer("Massimo Luongo", 30, 140, 85, 100, "CAM");
-	Footballer kenlocke = new Footballer("Myles Kenlocke", 25, 75, 185, 100, "LB");
-	Footballer wolfenden = new Footballer("Luke Wolfenden", 24, 60, 220, 100, "CB", "CB1");
-	Footballer donacien = new Footballer("Toto Donacien", 29, 55, 225, 100, "CB", "CB2");
-	Footballer leigh = new Footballer("Greg Leigh", 30, 85, 195, 100, "RB");
+        season = new Season(preTeams);
 
-	Goalkeeper ramsdake = new Goalkeeper("Aaron Ramsdake", 26, 140);
-	Footballer mitrovich = new Footballer("Aleksandar Mitrovich", 29, 190, 55, 100, "ST");
-	Footballer wilson = new Footballer("Harry Wilson", 27, 175, 60, 100, "RW");
-	Footballer perreir = new Footballer("Andreas Perreir", 28, 180, 65, 100, "LW");
-	Footballer palhinh = new Footballer("Joao Palhinh", 28, 170, 80, 100, "CM", "CM1");
-	Footballer reen = new Footballer("Harrison Reen", 28, 155, 85, 100, "CM", "CM2");
-	Footballer lukic = new Footballer("Sasa Lukic", 27, 140, 90, 100, "CAM");
-	Footballer robertz = new Footballer("Antonee Robertz", 25, 70, 185, 100, "LB");
-	Footballer diob = new Footballer("Issa Diob", 26, 60, 220, 100, "CB", "CB1");
-	Footballer adarabioyu = new Footballer("Tosin Adarabioyu", 25, 55, 230, 100, "CB", "CB2");
-	Footballer tete = new Footballer("Sergi Tete", 26, 80, 195, 100, "RB");
+        window = new GameWindow();
+        window.setVisible(true);
 
-	Goalkeeper pickfard = new Goalkeeper("Jordan Pickfard", 30, 145);
-	Footballer calvertlewin = new Footballer("Dominic Calvert-Lewin", 26, 190, 55, 100, "ST");
-	Footballer grary = new Footballer("Demarai Grary", 27, 180, 50, 100, "RW");
-	Footballer mcneil = new Footballer("Dwight Mcneil", 24, 175, 55, 100, "LW");
-	Footballer gueye = new Footballer("Idrissa Gueye", 34, 165, 75, 100, "CM", "CM1");
-	Footballer onan = new Footballer("Amadou Onan", 22, 160, 80, 100, "CM", "CM2");
-	Footballer iwobi = new Footballer("Alex Iwobi", 27, 140, 85, 100, "CAM");
-	Footballer mykalenko = new Footballer("Vitaliy Mykalenko", 24, 70, 180, 100, "LB");
-	Footballer tarkowsky = new Footballer("James Tarkowsky", 31, 65, 225, 100, "CB", "CB1");
-	Footballer coad = new Footballer("Conor Coad", 30, 55, 235, 100, "CB", "CB2");
-	Footballer patterson = new Footballer("Nathan Patterson", 22, 85, 200, 100, "RB");
+        StartPage startPage = new StartPage(this);
+        startPage.displayPage();
+    }
 
-	Goalkeeper steell = new Goalkeeper("Jason Steell", 27, 130);
-	Footballer mitom = new Footballer("Kaoru Mitom", 26, 180, 55, 100, "ST");
-	Footballer marc = new Footballer("Solly Marc", 29, 175, 60, 100, "RW");
-	Footballer estupinaz = new Footballer("Pervis Estupinaz", 25, 185, 65, 100, "LW");
-	Footballer macalliste = new Footballer("Alexis Macalliste", 25, 170, 80, 100, "CM", "CM1");
-	Footballer caicedo = new Footballer("Moises Caicedo", 22, 155, 85, 100, "CM", "CM2");
-	Footballer gilmore = new Footballer("Billy Gilmore", 22, 145, 90, 100, "CAM");
-	Footballer veltma = new Footballer("Joel Veltma", 32, 75, 180, 100, "LB");
-	Footballer dunk = new Footballer("Lewis Dunk", 31, 60, 230, 100, "CB", "CB1");
-	Footballer webste = new Footballer("Adam Webste", 24, 55, 220, 100, "CB", "CB2");
-	Footballer lamptey = new Footballer("Tariq Lamptey", 23, 85, 195, 100, "RB");
+    private Team createSouthampton() {
+        Goalkeeper bazunu = new Goalkeeper("Gavin Bazunu", 22, 135);
+        Footballer alcarrz = new Footballer("Carlos Alcarrz", 21, 175, 50, 100, "ST");
+        Footballer wardprose = new Footballer("James Wardprose", 29, 180, 60, 100, "RW");
+        Footballer peraud = new Footballer("Romain Peraud", 26, 170, 65, 100, "LW");
+        Footballer lavie = new Footballer("Romeo Lavie", 20, 160, 70, 100, "CM", "CM2");
+        Footballer arreole = new Footballer("Nicolas Arreole", 24, 150, 80, 100, "CM", "CM1");
+        Footballer jankwitz = new Footballer("James Jankwitz", 23, 140, 85, 100, "CAM");
+        Footballer karlsen = new Footballer("Lianco Karlsen", 24, 75, 185, 100, "LB");
+        Footballer salisu = new Footballer("Mohammed Salisu", 24, 60, 220, 100, "CB", "CB1");
+        Footballer bednarek = new Footballer("Jan Bednarek", 27, 55, 230, 100, "CB", "CB2");
+        Footballer walkr = new Footballer("Kyle Walkr", 32, 80, 195, 100, "RB");
 
-	Goalkeeper hennessex = new Goalkeeper("Wayne Hennessex", 36, 140);
-	Footballer awoniy = new Footballer("Taiwo Awoniy", 25, 185, 55, 100, "ST");
-	Footballer lingrd = new Footballer("Jesse Lingrd", 31, 175, 60, 100, "RW");
-	Footballer johnsn = new Footballer("Brennan Johnsn", 22, 180, 65, 100, "LW");
-	Footballer yates = new Footballer("Ryan Yates", 26, 170, 70, 100, "CM", "CM1");
-	Footballer freuler = new Footballer("Remo Freuler", 31, 155, 80, 100, "CM", "CM2");
-	Footballer pereira = new Footballer("Danilo Pereira", 22, 140, 85, 100, "CAM");
-	Footballer lodi = new Footballer("Renan Lodi", 25, 75, 185, 100, "LB");
-	Footballer mckenna = new Footballer("Scott Mckenna", 26, 60, 220, 100, "CB", "CB1");
-	Footballer worrll = new Footballer("Joe Worrll", 26, 55, 230, 100, "CB", "CB2");
-	Footballer nico = new Footballer("Neco Williams", 23, 80, 195, 100, "RB");
+        Map<String, Footballer> southamtonFirst = new HashMap<>();
+        southamtonFirst.put(bazunu.getPositionPlaced(), bazunu);
+        southamtonFirst.put(alcarrz.getPositionPlaced(), alcarrz);
+        southamtonFirst.put(wardprose.getPositionPlaced(), wardprose);
+        southamtonFirst.put(peraud.getPositionPlaced(), peraud);
+        southamtonFirst.put(jankwitz.getPositionPlaced(), jankwitz);
+        southamtonFirst.put(arreole.getPositionPlaced(), arreole);
+        southamtonFirst.put(lavie.getPositionPlaced(), lavie);
+        southamtonFirst.put(karlsen.getPositionPlaced(), karlsen);
+        southamtonFirst.put(salisu.getPositionPlaced(), salisu);
+        southamtonFirst.put(bednarek.getPositionPlaced(), bednarek);
+        southamtonFirst.put(walkr.getPositionPlaced(), walkr);
 
-	Goalkeeper ramstale = new Goalkeeper("Aaron Ramstale", 25, 135);
-	Footballer solankc = new Footballer("Dominic Solankc", 25, 185, 55, 100, "ST");
-	Footballer antony = new Footballer("Ryan Antony", 23, 175, 60, 100, "RW");
-	Footballer billong = new Footballer("David Billong", 22, 180, 65, 100, "LW");
-	Footballer lerme = new Footballer("Jefferson Lerme", 28, 170, 80, 100, "CM", "CM1");
-	Footballer ramsay = new Footballer("Maxime Ramsay", 22, 155, 85, 100, "CM", "CM2");
-	Footballer cooke = new Footballer("Lewis Cooke", 26, 140, 90, 100, "CAM");
-	Footballer zamor = new Footballer("Jordan Zamor", 24, 75, 185, 100, "LB");
-	Footballer mepham = new Footballer("Chris Mepham", 26, 60, 220, 100, "CB", "CB1");
-	Footballer smiths = new Footballer("Adam Smiths", 32, 55, 230, 100, "CB", "CB2");
-	Footballer travers = new Footballer("Mark Travers", 23, 80, 195, 100, "RB");
+        Manager gibbs = new Manager("Mark Gibbs", 33, 300000);
+        Team Southamton = new Team("Southamton", gibbs, southamtonFirst, 45000000, "Southamton Stadium", Color.RED, Color.WHITE);
+        Southamton.setCaptain(bednarek);
+        return Southamton;
+    }
 
-	Goalkeeper rayz = new Goalkeeper("David Rayz", 31, 150);
-	Footballer toney = new Footballer("Ivan Toney", 28, 190, 60, 100, "ST");
-	Footballer breetton = new Footballer("Bryan Breetton", 26, 180, 55, 100, "RW");
-	Footballer dasilva = new Footballer("Josh DaSilva", 24, 175, 60, 100, "LW");
-	Footballer janelt = new Footballer("Vitaly Janelt", 25, 170, 70, 100, "CM", "CM1");
-	Footballer norgaard = new Footballer("Christian Norgaard", 29, 155, 80, 100, "CM", "CM2");
-	Footballer hicksy = new Footballer("Aaron Hicksy", 22, 140, 85, 100, "CAM");
-	Footballer henrey = new Footballer("Rico Henrey", 26, 75, 180, 100, "LB");
-	Footballer pinnok = new Footballer("Ethan Pinnok", 27, 60, 220, 100, "CB", "CB1");
-	Footballer mee = new Footballer("Ben Mee", 34, 55, 230, 100, "CB", "CB2");
-	Footballer canos = new Footballer("Sergi Canos", 26, 80, 195, 100, "RB");
+    private Team createBrentford() {
+        Goalkeeper rayz = new Goalkeeper("David Rayz", 31, 150);
+        Footballer toney = new Footballer("Ivan Toney", 28, 190, 60, 100, "ST");
+        Footballer breetton = new Footballer("Bryan Breetton", 26, 180, 55, 100, "RW");
+        Footballer dasilva = new Footballer("Josh DaSilva", 24, 175, 60, 100, "LW");
+        Footballer janelt = new Footballer("Vitaly Janelt", 25, 170, 70, 100, "CM", "CM1");
+        Footballer norgaard = new Footballer("Christian Norgaard", 29, 155, 80, 100, "CM", "CM2");
+        Footballer hicksy = new Footballer("Aaron Hicksy", 22, 140, 85, 100, "CAM");
+        Footballer henrey = new Footballer("Rico Henrey", 26, 75, 180, 100, "LB");
+        Footballer pinnok = new Footballer("Ethan Pinnok", 27, 60, 220, 100, "CB", "CB1");
+        Footballer mee = new Footballer("Ben Mee", 34, 55, 230, 100, "CB", "CB2");
+        Footballer canos = new Footballer("Sergi Canos", 26, 80, 195, 100, "RB");
 
-	Goalkeeper johnstone = new Goalkeeper("Sam Johnstone", 30, 140);
-	Footballer eze = new Footballer("Eberechi Eze", 25, 180, 55, 100, "ST");
-	Footballer zah = new Footballer("Wilfried Zah", 31, 175, 60, 100, "RW");
-	Footballer olise = new Footballer("Michael Olise", 22, 185, 65, 100, "LW");
-	Footballer doucoure = new Footballer("Cheick Doucoure", 24, 170, 70, 100, "CM", "CM1");
-	Footballer lurie = new Footballer("Jeffrey Lurie", 26, 155, 80, 100, "CM", "CM2");
-	Footballer hughes = new Footballer("Will Hughes", 28, 140, 85, 100, "CAM");
-	Footballer mitchell = new Footballer("Tyrick Mitchell", 24, 75, 185, 100, "LB");
-	Footballer gueh = new Footballer("Marc Gueh", 23, 60, 220, 100, "CB", "CB1");
-	Footballer andersn = new Footballer("Jannik Andersn", 27, 55, 230, 100, "CB", "CB2");
-	Footballer wrad = new Footballer("Joel Wrad", 30, 80, 195, 100, "RB");
+        Map<String, Footballer> burntfordFirst = new HashMap<>();
+        burntfordFirst.put(rayz.getPositionPlaced(), rayz);
+        burntfordFirst.put(toney.getPositionPlaced(), toney);
+        burntfordFirst.put(breetton.getPositionPlaced(), breetton);
+        burntfordFirst.put(dasilva.getPositionPlaced(), dasilva);
+        burntfordFirst.put(hicksy.getPositionPlaced(), hicksy);
+        burntfordFirst.put(norgaard.getPositionPlaced(), norgaard);
+        burntfordFirst.put(janelt.getPositionPlaced(), janelt);
+        burntfordFirst.put(henrey.getPositionPlaced(), henrey);
+        burntfordFirst.put(pinnok.getPositionPlaced(), pinnok);
+        burntfordFirst.put(mee.getPositionPlaced(), mee);
+        burntfordFirst.put(canos.getPositionPlaced(), canos);
 
-	Goalkeeper bazunu = new Goalkeeper("Gavin Bazunu", 22, 135);
-	Footballer alcarrz = new Footballer("Carlos Alcarrz", 21, 175, 50, 100, "ST");
-	Footballer wardprose = new Footballer("James Wardprose", 29, 180, 60, 100, "RW");
-	Footballer peraud = new Footballer("Romain Peraud", 26, 170, 65, 100, "LW");
-	Footballer lavie = new Footballer("Romeo Lavie", 20, 160, 70, 100, "CM", "CM2");
-	Footballer arreole = new Footballer("Nicolas Arreole", 24, 150, 80, 100, "CM", "CM1");
-	Footballer jankwitz = new Footballer("James Jankwitz", 23, 140, 85, 100, "CAM");
-	Footballer karlsen = new Footballer("Lianco Karlsen", 24, 75, 185, 100, "LB");
-	Footballer salisu = new Footballer("Mohammed Salisu", 24, 60, 220, 100, "CB", "CB1");
-	Footballer bednarek = new Footballer("Jan Bednarek", 27, 55, 230, 100, "CB", "CB2");
-	Footballer walkr = new Footballer("Kyle Walkr", 32, 80, 195, 100, "RB");
+        Manager mcnally = new Manager("Ryan McNally", 31, 300000);
+        Team Burntford = new Team("Burntford", mcnally, burntfordFirst, 45000000, "Burntford Stadium", Color.RED, Color.WHITE);
+        Burntford.setCaptain(norgaard);
+        return Burntford;
+    }
 
-	Goalkeeper sarr = new Goalkeeper("José Sárr", 30, 140);
-	Footballer cuhna = new Footballer("Matheus Cuhna", 24, 185, 55, 100, "ST");
-	Footballer podenc = new Footballer("Daniel Podenc", 28, 175, 60, 100, "RW");
-	Footballer nett = new Footballer("Pedro Nett", 23, 180, 65, 100, "LW");
-	Footballer neves = new Footballer("Rúben Neves", 27, 170, 75, 100, "CM", "CM1");
-	Footballer lobato = new Footballer("Mateus Lobato", 20, 155, 80, 100, "CM", "CM2");
-	Footballer nunes = new Footballer("Matheus Nunes", 25, 140, 85, 100, "CAM");
-	Footballer marcal = new Footballer("Marçal", 34, 75, 180, 100, "LB");
-	Footballer kilman = new Footballer("Max Kilman", 26, 60, 220, 100, "CB", "CB1");
-	Footballer collins = new Footballer("Hugo Collins", 26, 55, 230, 100, "CB", "CB2");
-	Footballer casto = new Footballer("Jonny Casto", 30, 80, 195, 100, "RB");
+    private Team createBournemouth() {
+        Goalkeeper ramstale = new Goalkeeper("Aaron Ramstale", 25, 135);
+        Footballer solankc = new Footballer("Dominic Solankc", 25, 185, 55, 100, "ST");
+        Footballer antony = new Footballer("Ryan Antony", 23, 175, 60, 100, "RW");
+        Footballer billong = new Footballer("David Billong", 22, 180, 65, 100, "LW");
+        Footballer lerme = new Footballer("Jefferson Lerme", 28, 170, 80, 100, "CM", "CM1");
+        Footballer ramsay = new Footballer("Maxime Ramsay", 22, 155, 85, 100, "CM", "CM2");
+        Footballer cooke = new Footballer("Lewis Cooke", 26, 140, 90, 100, "CAM");
+        Footballer zamor = new Footballer("Jordan Zamor", 24, 75, 185, 100, "LB");
+        Footballer mepham = new Footballer("Chris Mepham", 26, 60, 220, 100, "CB", "CB1");
+        Footballer smiths = new Footballer("Adam Smiths", 32, 55, 230, 100, "CB", "CB2");
+        Footballer travers = new Footballer("Mark Travers", 23, 80, 195, 100, "RB");
 
-	Map<String, Footballer> fullhamFirst = new HashMap<>();
-	fullhamFirst.put(ramsdake.getPositionPlaced(), ramsdake);
-	fullhamFirst.put(mitrovich.getPositionPlaced(), mitrovich);
-	fullhamFirst.put(wilson.getPositionPlaced(), wilson);
-	fullhamFirst.put(perreir.getPositionPlaced(), perreir);
-	fullhamFirst.put(lukic.getPositionPlaced(), lukic);
-	fullhamFirst.put(reen.getPositionPlaced(), reen);
-	fullhamFirst.put(palhinh.getPositionPlaced(), palhinh);
-	fullhamFirst.put(robertz.getPositionPlaced(), robertz);
-	fullhamFirst.put(diob.getPositionPlaced(), diob);
-	fullhamFirst.put(adarabioyu.getPositionPlaced(), adarabioyu);
-	fullhamFirst.put(tete.getPositionPlaced(), tete);
+        Map<String, Footballer> bornmouthFirst = new HashMap<>();
+        bornmouthFirst.put(ramstale.getPositionPlaced(), ramstale);
+        bornmouthFirst.put(solankc.getPositionPlaced(), solankc);
+        bornmouthFirst.put(antony.getPositionPlaced(), antony);
+        bornmouthFirst.put(billong.getPositionPlaced(), billong);
+        bornmouthFirst.put(cooke.getPositionPlaced(), cooke);
+        bornmouthFirst.put(ramsay.getPositionPlaced(), ramsay);
+        bornmouthFirst.put(lerme.getPositionPlaced(), lerme);
+        bornmouthFirst.put(zamor.getPositionPlaced(), zamor);
+        bornmouthFirst.put(mepham.getPositionPlaced(), mepham);
+        bornmouthFirst.put(smiths.getPositionPlaced(), smiths);
+        bornmouthFirst.put(travers.getPositionPlaced(), travers);
 
-	Map<String, Footballer> upswitchFirst = new HashMap<>();
-	upswitchFirst.put(waltom.getPositionPlaced(), waltom);
-	upswitchFirst.put(broadhed.getPositionPlaced(), broadhed);
-	upswitchFirst.put(burnz.getPositionPlaced(), burnz);
-	upswitchFirst.put(clark.getPositionPlaced(), clark);
-	upswitchFirst.put(luongo.getPositionPlaced(), luongo);
-	upswitchFirst.put(morsy.getPositionPlaced(), morsy);
-	upswitchFirst.put(evens.getPositionPlaced(), evens);
-	upswitchFirst.put(kenlocke.getPositionPlaced(), kenlocke);
-	upswitchFirst.put(wolfenden.getPositionPlaced(), wolfenden);
-	upswitchFirst.put(donacien.getPositionPlaced(), donacien);
-	upswitchFirst.put(leigh.getPositionPlaced(), leigh);
+        Manager oneil = new Manager("Gary O'Neil", 41, 300000);
+        Team Bornmouth = new Team("Bornmouth", oneil, bornmouthFirst, 45000000, "Bornmouth Stadium", Color.RED, Color.BLACK);
+        Bornmouth.setCaptain(lerme);
+        return Bornmouth;
+    }
 
-	Map<String, Footballer> evertunFirst = new HashMap<>();
-	evertunFirst.put(pickfard.getPositionPlaced(), pickfard);
-	evertunFirst.put(calvertlewin.getPositionPlaced(), calvertlewin);
-	evertunFirst.put(grary.getPositionPlaced(), grary);
-	evertunFirst.put(mcneil.getPositionPlaced(), mcneil);
-	evertunFirst.put(iwobi.getPositionPlaced(), iwobi);
-	evertunFirst.put(onan.getPositionPlaced(), onan);
-	evertunFirst.put(gueye.getPositionPlaced(), gueye);
-	evertunFirst.put(mykalenko.getPositionPlaced(), mykalenko);
-	evertunFirst.put(tarkowsky.getPositionPlaced(), tarkowsky);
-	evertunFirst.put(coad.getPositionPlaced(), coad);
-	evertunFirst.put(patterson.getPositionPlaced(), patterson);
+    private Team createNottinghamForest() {
+        Goalkeeper hennessex = new Goalkeeper("Wayne Hennessex", 36, 140);
+        Footballer awoniy = new Footballer("Taiwo Awoniy", 25, 185, 55, 100, "ST");
+        Footballer lingrd = new Footballer("Jesse Lingrd", 31, 175, 60, 100, "RW");
+        Footballer johnsn = new Footballer("Brennan Johnsn", 22, 180, 65, 100, "LW");
+        Footballer yates = new Footballer("Ryan Yates", 26, 170, 70, 100, "CM", "CM1");
+        Footballer freuler = new Footballer("Remo Freuler", 31, 155, 80, 100, "CM", "CM2");
+        Footballer pereira = new Footballer("Danilo Pereira", 22, 140, 85, 100, "CAM");
+        Footballer lodi = new Footballer("Renan Lodi", 25, 75, 185, 100, "LB");
+        Footballer mckenna = new Footballer("Scott Mckenna", 26, 60, 220, 100, "CB", "CB1");
+        Footballer worrll = new Footballer("Joe Worrll", 26, 55, 230, 100, "CB", "CB2");
+        Footballer nico = new Footballer("Neco Williams", 23, 80, 195, 100, "RB");
 
-	Map<String, Footballer> brightenFirst = new HashMap<>();
-	brightenFirst.put(steell.getPositionPlaced(), steell);
-	brightenFirst.put(mitom.getPositionPlaced(), mitom);
-	brightenFirst.put(marc.getPositionPlaced(), marc);
-	brightenFirst.put(estupinaz.getPositionPlaced(), estupinaz);
-	brightenFirst.put(gilmore.getPositionPlaced(), gilmore);
-	brightenFirst.put(caicedo.getPositionPlaced(), caicedo);
-	brightenFirst.put(macalliste.getPositionPlaced(), macalliste);
-	brightenFirst.put(veltma.getPositionPlaced(), veltma);
-	brightenFirst.put(dunk.getPositionPlaced(), dunk);
-	brightenFirst.put(webste.getPositionPlaced(), webste);
-	brightenFirst.put(lamptey.getPositionPlaced(), lamptey);
+        Map<String, Footballer> nottinghamWoodsFirst = new HashMap<>();
+        nottinghamWoodsFirst.put(hennessex.getPositionPlaced(), hennessex);
+        nottinghamWoodsFirst.put(awoniy.getPositionPlaced(), awoniy);
+        nottinghamWoodsFirst.put(lingrd.getPositionPlaced(), lingrd);
+        nottinghamWoodsFirst.put(johnsn.getPositionPlaced(), johnsn);
+        nottinghamWoodsFirst.put(pereira.getPositionPlaced(), pereira);
+        nottinghamWoodsFirst.put(freuler.getPositionPlaced(), freuler);
+        nottinghamWoodsFirst.put(yates.getPositionPlaced(), yates);
+        nottinghamWoodsFirst.put(lodi.getPositionPlaced(), lodi);
+        nottinghamWoodsFirst.put(mckenna.getPositionPlaced(), mckenna);
+        nottinghamWoodsFirst.put(worrll.getPositionPlaced(), worrll);
+        nottinghamWoodsFirst.put(nico.getPositionPlaced(), nico);
 
-	Map<String, Footballer> nottinghamWoodsFirst = new HashMap<>();
-	nottinghamWoodsFirst.put(hennessex.getPositionPlaced(), hennessex);
-	nottinghamWoodsFirst.put(awoniy.getPositionPlaced(), awoniy);
-	nottinghamWoodsFirst.put(lingrd.getPositionPlaced(), lingrd);
-	nottinghamWoodsFirst.put(johnsn.getPositionPlaced(), johnsn);
-	nottinghamWoodsFirst.put(pereira.getPositionPlaced(), pereira);
-	nottinghamWoodsFirst.put(freuler.getPositionPlaced(), freuler);
-	nottinghamWoodsFirst.put(yates.getPositionPlaced(), yates);
-	nottinghamWoodsFirst.put(lodi.getPositionPlaced(), lodi);
-	nottinghamWoodsFirst.put(mckenna.getPositionPlaced(), mckenna);
-	nottinghamWoodsFirst.put(worrll.getPositionPlaced(), worrll);
-	nottinghamWoodsFirst.put(nico.getPositionPlaced(), nico);
+        Manager cooper = new Manager("Steve Cooper", 44, 300000);
+        Team NottinghamWoods = new Team("Nottingham Woods", cooper, nottinghamWoodsFirst, 45000000, "Woods Stadium", Color.RED, Color.WHITE);
+        NottinghamWoods.setCaptain(pereira);
+        return NottinghamWoods;
+    }
 
-	Map<String, Footballer> palaceFirst = new HashMap<>();
-	palaceFirst.put(johnstone.getPositionPlaced(), johnstone);
-	palaceFirst.put(eze.getPositionPlaced(), eze);
-	palaceFirst.put(zah.getPositionPlaced(), zah);
-	palaceFirst.put(olise.getPositionPlaced(), olise);
-	palaceFirst.put(doucoure.getPositionPlaced(), doucoure);
-	palaceFirst.put(lurie.getPositionPlaced(), lurie);
-	palaceFirst.put(hughes.getPositionPlaced(), hughes);
-	palaceFirst.put(mitchell.getPositionPlaced(), mitchell);
-	palaceFirst.put(gueh.getPositionPlaced(), gueh);
-	palaceFirst.put(andersn.getPositionPlaced(), andersn);
-	palaceFirst.put(wrad.getPositionPlaced(), wrad);
+    private Team createCrystalPalace() {
+        Goalkeeper johnstone = new Goalkeeper("Sam Johnstone", 30, 140);
+        Footballer eze = new Footballer("Eberechi Eze", 25, 180, 55, 100, "ST");
+        Footballer zah = new Footballer("Wilfried Zah", 31, 175, 60, 100, "RW");
+        Footballer olise = new Footballer("Michael Olise", 22, 185, 65, 100, "LW");
+        Footballer doucoure = new Footballer("Cheick Doucoure", 24, 170, 70, 100, "CM", "CM1");
+        Footballer lurie = new Footballer("Jeffrey Lurie", 26, 155, 80, 100, "CM", "CM2");
+        Footballer hughes = new Footballer("Will Hughes", 28, 140, 85, 100, "CAM");
+        Footballer mitchell = new Footballer("Tyrick Mitchell", 24, 75, 185, 100, "LB");
+        Footballer gueh = new Footballer("Marc Gueh", 23, 60, 220, 100, "CB", "CB1");
+        Footballer andersn = new Footballer("Jannik Andersn", 27, 55, 230, 100, "CB", "CB2");
+        Footballer wrad = new Footballer("Joel Wrad", 30, 80, 195, 100, "RB");
 
-	Map<String, Footballer> southamtonFirst = new HashMap<>();
-	southamtonFirst.put(bazunu.getPositionPlaced(), bazunu);
-	southamtonFirst.put(alcarrz.getPositionPlaced(), alcarrz);
-	southamtonFirst.put(wardprose.getPositionPlaced(), wardprose);
-	southamtonFirst.put(peraud.getPositionPlaced(), peraud);
-	southamtonFirst.put(jankwitz.getPositionPlaced(), jankwitz);
-	southamtonFirst.put(arreole.getPositionPlaced(), arreole);
-	southamtonFirst.put(lavie.getPositionPlaced(), lavie);
-	southamtonFirst.put(karlsen.getPositionPlaced(), karlsen);
-	southamtonFirst.put(salisu.getPositionPlaced(), salisu);
-	southamtonFirst.put(bednarek.getPositionPlaced(), bednarek);
-	southamtonFirst.put(walkr.getPositionPlaced(), walkr);
+        Map<String, Footballer> palaceFirst = new HashMap<>();
+        palaceFirst.put(johnstone.getPositionPlaced(), johnstone);
+        palaceFirst.put(eze.getPositionPlaced(), eze);
+        palaceFirst.put(zah.getPositionPlaced(), zah);
+        palaceFirst.put(olise.getPositionPlaced(), olise);
+        palaceFirst.put(doucoure.getPositionPlaced(), doucoure);
+        palaceFirst.put(lurie.getPositionPlaced(), lurie);
+        palaceFirst.put(hughes.getPositionPlaced(), hughes);
+        palaceFirst.put(mitchell.getPositionPlaced(), mitchell);
+        palaceFirst.put(gueh.getPositionPlaced(), gueh);
+        palaceFirst.put(andersn.getPositionPlaced(), andersn);
+        palaceFirst.put(wrad.getPositionPlaced(), wrad);
 
-	Map<String, Footballer> bornmouthFirst = new HashMap<>();
-	bornmouthFirst.put(ramstale.getPositionPlaced(), ramstale);
-	bornmouthFirst.put(solankc.getPositionPlaced(), solankc);
-	bornmouthFirst.put(antony.getPositionPlaced(), antony);
-	bornmouthFirst.put(billong.getPositionPlaced(), billong);
-	bornmouthFirst.put(cooke.getPositionPlaced(), cooke);
-	bornmouthFirst.put(ramsay.getPositionPlaced(), ramsay);
-	bornmouthFirst.put(lerme.getPositionPlaced(), lerme);
-	bornmouthFirst.put(zamor.getPositionPlaced(), zamor);
-	bornmouthFirst.put(mepham.getPositionPlaced(), mepham);
-	bornmouthFirst.put(smiths.getPositionPlaced(), smiths);
-	bornmouthFirst.put(travers.getPositionPlaced(), travers);
+        Manager edwards = new Manager("Rob Edwards", 40, 300000);
+        Team Palace = new Team("Palace", edwards, palaceFirst, 45000000, "Palace Stadium", Color.BLUE, Color.RED);
+        Palace.setCaptain(hughes);
+        return Palace;
+    }
 
-	Map<String, Footballer> burntfordFirst = new HashMap<>();
-	burntfordFirst.put(rayz.getPositionPlaced(), rayz);
-	burntfordFirst.put(toney.getPositionPlaced(), toney);
-	burntfordFirst.put(breetton.getPositionPlaced(), breetton);
-	burntfordFirst.put(dasilva.getPositionPlaced(), dasilva);
-	burntfordFirst.put(hicksy.getPositionPlaced(), hicksy);
-	burntfordFirst.put(norgaard.getPositionPlaced(), norgaard);
-	burntfordFirst.put(janelt.getPositionPlaced(), janelt);
-	burntfordFirst.put(henrey.getPositionPlaced(), henrey);
-	burntfordFirst.put(pinnok.getPositionPlaced(), pinnok);
-	burntfordFirst.put(mee.getPositionPlaced(), mee);
-	burntfordFirst.put(canos.getPositionPlaced(), canos);
+    private Team createBrighton() {
+        Goalkeeper steell = new Goalkeeper("Jason Steell", 27, 130);
+        Footballer mitom = new Footballer("Kaoru Mitom", 26, 180, 55, 100, "ST");
+        Footballer marc = new Footballer("Solly Marc", 29, 175, 60, 100, "RW");
+        Footballer estupinaz = new Footballer("Pervis Estupinaz", 25, 185, 65, 100, "LW");
+        Footballer macalliste = new Footballer("Alexis Macalliste", 25, 170, 80, 100, "CM", "CM1");
+        Footballer caicedo = new Footballer("Moises Caicedo", 22, 155, 85, 100, "CM", "CM2");
+        Footballer gilmore = new Footballer("Billy Gilmore", 22, 145, 90, 100, "CAM");
+        Footballer veltma = new Footballer("Joel Veltma", 32, 75, 180, 100, "LB");
+        Footballer dunk = new Footballer("Lewis Dunk", 31, 60, 230, 100, "CB", "CB1");
+        Footballer webste = new Footballer("Adam Webste", 24, 55, 220, 100, "CB", "CB2");
+        Footballer lamptey = new Footballer("Tariq Lamptey", 23, 85, 195, 100, "RB");
 
-	Map<String, Footballer> wolvesFirst = new HashMap<>();
-	wolvesFirst.put(sarr.getPositionPlaced(), sarr);
-	wolvesFirst.put(cuhna.getPositionPlaced(), cuhna);
-	wolvesFirst.put(podenc.getPositionPlaced(), podenc);
-	wolvesFirst.put(nett.getPositionPlaced(), nett);
-	wolvesFirst.put(nunes.getPositionPlaced(), nunes);
-	wolvesFirst.put(lobato.getPositionPlaced(), lobato);
-	wolvesFirst.put(neves.getPositionPlaced(), neves);
-	wolvesFirst.put(marcal.getPositionPlaced(), marcal);
-	wolvesFirst.put(kilman.getPositionPlaced(), kilman);
-	wolvesFirst.put(collins.getPositionPlaced(), collins);
-	wolvesFirst.put(casto.getPositionPlaced(), casto);
+        Map<String, Footballer> brightenFirst = new HashMap<>();
+        brightenFirst.put(steell.getPositionPlaced(), steell);
+        brightenFirst.put(mitom.getPositionPlaced(), mitom);
+        brightenFirst.put(marc.getPositionPlaced(), marc);
+        brightenFirst.put(estupinaz.getPositionPlaced(), estupinaz);
+        brightenFirst.put(gilmore.getPositionPlaced(), gilmore);
+        brightenFirst.put(caicedo.getPositionPlaced(), caicedo);
+        brightenFirst.put(macalliste.getPositionPlaced(), macalliste);
+        brightenFirst.put(veltma.getPositionPlaced(), veltma);
+        brightenFirst.put(dunk.getPositionPlaced(), dunk);
+        brightenFirst.put(webste.getPositionPlaced(), webste);
+        brightenFirst.put(lamptey.getPositionPlaced(), lamptey);
 
-	Map<String, Footballer> leicestorFirst = new HashMap<>();
-	leicestorFirst.put(hermanson.getPositionPlaced(), hermanson);
-	leicestorFirst.put(vardi.getPositionPlaced(), vardi);
-	leicestorFirst.put(iheanachos.getPositionPlaced(), iheanachos);
-	leicestorFirst.put(madisonn.getPositionPlaced(), madisonn);
-	leicestorFirst.put(dewburyHull.getPositionPlaced(), dewburyHull);
-	leicestorFirst.put(soumara.getPositionPlaced(), soumara);
-	leicestorFirst.put(ndidy.getPositionPlaced(), ndidy);
-	leicestorFirst.put(castagna.getPositionPlaced(), castagna);
-	leicestorFirst.put(fase.getPositionPlaced(), fase);
-	leicestorFirst.put(soutar.getPositionPlaced(), soutar);
-	leicestorFirst.put(riccardo.getPositionPlaced(), riccardo);
-	
-	Manager smithe = new Manager("Dean Smithe", 52, 300000);
-	Manager dyche = new Manager("Sean Dyche", 52, 300000);
-	Manager pochettino = new Manager("Mauricio Pochettino", 52, 300000);
-	Manager viera = new Manager("Patrick Vieira", 48, 300000);
-	Manager Ehowe = new Manager("Eddie Howe", 46, 300000);
-	Manager cooper = new Manager("Steve Cooper", 44, 300000);
-	Manager edwards = new Manager("Rob Edwards", 40, 300000);
-	Manager oneil = new Manager("Gary O'Neil", 41, 300000);
-	Manager mcnally = new Manager("Ryan McNally", 31, 300000);
-	Manager hodgson = new Manager("Roy Hodgson", 76, 300000);
-	Manager gibbs = new Manager("Mark Gibbs", 33, 300000);
+        Manager Ehowe = new Manager("Eddie Howe", 46, 300000);
+        Team Brighten = new Team("Brighten", Ehowe, brightenFirst, 45000000, "Brighten Stadium", Color.BLUE, Color.BLACK);
+        Brighten.setCaptain(lamptey);
+        return Brighten;
+    }
 
-	Team Leicestor = new Team("Leicestor", viera, leicestorFirst, 45000000, "Leicestor Stadium", Color.BLUE, Color.WHITE);
-	Leicestor.setCaptain(castagna);
-	Team Wolves = new Team("Wolves", hodgson, wolvesFirst, 45000000, "Wolves Stadium", Color.ORANGE, Color.WHITE);
-	Wolves.setCaptain(neves);
-	Team Upswitch = new Team("Upswitch", smithe, upswitchFirst, 45000000, "Upswitch Stadium", Color.BLUE, Color.WHITE);
-	Upswitch.setCaptain(evens);
-	Team Fullham = new Team("Fullham", dyche, fullhamFirst, 45000000, "Fullham Stadium", Color.WHITE, Color.BLACK);
-	Fullham.setCaptain(palhinh);
-	Team Evertun = new Team("Evertun", pochettino, evertunFirst, 45000000, "Evertun Stadium", Color.BLUE, Color.BLUE);
-	Evertun.setCaptain(tarkowsky);
-	Team Brighten = new Team("Brighten", Ehowe, brightenFirst, 45000000, "Brighten Stadium", Color.BLUE, Color.BLACK);
-	Brighten.setCaptain(lamptey);
-	Team NottinghamWoods = new Team("Nottingham Woods", cooper, nottinghamWoodsFirst, 45000000, "Woods Stadium", Color.RED, Color.WHITE);
-	NottinghamWoods.setCaptain(pereira);
-	Team Palace = new Team("Palace", edwards, palaceFirst, 45000000, "Palace Stadium", Color.BLUE, Color.RED);
-	Palace.setCaptain(hughes);
-	Team Bornmouth = new Team("Bornmouth", oneil, bornmouthFirst, 45000000, "Bornmouth Stadium", Color.RED, Color.BLACK);
-	Bornmouth.setCaptain(lerme);
-	Team Burntford = new Team("Burntford", mcnally, burntfordFirst, 45000000, "Burntford Stadium", Color.RED, Color.WHITE);
-	Burntford.setCaptain(norgaard);
-	Team Southamton = new Team("Southamton", gibbs, southamtonFirst, 45000000, "Southamton Stadium", Color.RED, Color.WHITE);
-	Southamton.setCaptain(bednarek);
+    private Team createEverton() {
+        Goalkeeper pickfard = new Goalkeeper("Jordan Pickfard", 30, 145);
+        Footballer calvertlewin = new Footballer("Dominic Calvert-Lewin", 26, 190, 55, 100, "ST");
+        Footballer grary = new Footballer("Demarai Grary", 27, 180, 50, 100, "RW");
+        Footballer mcneil = new Footballer("Dwight Mcneil", 24, 175, 55, 100, "LW");
+        Footballer gueye = new Footballer("Idrissa Gueye", 34, 165, 75, 100, "CM", "CM1");
+        Footballer onan = new Footballer("Amadou Onan", 22, 160, 80, 100, "CM", "CM2");
+        Footballer iwobi = new Footballer("Alex Iwobi", 27, 140, 85, 100, "CAM");
+        Footballer mykalenko = new Footballer("Vitaliy Mykalenko", 24, 70, 180, 100, "LB");
+        Footballer tarkowsky = new Footballer("James Tarkowsky", 31, 65, 225, 100, "CB", "CB1");
+        Footballer coad = new Footballer("Conor Coad", 30, 55, 235, 100, "CB", "CB2");
+        Footballer patterson = new Footballer("Nathan Patterson", 22, 85, 200, 100, "RB");
 
-	Map<String, Team> preTeams = new HashMap<>();
-	preTeams.put("Arsenol", createArsenal());
-	preTeams.put("Totenham", createTottenham());
-	preTeams.put("Liverpule", createLiverpool());
-	preTeams.put("Newcostle", createNewcastle());
-	preTeams.put("Tan United", createManUtd());
-	preTeams.put("Van City", createManCity());
-	preTeams.put("Acton Villa", createAstonVilla());
-	preTeams.put("Chelsee", createChelsea());
-	preTeams.put("East Ham", createWestHam());
-	preTeams.put("Leicestor", Leicestor);
-	preTeams.put("Wolves", Wolves);
-	preTeams.put("Upswitch", Upswitch);
-	preTeams.put("Fullham", Fullham);
-	preTeams.put("Evertun", Evertun);
-	preTeams.put("Brighten", Brighten);
-	preTeams.put("Nottingham Woods", NottinghamWoods);
-	preTeams.put("Palace", Palace);
-	preTeams.put("Bornmouth", Bornmouth);
-	preTeams.put("Burntford", Burntford);
-	preTeams.put("Southamton", Southamton);
-	
-	season = new Season(preTeams);
-    
-	window = new GameWindow();
-    window.setVisible(true);
-	
-	StartPage startPage = new StartPage(this);
-	startPage.displayPage();
-	
-	}
+        Map<String, Footballer> evertunFirst = new HashMap<>();
+        evertunFirst.put(pickfard.getPositionPlaced(), pickfard);
+        evertunFirst.put(calvertlewin.getPositionPlaced(), calvertlewin);
+        evertunFirst.put(grary.getPositionPlaced(), grary);
+        evertunFirst.put(mcneil.getPositionPlaced(), mcneil);
+        evertunFirst.put(iwobi.getPositionPlaced(), iwobi);
+        evertunFirst.put(onan.getPositionPlaced(), onan);
+        evertunFirst.put(gueye.getPositionPlaced(), gueye);
+        evertunFirst.put(mykalenko.getPositionPlaced(), mykalenko);
+        evertunFirst.put(tarkowsky.getPositionPlaced(), tarkowsky);
+        evertunFirst.put(coad.getPositionPlaced(), coad);
+        evertunFirst.put(patterson.getPositionPlaced(), patterson);
+
+        Manager pochettino = new Manager("Mauricio Pochettino", 52, 300000);
+        Team Evertun = new Team("Evertun", pochettino, evertunFirst, 45000000, "Evertun Stadium", Color.BLUE, Color.BLUE);
+        Evertun.setCaptain(tarkowsky);
+        return Evertun;
+    }
+
+    private Team createFulham() {
+        Goalkeeper ramsdake = new Goalkeeper("Aaron Ramsdake", 26, 140);
+        Footballer mitrovich = new Footballer("Aleksandar Mitrovich", 29, 190, 55, 100, "ST");
+        Footballer wilson = new Footballer("Harry Wilson", 27, 175, 60, 100, "RW");
+        Footballer perreir = new Footballer("Andreas Perreir", 28, 180, 65, 100, "LW");
+        Footballer palhinh = new Footballer("Joao Palhinh", 28, 170, 80, 100, "CM", "CM1");
+        Footballer reen = new Footballer("Harrison Reen", 28, 155, 85, 100, "CM", "CM2");
+        Footballer lukic = new Footballer("Sasa Lukic", 27, 140, 90, 100, "CAM");
+        Footballer robertz = new Footballer("Antonee Robertz", 25, 70, 185, 100, "LB");
+        Footballer diob = new Footballer("Issa Diob", 26, 60, 220, 100, "CB", "CB1");
+        Footballer adarabioyu = new Footballer("Tosin Adarabioyu", 25, 55, 230, 100, "CB", "CB2");
+        Footballer tete = new Footballer("Sergi Tete", 26, 80, 195, 100, "RB");
+
+        Map<String, Footballer> fullhamFirst = new HashMap<>();
+        fullhamFirst.put(ramsdake.getPositionPlaced(), ramsdake);
+        fullhamFirst.put(mitrovich.getPositionPlaced(), mitrovich);
+        fullhamFirst.put(wilson.getPositionPlaced(), wilson);
+        fullhamFirst.put(perreir.getPositionPlaced(), perreir);
+        fullhamFirst.put(lukic.getPositionPlaced(), lukic);
+        fullhamFirst.put(reen.getPositionPlaced(), reen);
+        fullhamFirst.put(palhinh.getPositionPlaced(), palhinh);
+        fullhamFirst.put(robertz.getPositionPlaced(), robertz);
+        fullhamFirst.put(diob.getPositionPlaced(), diob);
+        fullhamFirst.put(adarabioyu.getPositionPlaced(), adarabioyu);
+        fullhamFirst.put(tete.getPositionPlaced(), tete);
+
+        Manager dyche = new Manager("Sean Dyche", 52, 300000);
+        Team Fullham = new Team("Fullham", dyche, fullhamFirst, 45000000, "Fullham Stadium", Color.WHITE, Color.BLACK);
+        Fullham.setCaptain(palhinh);
+        return Fullham;
+    }
+
+    private Team createIpswich() {
+        Goalkeeper waltom = new Goalkeeper("Christian Waltom", 28, 140);
+        Footballer broadhed = new Footballer("Ellis Broadhed", 25, 175, 50, 100, "ST");
+        Footballer burnz = new Footballer("Janoi Burnz", 26, 180, 55, 100, "RW");
+        Footballer clark = new Footballer("Conor Clark", 24, 170, 60, 100, "LW");
+        Footballer evens = new Footballer("Lee Evens", 28, 160, 65, 100, "CM", "CM1");
+        Footballer morsy = new Footballer("Sam Morsy", 31, 150, 80, 100, "CM", "CM2");
+        Footballer luongo = new Footballer("Massimo Luongo", 30, 140, 85, 100, "CAM");
+        Footballer kenlocke = new Footballer("Myles Kenlocke", 25, 75, 185, 100, "LB");
+        Footballer wolfenden = new Footballer("Luke Wolfenden", 24, 60, 220, 100, "CB", "CB1");
+        Footballer donacien = new Footballer("Toto Donacien", 29, 55, 225, 100, "CB", "CB2");
+        Footballer leigh = new Footballer("Greg Leigh", 30, 85, 195, 100, "RB");
+
+        Map<String, Footballer> upswitchFirst = new HashMap<>();
+        upswitchFirst.put(waltom.getPositionPlaced(), waltom);
+        upswitchFirst.put(broadhed.getPositionPlaced(), broadhed);
+        upswitchFirst.put(burnz.getPositionPlaced(), burnz);
+        upswitchFirst.put(clark.getPositionPlaced(), clark);
+        upswitchFirst.put(luongo.getPositionPlaced(), luongo);
+        upswitchFirst.put(morsy.getPositionPlaced(), morsy);
+        upswitchFirst.put(evens.getPositionPlaced(), evens);
+        upswitchFirst.put(kenlocke.getPositionPlaced(), kenlocke);
+        upswitchFirst.put(wolfenden.getPositionPlaced(), wolfenden);
+        upswitchFirst.put(donacien.getPositionPlaced(), donacien);
+        upswitchFirst.put(leigh.getPositionPlaced(), leigh);
+
+        Manager smithe = new Manager("Dean Smithe", 52, 300000);
+        Team Upswitch = new Team("Upswitch", smithe, upswitchFirst, 45000000, "Upswitch Stadium", Color.BLUE, Color.WHITE);
+        Upswitch.setCaptain(evens);
+        return Upswitch;
+    }
+
+    private Team createWolves() {
+        Goalkeeper sarr = new Goalkeeper("José Sárr", 30, 140);
+        Footballer cuhna = new Footballer("Matheus Cuhna", 24, 185, 55, 100, "ST");
+        Footballer podenc = new Footballer("Daniel Podenc", 28, 175, 60, 100, "RW");
+        Footballer nett = new Footballer("Pedro Nett", 23, 180, 65, 100, "LW");
+        Footballer neves = new Footballer("Rúben Neves", 27, 170, 75, 100, "CM", "CM1");
+        Footballer lobato = new Footballer("Mateus Lobato", 20, 155, 80, 100, "CM", "CM2");
+        Footballer nunes = new Footballer("Matheus Nunes", 25, 140, 85, 100, "CAM");
+        Footballer marcal = new Footballer("Marçal", 34, 75, 180, 100, "LB");
+        Footballer kilman = new Footballer("Max Kilman", 26, 60, 220, 100, "CB", "CB1");
+        Footballer collins = new Footballer("Hugo Collins", 26, 55, 230, 100, "CB", "CB2");
+        Footballer casto = new Footballer("Jonny Casto", 30, 80, 195, 100, "RB");
+
+        Map<String, Footballer> wolvesFirst = new HashMap<>();
+        wolvesFirst.put(sarr.getPositionPlaced(), sarr);
+        wolvesFirst.put(cuhna.getPositionPlaced(), cuhna);
+        wolvesFirst.put(podenc.getPositionPlaced(), podenc);
+        wolvesFirst.put(nett.getPositionPlaced(), nett);
+        wolvesFirst.put(nunes.getPositionPlaced(), nunes);
+        wolvesFirst.put(lobato.getPositionPlaced(), lobato);
+        wolvesFirst.put(neves.getPositionPlaced(), neves);
+        wolvesFirst.put(marcal.getPositionPlaced(), marcal);
+        wolvesFirst.put(kilman.getPositionPlaced(), kilman);
+        wolvesFirst.put(collins.getPositionPlaced(), collins);
+        wolvesFirst.put(casto.getPositionPlaced(), casto);
+
+        Manager hodgson = new Manager("Roy Hodgson", 76, 300000);
+        Team Wolves = new Team("Wolves", hodgson, wolvesFirst, 45000000, "Wolves Stadium", Color.ORANGE, Color.WHITE);
+        Wolves.setCaptain(neves);
+        return Wolves;
+    }
+
+    private Team createLeicester() {
+        Goalkeeper hermanson = new Goalkeeper("Mads Hermansan", 23, 130);
+        Footballer vardi = new Footballer("Jamie Vardy", 36, 180, 50, 100, "ST");
+        Footballer iheanachos = new Footballer("Kelechi Iheanacno", 26, 175, 55, 100, "RW");
+        Footballer madisonn = new Footballer("James Madisen", 27, 185, 60, 100, "LW");
+        Footballer ndidy = new Footballer("Wilfred Ndidr", 26, 165, 70, 100, "CM", "CM1");
+        Footballer soumara = new Footballer("Boubakary Soumara", 24, 160, 80, 100, "CM", "CM2");
+        Footballer dewburyHull = new Footballer("Kiernan Dewsbury-Hall", 25, 150, 85, 100, "CAM");
+        Footballer castagna = new Footballer("Timothy Castanre", 28, 70, 190, 100, "LB");
+        Footballer fase = new Footballer("Wout Fas", 25, 55, 220, 100, "CB", "CB1");
+        Footballer soutar = new Footballer("Harry Souttqr", 24, 50, 230, 100, "CB", "CB2");
+        Footballer riccardo = new Footballer("Ricardo Pereirz", 29, 80, 195, 100, "RB");
+
+        Map<String, Footballer> leicestorFirst = new HashMap<>();
+        leicestorFirst.put(hermanson.getPositionPlaced(), hermanson);
+        leicestorFirst.put(vardi.getPositionPlaced(), vardi);
+        leicestorFirst.put(iheanachos.getPositionPlaced(), iheanachos);
+        leicestorFirst.put(madisonn.getPositionPlaced(), madisonn);
+        leicestorFirst.put(dewburyHull.getPositionPlaced(), dewburyHull);
+        leicestorFirst.put(soumara.getPositionPlaced(), soumara);
+        leicestorFirst.put(ndidy.getPositionPlaced(), ndidy);
+        leicestorFirst.put(castagna.getPositionPlaced(), castagna);
+        leicestorFirst.put(fase.getPositionPlaced(), fase);
+        leicestorFirst.put(soutar.getPositionPlaced(), soutar);
+        leicestorFirst.put(riccardo.getPositionPlaced(), riccardo);
+
+        Manager viera = new Manager("Patrick Vieira", 48, 300000);
+        Team Leicestor = new Team("Leicestor", viera, leicestorFirst, 45000000, "Leicestor Stadium", Color.BLUE, Color.WHITE);
+        Leicestor.setCaptain(castagna);
+        return Leicestor;
+    }
 
     private Team createWestHam() {
         Goalkeeper areole = new Goalkeeper("Alphonse Areole", 30, 135);
