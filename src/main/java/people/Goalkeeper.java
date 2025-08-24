@@ -12,13 +12,6 @@ public class Goalkeeper extends Footballer {
         super(name, "GK", "Goalkeeper", attributes);
     }
 
-	public Goalkeeper(String name, int age, int keeping) {
-		super(name, age);
-		this.keeping = keeping;
-		this.likedPosition = "GK";
-		this.positionPlaced = "GK";
-	}
-
 	public int getKeeping() {
 		return keeping;
 	}

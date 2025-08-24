@@ -495,9 +495,9 @@ public class Match {
 			
 			/* This works out the likelihood percentage of
 			the player getting past the defence. */
-			int overall = player.attack + otherPlayer.defence;
+			int overall = player.getOVR() + otherPlayer.getOVR();
 			float odds = overall / 100.0F;
-			float perc = player.attack / odds;
+			float perc = player.getOVR() / odds;
 			
 			// Here we have a random number between 1-100
 			double randomNumber = Math.floor(Math.random()*100);
@@ -517,9 +517,9 @@ public class Match {
 	
 	public boolean takeShot(Footballer player, Goalkeeper gk) {
 		System.out.println(player.getName() + " is having a crack!");
-		int overall = player.attack + gk.getKeeping();
+		int overall = player.getOVR() + gk.getKeeping();
 		float odds = overall / 100.0F;
-		float perc = player.attack / odds;
+		float perc = player.getOVR() / odds;
 		
 		// Here we have a random number between 1-100
 		double randomNumber = Math.floor(Math.random()*100);

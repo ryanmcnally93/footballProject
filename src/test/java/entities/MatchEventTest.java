@@ -18,7 +18,9 @@ public class MatchEventTest {
             "home, goal, ryan, 2",
     })
     void testConstructorWithIncorrectParams(String a, String b, String c, int d) {
-        Footballer footballer = new Footballer(c, 20);
+        Footballer footballer = new Footballer();
+        footballer.setName(c);
+        footballer.setAge(20);
         MatchEvent event = new MatchEvent(a, b, footballer, d);
         assertNotNull(event);
     }
@@ -30,7 +32,9 @@ public class MatchEventTest {
         matchEvent.setEventType("Goal");
         matchEvent.setMinute(45);
 
-        Footballer player = new Footballer("Test Person", 18);
+        Footballer player = new Footballer();
+        player.setName("Test Person");
+        player.setAge(18);
         matchEvent.setPlayer(player);
 
         assertEquals("Home", matchEvent.getHomeOrAway());

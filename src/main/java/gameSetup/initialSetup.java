@@ -7,7 +7,6 @@ import people.Goalkeeper;
 import people.Manager;
 
 import java.awt.*;
-import java.security.cert.TrustAnchor;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,17 +50,17 @@ public class initialSetup {
     }
 
     private Team createSouthampton() {
-        Goalkeeper bazunu = new Goalkeeper("Gavin Bazunu", 22, 135);
-        Footballer alcarrz = new Footballer("Carlos Alcarrz", 21, 175, 50, 100, "ST");
-        Footballer wardprose = new Footballer("James Wardprose", 29, 180, 60, 100, "RW");
-        Footballer peraud = new Footballer("Romain Peraud", 26, 170, 65, 100, "LW");
-        Footballer lavie = new Footballer("Romeo Lavie", 20, 160, 70, 100, "CM", "CM2");
-        Footballer arreole = new Footballer("Nicolas Arreole", 24, 150, 80, 100, "CM", "CM1");
-        Footballer jankwitz = new Footballer("James Jankwitz", 23, 140, 85, 100, "CAM");
-        Footballer karlsen = new Footballer("Lianco Karlsen", 24, 75, 185, 100, "LB");
-        Footballer salisu = new Footballer("Mohammed Salisu", 24, 60, 220, 100, "CB", "CB1");
-        Footballer bednarek = new Footballer("Jan Bednarek", 27, 55, 230, 100, "CB", "CB2");
-        Footballer walkr = new Footballer("Kyle Walkr", 32, 80, 195, 100, "RB");
+        Goalkeeper bazunu = (Goalkeeper) FootballerFactory.createPlayer("GK", "Goalkeeper", 76, 78,  "Gavin Bazunu", LocalDate.of(1993, 6, 10));
+        Footballer alcarrz = FootballerFactory.createPlayer("ST", "Technically Gifted", 78, 80, "Carlos Alcarrz", LocalDate.of(1993, 6, 10));
+        Footballer wardprose = FootballerFactory.createPlayer("RW", "Physically Strong", 79, 79, "James Wardprose", LocalDate.of(1993, 6, 10));
+        Footballer peraud = FootballerFactory.createPlayer("LW", "Technically Gifted", 77, 78, "Romain Peraud", LocalDate.of(1993, 6, 10));
+        Footballer lavie = FootballerFactory.createPlayer("CAM", "Technically Gifted", 78, 80, "Romeo Lavie", LocalDate.of(1993, 6, 10));
+        Footballer arreole = FootballerFactory.createPlayer("CM1", "Playmaker", 75, 77, "Nicolas Arreole", LocalDate.of(1993, 6, 10));
+        Footballer jankwitz = FootballerFactory.createPlayer("CM2", "Playmaker", 76, 79, "James Jankwitz", LocalDate.of(1993, 6, 10));
+        Footballer karlsen = FootballerFactory.createPlayer("LB", "Physically Strong", 77, 79, "Lianco Karlsen", LocalDate.of(1993, 6, 10));
+        Footballer salisu = FootballerFactory.createPlayer("CB1", "Physically Strong", 79, 79, "Mohammed Salisu", LocalDate.of(1993, 6, 10));
+        Footballer bednarek = FootballerFactory.createPlayer("CB2", "Physically Strong", 80, 80, "Jan Bednarek", LocalDate.of(1993, 6, 10));
+        Footballer walkr = FootballerFactory.createPlayer("RB", "Technically Gifted", 82, 84, "Kyle Walkr", LocalDate.of(1993, 6, 10));
 
         Map<String, Footballer> southamtonFirst = new HashMap<>();
         southamtonFirst.put(bazunu.getPositionPlaced(), bazunu);
@@ -83,17 +82,17 @@ public class initialSetup {
     }
 
     private Team createBrentford() {
-        Goalkeeper rayz = new Goalkeeper("David Rayz", 31, 150);
-        Footballer toney = new Footballer("Ivan Toney", 28, 190, 60, 100, "ST");
-        Footballer breetton = new Footballer("Bryan Breetton", 26, 180, 55, 100, "RW");
-        Footballer dasilva = new Footballer("Josh DaSilva", 24, 175, 60, 100, "LW");
-        Footballer janelt = new Footballer("Vitaly Janelt", 25, 170, 70, 100, "CM", "CM1");
-        Footballer norgaard = new Footballer("Christian Norgaard", 29, 155, 80, 100, "CM", "CM2");
-        Footballer hicksy = new Footballer("Aaron Hicksy", 22, 140, 85, 100, "CAM");
-        Footballer henrey = new Footballer("Rico Henrey", 26, 75, 180, 100, "LB");
-        Footballer pinnok = new Footballer("Ethan Pinnok", 27, 60, 220, 100, "CB", "CB1");
-        Footballer mee = new Footballer("Ben Mee", 34, 55, 230, 100, "CB", "CB2");
-        Footballer canos = new Footballer("Sergi Canos", 26, 80, 195, 100, "RB");
+        Goalkeeper rayz = (Goalkeeper) FootballerFactory.createPlayer("GK", "Goalkeeper", 76, 78, "David Rayz", LocalDate.of(1993, 6, 10));
+        Footballer toney = FootballerFactory.createPlayer("ST", "Physically Strong", 78, 80, "Ivan Toney", LocalDate.of(1993, 6, 10));
+        Footballer breetton = FootballerFactory.createPlayer("RW", "Technically Gifted", 79, 79, "Bryan Breetton", LocalDate.of(1993, 6, 10));
+        Footballer dasilva = FootballerFactory.createPlayer("LW", "Technically Gifted", 77, 78, "Josh DaSilva", LocalDate.of(1993, 6, 10));
+        Footballer janelt = FootballerFactory.createPlayer("CM1", "Playmaker", 75, 77, "Vitaly Janelt", LocalDate.of(1993, 6, 10));
+        Footballer norgaard = FootballerFactory.createPlayer("CM2", "Playmaker", 76, 79, "Christian Norgaard", LocalDate.of(1993, 6, 10));
+        Footballer hicksy = FootballerFactory.createPlayer("CAM", "Technically Gifted", 78, 80, "Aaron Hicksy", LocalDate.of(1993, 6, 10));
+        Footballer henrey = FootballerFactory.createPlayer("LB", "Physically Strong", 77, 79, "Rico Henrey", LocalDate.of(1993, 6, 10));
+        Footballer pinnok = FootballerFactory.createPlayer("CB1", "Physically Strong", 79, 79, "Ethan Pinnok", LocalDate.of(1993, 6, 10));
+        Footballer mee = FootballerFactory.createPlayer("CB2", "Physically Strong", 80, 80, "Ben Mee", LocalDate.of(1993, 6, 10));
+        Footballer canos = FootballerFactory.createPlayer("RB", "Technically Gifted", 82, 84, "Sergi Canos", LocalDate.of(1993, 6, 10));
 
         Map<String, Footballer> burntfordFirst = new HashMap<>();
         burntfordFirst.put(rayz.getPositionPlaced(), rayz);
@@ -115,17 +114,17 @@ public class initialSetup {
     }
 
     private Team createBournemouth() {
-        Goalkeeper ramstale = new Goalkeeper("Aaron Ramstale", 25, 135);
-        Footballer solankc = new Footballer("Dominic Solankc", 25, 185, 55, 100, "ST");
-        Footballer antony = new Footballer("Ryan Antony", 23, 175, 60, 100, "RW");
-        Footballer billong = new Footballer("David Billong", 22, 180, 65, 100, "LW");
-        Footballer lerme = new Footballer("Jefferson Lerme", 28, 170, 80, 100, "CM", "CM1");
-        Footballer ramsay = new Footballer("Maxime Ramsay", 22, 155, 85, 100, "CM", "CM2");
-        Footballer cooke = new Footballer("Lewis Cooke", 26, 140, 90, 100, "CAM");
-        Footballer zamor = new Footballer("Jordan Zamor", 24, 75, 185, 100, "LB");
-        Footballer mepham = new Footballer("Chris Mepham", 26, 60, 220, 100, "CB", "CB1");
-        Footballer smiths = new Footballer("Adam Smiths", 32, 55, 230, 100, "CB", "CB2");
-        Footballer travers = new Footballer("Mark Travers", 23, 80, 195, 100, "RB");
+        Goalkeeper ramstale = (Goalkeeper) FootballerFactory.createPlayer("GK", "Goalkeeper", 74, 77, "Aaron Ramstale", LocalDate.of(1993, 6, 10));
+        Footballer solankc = FootballerFactory.createPlayer("ST", "Physically Strong", 76, 79, "Dominic Solankc", LocalDate.of(1993, 6, 10));
+        Footballer antony = FootballerFactory.createPlayer("RW", "Technically Gifted", 75, 78, "Ryan Antony", LocalDate.of(1993, 6, 10));
+        Footballer billong = FootballerFactory.createPlayer("LW", "Technically Gifted", 74, 77, "David Billong", LocalDate.of(1993, 6, 10));
+        Footballer lerme = FootballerFactory.createPlayer("CM1", "Playmaker", 78, 81, "Jefferson Lerme", LocalDate.of(1993, 6, 10));
+        Footballer ramsay = FootballerFactory.createPlayer("CM2", "Playmaker", 77, 80, "Maxime Ramsay", LocalDate.of(1993, 6, 10));
+        Footballer cooke = FootballerFactory.createPlayer("CAM", "Technically Gifted", 79, 82, "Lewis Cooke", LocalDate.of(1993, 6, 10));
+        Footballer zamor = FootballerFactory.createPlayer("LB", "Physically Strong", 73, 76, "Jordan Zamor", LocalDate.of(1993, 6, 10));
+        Footballer mepham = FootballerFactory.createPlayer("CB1", "Physically Strong", 76, 79, "Chris Mepham", LocalDate.of(1993, 6, 10));
+        Footballer smiths = FootballerFactory.createPlayer("CB2", "Physically Strong", 78, 80, "Adam Smiths", LocalDate.of(1993, 6, 10));
+        Footballer travers = FootballerFactory.createPlayer("RB", "Technically Gifted", 77, 79, "Mark Travers", LocalDate.of(1993, 6, 10));
 
         Map<String, Footballer> bornmouthFirst = new HashMap<>();
         bornmouthFirst.put(ramstale.getPositionPlaced(), ramstale);
@@ -147,17 +146,17 @@ public class initialSetup {
     }
 
     private Team createNottinghamForest() {
-        Goalkeeper hennessex = new Goalkeeper("Wayne Hennessex", 36, 140);
-        Footballer awoniy = new Footballer("Taiwo Awoniy", 25, 185, 55, 100, "ST");
-        Footballer lingrd = new Footballer("Jesse Lingrd", 31, 175, 60, 100, "RW");
-        Footballer johnsn = new Footballer("Brennan Johnsn", 22, 180, 65, 100, "LW");
-        Footballer yates = new Footballer("Ryan Yates", 26, 170, 70, 100, "CM", "CM1");
-        Footballer freuler = new Footballer("Remo Freuler", 31, 155, 80, 100, "CM", "CM2");
-        Footballer pereira = new Footballer("Danilo Pereira", 22, 140, 85, 100, "CAM");
-        Footballer lodi = new Footballer("Renan Lodi", 25, 75, 185, 100, "LB");
-        Footballer mckenna = new Footballer("Scott Mckenna", 26, 60, 220, 100, "CB", "CB1");
-        Footballer worrll = new Footballer("Joe Worrll", 26, 55, 230, 100, "CB", "CB2");
-        Footballer nico = new Footballer("Neco Williams", 23, 80, 195, 100, "RB");
+        Goalkeeper hennessex = (Goalkeeper) FootballerFactory.createPlayer("GK", "Goalkeeper", 72, 75, "Wayne Hennessex", LocalDate.of(1993, 6, 10));
+        Footballer awoniy = FootballerFactory.createPlayer("ST", "Physically Strong", 75, 78, "Taiwo Awoniy", LocalDate.of(1993, 6, 10));
+        Footballer lingrd = FootballerFactory.createPlayer("RW", "Technically Gifted", 74, 77, "Jesse Lingrd", LocalDate.of(1993, 6, 10));
+        Footballer johnsn = FootballerFactory.createPlayer("LW", "Technically Gifted", 73, 76, "Brennan Johnsn", LocalDate.of(1993, 6, 10));
+        Footballer yates = FootballerFactory.createPlayer("CM1", "Playmaker", 77, 80, "Ryan Yates", LocalDate.of(1993, 6, 10));
+        Footballer freuler = FootballerFactory.createPlayer("CM2", "Playmaker", 76, 79, "Remo Freuler", LocalDate.of(1993, 6, 10));
+        Footballer pereira = FootballerFactory.createPlayer("CAM", "Technically Gifted", 78, 81, "Danilo Pereira", LocalDate.of(1993, 6, 10));
+        Footballer lodi = FootballerFactory.createPlayer("LB", "Physically Strong", 72, 75, "Renan Lodi", LocalDate.of(1993, 6, 10));
+        Footballer mckenna = FootballerFactory.createPlayer("CB1", "Physically Strong", 75, 78, "Scott Mckenna", LocalDate.of(1993, 6, 10));
+        Footballer worrll = FootballerFactory.createPlayer("CB2", "Physically Strong", 76, 79, "Joe Worrll", LocalDate.of(1993, 6, 10));
+        Footballer nico = FootballerFactory.createPlayer("RB", "Technically Gifted", 77, 79, "Neco Williams", LocalDate.of(1993, 6, 10));
 
         Map<String, Footballer> nottinghamWoodsFirst = new HashMap<>();
         nottinghamWoodsFirst.put(hennessex.getPositionPlaced(), hennessex);
@@ -179,17 +178,17 @@ public class initialSetup {
     }
 
     private Team createCrystalPalace() {
-        Goalkeeper johnstone = new Goalkeeper("Sam Johnstone", 30, 140);
-        Footballer eze = new Footballer("Eberechi Eze", 25, 180, 55, 100, "ST");
-        Footballer zah = new Footballer("Wilfried Zah", 31, 175, 60, 100, "RW");
-        Footballer olise = new Footballer("Michael Olise", 22, 185, 65, 100, "LW");
-        Footballer doucoure = new Footballer("Cheick Doucoure", 24, 170, 70, 100, "CM", "CM1");
-        Footballer lurie = new Footballer("Jeffrey Lurie", 26, 155, 80, 100, "CM", "CM2");
-        Footballer hughes = new Footballer("Will Hughes", 28, 140, 85, 100, "CAM");
-        Footballer mitchell = new Footballer("Tyrick Mitchell", 24, 75, 185, 100, "LB");
-        Footballer gueh = new Footballer("Marc Gueh", 23, 60, 220, 100, "CB", "CB1");
-        Footballer andersn = new Footballer("Jannik Andersn", 27, 55, 230, 100, "CB", "CB2");
-        Footballer wrad = new Footballer("Joel Wrad", 30, 80, 195, 100, "RB");
+        Goalkeeper johnstone = (Goalkeeper) FootballerFactory.createPlayer("GK", "Goalkeeper", 73, 76, "Sam Johnstone", LocalDate.of(1993, 6, 10));
+        Footballer eze = FootballerFactory.createPlayer("ST", "Physically Strong", 75, 78, "Eberechi Eze", LocalDate.of(1993, 6, 10));
+        Footballer zah = FootballerFactory.createPlayer("RW", "Technically Gifted", 74, 77, "Wilfried Zah", LocalDate.of(1993, 6, 10));
+        Footballer olise = FootballerFactory.createPlayer("LW", "Technically Gifted", 76, 79, "Michael Olise", LocalDate.of(1993, 6, 10));
+        Footballer doucoure = FootballerFactory.createPlayer("CM1", "Playmaker", 77, 80, "Cheick Doucoure", LocalDate.of(1993, 6, 10));
+        Footballer lurie = FootballerFactory.createPlayer("CM2", "Playmaker", 76, 79, "Jeffrey Lurie", LocalDate.of(1993, 6, 10));
+        Footballer hughes = FootballerFactory.createPlayer("CAM", "Technically Gifted", 78, 81, "Will Hughes", LocalDate.of(1993, 6, 10));
+        Footballer mitchell = FootballerFactory.createPlayer("LB", "Physically Strong", 72, 75, "Tyrick Mitchell", LocalDate.of(1993, 6, 10));
+        Footballer gueh = FootballerFactory.createPlayer("CB1", "Physically Strong", 75, 78, "Marc Gueh", LocalDate.of(1993, 6, 10));
+        Footballer andersn = FootballerFactory.createPlayer("CB2", "Physically Strong", 76, 79, "Jannik Andersn", LocalDate.of(1993, 6, 10));
+        Footballer wrad = FootballerFactory.createPlayer("RB", "Technically Gifted", 77, 79, "Joel Wrad", LocalDate.of(1993, 6, 10));
 
         Map<String, Footballer> palaceFirst = new HashMap<>();
         palaceFirst.put(johnstone.getPositionPlaced(), johnstone);
@@ -211,17 +210,17 @@ public class initialSetup {
     }
 
     private Team createBrighton() {
-        Goalkeeper steell = new Goalkeeper("Jason Steell", 27, 130);
-        Footballer mitom = new Footballer("Kaoru Mitom", 26, 180, 55, 100, "ST");
-        Footballer marc = new Footballer("Solly Marc", 29, 175, 60, 100, "RW");
-        Footballer estupinaz = new Footballer("Pervis Estupinaz", 25, 185, 65, 100, "LW");
-        Footballer macalliste = new Footballer("Alexis Macalliste", 25, 170, 80, 100, "CM", "CM1");
-        Footballer caicedo = new Footballer("Moises Caicedo", 22, 155, 85, 100, "CM", "CM2");
-        Footballer gilmore = new Footballer("Billy Gilmore", 22, 145, 90, 100, "CAM");
-        Footballer veltma = new Footballer("Joel Veltma", 32, 75, 180, 100, "LB");
-        Footballer dunk = new Footballer("Lewis Dunk", 31, 60, 230, 100, "CB", "CB1");
-        Footballer webste = new Footballer("Adam Webste", 24, 55, 220, 100, "CB", "CB2");
-        Footballer lamptey = new Footballer("Tariq Lamptey", 23, 85, 195, 100, "RB");
+        Goalkeeper steell = (Goalkeeper) FootballerFactory.createPlayer("GK", "Goalkeeper", 70, 73, "Jason Steell", LocalDate.of(1993, 6, 10));
+        Footballer mitom = FootballerFactory.createPlayer("ST", "Physically Strong", 75, 78, "Kaoru Mitom", LocalDate.of(1993, 6, 10));
+        Footballer marc = FootballerFactory.createPlayer("RW", "Technically Gifted", 74, 77, "Solly Marc", LocalDate.of(1993, 6, 10));
+        Footballer estupinaz = FootballerFactory.createPlayer("LW", "Technically Gifted", 76, 79, "Pervis Estupinaz", LocalDate.of(1993, 6, 10));
+        Footballer macalliste = FootballerFactory.createPlayer("CM1", "Playmaker", 77, 80, "Alexis Macalliste", LocalDate.of(1993, 6, 10));
+        Footballer caicedo = FootballerFactory.createPlayer("CM2", "Playmaker", 76, 79, "Moises Caicedo", LocalDate.of(1993, 6, 10));
+        Footballer gilmore = FootballerFactory.createPlayer("CAM", "Technically Gifted", 78, 81, "Billy Gilmore", LocalDate.of(1993, 6, 10));
+        Footballer veltma = FootballerFactory.createPlayer("LB", "Physically Strong", 72, 75, "Joel Veltma", LocalDate.of(1993, 6, 10));
+        Footballer dunk = FootballerFactory.createPlayer("CB1", "Physically Strong", 75, 78, "Lewis Dunk", LocalDate.of(1993, 6, 10));
+        Footballer webste = FootballerFactory.createPlayer("CB2", "Physically Strong", 74, 77, "Adam Webste", LocalDate.of(1993, 6, 10));
+        Footballer lamptey = FootballerFactory.createPlayer("RB", "Technically Gifted", 79, 81, "Tariq Lamptey", LocalDate.of(1993, 6, 10));
 
         Map<String, Footballer> brightenFirst = new HashMap<>();
         brightenFirst.put(steell.getPositionPlaced(), steell);
@@ -243,17 +242,17 @@ public class initialSetup {
     }
 
     private Team createEverton() {
-        Goalkeeper pickfard = new Goalkeeper("Jordan Pickfard", 30, 145);
-        Footballer calvertlewin = new Footballer("Dominic Calvert-Lewin", 26, 190, 55, 100, "ST");
-        Footballer grary = new Footballer("Demarai Grary", 27, 180, 50, 100, "RW");
-        Footballer mcneil = new Footballer("Dwight Mcneil", 24, 175, 55, 100, "LW");
-        Footballer gueye = new Footballer("Idrissa Gueye", 34, 165, 75, 100, "CM", "CM1");
-        Footballer onan = new Footballer("Amadou Onan", 22, 160, 80, 100, "CM", "CM2");
-        Footballer iwobi = new Footballer("Alex Iwobi", 27, 140, 85, 100, "CAM");
-        Footballer mykalenko = new Footballer("Vitaliy Mykalenko", 24, 70, 180, 100, "LB");
-        Footballer tarkowsky = new Footballer("James Tarkowsky", 31, 65, 225, 100, "CB", "CB1");
-        Footballer coad = new Footballer("Conor Coad", 30, 55, 235, 100, "CB", "CB2");
-        Footballer patterson = new Footballer("Nathan Patterson", 22, 85, 200, 100, "RB");
+        Goalkeeper pickfard = (Goalkeeper) FootballerFactory.createPlayer("GK", "Goalkeeper", 72, 75, "Jordan Pickfard", LocalDate.of(1993, 6, 10));
+        Footballer calvertlewin = FootballerFactory.createPlayer("ST", "Physically Strong", 78, 80, "Dominic Calvert-Lewin", LocalDate.of(1993, 6, 10));
+        Footballer grary = FootballerFactory.createPlayer("RW", "Technically Gifted", 75, 77, "Demarai Grary", LocalDate.of(1993, 6, 10));
+        Footballer mcneil = FootballerFactory.createPlayer("LW", "Technically Gifted", 74, 76, "Dwight Mcneil", LocalDate.of(1993, 6, 10));
+        Footballer gueye = FootballerFactory.createPlayer("CM1", "Playmaker", 73, 75, "Idrissa Gueye", LocalDate.of(1993, 6, 10));
+        Footballer onan = FootballerFactory.createPlayer("CM2", "Playmaker", 72, 74, "Amadou Onan", LocalDate.of(1993, 6, 10));
+        Footballer iwobi = FootballerFactory.createPlayer("CAM", "Technically Gifted", 76, 78, "Alex Iwobi", LocalDate.of(1993, 6, 10));
+        Footballer mykalenko = FootballerFactory.createPlayer("LB", "Physically Strong", 70, 72, "Vitaliy Mykalenko", LocalDate.of(1993, 6, 10));
+        Footballer tarkowsky = FootballerFactory.createPlayer("CB1", "Physically Strong", 73, 75, "James Tarkowsky", LocalDate.of(1993, 6, 10));
+        Footballer coad = FootballerFactory.createPlayer("CB2", "Physically Strong", 72, 74, "Conor Coad", LocalDate.of(1993, 6, 10));
+        Footballer patterson = FootballerFactory.createPlayer("RB", "Technically Gifted", 77, 79, "Nathan Patterson", LocalDate.of(1993, 6, 10));
 
         Map<String, Footballer> evertunFirst = new HashMap<>();
         evertunFirst.put(pickfard.getPositionPlaced(), pickfard);
@@ -275,17 +274,17 @@ public class initialSetup {
     }
 
     private Team createFulham() {
-        Goalkeeper ramsdake = new Goalkeeper("Aaron Ramsdake", 26, 140);
-        Footballer mitrovich = new Footballer("Aleksandar Mitrovich", 29, 190, 55, 100, "ST");
-        Footballer wilson = new Footballer("Harry Wilson", 27, 175, 60, 100, "RW");
-        Footballer perreir = new Footballer("Andreas Perreir", 28, 180, 65, 100, "LW");
-        Footballer palhinh = new Footballer("Joao Palhinh", 28, 170, 80, 100, "CM", "CM1");
-        Footballer reen = new Footballer("Harrison Reen", 28, 155, 85, 100, "CM", "CM2");
-        Footballer lukic = new Footballer("Sasa Lukic", 27, 140, 90, 100, "CAM");
-        Footballer robertz = new Footballer("Antonee Robertz", 25, 70, 185, 100, "LB");
-        Footballer diob = new Footballer("Issa Diob", 26, 60, 220, 100, "CB", "CB1");
-        Footballer adarabioyu = new Footballer("Tosin Adarabioyu", 25, 55, 230, 100, "CB", "CB2");
-        Footballer tete = new Footballer("Sergi Tete", 26, 80, 195, 100, "RB");
+        Goalkeeper ramsdake = (Goalkeeper) FootballerFactory.createPlayer("GK", "Goalkeeper", 76, 78, "Aaron Ramsdake", LocalDate.of(1993, 6, 10));
+        Footballer mitrovich = FootballerFactory.createPlayer("ST", "Physically Strong", 82, 84, "Aleksandar Mitrovich", LocalDate.of(1993, 6, 10));
+        Footballer wilson = FootballerFactory.createPlayer("RW", "Technically Gifted", 77, 79, "Harry Wilson", LocalDate.of(1993, 6, 10));
+        Footballer perreir = FootballerFactory.createPlayer("LW", "Technically Gifted", 79, 81, "Andreas Perreir", LocalDate.of(1993, 6, 10));
+        Footballer palhinh = FootballerFactory.createPlayer("CM1", "Playmaker", 80, 82, "Joao Palhinh", LocalDate.of(1993, 6, 10));
+        Footballer reen = FootballerFactory.createPlayer("CM2", "Playmaker", 78, 80, "Harrison Reen", LocalDate.of(1993, 6, 10));
+        Footballer lukic = FootballerFactory.createPlayer("CAM", "Technically Gifted", 81, 83, "Sasa Lukic", LocalDate.of(1993, 6, 10));
+        Footballer robertz = FootballerFactory.createPlayer("LB", "Physically Strong", 72, 74, "Antonee Robertz", LocalDate.of(1993, 6, 10));
+        Footballer diob = FootballerFactory.createPlayer("CB1", "Physically Strong", 75, 77, "Issa Diob", LocalDate.of(1993, 6, 10));
+        Footballer adarabioyu = FootballerFactory.createPlayer("CB2", "Physically Strong", 74, 76, "Tosin Adarabioyu", LocalDate.of(1993, 6, 10));
+        Footballer tete = FootballerFactory.createPlayer("RB", "Technically Gifted", 76, 78, "Sergi Tete", LocalDate.of(1993, 6, 10));
 
         Map<String, Footballer> fullhamFirst = new HashMap<>();
         fullhamFirst.put(ramsdake.getPositionPlaced(), ramsdake);
@@ -307,17 +306,17 @@ public class initialSetup {
     }
 
     private Team createIpswich() {
-        Goalkeeper waltom = new Goalkeeper("Christian Waltom", 28, 140);
-        Footballer broadhed = new Footballer("Ellis Broadhed", 25, 175, 50, 100, "ST");
-        Footballer burnz = new Footballer("Janoi Burnz", 26, 180, 55, 100, "RW");
-        Footballer clark = new Footballer("Conor Clark", 24, 170, 60, 100, "LW");
-        Footballer evens = new Footballer("Lee Evens", 28, 160, 65, 100, "CM", "CM1");
-        Footballer morsy = new Footballer("Sam Morsy", 31, 150, 80, 100, "CM", "CM2");
-        Footballer luongo = new Footballer("Massimo Luongo", 30, 140, 85, 100, "CAM");
-        Footballer kenlocke = new Footballer("Myles Kenlocke", 25, 75, 185, 100, "LB");
-        Footballer wolfenden = new Footballer("Luke Wolfenden", 24, 60, 220, 100, "CB", "CB1");
-        Footballer donacien = new Footballer("Toto Donacien", 29, 55, 225, 100, "CB", "CB2");
-        Footballer leigh = new Footballer("Greg Leigh", 30, 85, 195, 100, "RB");
+        Goalkeeper waltom = (Goalkeeper) FootballerFactory.createPlayer("GK", "Goalkeeper", 75, 77, "Christian Waltom", LocalDate.of(1993, 6, 10));
+        Footballer broadhed = FootballerFactory.createPlayer("ST", "Physically Strong", 72, 74, "Ellis Broadhed", LocalDate.of(1993, 6, 10));
+        Footballer burnz = FootballerFactory.createPlayer("RW", "Technically Gifted", 74, 76, "Janoi Burnz", LocalDate.of(1993, 6, 10));
+        Footballer clark = FootballerFactory.createPlayer("LW", "Technically Gifted", 73, 75, "Conor Clark", LocalDate.of(1993, 6, 10));
+        Footballer evens = FootballerFactory.createPlayer("CM1", "Playmaker", 71, 73, "Lee Evens", LocalDate.of(1993, 6, 10));
+        Footballer morsy = FootballerFactory.createPlayer("CM2", "Playmaker", 74, 76, "Sam Morsy", LocalDate.of(1993, 6, 10));
+        Footballer luongo = FootballerFactory.createPlayer("CAM", "Technically Gifted", 75, 77, "Massimo Luongo", LocalDate.of(1993, 6, 10));
+        Footballer kenlocke = FootballerFactory.createPlayer("LB", "Physically Strong", 70, 72, "Myles Kenlocke", LocalDate.of(1993, 6, 10));
+        Footballer wolfenden = FootballerFactory.createPlayer("CB1", "Physically Strong", 69, 71, "Luke Wolfenden", LocalDate.of(1993, 6, 10));
+        Footballer donacien = FootballerFactory.createPlayer("CB2", "Physically Strong", 68, 70, "Toto Donacien", LocalDate.of(1993, 6, 10));
+        Footballer leigh = FootballerFactory.createPlayer("RB", "Technically Gifted", 76, 78, "Greg Leigh", LocalDate.of(1993, 6, 10));
 
         Map<String, Footballer> upswitchFirst = new HashMap<>();
         upswitchFirst.put(waltom.getPositionPlaced(), waltom);
@@ -339,17 +338,17 @@ public class initialSetup {
     }
 
     private Team createWolves() {
-        Goalkeeper sarr = new Goalkeeper("José Sárr", 30, 140);
-        Footballer cuhna = new Footballer("Matheus Cuhna", 24, 185, 55, 100, "ST");
-        Footballer podenc = new Footballer("Daniel Podenc", 28, 175, 60, 100, "RW");
-        Footballer nett = new Footballer("Pedro Nett", 23, 180, 65, 100, "LW");
-        Footballer neves = new Footballer("Rúben Neves", 27, 170, 75, 100, "CM", "CM1");
-        Footballer lobato = new Footballer("Mateus Lobato", 20, 155, 80, 100, "CM", "CM2");
-        Footballer nunes = new Footballer("Matheus Nunes", 25, 140, 85, 100, "CAM");
-        Footballer marcal = new Footballer("Marçal", 34, 75, 180, 100, "LB");
-        Footballer kilman = new Footballer("Max Kilman", 26, 60, 220, 100, "CB", "CB1");
-        Footballer collins = new Footballer("Hugo Collins", 26, 55, 230, 100, "CB", "CB2");
-        Footballer casto = new Footballer("Jonny Casto", 30, 80, 195, 100, "RB");
+        Goalkeeper sarr = (Goalkeeper) FootballerFactory.createPlayer("GK", "Goalkeeper", 75, 77, "José Sárr", LocalDate.of(1993, 6, 10));
+        Footballer cuhna = FootballerFactory.createPlayer("ST", "Physically Strong", 78, 80, "Matheus Cuhna", LocalDate.of(1993, 6, 10));
+        Footballer podenc = FootballerFactory.createPlayer("RW", "Technically Gifted", 74, 76, "Daniel Podenc", LocalDate.of(1993, 6, 10));
+        Footballer nett = FootballerFactory.createPlayer("LW", "Technically Gifted", 75, 77, "Pedro Nett", LocalDate.of(1993, 6, 10));
+        Footballer neves = FootballerFactory.createPlayer("CM1", "Playmaker", 77, 79, "Rúben Neves", LocalDate.of(1993, 6, 10));
+        Footballer lobato = FootballerFactory.createPlayer("CM2", "Playmaker", 72, 74, "Mateus Lobato", LocalDate.of(1993, 6, 10));
+        Footballer nunes = FootballerFactory.createPlayer("CAM", "Technically Gifted", 76, 78, "Matheus Nunes", LocalDate.of(1993, 6, 10));
+        Footballer marcal = FootballerFactory.createPlayer("LB", "Physically Strong", 70, 72, "Marçal", LocalDate.of(1993, 6, 10));
+        Footballer kilman = FootballerFactory.createPlayer("CB1", "Physically Strong", 69, 71, "Max Kilman", LocalDate.of(1993, 6, 10));
+        Footballer collins = FootballerFactory.createPlayer("CB2", "Physically Strong", 68, 70, "Hugo Collins", LocalDate.of(1993, 6, 10));
+        Footballer casto = FootballerFactory.createPlayer("RB", "Technically Gifted", 76, 78, "Jonny Casto", LocalDate.of(1993, 6, 10));
 
         Map<String, Footballer> wolvesFirst = new HashMap<>();
         wolvesFirst.put(sarr.getPositionPlaced(), sarr);
@@ -371,17 +370,17 @@ public class initialSetup {
     }
 
     private Team createLeicester() {
-        Goalkeeper hermanson = new Goalkeeper("Mads Hermansan", 23, 130);
-        Footballer vardi = new Footballer("Jamie Vardy", 36, 180, 50, 100, "ST");
-        Footballer iheanachos = new Footballer("Kelechi Iheanacno", 26, 175, 55, 100, "RW");
-        Footballer madisonn = new Footballer("James Madisen", 27, 185, 60, 100, "LW");
-        Footballer ndidy = new Footballer("Wilfred Ndidr", 26, 165, 70, 100, "CM", "CM1");
-        Footballer soumara = new Footballer("Boubakary Soumara", 24, 160, 80, 100, "CM", "CM2");
-        Footballer dewburyHull = new Footballer("Kiernan Dewsbury-Hall", 25, 150, 85, 100, "CAM");
-        Footballer castagna = new Footballer("Timothy Castanre", 28, 70, 190, 100, "LB");
-        Footballer fase = new Footballer("Wout Fas", 25, 55, 220, 100, "CB", "CB1");
-        Footballer soutar = new Footballer("Harry Souttqr", 24, 50, 230, 100, "CB", "CB2");
-        Footballer riccardo = new Footballer("Ricardo Pereirz", 29, 80, 195, 100, "RB");
+        Goalkeeper hermanson = (Goalkeeper) FootballerFactory.createPlayer("GK", "Goalkeeper", 70, 73, "Mads Hermansan", LocalDate.of(2000, 1, 1));
+        Footballer vardi = FootballerFactory.createPlayer("ST", "Physically Strong", 75, 78, "Jamie Vardy", LocalDate.of(1987, 1, 1));
+        Footballer iheanachos = FootballerFactory.createPlayer("RW", "Technically Gifted", 74, 77, "Kelechi Iheanacno", LocalDate.of(1997, 1, 1));
+        Footballer madisonn = FootballerFactory.createPlayer("LW", "Technically Gifted", 73, 76, "James Madisen", LocalDate.of(1996, 1, 1));
+        Footballer ndidy = FootballerFactory.createPlayer("CM1", "Playmaker", 72, 75, "Wilfred Ndidr", LocalDate.of(1997, 1, 1));
+        Footballer soumara = FootballerFactory.createPlayer("CM2", "Playmaker", 70, 73, "Boubakary Soumara", LocalDate.of(1999, 1, 1));
+        Footballer dewburyHull = FootballerFactory.createPlayer("CAM", "Technically Gifted", 74, 77, "Kiernan Dewsbury-Hall", LocalDate.of(1998, 1, 1));
+        Footballer castagna = FootballerFactory.createPlayer("LB", "Physically Strong", 69, 71, "Timothy Castanre", LocalDate.of(1995, 1, 1));
+        Footballer fase = FootballerFactory.createPlayer("CB1", "Physically Strong", 68, 70, "Wout Fas", LocalDate.of(1998, 1, 1));
+        Footballer soutar = FootballerFactory.createPlayer("CB2", "Physically Strong", 67, 69, "Harry Souttqr", LocalDate.of(1999, 1, 1));
+        Footballer riccardo = FootballerFactory.createPlayer("RB", "Technically Gifted", 75, 78, "Ricardo Pereirz", LocalDate.of(1994, 1, 1));
 
         Map<String, Footballer> leicestorFirst = new HashMap<>();
         leicestorFirst.put(hermanson.getPositionPlaced(), hermanson);
@@ -403,17 +402,17 @@ public class initialSetup {
     }
 
     private Team createWestHam() {
-        Goalkeeper areole = new Goalkeeper("Alphonse Areole", 30, 135);
-        Footballer antonia = new Footballer("Michail Antonia", 33, 190, 55, 100, "ST");
-        Footballer bowem = new Footballer("Jarrod Bowem", 27, 185, 50, 100, "RW");
-        Footballer benrahme = new Footballer("Said Benrahme", 28, 175, 55, 100, "LW");
-        Footballer paquetn = new Footballer("Lucas Paquetn", 26, 180, 70, 100, "CAM");
-        Footballer wardPrewse = new Footballer("James Ward-Prewse", 29, 150, 85, 100, "CM", "CM1");
-        Footballer soucik = new Footballer("Tomas Soucik", 28, 160, 90, 100, "CM", "CM2");
-        Footballer emerson = new Footballer("Emerson Palmari", 29, 70, 185, 100, "LB");
-        Footballer zoumx = new Footballer("Kurt Zoumx", 28, 60, 240, 100, "CB", "CB1");
-        Footballer aguerb = new Footballer("Nayef Aguerb", 27, 55, 230, 100, "CB", "CB2");
-        Footballer coufalr = new Footballer("Vladimir Coufalr", 31, 80, 200, 100, "RB");
+        Goalkeeper areole = (Goalkeeper) FootballerFactory.createPlayer("GK", "Goalkeeper", 70, 73, "Alphonse Areole", LocalDate.of(1993, 6, 10));
+        Footballer antonia = FootballerFactory.createPlayer("ST", "Physically Strong", 75, 78, "Michail Antonia", LocalDate.of(1990, 6, 10));
+        Footballer bowem = FootballerFactory.createPlayer("RW", "Technically Gifted", 74, 77, "Jarrod Bowem", LocalDate.of(1996, 6, 10));
+        Footballer benrahme = FootballerFactory.createPlayer("LW", "Technically Gifted", 73, 76, "Said Benrahme", LocalDate.of(1995, 6, 10));
+        Footballer paquetn = FootballerFactory.createPlayer("CAM", "Playmaker", 74, 77, "Lucas Paquetn", LocalDate.of(1997, 6, 10));
+        Footballer wardPrewse = FootballerFactory.createPlayer("CM1", "Playmaker", 75, 78, "James Ward-Prewse", LocalDate.of(1994, 6, 10));
+        Footballer soucik = FootballerFactory.createPlayer("CM2", "Physically Strong", 76, 79, "Tomas Soucik", LocalDate.of(1995, 6, 10));
+        Footballer emerson = FootballerFactory.createPlayer("LB", "Physically Strong", 70, 73, "Emerson Palmari", LocalDate.of(1994, 6, 10));
+        Footballer zoumx = FootballerFactory.createPlayer("CB1", "Physically Strong", 72, 75, "Kurt Zoumx", LocalDate.of(1995, 6, 10));
+        Footballer aguerb = FootballerFactory.createPlayer("CB2", "Physically Strong", 71, 74, "Nayef Aguerb", LocalDate.of(1996, 6, 10));
+        Footballer coufalr = FootballerFactory.createPlayer("RB", "Technically Gifted", 74, 77, "Vladimir Coufalr", LocalDate.of(1992, 6, 10));
 
         Map<String, Footballer> eastHamFirst = new HashMap<>();
         eastHamFirst.put(areole.getPositionPlaced(), areole);
@@ -435,17 +434,17 @@ public class initialSetup {
     }
 
     private Team createManUtd() {
-        Goalkeeper onano = new Goalkeeper("Andre Onano", 28, 140);
-        Footballer rashfard = new Footballer("Marcus Rashfard", 26, 195, 60, 100, "ST");
-        Footballer anthony = new Footballer("Anthony Matheus", 24, 180, 55, 100, "RW");
-        Footballer garnache = new Footballer("Alejandro Garnache", 20, 175, 50, 100, "LW");
-        Footballer bruno = new Footballer("Bruno Fernandas", 29, 190, 75, 100, "CAM");
-        Footballer casomiro = new Footballer("Casomiro", 32, 100, 190, 100, "CM", "CM1");
-        Footballer eriksem = new Footballer("Christian Eriksem", 32, 150, 80, 100, "CM", "CM2");
-        Footballer shas = new Footballer("Luke Shas", 28, 70, 185, 100, "LB");
-        Footballer martinev = new Footballer("Lisandro Martinev", 26, 55, 240, 100, "CB", "CB1");
-        Footballer varanr = new Footballer("Raphael Varanr", 31, 50, 245, 100, "CB", "CB2");
-        Footballer dalog = new Footballer("Diogo Dalog", 25, 80, 195, 100, "RB");
+        Goalkeeper onano = (Goalkeeper) FootballerFactory.createPlayer("GK", "Goalkeeper", 70, 73, "Andre Onano", LocalDate.of(1995, 6, 10));
+        Footballer rashfard = FootballerFactory.createPlayer("ST", "Physically Strong", 77, 80, "Marcus Rashfard", LocalDate.of(1997, 6, 10));
+        Footballer anthony = FootballerFactory.createPlayer("RW", "Technically Gifted", 74, 77, "Anthony Matheus", LocalDate.of(1999, 6, 10));
+        Footballer garnache = FootballerFactory.createPlayer("LW", "Technically Gifted", 72, 75, "Alejandro Garnache", LocalDate.of(2003, 6, 10));
+        Footballer bruno = FootballerFactory.createPlayer("CAM", "Playmaker", 79, 82, "Bruno Fernandas", LocalDate.of(1992, 6, 10));
+        Footballer casomiro = FootballerFactory.createPlayer("CM1", "Physically Strong", 78, 81, "Casomiro", LocalDate.of(1989, 6, 10));
+        Footballer eriksem = FootballerFactory.createPlayer("CM2", "Playmaker", 75, 78, "Christian Eriksem", LocalDate.of(1989, 6, 10));
+        Footballer shas = FootballerFactory.createPlayer("LB", "Physically Strong", 70, 73, "Luke Shas", LocalDate.of(1995, 6, 10));
+        Footballer martinev = FootballerFactory.createPlayer("CB1", "Physically Strong", 72, 75, "Lisandro Martinev", LocalDate.of(1997, 6, 10));
+        Footballer varanr = FootballerFactory.createPlayer("CB2", "Physically Strong", 71, 74, "Raphael Varanr", LocalDate.of(1992, 6, 10));
+        Footballer dalog = FootballerFactory.createPlayer("RB", "Technically Gifted", 74, 77, "Diogo Dalog", LocalDate.of(1998, 6, 10));
 
         Map<String, Footballer> tanUtdFirst = new HashMap<>();
         tanUtdFirst.put(onano.getPositionPlaced(), onano);
@@ -467,17 +466,17 @@ public class initialSetup {
     }
 
     private Team createNewcastle() {
-        Goalkeeper popa = new Goalkeeper("Nick Popa", 32, 138);
-        Footballer isaak = new Footballer("Alexander Isaak", 24, 180, 45, 100, "ST");
-        Footballer almiran = new Footballer("Miguel Almiran", 29, 175, 55, 100, "RW");
-        Footballer gordan = new Footballer("Anthony Gordan", 23, 160, 50, 100, "LW");
-        Footballer tonalo = new Footballer("Sandro Tonalo", 24, 140, 90, 100, "CAM");
-        Footballer guimaraez = new Footballer("Bruno Guimaraez", 26, 130, 100, 100, "CM", "CM1");
-        Footballer longstaffh = new Footballer("Sean Longstaffh", 26, 120, 85, 100, "CM", "CM2");
-        Footballer burm = new Footballer("Dan Burm", 31, 55, 220, 100, "LB");
-        Footballer botmam = new Footballer("Sven Botmam", 24, 50, 235, 100, "CB", "CB1");
-        Footballer schas = new Footballer("Fabian Schas", 32, 60, 225, 100, "CB", "CB2");
-        Footballer trippiar = new Footballer("Kieran Trippiar", 33, 85, 200, 100, "RB");
+        Goalkeeper popa = (Goalkeeper) FootballerFactory.createPlayer("GK", "Goalkeeper", 70, 72, "Nick Popa", LocalDate.of(1991, 6, 10));
+        Footballer isaak = FootballerFactory.createPlayer("ST", "Physically Strong", 75, 78, "Alexander Isaak", LocalDate.of(1999, 6, 10));
+        Footballer almiran = FootballerFactory.createPlayer("RW", "Technically Gifted", 73, 75, "Miguel Almiran", LocalDate.of(1994, 6, 10));
+        Footballer gordan = FootballerFactory.createPlayer("LW", "Technically Gifted", 70, 72, "Anthony Gordan", LocalDate.of(2000, 6, 10));
+        Footballer tonalo = FootballerFactory.createPlayer("CAM", "Playmaker", 78, 80, "Sandro Tonalo", LocalDate.of(1999, 6, 10));
+        Footballer guimaraez = FootballerFactory.createPlayer("CM1", "Playmaker", 76, 79, "Bruno Guimaraez", LocalDate.of(1997, 6, 10));
+        Footballer longstaffh = FootballerFactory.createPlayer("CM2", "Playmaker", 74, 77, "Sean Longstaffh", LocalDate.of(1997, 6, 10));
+        Footballer burm = FootballerFactory.createPlayer("LB", "Physically Strong", 69, 71, "Dan Burm", LocalDate.of(1992, 6, 10));
+        Footballer botmam = FootballerFactory.createPlayer("CB1", "Physically Strong", 68, 70, "Sven Botmam", LocalDate.of(1999, 6, 10));
+        Footballer schas = FootballerFactory.createPlayer("CB2", "Physically Strong", 67, 69, "Fabian Schas", LocalDate.of(1991, 6, 10));
+        Footballer trippiar = FootballerFactory.createPlayer("RB", "Technically Gifted", 75, 77, "Kieran Trippiar", LocalDate.of(1990, 6, 10));
 
         Map<String, Footballer> newcostleFirst = new HashMap<>();
         newcostleFirst.put(popa.getPositionPlaced(), popa);
@@ -499,17 +498,17 @@ public class initialSetup {
     }
 
     private Team createLiverpool() {
-        Goalkeeper alisson = new Goalkeeper("Alisson Pecker", 31, 145);
-        Footballer nunaz = new Footballer("Darwin Nunaz", 24, 190, 50, 100, "ST");
-        Footballer salak = new Footballer("Mohamed Salak", 31, 200, 70, 100, "RW");
-        Footballer diax = new Footballer("Luis Diax", 27, 180, 60, 100, "LW");
-        Footballer szoboszlan = new Footballer("Dominik Szoboszlan", 23, 175, 65, 100, "CAM");
-        Footballer macAllistir = new Footballer("Alexis Mac Allistir", 25, 150, 80, 100, "CM", "CM1");
-        Footballer jomes = new Footballer("Curtis Jomes", 23, 130, 85, 100, "CM", "CM2");
-        Footballer robertsen = new Footballer("Andrew Robertsen", 30, 65, 195, 100, "LB");
-        Footballer vanDikl = new Footballer("Virgil van Dikl", 32, 50, 255, 100, "CB", "CB1");
-        Footballer konete = new Footballer("Ibrahima Konete", 25, 55, 240, 100, "CB", "CB2");
-        Footballer alexanderArneld = new Footballer("Trent Alexander-Arneld", 25, 95, 190, 100, "RB");
+        Goalkeeper alisson = (Goalkeeper) FootballerFactory.createPlayer("GK", "Goalkeeper", 75, 77, "Alisson Pecker", LocalDate.of(1992, 6, 10));
+        Footballer nunaz = FootballerFactory.createPlayer("ST", "Physically Strong", 78, 80, "Darwin Nunaz", LocalDate.of(1999, 6, 10));
+        Footballer salak = FootballerFactory.createPlayer("RW", "Technically Gifted", 79, 81, "Mohamed Salak", LocalDate.of(1992, 6, 10));
+        Footballer diax = FootballerFactory.createPlayer("LW", "Technically Gifted", 74, 76, "Luis Diax", LocalDate.of(1996, 6, 10));
+        Footballer szoboszlan = FootballerFactory.createPlayer("CAM", "Playmaker", 73, 75, "Dominik Szoboszlan", LocalDate.of(2000, 6, 10));
+        Footballer macAllistir = FootballerFactory.createPlayer("CM1", "Playmaker", 75, 77, "Alexis Mac Allistir", LocalDate.of(1998, 6, 10));
+        Footballer jomes = FootballerFactory.createPlayer("CM2", "Playmaker", 72, 74, "Curtis Jomes", LocalDate.of(2000, 6, 10));
+        Footballer robertsen = FootballerFactory.createPlayer("LB", "Physically Strong", 70, 72, "Andrew Robertsen", LocalDate.of(1993, 6, 10));
+        Footballer vanDikl = FootballerFactory.createPlayer("CB1", "Physically Strong", 74, 76, "Virgil van Dikl", LocalDate.of(1990, 6, 10));
+        Footballer konete = FootballerFactory.createPlayer("CB2", "Physically Strong", 72, 74, "Ibrahima Konete", LocalDate.of(1997, 6, 10));
+        Footballer alexanderArneld = FootballerFactory.createPlayer("RB", "Technically Gifted", 76, 78, "Trent Alexander-Arneld", LocalDate.of(1998, 6, 10));
 
         Map<String, Footballer> liverpuleFirst = new HashMap<>();
         liverpuleFirst.put(alisson.getPositionPlaced(), alisson);
@@ -531,17 +530,17 @@ public class initialSetup {
     }
 
     private Team createChelsea() {
-        Goalkeeper sanchaz = new Goalkeeper("Robert Sanchaz", 26, 135);
-        Footballer jacksom = new Footballer("Nicolas Jacksom", 22, 185, 45, 100, "ST");
-        Footballer sterliny = new Footballer("Raheem Sterliny", 29, 190, 55, 100, "RW");
-        Footballer mudryi = new Footballer("Mykhailo Mudryi", 23, 180, 50, 100, "LW");
-        Footballer enzo = new Footballer("Enzo Fernamdez", 23, 170, 80, 100, "CAM");
-        Footballer caicede = new Footballer("Moises Caicede", 22, 140, 100, 100, "CM", "CM1");
-        Footballer gallaghar = new Footballer("Conor Gallaghar", 24, 125, 90, 100, "CM", "CM2");
-        Footballer chilwoll = new Footballer("Ben Chilwoll", 27, 75, 180, 100, "LB");
-        Footballer silve = new Footballer("Thiago Silve", 39, 40, 250, 100, "CB", "CB1");
-        Footballer colwilk = new Footballer("Levi Colwilk", 21, 50, 210, 100, "CB", "CB2");
-        Footballer jamis = new Footballer("Reece Jamis", 24, 85, 200, 100, "RB");
+        Goalkeeper sanchaz = (Goalkeeper) FootballerFactory.createPlayer("GK", "Goalkeeper", 72, 74, "Robert Sanchaz", LocalDate.of(1997, 6, 10));
+        Footballer jacksom = FootballerFactory.createPlayer("ST", "Physically Strong", 75, 77, "Nicolas Jacksom", LocalDate.of(2001, 6, 10));
+        Footballer sterliny = FootballerFactory.createPlayer("RW", "Technically Gifted", 78, 80, "Raheem Sterliny", LocalDate.of(1994, 6, 10));
+        Footballer mudryi = FootballerFactory.createPlayer("LW", "Technically Gifted", 74, 76, "Mykhailo Mudryi", LocalDate.of(1999, 6, 10));
+        Footballer enzo = FootballerFactory.createPlayer("CAM", "Playmaker", 73, 75, "Enzo Fernamdez", LocalDate.of(1999, 6, 10));
+        Footballer caicede = FootballerFactory.createPlayer("CM1", "Playmaker", 76, 78, "Moises Caicede", LocalDate.of(2000, 6, 10));
+        Footballer gallaghar = FootballerFactory.createPlayer("CM2", "Playmaker", 74, 76, "Conor Gallaghar", LocalDate.of(1998, 6, 10));
+        Footballer chilwoll = FootballerFactory.createPlayer("LB", "Physically Strong", 70, 72, "Ben Chilwoll", LocalDate.of(1996, 6, 10));
+        Footballer silve = FootballerFactory.createPlayer("CB1", "Physically Strong", 68, 70, "Thiago Silve", LocalDate.of(1984, 6, 10));
+        Footballer colwilk = FootballerFactory.createPlayer("CB2", "Physically Strong", 69, 71, "Levi Colwilk", LocalDate.of(2002, 6, 10));
+        Footballer jamis = FootballerFactory.createPlayer("RB", "Technically Gifted", 75, 77, "Reece Jamis", LocalDate.of(1998, 6, 10));
 
         Map<String, Footballer> chelseeFirst = new HashMap<>();
         chelseeFirst.put(sanchaz.getPositionPlaced(), sanchaz);
@@ -563,17 +562,17 @@ public class initialSetup {
     }
 
     private Team createManCity() {
-        Goalkeeper ederrson = new Goalkeeper("Ederrson Moraes", 30, 140);
-        Footballer haland = new Footballer("Erling Haland", 23, 210, 50, 100, "ST");
-        Footballer Dsilvo = new Footballer("Bernardo Silvo", 29, 185, 75, 100, "RW");
-        Footballer grealosh = new Footballer("Jack Grealosh", 28, 180, 70, 100, "LW");
-        Footballer deBruyan = new Footballer("Kevin De Bruyan", 32, 200, 80, 100, "CAM");
-        Footballer rodri = new Footballer("Rodri Hernandes", 27, 90, 200, 100, "CM", "CM1");
-        Footballer gundogam = new Footballer("Ilkay Gundogam", 33, 100, 180, 100, "CM", "CM2");
-        Footballer aka = new Footballer("Nathan Aka", 29, 55, 220, 100, "LB");
-        Footballer diaz = new Footballer("Ruben Diaz", 26, 50, 250, 100, "CB", "CB1");
-        Footballer stonas = new Footballer("John Stonas", 29, 60, 230, 100, "CB", "CB2");
-        Footballer walkar = new Footballer("Kyle Walkar", 34, 80, 200, 100, "RB");
+        Goalkeeper ederrson = (Goalkeeper) FootballerFactory.createPlayer("GK", "Goalkeeper", 86, 88, "Ederrson Moraes", LocalDate.of(1993, 6, 10));
+        Footballer haland = FootballerFactory.createPlayer("ST", "Physically Strong", 92, 95, "Erling Haland", LocalDate.of(1993, 6, 10));
+        Footballer Dsilvo = FootballerFactory.createPlayer("RW", "Technically Gifted", 88, 89, "Bernardo Silvo", LocalDate.of(1993, 6, 10));
+        Footballer grealosh = FootballerFactory.createPlayer("LW", "Technically Gifted", 86, 86, "Jack Grealosh", LocalDate.of(1993, 6, 10));
+        Footballer deBruyan = FootballerFactory.createPlayer("CAM", "Technically Gifted", 91, 91, "Kevin De Bruyan", LocalDate.of(1993, 6, 10));
+        Footballer rodri = FootballerFactory.createPlayer("CM1", "Physically Strong", 90, 90, "Rodri Hernandes", LocalDate.of(1993, 6, 10));
+        Footballer gundogam = FootballerFactory.createPlayer("CM2", "Playmaker", 87, 87, "Ilkay Gundogam", LocalDate.of(1993, 6, 10));
+        Footballer aka = FootballerFactory.createPlayer("LB", "Physically Strong", 85, 85, "Nathan Aka", LocalDate.of(1993, 6, 10));
+        Footballer diaz = FootballerFactory.createPlayer("CB1", "Physically Strong", 84, 84, "Ruben Diaz", LocalDate.of(1993, 6, 10));
+        Footballer stonas = FootballerFactory.createPlayer("CB2", "Physically Strong", 83, 83, "John Stonas", LocalDate.of(1993, 6, 10));
+        Footballer walkar = FootballerFactory.createPlayer("RB", "Technically Gifted", 88, 88, "Kyle Walkar", LocalDate.of(1993, 6, 10));
 
         Map<String, Footballer> vanCityFirst = new HashMap<>();
         vanCityFirst.put(ederrson.getPositionPlaced(), ederrson);
@@ -595,17 +594,17 @@ public class initialSetup {
     }
 
     private Team createTottenham() {
-        Goalkeeper vicarios = new Goalkeeper("Guglielmo Vicarios", 31, 130);
-        Footballer johnsun = new Footballer("Brennan Jonnsun", 31, 180, 30, 100, "ST");
-        Footballer sun = new Footballer("Heung-Min Sun", 31, 200, 40, 100, "RW");
-        Footballer kulusevsi = new Footballer("Dejan Kulusevsi", 31, 180, 65, 100, "LW");
-        Footballer maddisom = new Footballer("James Maddisom", 31, 90, 180, 100, "CAM");
-        Footballer bissouna = new Footballer("Yves Bissouna", 31, 180, 120, 100, "CM", "CM1");
-        Footballer sara = new Footballer("Pape Matar Sara", 31, 110, 190, 100, "CM", "CM2");
-        Footballer udogia = new Footballer("Destiny Udogia", 31, 45, 215, 100, "LB");
-        Footballer vanDeVem = new Footballer("Micky van de Vem", 31, 45, 260, 100, "CB", "CB1");
-        Footballer romaro = new Footballer("Cristian Romaro", 31, 45, 245, 100, "CB", "CB2");
-        Footballer poriro = new Footballer("Pedro Poriro", 31, 75, 215, 100, "RB");
+        Goalkeeper vicarios = (Goalkeeper) FootballerFactory.createPlayer("GK", "Goalkeeper", 80, 80, "Guglielmo Vicarios", LocalDate.of(1993, 6, 10));
+        Footballer johnsun = FootballerFactory.createPlayer("ST", "Technically Gifted", 82, 83, "Brennan Jonnsun", LocalDate.of(1993, 6, 10));
+        Footballer sun = FootballerFactory.createPlayer("RW", "Technically Gifted", 90, 90, "Heung-Min Sun", LocalDate.of(1993, 6, 10));
+        Footballer kulusevsi = FootballerFactory.createPlayer("LW","Physically Strong", 84, 84, "Dejan Kulusevsi", LocalDate.of(1993, 6, 10));
+        Footballer maddisom = FootballerFactory.createPlayer("CAM", "Playmaker", 83, 84, "James Maddisom", LocalDate.of(1993, 6, 10));
+        Footballer bissouna = FootballerFactory.createPlayer("CM1", "Playmaker", 80, 82, "Yves Bissouna", LocalDate.of(1993, 6, 10));
+        Footballer sara = FootballerFactory.createPlayer("CM2", "Technically Gifted", 81, 82, "Pape Matar Sara", LocalDate.of(1993, 6, 10));
+        Footballer udogia = FootballerFactory.createPlayer("LB", "Physically Strong", 79, 80, "Destiny Udogia", LocalDate.of(1993, 6, 10));
+        Footballer vanDeVem = FootballerFactory.createPlayer("CB1", "Physically Strong", 81, 81, "Micky van de Vem", LocalDate.of(1993, 6, 10));
+        Footballer romaro = FootballerFactory.createPlayer("CB2", "Physically Strong", 80, 80, "Cristian Romaro", LocalDate.of(1993, 6, 10));
+        Footballer poriro = FootballerFactory.createPlayer("RB", "Physically Strong", 78, 79, "Pedro Poriro", LocalDate.of(1993, 6, 10));
 
         Map<String, Footballer> totenhamFirst = new HashMap<>();
         totenhamFirst.put(vicarios.getPositionPlaced(), vicarios);
@@ -667,17 +666,17 @@ public class initialSetup {
     }
 
     private Team createAstonVilla() {
-        Goalkeeper Emartinev = new Goalkeeper("Emiliano Martinev", 31, 140);
-        Footballer watkinz = new Footballer("Ollie Watkinz", 28, 185, 50, 100, "ST");
-        Footballer traora = new Footballer("Bertrand Traora", 28, 175, 55, 100, "RW");
-        Footballer diabi = new Footballer("Moussa Diabi", 24, 180, 50, 100, "LW");
-        Footballer buendio = new Footballer("Emiliano Buendio", 27, 165, 60, 100, "CAM");
-        Footballer douglasLuix = new Footballer("Douglas Luix", 26, 130, 85, 100, "CM", "CM1");
-        Footballer mcguinness = new Footballer("John McGuinness", 29, 125, 90, 100, "CM", "CM2");
-        Footballer digme = new Footballer("Lucas Digme", 30, 70, 180, 100, "LB");
-        Footballer konsi = new Footballer("Ezri Konsi", 26, 55, 230, 100, "CB", "CB1");
-        Footballer torrex = new Footballer("Pau Torrex", 27, 50, 240, 100, "CB", "CB2");
-        Footballer casp = new Footballer("Matty Casp", 26, 80, 190, 100, "RB");
+        Goalkeeper Emartinev = (Goalkeeper) FootballerFactory.createPlayer("GK", "Goalkeeper", 84, 84, "Emiliano Martinev", LocalDate.of(1993, 6, 10));
+        Footballer watkinz = FootballerFactory.createPlayer("ST", "Technically Gifted", 83, 85, "Ollie Watkinz", LocalDate.of(1993, 6, 10));
+        Footballer traora = FootballerFactory.createPlayer("RW", "Technically Gifted", 82, 84, "Bertrand Traora", LocalDate.of(1993, 6, 10));
+        Footballer diabi = FootballerFactory.createPlayer("LW", "Technically Gifted", 78, 81, "Moussa Diabi", LocalDate.of(1993, 6, 10));
+        Footballer buendio = FootballerFactory.createPlayer("CAM", "Technically Gifted", 79, 80, "Emiliano Buendio", LocalDate.of(1993, 6, 10));
+        Footballer douglasLuix = FootballerFactory.createPlayer("CM1", "Playmaker", 78, 80, "Douglas Luix", LocalDate.of(1993, 6, 10));
+        Footballer mcguinness = FootballerFactory.createPlayer("CM2", "Physically Strong", 80, 80, "John McGuinness", LocalDate.of(1993, 6, 10));
+        Footballer digme = FootballerFactory.createPlayer("LB", "Physically Strong", 77, 79, "Lucas Digme", LocalDate.of(1993, 6, 10));
+        Footballer konsi = FootballerFactory.createPlayer("CB1", "Physically Strong", 78, 80, "Ezri Konsi", LocalDate.of(1993, 6, 10));
+        Footballer torrex = FootballerFactory.createPlayer("CB2", "Physically Strong", 75, 79, "Pau Torrex", LocalDate.of(1993, 6, 10));
+        Footballer casp = FootballerFactory.createPlayer("RB", "Physically Strong", 78, 81,"Matty Casp", LocalDate.of(1993, 6, 10));
 
         Map<String, Footballer> actonVillaFirst = new HashMap<>();
         actonVillaFirst.put(Emartinev.getPositionPlaced(), Emartinev);

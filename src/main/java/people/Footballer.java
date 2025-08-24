@@ -2,6 +2,8 @@ package people;
 
 import entities.Team;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Map;
 
 public class Footballer extends Individual {
@@ -12,8 +14,6 @@ public class Footballer extends Individual {
     // Passing = Vision, Crossing, Short Passing, Long Passing, Curve
     // Value = Potential, Rating, Age (Derived from DOB)
 
-	public int attack;
-	public int defence;
 	public String likedPosition;
 	private Team team;
 	public String positionPlaced;
@@ -45,29 +45,6 @@ public class Footballer extends Individual {
 
     public Footballer() {};
 
-	public Footballer(String name, int age) {
-		super(name,age);
-		this.stamina = 100;
-	}
-	
-	public Footballer(String name, int age, int attack, int defence, int stamina, String position, String positionPlaced) {
-		super(name,age);
-		this.attack = attack;
-		this.defence = defence;
-		this.stamina = stamina;
-		this.likedPosition = position;
-		this.positionPlaced = positionPlaced;
-	}
-
-	public Footballer(String name, int age, int attack, int defence, int stamina, String position) {
-		super(name,age);
-		this.attack = attack;
-		this.defence = defence;
-		this.stamina = stamina;
-		this.likedPosition = position;
-		this.positionPlaced = position;
-	}
-
     public Footballer(String name, String positionPlaced, String playerType, Map<String, Integer> attributes) {
         super(name, attributes.get("Date Of Birth"));
         this.attributes = attributes;
@@ -82,22 +59,6 @@ public class Footballer extends Individual {
 	
 	public void removeStamina(int number) {
 		this.stamina -= number;
-	}
-
-	public int getAttack() {
-		return attack;
-	}
-
-	public void setAttack(int attack) {
-		this.attack = attack;
-	}
-
-	public int getDefence() {
-		return defence;
-	}
-
-	public void setDefence(int defence) {
-		this.defence = defence;
 	}
 
 	public void setStamina(int stamina) {
@@ -375,5 +336,31 @@ public class Footballer extends Individual {
 	public void setPositionPlaced(String positionPlaced) {
 		this.positionPlaced = positionPlaced;
 	}
+
+    public int getOVR() {
+        return attributes.get("Rating");
+    }
+
+    public int getDob() {
+        return attributes.get("Date Of Birth");
+    }
+
+    public int getCurrentAge(LocalDate asOfDate) {
+        int dobInt = getDob();
+
+        // Extract year, month, day from the int yyyymmdd
+        int year = dobInt / 10000;
+        int month = (dobInt % 10000) / 100;
+        int day = dobInt % 100;
+
+        LocalDate dob = LocalDate.of(year, month, day);
+
+        if (asOfDate.isBefore(dob)) {
+            throw new IllegalArgumentException("Date to calculate age cannot be before date of birth");
+        }
+
+        // Calculate age using Period.between
+        return Period.between(dob, asOfDate).getYears();
+    }
 
 }
