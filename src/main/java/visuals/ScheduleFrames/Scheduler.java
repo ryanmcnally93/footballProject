@@ -369,6 +369,11 @@ public class Scheduler extends GamePanel {
 		if (backgroundImage != null) {
 			g.drawImage(backgroundImage, 0, backgroundImageHeight, getWidth(), getHeight() + 205, this);
 		}
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.28f)); // 72% transparency
+        g2d.setColor(new Color(255, 255, 255)); // Change color if needed (white here)
+        g2d.fillRect(0, 0, getWidth(), getHeight());
+        g2d.dispose();
 	}
 
 	public void createLayoutsMapsAndPages() {

@@ -127,7 +127,7 @@ public class StartPage extends GamePanel {
 			g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
 		}
 		Graphics2D g2d = (Graphics2D) g.create();
-		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.45f)); // 55% transparency
+		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.43f)); // 57% transparency
 		g2d.setColor(new Color(255, 255, 255)); // Change color if needed (white here)
 		g2d.fillRect(0, 0, getWidth(), getHeight());
 		g2d.dispose();

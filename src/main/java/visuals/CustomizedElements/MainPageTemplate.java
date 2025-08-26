@@ -48,17 +48,19 @@ public class MainPageTemplate extends GamePanel {
         setVisible(true);
     }
 
-    public class HeaderPanel extends JPanel {
+    public class HeaderPanel extends Box {
 
         private JLabel title;
 
         public HeaderPanel() {
-            setLayout(new BorderLayout());
-            setBackground(Color.LIGHT_GRAY);
-            title = new JLabel("", SwingConstants.CENTER);
+            super(BoxLayout.X_AXIS);
+
+            title = new CustomizedTitle("", SwingConstants.CENTER);
             title.setFont(getBebasNeueFont());
-            title.setForeground(new Color(0, 51, 204));
+
+            add(Box.createHorizontalGlue());
             add(title, BorderLayout.CENTER);
+            add(Box.createHorizontalGlue());
         }
 
         public JLabel getTitle() {
@@ -74,7 +76,7 @@ public class MainPageTemplate extends GamePanel {
     public class FooterPanel extends JPanel {
 
         private CustomizedButton prevButton, nextButton;
-        private JPanel buttonBox, middleBox, backButtonBox;
+        private JPanel buttonBox, middleBox, backButtonBox, leftBlankBox;
         private JButton back;
 
         public FooterPanel() {
@@ -85,7 +87,7 @@ public class MainPageTemplate extends GamePanel {
             backButtonBox.setBackground(Color.LIGHT_GRAY);
             setPermanentWidth(backButtonBox, 115);
 
-            JPanel leftBlankBox = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            leftBlankBox = new JPanel(new FlowLayout(FlowLayout.LEFT));
             leftBlankBox.setBackground(Color.LIGHT_GRAY);
             setPermanentWidth(leftBlankBox, 115);
 
@@ -130,6 +132,14 @@ public class MainPageTemplate extends GamePanel {
             add(buttonBox, BorderLayout.CENTER);
 
             addKeyListeners();
+        }
+
+        public JPanel getLeftBlankBox() {
+            return leftBlankBox;
+        }
+
+        public void setLeftBlankBox(JPanel leftBlankBox) {
+            this.leftBlankBox = leftBlankBox;
         }
 
         public JPanel getMiddleBox() {

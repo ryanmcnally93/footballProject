@@ -44,4 +44,12 @@ public class RoundedPanel extends GamePanel {
             );
         }
     }
+
+    public Color getBorderColor() {
+        return borderColor;
+    }
+
+    public void setBorderColor(Color borderColor) {
+        this.borderColor = borderColor;
+    }
 }

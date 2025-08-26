@@ -113,6 +113,15 @@ public abstract class GamePanel extends JPanel {
         return scroller;
     }
 
+    public JScrollPane makeScroller(RoundedPanel container){
+        JScrollPane scroller = new JScrollPane(container);
+        scroller.getViewport().setBackground(Color.LIGHT_GRAY);
+        scroller.setBorder(null);
+        scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        return scroller;
+    }
+
     public void setPermanentWidthAndHeight(JButton box, int width, int height){
         box.setPreferredSize(new Dimension(width, height));
         box.setMinimumSize(new Dimension(width, height));
