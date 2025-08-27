@@ -618,21 +618,12 @@ public class Scheduler extends GamePanel {
 	public void showTodaysEvents(ArrayList<Events> todaysEvents){
 		System.out.println("Todays Events: " + todaysEvents);
 
-		// Find events to remove
-		ArrayList<Events> toRemove = new ArrayList<Events>();
-		for(Events event : todaysEvents) {
-			if(event.getRemoveEvent()){
-				toRemove.add(event);
-			}
-		}
-		// Remove them
-		for(Events event : toRemove){
-			todaysEvents.remove(event);
-			events.remove(event);
-		}
+		// Find events to remove and remove them
+        todaysEvents.removeIf(Events::getRemoveEvent);
+        events.removeIf(Events::getRemoveEvent);
 
 		// Let's look through todays events that are left
-		for(Events event : todaysEvents){
+		for(Events event : new ArrayList<>(todaysEvents)){
 			messageViewer.displayEvent(event);
 			messageViewer.removeAdvanceButton();
 
@@ -647,7 +638,7 @@ public class Scheduler extends GamePanel {
 			} else {
 				// This is not a match event
 				System.out.println("Adding a dismiss button");
-				messageViewer.addDismissButton(event, todaysEvents);
+                messageViewer.addDismissButton(event, todaysEvents);
 				break;
 			}
 		}

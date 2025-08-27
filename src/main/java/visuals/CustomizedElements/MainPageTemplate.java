@@ -48,19 +48,61 @@ public class MainPageTemplate extends GamePanel {
         setVisible(true);
     }
 
-    public class HeaderPanel extends Box {
+    public class HeaderPanel extends JPanel {
 
         private CustomizedTitle title;
 
         public HeaderPanel() {
-            super(BoxLayout.X_AXIS);
+            setLayout(new BorderLayout());
+
+            CustomizedTitle teamName = new CustomizedTitle("");
+            teamName.setFontSize(20);
+
+            if (scheduler != null && scheduler.getTeam() != null) {
+                teamName = new CustomizedTitle(scheduler.getTeam().getName());
+            }
+
+            JPanel leftPanel = new JPanel();
+            leftPanel.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 0));
+            leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+            leftPanel.setOpaque(false);
+            leftPanel.add(Box.createVerticalGlue());
+            leftPanel.add(teamName);
+            leftPanel.add(Box.createVerticalGlue());
+            setPermanentWidthAndHeight(leftPanel, 200, 120);
+
+            CustomizedTitle userName = new CustomizedTitle("");
+            userName.setFontSize(20);
+
+            if (scheduler != null && scheduler.getUser() != null) {
+                userName = new CustomizedTitle(scheduler.getUser().getName());
+            }
+            userName.setAlignmentX(Component.RIGHT_ALIGNMENT);
+
+            JPanel rightPanel = new JPanel();
+            rightPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 30));
+            rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+            rightPanel.setOpaque(false);
+            rightPanel.add(Box.createVerticalGlue());
+            rightPanel.add(userName);
+            rightPanel.add(Box.createVerticalGlue());
+            setPermanentWidthAndHeight(rightPanel, 200, 120);
 
             title = new CustomizedTitle("", SwingConstants.CENTER);
             title.setFont(getBebasNeueFont());
+            title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-            add(Box.createHorizontalGlue());
-            add(title, BorderLayout.CENTER);
-            add(Box.createHorizontalGlue());
+            JPanel titlePanel = new JPanel();
+            titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
+            titlePanel.setOpaque(false);
+            titlePanel.add(Box.createVerticalGlue());
+            titlePanel.add(title);
+            titlePanel.add(Box.createVerticalGlue());
+            setPermanentWidthAndHeight(titlePanel, 400, 120);
+
+            add(leftPanel, BorderLayout.WEST);
+            add(titlePanel, BorderLayout.CENTER);
+            add(rightPanel, BorderLayout.EAST);
         }
 
         public CustomizedTitle getTitle() {
@@ -69,8 +111,8 @@ public class MainPageTemplate extends GamePanel {
 
         public void setTitle(String title) {
             getTitle().setText(title);
-            getTitle().revalidate();
-            getTitle().repaint();
+            revalidate();
+            repaint();
         }
 
     }

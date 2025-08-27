@@ -16,34 +16,14 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
 
-public class FixturesPage extends MainPageTemplate {
+public class FixturesPage extends SinglePageTemplate {
 
-    private JPanel mainPanel;
-    private Box centerBox;
-    private JScrollPane scroller;
     private ArrayList<MatchLineOnFixturesPages> lines;
 
     public FixturesPage(Scheduler scheduler) {
         super(scheduler);
         getHeaderPanel().setTitle("My Fixtures");
         lines = new ArrayList<>();
-
-        JLayeredPane layeredPane = getLayeredPane();
-        mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
-
-        centerBox = Box.createVerticalBox();
-        mainPanel.add(centerBox);
-
-        scroller = makeScroller(centerBox);
-        mainPanel.add(scroller);
-
-        mainPanel.setBounds(35, 90, 730, 420);
-        mainPanel.setBackground(Color.LIGHT_GRAY);
-        layeredPane.add(mainPanel, JLayeredPane.DEFAULT_LAYER);
-
-        getFooterPanel().addBackButton();
-        updateBackButtonFunctionality();
 
         setVisible(true);
     }
@@ -94,10 +74,10 @@ public class FixturesPage extends MainPageTemplate {
         });
 
         for (MatchLineOnFixturesPages eachLine : lines) {
-            centerBox.add(eachLine);
+            getLeftBox().add(eachLine);
         }
-        centerBox.revalidate();
-        centerBox.repaint();
+        getLeftBox().revalidate();
+        getLeftBox().repaint();
     }
 
     public MatchLineOnFixturesPages getLine(Match match) {

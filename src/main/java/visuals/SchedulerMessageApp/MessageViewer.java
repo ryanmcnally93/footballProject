@@ -88,12 +88,7 @@ public class MessageViewer extends GamePanel {
                         CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
                     }
                     scheduler.getFixturesPage().getLine(event.getMatch()).gameComplete();
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            isWaitingForEventToUpdate = false;
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> addDismissButtonAfterChecks(event, todaysEvents));
                 }
 
                 event.setRemoveEvent(true);
@@ -211,16 +206,7 @@ public class MessageViewer extends GamePanel {
         // If we are adding a dismiss button after a match, we need to be sure
         // that all the background matches have been completed otherwise we will
         // reset the event, and still try to call event.getMatch() somewhere else
-        if (event.getType().equals("Result")) {
-            isWaitingForEventToUpdate = true;
-            Timer timer = new Timer(250, e -> {
-                if (!isWaitingForEventToUpdate) {
-                    ((Timer) e.getSource()).stop();
-                    addDismissButtonAfterChecks(event, todaysEvents);
-                }
-            });
-            timer.start();
-        } else {
+        if (!event.getType().equals("Result")) {
             addDismissButtonAfterChecks(event, todaysEvents);
         }
     }

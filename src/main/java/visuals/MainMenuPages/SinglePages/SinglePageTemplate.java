@@ -5,7 +5,6 @@ import visuals.CustomizedElements.RoundedPanel;
 import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
-import javax.swing.border.CompoundBorder;
 import java.awt.*;
 
 public class SinglePageTemplate extends MainPageTemplate {
@@ -18,7 +17,7 @@ public class SinglePageTemplate extends MainPageTemplate {
     public SinglePageTemplate(Scheduler scheduler) {
         super(scheduler);
         getHeaderPanel().setOpaque(false);
-        getHeaderPanel().setBounds(0, 0, 800, 155);
+        getHeaderPanel().setBounds(0, 0, 800, 120);
         getFooterPanel().setOpaque(false);
         getFooterPanel().getBackButtonBox().setOpaque(false);
         getFooterPanel().getLeftBlankBox().setOpaque(false);
@@ -55,6 +54,14 @@ public class SinglePageTemplate extends MainPageTemplate {
         updateBackButtonFunctionality();
 
         setVisible(true);
+    }
+
+    public RoundedPanel getLeftBox() {
+        return leftBox;
+    }
+
+    public void setLeftBox(RoundedPanel leftBox) {
+        this.leftBox = leftBox;
     }
 
     @Override
