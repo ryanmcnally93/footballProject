@@ -944,7 +944,6 @@ public class Scheduler extends GamePanel {
 	}
 
 	private void refreshDateLabelSize() {
-		todaysDate.addOpaqueBackground();
 		datePanel.setBounds(10, 532, (int) todaysDate.getPreferredSize().getWidth(), (int) todaysDate.getPreferredSize().getHeight());
 		todaysDate.setBounds(0,0,(int) todaysDate.getPreferredSize().getWidth(), (int) todaysDate.getPreferredSize().getHeight());
 

@@ -50,7 +50,7 @@ public class MainPageTemplate extends GamePanel {
 
     public class HeaderPanel extends Box {
 
-        private JLabel title;
+        private CustomizedTitle title;
 
         public HeaderPanel() {
             super(BoxLayout.X_AXIS);
@@ -63,12 +63,14 @@ public class MainPageTemplate extends GamePanel {
             add(Box.createHorizontalGlue());
         }
 
-        public JLabel getTitle() {
+        public CustomizedTitle getTitle() {
             return title;
         }
 
         public void setTitle(String title) {
             getTitle().setText(title);
+            getTitle().revalidate();
+            getTitle().repaint();
         }
 
     }

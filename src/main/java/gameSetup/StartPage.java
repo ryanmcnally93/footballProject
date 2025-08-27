@@ -149,7 +149,6 @@ public class StartPage extends GamePanel {
 		centerBox.revalidate();
 		centerBox.repaint();
         title.setText("Edit your name");
-		title.addOpaqueBackground();
     }
 
 	private void viewNamePickPage() {
@@ -238,7 +237,6 @@ public class StartPage extends GamePanel {
 		mainContentBox.repaint();
 
 		title.setText("Pick a country");
-		title.addOpaqueBackground();
 	}
 
 	public void countryPick(String country) {
@@ -288,7 +286,6 @@ public class StartPage extends GamePanel {
 		centerBox.revalidate();
 		centerBox.repaint();
 		title.setText("Edit your country");
-		title.addOpaqueBackground();
 	}
 
 	private void viewLeaguePickPage() {
@@ -326,7 +323,6 @@ public class StartPage extends GamePanel {
 		});
 
 		title.setText("Pick a League");
-		title.addOpaqueBackground();
 	}
 
 	public void leaguePick(String league) {
@@ -371,7 +367,6 @@ public class StartPage extends GamePanel {
 		centerBox.revalidate();
 		centerBox.repaint();
 		title.setText("Edit your league");
-		title.addOpaqueBackground();
 	}
 
 	private void viewTeamPickPage() {
@@ -411,7 +406,6 @@ public class StartPage extends GamePanel {
 		mainContentBox.repaint();
 
 		title.setText("Pick a Team");
-		title.addOpaqueBackground();
 	}
 
 	public void startGameWithChosenTeam(Team team) {

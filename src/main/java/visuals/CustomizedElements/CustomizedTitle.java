@@ -16,8 +16,6 @@ public class CustomizedTitle extends JLabel {
         setFont(GamePanel.getBebasNeueFont());
         setForeground(new Color(0x36, 0x45, 0x4F));
         setHorizontalAlignment(SwingConstants.CENTER);
-        setVerticalAlignment(SwingConstants.CENTER);
-        addOpaqueBackground();
     }
 
     public CustomizedTitle(String text) {
@@ -26,14 +24,12 @@ public class CustomizedTitle extends JLabel {
 
     public void setFontSize(float size) {
         setFont(GamePanel.getBebasNeueFontWithSize(size));
-        addOpaqueBackground();
     }
 
-    public void addOpaqueBackground() {
-        FontMetrics fm = getFontMetrics(getFont());
-        int textWidth = fm.stringWidth(getText());
-        int textHeight = fm.getHeight();
-        setPreferredSize(new Dimension(textWidth + 20,textHeight + 10));
+    @Override
+    public Dimension getPreferredSize() {
+        Dimension d = super.getPreferredSize();
+        return new Dimension(d.width + (padding*2), d.height + padding); // add padding
     }
 
     @Override
@@ -52,6 +48,12 @@ public class CustomizedTitle extends JLabel {
 
         g2d.dispose();
         super.paintComponent(g);
+    }
+
+    @Override
+    public Dimension getMaximumSize() {
+        Dimension d = getPreferredSize(); // use your padded height
+        return new Dimension(d.width, d.height); // lock width & height
     }
 
 }
