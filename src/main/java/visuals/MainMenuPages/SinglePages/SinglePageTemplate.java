@@ -64,6 +64,14 @@ public class SinglePageTemplate extends MainPageTemplate {
         this.leftBox = leftBox;
     }
 
+    public RoundedPanel getRightBox() {
+        return rightBox;
+    }
+
+    public void setRightBox(RoundedPanel rightBox) {
+        this.rightBox = rightBox;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
