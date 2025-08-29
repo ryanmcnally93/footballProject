@@ -363,4 +363,7 @@ public class Footballer extends Individual {
         return Period.between(dob, asOfDate).getYears();
     }
 
+    public String getSquadNo() {
+        return String.valueOf(attributes.get("Squad Number"));
+    }
 }

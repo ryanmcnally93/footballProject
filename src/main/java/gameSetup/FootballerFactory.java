@@ -16,7 +16,7 @@ public class FootballerFactory {
     private static final List<String> TECHNICAL_ATTRIBUTES = List.of("Finishing", "Shot Power", "Long Shots", "Volleys", "Attacking Positioning", "Heading Accuracy", "Penalties", "Crossing", "Short Passing", "Long Passing", "Curve", "Ball Control", "Free Kick Accuracy", "Defensive Positioning", "Standing Tackle", "Sliding Tackle");
     private static final List<String> MENTAL_ATTRIBUTES = List.of("Vision", "Composure", "Reactions", "Interceptions", "Aggression");
     private static final List<String> GOALKEEPER_ATTRIBUTES = List.of("GK Diving", "GK Handling", "GK Kicking", "GK Positioning", "GK Reflexes", "GK 1-on-1");
-    private static final List<String> MAIN_ATTRIBUTES = List.of("Rating", "Potential", "Wage", "Date Of Birth", "Height", "Weight", "Contract Length", "Form", "Morale", "Injury Proneness");
+    private static final List<String> MAIN_ATTRIBUTES = List.of("Rating", "Potential", "Wage", "Date Of Birth", "Height", "Weight", "Contract Length", "Form", "Morale", "Injury Proneness", "Squad Number");
 
     // do these weight distributions reflect our OVR weights correctly? Or will we create a player with an under or overwhelming ovr?
 
@@ -385,7 +385,7 @@ public class FootballerFactory {
     );
 
     // Type is doing nothing for now
-    public static Footballer createPlayer(String position, String type, int rating, int potential, String name, LocalDate dateOfBirth) {
+    public static Footballer createPlayer(String position, String type, int rating, int potential, String name, LocalDate dateOfBirth, int squadNo) {
         Map<String, Double> ovrWeights = getOvrWeightsForPosition(position); // Must total 1.0
         Map<String, Double> distWeights = getWeightsForPosition(position);   // For realism
         Map<String, Integer> attributes = new HashMap<>();
@@ -436,7 +436,7 @@ public class FootballerFactory {
             ratingObtained = result == rating;
         }
 
-        setMainAttributes(attributes, rating, potential, dateOfBirth);
+        setMainAttributes(attributes, rating, potential, dateOfBirth, squadNo);
 
         if (position.equals("GK")) {
             return new Goalkeeper(name, attributes);
@@ -445,7 +445,7 @@ public class FootballerFactory {
         return new Footballer(name, position, type, attributes);
     }
 
-    private static void setMainAttributes(Map<String, Integer> attributes, int rating, int potential, LocalDate dateOfBirth) {
+    private static void setMainAttributes(Map<String, Integer> attributes, int rating, int potential, LocalDate dateOfBirth, int squadNo) {
         // We can add wage, height, weight, contract length and injury proneness as parameters later
         attributes.put(MAIN_ATTRIBUTES.get(0), rating);
         attributes.put(MAIN_ATTRIBUTES.get(1), potential);
@@ -456,6 +456,7 @@ public class FootballerFactory {
         attributes.put(MAIN_ATTRIBUTES.get(5), 160);
         attributes.put(MAIN_ATTRIBUTES.get(6), 24);
         attributes.put(MAIN_ATTRIBUTES.get(9), 10);
+        attributes.put(MAIN_ATTRIBUTES.get(10), squadNo);
     }
 
     // For checking our ratings later on

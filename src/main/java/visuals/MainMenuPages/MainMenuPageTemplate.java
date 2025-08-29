@@ -2,6 +2,7 @@ package visuals.MainMenuPages;
 
 import entities.UsersMatch;
 import visuals.CustomizedElements.CardmapMainPageTemplate;
+import visuals.CustomizedElements.CustomizedButton;
 import visuals.MatchPages.MatchFrames;
 import visuals.ScheduleFrames.Events;
 import visuals.ScheduleFrames.Scheduler;
@@ -30,7 +31,7 @@ public class MainMenuPageTemplate extends CardmapMainPageTemplate {
 
     @Override
     public void updateBackButtonFunctionality(){
-        JButton back = getFooterPanel().getBackButton();
+        CustomizedButton back = getFooterPanel().getBackButton();
         if (event == null) {
             if (back.getMouseListeners().length == 1) {
                 getFooterPanel().addBackButtonListener(back);
@@ -50,7 +51,7 @@ public class MainMenuPageTemplate extends CardmapMainPageTemplate {
         }
     }
 
-    public void addPlayFunctionalityToBackButton(JButton back) {
+    public void addPlayFunctionalityToBackButton(CustomizedButton back) {
         back.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -86,7 +87,7 @@ public class MainMenuPageTemplate extends CardmapMainPageTemplate {
     }
 
     public void setEvent(Events event) {
-        JButton back = getFooterPanel().getBackButton();
+        CustomizedButton back = getFooterPanel().getBackButton();
         if (event != null) {
             this.event = event;
             back.setText("Kick Off");

@@ -121,7 +121,7 @@ public class MainPageTemplate extends GamePanel {
 
         private CustomizedButton prevButton, nextButton;
         private JPanel buttonBox, middleBox, backButtonBox, leftBlankBox;
-        private JButton back;
+        private CustomizedButton back;
 
         public FooterPanel() {
             setLayout(new BorderLayout());
@@ -138,7 +138,7 @@ public class MainPageTemplate extends GamePanel {
             add(backButtonBox, BorderLayout.EAST);
             add(leftBlankBox, BorderLayout.WEST);
 
-            back = new JButton("Back");
+            back = new CustomizedButton("Back");
         }
 
         public void addBackButton() {
@@ -147,7 +147,7 @@ public class MainPageTemplate extends GamePanel {
             }
         }
 
-        public void addBackButtonListener(JButton back) {
+        public void addBackButtonListener(CustomizedButton back) {
             back.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -222,11 +222,11 @@ public class MainPageTemplate extends GamePanel {
             return prevButton;
         }
 
-        public JButton getBackButton() {
+        public CustomizedButton getBackButton() {
             return back;
         }
 
-        public void setBackButton(JButton back) {
+        public void setBackButton(CustomizedButton back) {
             this.back = back;
         }
 
@@ -236,7 +236,7 @@ public class MainPageTemplate extends GamePanel {
     }
 
     public void updateBackButtonFunctionality() {
-        JButton back = getFooterPanel().getBackButton();
+        CustomizedButton back = getFooterPanel().getBackButton();
         if (back.getMouseListeners().length == 1) {
             getFooterPanel().addBackButtonListener(back);
         } else {

@@ -16,6 +16,8 @@ public class CustomizedButton extends JButton {
 	private Color primaryColor = Color.WHITE;
 	private Color secondaryColor = getCharcoal();
 	private Color hoverColor;
+    private int arcWidth = 10;
+    private int arcHeight = 10;
 
 	public CustomizedButton(String text) {
 		super(text);
@@ -76,6 +78,7 @@ public class CustomizedButton extends JButton {
 				}
 				setBackground(secondaryColor);
 				hoverColor = primaryColor;
+                childMouseEntered();
 				revalidate();
 				repaint();
 			}
@@ -91,25 +94,31 @@ public class CustomizedButton extends JButton {
 				}
 				setBackground(primaryColor);
 				hoverColor = secondaryColor;
+                childMouseExited();
 				revalidate();
 				repaint();
 			}
 		});
 	}
 
-	@Override
+    protected void childMouseExited() {}
+
+    protected void childMouseEntered() {}
+
+    @Override
 	protected void paintComponent(Graphics g) {
+        super.paintComponent(g); // first
 		Graphics2D g2 = (Graphics2D) g.create();
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		// Draw background
 		g2.setColor(getBackground());
-		g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+		g2.fillRoundRect(0, 0, getWidth(), getHeight(), arcWidth, arcHeight);
 
 		// Draw border
 		g2.setColor(hoverColor);
 		g2.setStroke(new BasicStroke(2));  // Set border thickness
-		g2.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, 10, 10);
+		g2.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, arcWidth, arcHeight);
 
 		g2.dispose();
 		super.paintComponent(g);
@@ -131,4 +140,36 @@ public class CustomizedButton extends JButton {
 		this.revalidate();
 		this.repaint();
 	}
+
+    public int getArcWidth() {
+        return arcWidth;
+    }
+
+    public void setArcWidth(int arcWidth) {
+        this.arcWidth = arcWidth;
+    }
+
+    public int getArcHeight() {
+        return arcHeight;
+    }
+
+    public void setArcHeight(int arcHeight) {
+        this.arcHeight = arcHeight;
+    }
+
+    public Color getPrimaryColor() {
+        return primaryColor;
+    }
+
+    public void setPrimaryColor(Color primaryColor) {
+        this.primaryColor = primaryColor;
+    }
+
+    public Color getSecondaryColor() {
+        return secondaryColor;
+    }
+
+    public void setSecondaryColor(Color secondaryColor) {
+        this.secondaryColor = secondaryColor;
+    }
 }
