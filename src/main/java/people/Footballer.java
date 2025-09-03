@@ -366,4 +366,8 @@ public class Footballer extends Individual {
     public String getSquadNo() {
         return String.valueOf(attributes.get("Squad Number"));
     }
+
+    public String getStandingTackle() {
+        return String.valueOf(attributes.get("Standing Tackle"));
+    }
 }

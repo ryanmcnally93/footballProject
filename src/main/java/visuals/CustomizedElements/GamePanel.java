@@ -146,7 +146,7 @@ public abstract class GamePanel extends JPanel {
         box.setMaximumSize(new Dimension(width, height));
     }
 
-    public void setPermanentWidth(JComponent box, int width){
+    public static void setPermanentWidth(JComponent box, int width){
         box.setPreferredSize(new Dimension(width, box.getPreferredSize().height));
         box.setMinimumSize(new Dimension(width, box.getMinimumSize().height));
         box.setMaximumSize(new Dimension(width, box.getMaximumSize().height));

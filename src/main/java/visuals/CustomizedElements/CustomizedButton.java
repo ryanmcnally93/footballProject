@@ -18,6 +18,7 @@ public class CustomizedButton extends JButton {
 	private Color hoverColor;
     private int arcWidth = 10;
     private int arcHeight = 10;
+    private boolean selected = false;
 
 	public CustomizedButton(String text) {
 		super(text);
@@ -69,6 +70,12 @@ public class CustomizedButton extends JButton {
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
+                hoverColor = primaryColor;
+                revalidate();
+                repaint();
+                if (isSelected()) {
+                    return;
+                }
 				if (hasImage) {
 					ImageIcon newIcon = getOppositeImage(icon);
 					setIcon(newIcon);
@@ -77,7 +84,6 @@ public class CustomizedButton extends JButton {
 					setForeground(primaryColor);
 				}
 				setBackground(secondaryColor);
-				hoverColor = primaryColor;
                 childMouseEntered();
 				revalidate();
 				repaint();
@@ -85,6 +91,12 @@ public class CustomizedButton extends JButton {
 
 			@Override
 			public void mouseExited(MouseEvent e) {
+                hoverColor = secondaryColor;
+                revalidate();
+                repaint();
+                if (isSelected()) {
+                    return;
+                }
 				if (hasImage) {
 					ImageIcon newIcon = getOppositeImage(icon);
 					setIcon(newIcon);
@@ -93,7 +105,6 @@ public class CustomizedButton extends JButton {
 					setForeground(secondaryColor);
 				}
 				setBackground(primaryColor);
-				hoverColor = secondaryColor;
                 childMouseExited();
 				revalidate();
 				repaint();
@@ -171,5 +182,13 @@ public class CustomizedButton extends JButton {
 
     public void setSecondaryColor(Color secondaryColor) {
         this.secondaryColor = secondaryColor;
+    }
+
+    public void setSelected() {
+        selected = true;
+    }
+
+    public boolean isSelected() {
+        return selected;
     }
 }

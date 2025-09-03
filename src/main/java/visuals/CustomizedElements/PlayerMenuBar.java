@@ -3,26 +3,40 @@ package visuals.CustomizedElements;
 import people.Footballer;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-import static visuals.CustomizedElements.GamePanel.getBebasNeueFontWithSize;
-import static visuals.CustomizedElements.GamePanel.getCharcoal;
+import static visuals.CustomizedElements.GamePanel.*;
 
 public class PlayerMenuBar extends CustomizedButton {
 
+    private Footballer player;
     private JLabel squadNo;
+    private JLabel playerName;
 
-    public PlayerMenuBar(Footballer player) {
-        super("       " + player.getName().charAt(0) + " " + player.getName().substring(player.getName().lastIndexOf(' ') + 1), 20);
-        if(Integer.parseInt(player.getSquadNo()) < 10) {
-            squadNo = new JLabel(" " + player.getSquadNo());
-        } else {
-            squadNo = new JLabel(player.getSquadNo());
+    public PlayerMenuBar(Footballer player, String title) {
+        super("", 20);
+        this.player = player;
+        setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0)); // left align, 5px gap
+
+        squadNo = new JLabel(player.getSquadNo());
+        playerName = new JLabel(title);
+
+        if (player.getSquadNo().length() > 1) {
+            squadNo.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 2)); // top, left, bottom, right
         }
+
         squadNo.setFont(getBebasNeueFontWithSize(20));
         squadNo.setForeground(getSecondaryColor());
-        add(squadNo);
-        setHorizontalAlignment(SwingConstants.LEFT);
+        squadNo.setHorizontalAlignment(SwingConstants.CENTER);
+        setPermanentWidth(squadNo, 25);
+
+        playerName.setFont(getBebasNeueFontWithSize(20));
+        playerName.setForeground(getSecondaryColor());
+        playerName.setHorizontalAlignment(SwingConstants.LEFT);
+
+        add(squadNo, BorderLayout.WEST);
+        add(playerName, BorderLayout.CENTER);
         setArcHeight(20);
         setArcWidth(20);
         revalidate();
@@ -46,11 +60,29 @@ public class PlayerMenuBar extends CustomizedButton {
     @Override
     protected void childMouseExited() {
         squadNo.setForeground(getSecondaryColor());
+        playerName.setForeground(getSecondaryColor());
     }
 
     @Override
     protected void childMouseEntered() {
         squadNo.setForeground(getPrimaryColor());
+        playerName.setForeground(getPrimaryColor());
+    }
+
+    public Footballer getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Footballer player) {
+        this.player = player;
+    }
+
+    public void setAsSelected() {
+        setSelected();
+        // This should be done ideally within the CustomisedButton class
+        squadNo.setForeground(getPrimaryColor());
+        playerName.setForeground(getPrimaryColor());
+        setBackground(getSecondaryColor());
     }
 
 }

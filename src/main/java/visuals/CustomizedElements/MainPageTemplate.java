@@ -58,8 +58,8 @@ public class MainPageTemplate extends GamePanel {
             CustomizedTitle teamName = new CustomizedTitle("");
             teamName.setFontSize(20);
 
-            if (scheduler != null && scheduler.getTeam() != null) {
-                teamName = new CustomizedTitle(scheduler.getTeam().getName());
+            if (getScheduler() != null && getScheduler().getTeam() != null) {
+                teamName = new CustomizedTitle(getScheduler().getTeam().getName());
             }
 
             JPanel leftPanel = new JPanel();
@@ -74,8 +74,8 @@ public class MainPageTemplate extends GamePanel {
             CustomizedTitle userName = new CustomizedTitle("");
             userName.setFontSize(20);
 
-            if (scheduler != null && scheduler.getUser() != null) {
-                userName = new CustomizedTitle(scheduler.getUser().getName());
+            if (getScheduler() != null && getScheduler().getUser() != null) {
+                userName = new CustomizedTitle(getScheduler().getUser().getName());
             }
             userName.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
