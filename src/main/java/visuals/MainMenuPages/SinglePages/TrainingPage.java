@@ -1,7 +1,7 @@
 package visuals.MainMenuPages.SinglePages;
 
 import people.Footballer;
-import visuals.CustomizedElements.PlayerAttributeBox;
+import visuals.CustomizedElements.PlayerAttributeLine;
 import visuals.CustomizedElements.PlayerMenuBar;
 import visuals.ScheduleFrames.Scheduler;
 
@@ -15,6 +15,7 @@ public class TrainingPage extends SinglePageTemplate {
 
     private Scheduler scheduler;
     private Footballer selectedPlayer;
+    private PlayerAttributeLine firstLine, secondLine, thirdLine, fourthLine;
 
     public TrainingPage(Scheduler scheduler) {
         super(scheduler);
@@ -25,10 +26,30 @@ public class TrainingPage extends SinglePageTemplate {
         PlayerMenuBar firstPlayerBar = (PlayerMenuBar) getRightBox().getComponent(0);
         firstPlayerBar.setAsSelected(true);
         selectedPlayer = firstPlayerBar.getPlayer();
-        setupMiddleContent();
+
+        setupAttributesOnLeft();
+        populatePlayerAttributes();
 
         addKeyListeners();
         setVisible(true);
+    }
+
+    private void setupAttributesOnLeft() {
+        getLeftBox().setLayout(new BoxLayout(getLeftBox(), BoxLayout.X_AXIS));
+        firstLine = new PlayerAttributeLine();
+        secondLine = new PlayerAttributeLine();
+        thirdLine = new PlayerAttributeLine();
+        fourthLine = new PlayerAttributeLine();
+
+        getLeftBox().add(Box.createHorizontalStrut(50));
+        getLeftBox().add(firstLine);
+        getLeftBox().add(Box.createHorizontalStrut(20));
+        getLeftBox().add(secondLine);
+        getLeftBox().add(Box.createHorizontalStrut(20));
+        getLeftBox().add(thirdLine);
+        getLeftBox().add(Box.createHorizontalStrut(20));
+        getLeftBox().add(fourthLine);
+        getLeftBox().add(Box.createHorizontalStrut(50));
     }
 
     @Override
@@ -84,16 +105,13 @@ public class TrainingPage extends SinglePageTemplate {
 
                 // Update reference
                 selectedPlayer = nextBar.getPlayer();
-                setupMiddleContent();
+                populatePlayerAttributes();
                 break;
             }
         }
     }
 
-    private void setupMiddleContent() {
-        getLeftBox().removeAll();
-        getLeftBox().setLayout(new BoxLayout(getLeftBox(), BoxLayout.Y_AXIS));
-        // Grab players position first, this needs to be in attributes instead
+    private void populatePlayerAttributes() {
         String position = selectedPlayer.getPositionPlaced();
         if (position.equals("RB") || position.equals("CB1") || position.equals("CB2") || position.equals("LB")) {
             addDefenderAttributes();
@@ -106,28 +124,24 @@ public class TrainingPage extends SinglePageTemplate {
         } else {
             throw new IllegalArgumentException("Invalid position: " + position);
         }
-            getLeftBox().revalidate();
+        getLeftBox().revalidate();
         getLeftBox().repaint();
     }
 
     private void addGoalkeeperAttributes() {
-        PlayerAttributeBox playerAttribute = new PlayerAttributeBox("GK Diving", selectedPlayer.getGkDiving());
-        getLeftBox().add(playerAttribute);
+        firstLine.changeContent(selectedPlayer.getGkAttributes());
     }
 
     private void addAttackerAttributes() {
-        PlayerAttributeBox playerAttribute = new PlayerAttributeBox("Finishing", selectedPlayer.getFinishing());
-        getLeftBox().add(playerAttribute);
+        firstLine.changeContent(selectedPlayer.getMovementAttributes());
     }
 
     private void addMidfielderAttributes() {
-        PlayerAttributeBox playerAttribute = new PlayerAttributeBox("Short Passing", selectedPlayer.getShortPassing());
-        getLeftBox().add(playerAttribute);
+        firstLine.changeContent(selectedPlayer.getMovementAttributes());
     }
 
     private void addDefenderAttributes() {
-        PlayerAttributeBox playerAttribute = new PlayerAttributeBox("Standing Tackle", selectedPlayer.getStandingTackle());
-        getLeftBox().add(playerAttribute);
+        firstLine.changeContent(selectedPlayer.getMovementAttributes());
     }
 
     private void setupPlayerListOnRight() {

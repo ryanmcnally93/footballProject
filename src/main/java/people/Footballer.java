@@ -4,7 +4,10 @@ import entities.Team;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Footballer extends Individual {
 
@@ -379,7 +382,33 @@ public class Footballer extends Individual {
         return String.valueOf(attributes.get("Finishing"));
     }
 
-    public String getGkDiving() {
-        return String.valueOf(attributes.get("GK Diving"));
+    public Map<String, String> getMovementAttributes() {
+        return Stream.of(
+                        "Sprint Speed",
+                        "Acceleration",
+                        "Agility",
+                        "Balance",
+                        "Ball Control"
+                )
+                .filter(attributes::containsKey)
+                .collect(Collectors.toMap(
+                        key -> key,
+                        key -> String.valueOf(attributes.get(key))
+                ));
+    }
+
+    public Map<String, String> getGkAttributes() {
+        return Stream.of(
+                "GK Diving",
+                        "GK Handling",
+                        "GK Kicking",
+                        "GK Positioning",
+                        "GK Reflexes"
+                )
+                .filter(attributes::containsKey)
+                .collect(Collectors.toMap(
+                        key -> key,
+                        key -> String.valueOf(attributes.get(key))
+                ));
     }
 }

@@ -63,4 +63,12 @@ public class CustomProgressBar extends JProgressBar {
     public void setBorder(boolean border) {
         this.border = border;
     }
+
+    public Color getOne() {
+        return one;
+    }
+
+    public void setOne(Color one) {
+        this.one = one;
+    }
 }
