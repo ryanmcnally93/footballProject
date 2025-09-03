@@ -366,20 +366,13 @@ public class Footballer extends Individual {
         return Period.between(dob, asOfDate).getYears();
     }
 
+    private int getDribbling() {
+        int overall = attributes.get("Agility") + attributes.get("Balance") + attributes.get("Ball Control") + attributes.get("Composure") + attributes.get("Reactions");
+        return overall / 5;
+    }
+
     public String getSquadNo() {
         return String.valueOf(attributes.get("Squad Number"));
-    }
-
-    public String getStandingTackle() {
-        return String.valueOf(attributes.get("Standing Tackle"));
-    }
-
-    public String getShortPassing() {
-        return String.valueOf(attributes.get("Short Passing"));
-    }
-
-    public String getFinishing() {
-        return String.valueOf(attributes.get("Finishing"));
     }
 
     public Map<String, String> getMovementAttributes() {
@@ -404,6 +397,95 @@ public class Footballer extends Individual {
                         "GK Kicking",
                         "GK Positioning",
                         "GK Reflexes"
+                )
+                .filter(attributes::containsKey)
+                .collect(Collectors.toMap(
+                        key -> key,
+                        key -> String.valueOf(attributes.get(key))
+                ));
+    }
+
+    public Map<String, String> getPassingAttributes() {
+        return Stream.of(
+                        "Short Passing",
+                        "Long Passing",
+                        "Crossing",
+                        "Vision",
+                        "Curve"
+                )
+                .filter(attributes::containsKey)
+                .collect(Collectors.toMap(
+                        key -> key,
+                        key -> String.valueOf(attributes.get(key))
+                ));
+    }
+
+    public Map<String, String> getGeneralAttributes() {
+        return Stream.of(
+                        "Stamina",
+                        "Strength",
+                        "Volleys",
+                        "Composure",
+                        "Heading Accuracy"
+                )
+                .filter(attributes::containsKey)
+                .collect(Collectors.toMap(
+                        key -> key,
+                        key -> String.valueOf(attributes.get(key))
+                ));
+    }
+
+    public Map<String, String> getAttackingAttributes() {
+        return Stream.of(
+                        "Finishing",
+                        "Shot Power",
+                        "Attacking Positioning",
+                        "Dribbling",
+                        "Long Shots"
+                )
+                .collect(Collectors.toMap(
+                        key -> key,
+                        key -> {
+                            if ("Dribbling".equals(key)) {
+                                return String.valueOf(getDribbling());
+                            } else {
+                                return String.valueOf(attributes.get(key));
+                            }
+                        }
+                ));
+    }
+
+    public Map<String, String> getDefendingAttributes() {
+        return Stream.of(
+                        "Standing Tackle",
+                        "Sliding Tackle",
+                        "Defensive Positioning",
+                        "Aggression",
+                        "Interceptions"
+                )
+                .filter(attributes::containsKey)
+                .collect(Collectors.toMap(
+                        key -> key,
+                        key -> String.valueOf(attributes.get(key))
+                ));
+    }
+
+    public Map<String, String> getSetPieceAttributes() {
+        return Stream.of(
+                        "Free Kick Accuracy",
+                        "Penalties"
+                )
+                .filter(attributes::containsKey)
+                .collect(Collectors.toMap(
+                        key -> key,
+                        key -> String.valueOf(attributes.get(key))
+                ));
+    }
+
+    public Map<String, String> getLastAttributes() {
+        return Stream.of(
+                        "Reactions",
+                        "GK 1-on-1"
                 )
                 .filter(attributes::containsKey)
                 .collect(Collectors.toMap(

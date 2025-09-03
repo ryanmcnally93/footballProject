@@ -46,7 +46,7 @@ public class PlayerAttributeBox extends Box {
     public void setAttribute(String attributeName, String value) {
         stat.setText(value);
 
-        if (attributeName.length() > 9) {
+        if (attributeName.length() > 10) {
             attributeName = getShorterAttributeName(attributeName);
         }
 
@@ -62,10 +62,10 @@ public class PlayerAttributeBox extends Box {
             return "Sl. Tackle";
         } else if (attributeName.equals("Short Passing")) {
             return "Short Pass";
+        } else if (attributeName.equals("Long Passing")) {
+            return "Long Pass";
         } else if(attributeName.equals("GK Reflexes")) {
             return "GK Reflex";
-        } else if(attributeName.equals("GK Kicking")) {
-            return "GK Kick";
         } else if(attributeName.equals("GK Handling")) {
             return "GK Handle";
         } else if (attributeName.equals("GK Positioning")) {
@@ -76,6 +76,14 @@ public class PlayerAttributeBox extends Box {
             return "Accelerate";
         } else if (attributeName.equals("Sprint Speed")) {
             return "Speed";
+        } else if (attributeName.equals("Attacking Positioning")) {
+            return "Att. Pos.";
+        } else if (attributeName.equals("Defensive Positioning")) {
+            return "Def. Pos.";
+        } else if (attributeName.equals("Interceptions")) {
+            return "Intercept";
+        } else if (attributeName.equals("Heading Accuracy")) {
+            return "Heading";
         } else {
             throw new IllegalArgumentException("Invalid attribute name: " + attributeName);
         }

@@ -130,18 +130,26 @@ public class TrainingPage extends SinglePageTemplate {
 
     private void addGoalkeeperAttributes() {
         firstLine.changeContent(selectedPlayer.getGkAttributes(), "Goalkeeper");
+        secondLine.changeContent(selectedPlayer.getPassingAttributes(), "Passing");
+        thirdLine.changeContent(selectedPlayer.getGeneralAttributes(), "General");
     }
 
     private void addAttackerAttributes() {
-        firstLine.changeContent(selectedPlayer.getMovementAttributes(), "Movement");
+        firstLine.changeContent(selectedPlayer.getAttackingAttributes(), "Attack");
+        secondLine.changeContent(selectedPlayer.getMovementAttributes(), "Movement");
+        thirdLine.changeContent(selectedPlayer.getGeneralAttributes(), "General");
     }
 
     private void addMidfielderAttributes() {
         firstLine.changeContent(selectedPlayer.getMovementAttributes(), "Movement");
+        secondLine.changeContent(selectedPlayer.getPassingAttributes(), "Passing");
+        thirdLine.changeContent(selectedPlayer.getGeneralAttributes(), "General");
     }
 
     private void addDefenderAttributes() {
-        firstLine.changeContent(selectedPlayer.getMovementAttributes(), "Movement");
+        firstLine.changeContent(selectedPlayer.getDefendingAttributes(), "Defence");
+        secondLine.changeContent(selectedPlayer.getPassingAttributes(), "Passing");
+        thirdLine.changeContent(selectedPlayer.getGeneralAttributes(), "General");
     }
 
     private void setupPlayerListOnRight() {
