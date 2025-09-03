@@ -10,29 +10,26 @@ import static visuals.CustomizedElements.GamePanel.*;
 public class PlayerAttributeBox extends Box {
 
     private CustomProgressBar statBar;
-    private JLabel title, stat;
+    private CustomizedLabel title, stat;
 
     public PlayerAttributeBox() {
         super(BoxLayout.Y_AXIS);
 
         Box attributeTitle = Box.createHorizontalBox();
-        title = new JLabel("Default");
-        title.setFont(getBebasNeueFontWithSize(16f));
-        title.setForeground(getCharcoal());
+        title = new CustomizedLabel("Default", 16f);
         title.setBorder(new EmptyBorder(0, 4, 0, 0));
         title.setAlignmentX(Component.LEFT_ALIGNMENT);
-        setPermanentWidth(title, 75);
-        stat = new JLabel(String.valueOf(0));
-        stat.setFont(getBebasNeueFontWithSize(16f));
+
+        stat = new CustomizedLabel(String.valueOf(0), 16f);
         stat.setBorder(new EmptyBorder(0, 0, 0, 4));
         stat.setHorizontalAlignment(SwingConstants.RIGHT);
-        stat.setForeground(getCharcoal());
-        setPermanentWidth(stat, 25);
 
         attributeTitle.add(title);
         attributeTitle.add(stat);
 
         SwingUtilities.invokeLater(() -> {
+            setPermanentWidth(title, 75);
+            setPermanentWidth(stat, 25);
             setPermanentWidth(this, 110);
         });
 

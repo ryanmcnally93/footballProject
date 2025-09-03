@@ -129,19 +129,19 @@ public class TrainingPage extends SinglePageTemplate {
     }
 
     private void addGoalkeeperAttributes() {
-        firstLine.changeContent(selectedPlayer.getGkAttributes());
+        firstLine.changeContent(selectedPlayer.getGkAttributes(), "Goalkeeper");
     }
 
     private void addAttackerAttributes() {
-        firstLine.changeContent(selectedPlayer.getMovementAttributes());
+        firstLine.changeContent(selectedPlayer.getMovementAttributes(), "Movement");
     }
 
     private void addMidfielderAttributes() {
-        firstLine.changeContent(selectedPlayer.getMovementAttributes());
+        firstLine.changeContent(selectedPlayer.getMovementAttributes(), "Movement");
     }
 
     private void addDefenderAttributes() {
-        firstLine.changeContent(selectedPlayer.getMovementAttributes());
+        firstLine.changeContent(selectedPlayer.getMovementAttributes(), "Movement");
     }
 
     private void setupPlayerListOnRight() {
