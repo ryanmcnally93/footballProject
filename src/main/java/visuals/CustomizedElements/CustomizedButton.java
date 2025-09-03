@@ -184,8 +184,8 @@ public class CustomizedButton extends JButton {
         this.secondaryColor = secondaryColor;
     }
 
-    public void setSelected() {
-        selected = true;
+    public void setSelected(boolean bool) {
+        selected = bool;
     }
 
     public boolean isSelected() {

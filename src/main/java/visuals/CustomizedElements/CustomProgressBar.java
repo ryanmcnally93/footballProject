@@ -5,9 +5,10 @@ import java.awt.*;
 
 public class CustomProgressBar extends JProgressBar {
     private static final long serialVersionUID = -9140075168622999308L;
-    private static final int CORNER_RADIUS = 8;
+    private int CORNER_RADIUS = 8;
     private Color one;
     private Color two;
+    private boolean border;
 
 	public CustomProgressBar(Color one, Color two) {
         super();
@@ -25,34 +26,41 @@ public class CustomProgressBar extends JProgressBar {
 
     @Override
     protected void paintComponent(Graphics g) {
-
-        // Convert Graphics to Graphics2D for more control
         Graphics2D g2d = (Graphics2D) g.create();
         int width = getWidth();
         int height = getHeight();
-        // int barWidth = (int) (width * 0.75); // 75% of the width of the container
         int progressWidth = (int) (width * ((double) getValue() / getMaximum()));
-        
-        // Center the progress bar
-        int x = (width - width) / 2;
-        int y = (height - CORNER_RADIUS * 2)/2;
-        
-        // Anti-aliasing for smoother corners
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Draw the background with rounded corners
+        // Draw background
         g2d.setColor(two);
-        g2d.fillRoundRect(x, y, width, CORNER_RADIUS * 2, CORNER_RADIUS, CORNER_RADIUS);
+        g2d.fillRoundRect(0, 0, width, height, CORNER_RADIUS, CORNER_RADIUS);
 
-        // Draw the progress with rounded corners
+        // Draw progress
         g2d.setColor(one);
-        g2d.fillRoundRect(x, y, progressWidth, CORNER_RADIUS * 2, CORNER_RADIUS, CORNER_RADIUS);
+        g2d.fillRoundRect(0, 0, progressWidth, height, CORNER_RADIUS, CORNER_RADIUS);
 
-        // Optional: Draw the border around the progress bar
-        g2d.setColor(Color.BLACK);
-        g2d.drawRoundRect(x, y, width, CORNER_RADIUS * 2, CORNER_RADIUS, CORNER_RADIUS);
+        // Optional border
+        if (isBorder()) {
+            g2d.setColor(Color.BLACK);
+            g2d.drawRoundRect(0, 0, width - 1, height - 1, CORNER_RADIUS, CORNER_RADIUS); // -1 to fit inside bounds
+        }
 
         g2d.dispose();
     }
-    
+
+    public int getCornerRadius() {
+        return CORNER_RADIUS;
+    }
+
+    public void setCornerRadius(int cornerRadius) {
+        CORNER_RADIUS = cornerRadius;
+    }
+
+    public boolean isBorder() {
+        return border;
+    }
+
+    public void setBorder(boolean border) {
+        this.border = border;
+    }
 }

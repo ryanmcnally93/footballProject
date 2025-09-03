@@ -8,6 +8,7 @@ import visuals.ScheduleFrames.Scheduler;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.Map;
 
 public class TrainingPage extends SinglePageTemplate {
@@ -22,20 +23,106 @@ public class TrainingPage extends SinglePageTemplate {
 
         setupPlayerListOnRight();
         PlayerMenuBar firstPlayerBar = (PlayerMenuBar) getRightBox().getComponent(0);
-        firstPlayerBar.setAsSelected();
+        firstPlayerBar.setAsSelected(true);
         selectedPlayer = firstPlayerBar.getPlayer();
         setupMiddleContent();
 
+        addKeyListeners();
         setVisible(true);
     }
 
+    @Override
+    protected AbstractAction getDownClickAction() {
+        return new TrainingPage.CustomDownClick();
+    }
+
+    public class CustomDownClick extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            move("down");
+        }
+    }
+
+    @Override
+    protected AbstractAction getUpClickAction() {
+        return new TrainingPage.CustomUpClick();
+    }
+
+    public class CustomUpClick extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            move("up");
+        }
+    }
+
+    private void move(String direction) {
+        Container rightBox = getRightBox();
+        int count = rightBox.getComponentCount();
+
+        for (int i = 0; i < count; i++) {
+            Component comp = rightBox.getComponent(i);
+
+            if (comp instanceof PlayerMenuBar playerBar && playerBar.isSelected()) {
+                // Deselect current
+                playerBar.setAsSelected(false);
+                playerBar.revalidate();
+                playerBar.repaint();
+
+                int nextIndex;
+                if (direction.equals("down")) {
+                    nextIndex = (i + 2 < count) ? i + 2 : i; // stay at end if no next
+                } else if (direction.equals("up")) {
+                    nextIndex = (i - 2 >= 0) ? i - 2 : i;
+                } else {
+                    throw new IllegalArgumentException("Invalid direction");
+                }
+
+                PlayerMenuBar nextBar = (PlayerMenuBar) rightBox.getComponent(nextIndex);
+                nextBar.setAsSelected(true);
+                nextBar.revalidate();
+                nextBar.repaint();
+
+                // Update reference
+                selectedPlayer = nextBar.getPlayer();
+                setupMiddleContent();
+                break;
+            }
+        }
+    }
+
     private void setupMiddleContent() {
+        getLeftBox().removeAll();
         getLeftBox().setLayout(new BoxLayout(getLeftBox(), BoxLayout.Y_AXIS));
         // Grab players position first, this needs to be in attributes instead
         String position = selectedPlayer.getPositionPlaced();
-        if (position.equals("RB") || position.equals("CB") || position.equals("LB")) {
+        if (position.equals("RB") || position.equals("CB1") || position.equals("CB2") || position.equals("LB")) {
             addDefenderAttributes();
+        } else if (position.equals("CM1") || position.equals("CM2") || position.equals("CAM") || position.equals("LM") || position.equals("RM") || position.equals("CDM")) {
+            addMidfielderAttributes();
+        } else if (position.equals("RW") || position.equals("ST") || position.equals("LW")) {
+            addAttackerAttributes();
+        } else if (position.equals("GK")) {
+            addGoalkeeperAttributes();
+        } else {
+            throw new IllegalArgumentException("Invalid position: " + position);
         }
+            getLeftBox().revalidate();
+        getLeftBox().repaint();
+    }
+
+    private void addGoalkeeperAttributes() {
+        PlayerAttributeBox playerAttribute = new PlayerAttributeBox("GK Diving", selectedPlayer.getGkDiving());
+        getLeftBox().add(playerAttribute);
+    }
+
+    private void addAttackerAttributes() {
+        PlayerAttributeBox playerAttribute = new PlayerAttributeBox("Finishing", selectedPlayer.getFinishing());
+        getLeftBox().add(playerAttribute);
+    }
+
+    private void addMidfielderAttributes() {
+        PlayerAttributeBox playerAttribute = new PlayerAttributeBox("Short Passing", selectedPlayer.getShortPassing());
+        getLeftBox().add(playerAttribute);
     }
 
     private void addDefenderAttributes() {

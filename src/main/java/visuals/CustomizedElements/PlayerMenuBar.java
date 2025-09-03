@@ -77,12 +77,18 @@ public class PlayerMenuBar extends CustomizedButton {
         this.player = player;
     }
 
-    public void setAsSelected() {
-        setSelected();
+    public void setAsSelected(boolean bool) {
+        setSelected(bool);
         // This should be done ideally within the CustomisedButton class
-        squadNo.setForeground(getPrimaryColor());
-        playerName.setForeground(getPrimaryColor());
-        setBackground(getSecondaryColor());
+        if (bool) {
+            squadNo.setForeground(getPrimaryColor());
+            playerName.setForeground(getPrimaryColor());
+            setBackground(getSecondaryColor());
+        } else {
+            squadNo.setForeground(getSecondaryColor());
+            playerName.setForeground(getSecondaryColor());
+            setBackground(getPrimaryColor());
+        }
     }
 
 }

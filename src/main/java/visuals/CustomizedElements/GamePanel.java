@@ -13,6 +13,8 @@ public abstract class GamePanel extends JPanel {
     private Box west;
     private static final String RIGHT = "Next Page";
     private static final String LEFT = "Previous Page";
+    private static final String UP = "Up";
+    private static final String DOWN = "Down";
 
     public GamePanel() {};
 
@@ -122,25 +124,7 @@ public abstract class GamePanel extends JPanel {
         return scroller;
     }
 
-    public void setPermanentWidthAndHeight(JButton box, int width, int height){
-        box.setPreferredSize(new Dimension(width, height));
-        box.setMinimumSize(new Dimension(width, height));
-        box.setMaximumSize(new Dimension(width, height));
-    }
-
-    public void setPermanentWidthAndHeight(Box box, int width, int height){
-        box.setPreferredSize(new Dimension(width, height));
-        box.setMinimumSize(new Dimension(width, height));
-        box.setMaximumSize(new Dimension(width, height));
-    }
-
-    public void setPermanentWidth(JButton box, int width){
-        box.setPreferredSize(new Dimension(width, box.getPreferredSize().height));
-        box.setMinimumSize(new Dimension(width, box.getMinimumSize().height));
-        box.setMaximumSize(new Dimension(width, box.getMaximumSize().height));
-    }
-
-    public void setPermanentWidthAndHeight(JComponent box, int width, int height){
+    public static void setPermanentWidthAndHeight(JComponent box, int width, int height){
         box.setPreferredSize(new Dimension(width, height));
         box.setMinimumSize(new Dimension(width, height));
         box.setMaximumSize(new Dimension(width, height));
@@ -152,16 +136,22 @@ public abstract class GamePanel extends JPanel {
         box.setMaximumSize(new Dimension(width, box.getMaximumSize().height));
     }
 
-    public void setPermanentExtendedHeight(JPanel box, int height){
+    public void setPermanentHeight(JComponent box, int height){
+        box.setPreferredSize(new Dimension(box.getPreferredSize().width, height));
+        box.setMinimumSize(new Dimension(box.getMinimumSize().width, height));
+        box.setMaximumSize(new Dimension(box.getMaximumSize().width, height));
+    }
+
+    public void setPermanentExtendedHeight(JComponent box, int height){
         box.setPreferredSize(new Dimension(box.getPreferredSize().width, box.getPreferredSize().height + height));
         box.setMinimumSize(new Dimension(box.getMinimumSize().width, box.getMinimumSize().height + height));
         box.setMaximumSize(new Dimension(box.getMaximumSize().width, box.getMaximumSize().height + height));
     }
 
-    public void setPermanentHeight(JPanel box, int height){
-        box.setPreferredSize(new Dimension(box.getPreferredSize().width, height));
-        box.setMinimumSize(new Dimension(box.getMinimumSize().width, height));
-        box.setMaximumSize(new Dimension(box.getMaximumSize().width, height));
+    public void setPermanentWidthAndHeight(Box box, int width, int height){
+        box.setPreferredSize(new Dimension(width, height));
+        box.setMinimumSize(new Dimension(width, height));
+        box.setMaximumSize(new Dimension(width, height));
     }
 
     public void setPermanentExtendedHeight(Box box, int height){
@@ -185,6 +175,12 @@ public abstract class GamePanel extends JPanel {
 
         inputMap.put(KeyStroke.getKeyStroke("RIGHT"), RIGHT);
         actionMap.put(RIGHT, getRightClickAction());
+
+        inputMap.put(KeyStroke.getKeyStroke("UP"), UP);
+        actionMap.put(UP, getUpClickAction());
+
+        inputMap.put(KeyStroke.getKeyStroke("DOWN"), DOWN);
+        actionMap.put(DOWN, getDownClickAction());
     }
 
     protected AbstractAction getRightClickAction() {
@@ -209,6 +205,28 @@ public abstract class GamePanel extends JPanel {
         }
     }
 
+    protected AbstractAction getDownClickAction() {
+        return new DownClick();
+    }
+
+    public static class DownClick extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Default: Do nothing
+        }
+    }
+
+    protected AbstractAction getUpClickAction() {
+        return new UpClick();
+    }
+
+    public static class UpClick extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Default: Do nothing
+        }
+    }
+
     public void removeKeyListeners() {
         InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = getActionMap();
@@ -218,6 +236,12 @@ public abstract class GamePanel extends JPanel {
 
         inputMap.remove(KeyStroke.getKeyStroke("RIGHT"));
         actionMap.remove(RIGHT);
+
+        inputMap.remove(KeyStroke.getKeyStroke("UP"));
+        actionMap.remove(UP);
+
+        inputMap.remove(KeyStroke.getKeyStroke("DOWN"));
+        actionMap.remove(DOWN);
     }
 
     public Box getWest() {
