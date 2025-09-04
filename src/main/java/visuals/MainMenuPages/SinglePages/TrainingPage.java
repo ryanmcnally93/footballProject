@@ -39,7 +39,7 @@ public class TrainingPage extends SinglePageTemplate {
         firstLine = new PlayerAttributeLine();
         secondLine = new PlayerAttributeLine();
         thirdLine = new PlayerAttributeLine();
-        fourthLine = new PlayerAttributeLine();
+        fourthLine = new PlayerAttributeLine(true);
 
         getLeftBox().add(Box.createHorizontalStrut(50));
         getLeftBox().add(firstLine);
@@ -132,24 +132,28 @@ public class TrainingPage extends SinglePageTemplate {
         firstLine.changeContent(selectedPlayer.getGkAttributes(), "Goalkeeper");
         secondLine.changeContent(selectedPlayer.getPassingAttributes(), "Passing");
         thirdLine.changeContent(selectedPlayer.getGeneralAttributes(), "General");
+        fourthLine.changeContent(selectedPlayer.getLastAttributes(), String.valueOf(selectedPlayer.getOVR()));
     }
 
     private void addAttackerAttributes() {
         firstLine.changeContent(selectedPlayer.getAttackingAttributes(), "Attack");
         secondLine.changeContent(selectedPlayer.getMovementAttributes(), "Movement");
         thirdLine.changeContent(selectedPlayer.getGeneralAttributes(), "General");
+        fourthLine.changeContent(selectedPlayer.getLastAttributes(), String.valueOf(selectedPlayer.getOVR()));
     }
 
     private void addMidfielderAttributes() {
         firstLine.changeContent(selectedPlayer.getMovementAttributes(), "Movement");
         secondLine.changeContent(selectedPlayer.getPassingAttributes(), "Passing");
         thirdLine.changeContent(selectedPlayer.getGeneralAttributes(), "General");
+        fourthLine.changeContent(selectedPlayer.getLastAttributes(), String.valueOf(selectedPlayer.getOVR()));
     }
 
     private void addDefenderAttributes() {
         firstLine.changeContent(selectedPlayer.getDefendingAttributes(), "Defence");
         secondLine.changeContent(selectedPlayer.getPassingAttributes(), "Passing");
         thirdLine.changeContent(selectedPlayer.getGeneralAttributes(), "General");
+        fourthLine.changeContent(selectedPlayer.getLastAttributes(), String.valueOf(selectedPlayer.getOVR()));
     }
 
     private void setupPlayerListOnRight() {
@@ -161,6 +165,7 @@ public class TrainingPage extends SinglePageTemplate {
             String title = player.getName().charAt(0) + " " + player.getName().substring(player.getName().lastIndexOf(' ') + 1);
             PlayerMenuBar playerMenuBar = new PlayerMenuBar(player, title);
             playerMenuBar.setAlignmentX(Component.LEFT_ALIGNMENT);
+            playerMenuBar.setFocusable(false);
             getRightBox().add(playerMenuBar);
             getRightBox().add(Box.createVerticalStrut(5));
         }

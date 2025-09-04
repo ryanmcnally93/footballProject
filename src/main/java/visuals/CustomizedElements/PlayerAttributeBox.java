@@ -28,8 +28,8 @@ public class PlayerAttributeBox extends Box {
         attributeTitle.add(stat);
 
         SwingUtilities.invokeLater(() -> {
-            setPermanentWidth(title, 75);
-            setPermanentWidth(stat, 25);
+            setPermanentWidthAndHeight(title, 75, 20);
+            setPermanentWidthAndHeight(stat, 25, 20);
             setPermanentWidth(this, 110);
         });
 
@@ -89,7 +89,7 @@ public class PlayerAttributeBox extends Box {
         }
     }
 
-    private Color getStatColour(int value) {
+    public static Color getStatColour(int value) {
         if (value == 99) {
             return new Color(0, 0, 0);
         } else if (value > 89) {
@@ -103,5 +103,29 @@ public class PlayerAttributeBox extends Box {
         } else {
             return new Color(255, 1, 5);
         }
+    }
+
+    public CustomizedLabel getTitle() {
+        return title;
+    }
+
+    public void setTitle(CustomizedLabel title) {
+        this.title = title;
+    }
+
+    public CustomizedLabel getStat() {
+        return stat;
+    }
+
+    public void setStat(CustomizedLabel stat) {
+        this.stat = stat;
+    }
+
+    public CustomProgressBar getStatBar() {
+        return statBar;
+    }
+
+    public void setStatBar(CustomProgressBar statBar) {
+        this.statBar = statBar;
     }
 }

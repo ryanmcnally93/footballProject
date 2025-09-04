@@ -42,6 +42,7 @@ public class SinglePageTemplate extends MainPageTemplate {
         mainPanel.add(Box.createRigidArea(new Dimension(12, 0)));
 
         scroller = makeScroller(rightBox);
+        scroller.setFocusable(false);
         scroller.setOpaque(false);
         scroller.getViewport().setOpaque(false);
         setPermanentWidthAndHeight(scroller, 155, 265);

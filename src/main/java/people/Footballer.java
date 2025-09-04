@@ -4,14 +4,12 @@ import entities.Team;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Footballer extends Individual {
 
-    // Dribbling = Agility, Balance, Ball Control, Composure, Reactions
     // Shooting = Finishing, Show Power, Long Shots, Volleys, Curve
     // Defending = Aggression, Defensive Positioning, Standing Tackle, Sliding Tackle, Interceptions
     // Passing = Vision, Crossing, Short Passing, Long Passing, Curve
@@ -424,9 +422,9 @@ public class Footballer extends Individual {
         return Stream.of(
                         "Stamina",
                         "Strength",
-                        "Volleys",
                         "Composure",
-                        "Heading Accuracy"
+                        "Heading Accuracy",
+                        "Volleys"
                 )
                 .filter(attributes::containsKey)
                 .collect(Collectors.toMap(

@@ -4,10 +4,37 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Map;
 
+import static visuals.CustomizedElements.GamePanel.setPermanentWidthAndHeight;
+
 public class PlayerAttributeLine extends Box {
 
     private PlayerAttributeBox firstBox, secondBox, thirdBox, fourthBox, fifthBox;
     private CustomizedLabel title;
+    private boolean smallerLine = false;
+    private CircledOVRLabel ovr;
+
+    public PlayerAttributeLine(boolean smallerLine) {
+        super(BoxLayout.Y_AXIS);
+        this.smallerLine = smallerLine;
+        title = new CustomizedLabel("", 16f);
+
+        firstBox = new PlayerAttributeBox();
+        secondBox = new PlayerAttributeBox();
+        ovr = new CircledOVRLabel(0);
+        setPermanentWidthAndHeight(ovr, 100, 136);
+
+        add(Box.createVerticalStrut(18));
+        add(ovr);
+        add(Box.createVerticalStrut(20));
+        add(firstBox);
+        add(Box.createVerticalStrut(14));
+        add(secondBox);
+        add(Box.createVerticalStrut(50));
+
+        ovr.setAlignmentX(Component.CENTER_ALIGNMENT);
+        firstBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+        secondBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+    }
 
     public PlayerAttributeLine() {
         super(BoxLayout.Y_AXIS);
@@ -34,10 +61,10 @@ public class PlayerAttributeLine extends Box {
         add(Box.createVerticalStrut(50));
     }
 
-    public void changeContent(Map<String, String> gkAttributes, String titleValue) {
+    public void changeContent(Map<String, String> attributes, String titleValue) {
         int i = 0;
 
-        for (Map.Entry<String, String> entry : gkAttributes.entrySet()) {
+        for (Map.Entry<String, String> entry : attributes.entrySet()) {
             switch (i) {
                 case 0 -> firstBox.setAttribute(entry.getKey(), entry.getValue());
                 case 1 -> secondBox.setAttribute(entry.getKey(), entry.getValue());
@@ -48,8 +75,16 @@ public class PlayerAttributeLine extends Box {
             }
             i++;
         }
-        title.setText(titleValue);
+        if (smallerLine) {
+            ovr.setText(titleValue);
+        } else {
+            title.setText(titleValue);
+        }
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        System.out.println("Box size: " + firstBox.getSize());
+        System.out.println("Title: " + firstBox.getTitle().getText());
+        System.out.println("Stat: " + firstBox.getStat().getText());
 
         revalidate();
         repaint();

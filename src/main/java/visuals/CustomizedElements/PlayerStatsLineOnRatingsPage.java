@@ -28,6 +28,7 @@ public class PlayerStatsLineOnRatingsPage extends RoundedPanel {
         setBackground(Color.LIGHT_GRAY);
 
         captaincyLabel = new CircledLabel("");
+        captaincyLabel.setOffset(3);
         setPermanentWidth(captaincyLabel, 18);
         captaincyLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
