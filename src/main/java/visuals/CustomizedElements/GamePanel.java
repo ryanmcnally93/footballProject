@@ -100,6 +100,18 @@ public abstract class GamePanel extends JPanel {
             return new ImageIcon("./src/main/java/visuals/Images/my_profile_icon_darkbg.png", "MyProfileDark");
         } else if (icon.getDescription().equals("MyProfileDark")) {
             return new ImageIcon("./src/main/java/visuals/Images/my_profile_icon.png", "MyProfile");
+        } else if (icon.getDescription().equals("DownSmall")) {
+            ImageIcon newIcon =  new ImageIcon("./src/main/java/visuals/Images/down_arrow_darkbg.png", "DownSmallDark");
+            return alterImageSize(newIcon, 2);
+        } else if (icon.getDescription().equals("DownSmallDark")) {
+            ImageIcon newIcon =  new ImageIcon("./src/main/java/visuals/Images/down_arrow.png", "DownSmall");
+            return alterImageSize(newIcon, 2);
+        } else if (icon.getDescription().equals("UpSmall")) {
+            ImageIcon newIcon =  new ImageIcon("./src/main/java/visuals/Images/up_arrow_darkbg.png", "UpSmallDark");
+            return alterImageSize(newIcon, 2);
+        } else if (icon.getDescription().equals("UpSmallDark")) {
+            ImageIcon newIcon =  new ImageIcon("./src/main/java/visuals/Images/up_arrow.png", "UpSmall");
+            return alterImageSize(newIcon, 2);
         } else {
             System.out.println("ERROR: getOppositeImage() is unable to determine which image should be shown! Icon description is: " + icon.getDescription() + ".");
             throw new RuntimeException();
@@ -122,6 +134,15 @@ public abstract class GamePanel extends JPanel {
         scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         return scroller;
+    }
+
+    public static ImageIcon alterImageSize(ImageIcon icon ,int size){
+        int newWidth = icon.getIconWidth() / size;
+        int newHeight = icon.getIconHeight() / size;
+
+        Image scaledImage = icon.getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+
+        return new ImageIcon(scaledImage, icon.getDescription());
     }
 
     public static void setPermanentWidthAndHeight(JComponent box, int width, int height){

@@ -2,6 +2,7 @@ package visuals.MainMenuPages.SinglePages;
 
 import people.Footballer;
 import visuals.CustomizedElements.CustomizedButton;
+import visuals.CustomizedElements.PlayerAttributeBox;
 import visuals.CustomizedElements.PlayerAttributeLine;
 import visuals.CustomizedElements.PlayerMenuBar;
 import visuals.ScheduleFrames.Scheduler;
@@ -45,7 +46,8 @@ public class TrainingPage extends SinglePageTemplate {
     }
 
     private void addScrollDownButton() {
-        CustomizedButton scrollDownButton = new CustomizedButton("▼");
+        ImageIcon buttonIcon = new ImageIcon("./src/main/java/visuals/Images/down_arrow.png", "DownSmall");
+        CustomizedButton scrollDownButton = new CustomizedButton(buttonIcon);
         scrollDownButton.setBounds(0, 0, 155, 20);
         scrollDownButton.setVisible(false);
 
@@ -100,7 +102,8 @@ public class TrainingPage extends SinglePageTemplate {
     }
 
     private void addScrollUpButton() {
-        CustomizedButton scrollUpButton = new CustomizedButton("▼");
+        ImageIcon buttonIcon = new ImageIcon("./src/main/java/visuals/Images/up_arrow.png", "UpSmall");
+        CustomizedButton scrollUpButton = new CustomizedButton(buttonIcon);
         scrollUpButton.setBounds(0, 0, 155, 20);
         scrollUpButton.setVisible(false);
 
@@ -264,6 +267,7 @@ public class TrainingPage extends SinglePageTemplate {
 
     private void addAttackerAttributes() {
         firstLine.changeContent(selectedPlayer.getAttackingAttributes(), "Attack");
+        ((PlayerAttributeBox) firstLine.getComponent(3)).addTripleIncrease();
         secondLine.changeContent(selectedPlayer.getMovementAttributes(), "Movement");
         thirdLine.changeContent(selectedPlayer.getGeneralAttributes(), "General");
         fourthLine.changeContent(selectedPlayer.getLastAttributes(), String.valueOf(selectedPlayer.getOVR()));

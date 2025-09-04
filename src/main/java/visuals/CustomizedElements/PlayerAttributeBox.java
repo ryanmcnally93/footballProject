@@ -11,6 +11,7 @@ public class PlayerAttributeBox extends Box {
 
     private CustomProgressBar statBar;
     private CustomizedLabel title, stat;
+    private JLabel increase;
 
     public PlayerAttributeBox() {
         super(BoxLayout.Y_AXIS);
@@ -20,16 +21,21 @@ public class PlayerAttributeBox extends Box {
         title.setBorder(new EmptyBorder(0, 4, 0, 0));
         title.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+        increase = new JLabel();
+        increase.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         stat = new CustomizedLabel(String.valueOf(0), 16f);
         stat.setBorder(new EmptyBorder(0, 0, 0, 4));
         stat.setHorizontalAlignment(SwingConstants.RIGHT);
 
         attributeTitle.add(title);
+        attributeTitle.add(increase);
         attributeTitle.add(stat);
 
         SwingUtilities.invokeLater(() -> {
-            setPermanentWidthAndHeight(title, 75, 20);
-            setPermanentWidthAndHeight(stat, 25, 20);
+            setPermanentWidthAndHeight(title, 60, 20);
+            setPermanentWidthAndHeight(increase, 20, 20);
+            setPermanentWidthAndHeight(stat, 20, 20);
             setPermanentWidth(this, 110);
         });
 
@@ -42,6 +48,27 @@ public class PlayerAttributeBox extends Box {
 
         add(statBar);
     };
+
+    public void addSingleIncrease() {
+        ImageIcon newIcon = new ImageIcon("./src/main/java/visuals/Images/single-attribute.png", "SingleIncrease");
+        increase.setIcon(alterImageSize(newIcon, 15));
+        increase.revalidate();
+        increase.repaint();
+    }
+
+    public void addDoubleIncrease() {
+        ImageIcon newIcon = new ImageIcon("./src/main/java/visuals/Images/double-attribute.png", "DoubleIncrease");
+        increase.setIcon(alterImageSize(newIcon, 15));
+        increase.revalidate();
+        increase.repaint();
+    }
+
+    public void addTripleIncrease() {
+        ImageIcon newIcon = new ImageIcon("./src/main/java/visuals/Images/triple-attribute.png", "TripleIncrease");
+        increase.setIcon(alterImageSize(newIcon, 15));
+        increase.revalidate();
+        increase.repaint();
+    }
 
     public void setAttribute(String attributeName, String value) {
         stat.setText(value);
