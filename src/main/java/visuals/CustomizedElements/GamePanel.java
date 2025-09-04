@@ -145,6 +145,11 @@ public abstract class GamePanel extends JPanel {
         return new ImageIcon(scaledImage, icon.getDescription());
     }
 
+    public static ImageIcon alterImageSizeWithTarget(ImageIcon icon, int targetSize) {
+        Image scaledImage = icon.getImage().getScaledInstance(targetSize, targetSize, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaledImage, icon.getDescription());
+    }
+
     public static void setPermanentWidthAndHeight(JComponent box, int width, int height){
         box.setPreferredSize(new Dimension(width, height));
         box.setMinimumSize(new Dimension(width, height));

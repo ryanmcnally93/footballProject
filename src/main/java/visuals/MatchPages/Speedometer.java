@@ -27,7 +27,7 @@ public class Speedometer extends GamePanel {
             slowDown.setBounds(55, 0, 80, 20);
             add(slowDown);
 
-            circles = new PanelOfCircles();
+            circles = new PanelOfCircles(4);
             circles.setBounds(171, 0, 58, 20);
             add(circles);
 

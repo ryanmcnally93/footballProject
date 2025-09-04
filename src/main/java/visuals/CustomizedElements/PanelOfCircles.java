@@ -7,13 +7,13 @@ public class PanelOfCircles extends GamePanel {
     private ArrayList<Circle> circles;
     int position = 0;
 
-    public PanelOfCircles() {
+    public PanelOfCircles(int numOfCircles) {
         // Initialize the array of colors for four circles
         setPreferredSize(new Dimension(110, 100));  // Set preferred size of the panel
-        setBackground(Color.LIGHT_GRAY);
         circles = new ArrayList<>();
+        setOpaque(false);
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < numOfCircles; i++) {
             circles.add(new Circle());
         }
     }
@@ -58,8 +58,8 @@ public class PanelOfCircles extends GamePanel {
     // Method to change the color of a specific circle
     public void changeCircleColor(String speed) {
         switch (speed) {
-            case "slowest" -> position = 0;
-            case "slow" -> position = 1;
+            case "slowest", "left" -> position = 0;
+            case "slow", "right" -> position = 1;
             case "fast" -> position = 2;
             case "fastest" -> position = 3;
         }
@@ -68,7 +68,7 @@ public class PanelOfCircles extends GamePanel {
             if(i != position){
                 circles.get(i).setColour(Color.WHITE);
             } else {
-                circles.get(i).setColour(Color.GREEN);
+                circles.get(i).setColour(getCharcoal());
             }
         }
 

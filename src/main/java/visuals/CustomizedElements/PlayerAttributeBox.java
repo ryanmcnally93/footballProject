@@ -22,7 +22,7 @@ public class PlayerAttributeBox extends Box {
         title.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         increase = new JLabel();
-        increase.setAlignmentX(Component.CENTER_ALIGNMENT);
+        increase.setHorizontalAlignment(SwingConstants.RIGHT);
 
         stat = new CustomizedLabel(String.valueOf(0), 16f);
         stat.setBorder(new EmptyBorder(0, 0, 0, 4));
@@ -51,21 +51,21 @@ public class PlayerAttributeBox extends Box {
 
     public void addSingleIncrease() {
         ImageIcon newIcon = new ImageIcon("./src/main/java/visuals/Images/single-attribute.png", "SingleIncrease");
-        increase.setIcon(alterImageSize(newIcon, 15));
+        increase.setIcon(alterImageSizeWithTarget(newIcon, 12));
         increase.revalidate();
         increase.repaint();
     }
 
     public void addDoubleIncrease() {
         ImageIcon newIcon = new ImageIcon("./src/main/java/visuals/Images/double-attribute.png", "DoubleIncrease");
-        increase.setIcon(alterImageSize(newIcon, 15));
+        increase.setIcon(alterImageSizeWithTarget(newIcon, 12));
         increase.revalidate();
         increase.repaint();
     }
 
     public void addTripleIncrease() {
         ImageIcon newIcon = new ImageIcon("./src/main/java/visuals/Images/triple-attribute.png", "TripleIncrease");
-        increase.setIcon(alterImageSize(newIcon, 15));
+        increase.setIcon(alterImageSizeWithTarget(newIcon, 12));
         increase.revalidate();
         increase.repaint();
     }
@@ -111,6 +111,8 @@ public class PlayerAttributeBox extends Box {
             return "Intercept";
         } else if (attributeName.equals("Heading Accuracy")) {
             return "Heading";
+        } else if (attributeName.equals("Free Kick Accuracy")) {
+            return "Free Kicks";
         } else {
             throw new IllegalArgumentException("Invalid attribute name: " + attributeName);
         }

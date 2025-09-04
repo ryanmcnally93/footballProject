@@ -1,20 +1,15 @@
 package visuals.MainMenuPages.SinglePages;
 
 import people.Footballer;
-import visuals.CustomizedElements.CustomizedButton;
-import visuals.CustomizedElements.PlayerAttributeBox;
-import visuals.CustomizedElements.PlayerAttributeLine;
-import visuals.CustomizedElements.PlayerMenuBar;
+import visuals.CustomizedElements.*;
 import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.LayerUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -24,6 +19,8 @@ public class TrainingPage extends SinglePageTemplate {
     private Footballer selectedPlayer;
     private PlayerAttributeLine firstLine, secondLine, thirdLine, fourthLine;
     private Timer downTimer, upTimer;
+    private String activePage = "left";
+    private PanelOfCircles circles;
 
     public TrainingPage(Scheduler scheduler) {
         super(scheduler);
@@ -171,6 +168,33 @@ public class TrainingPage extends SinglePageTemplate {
         getLeftBox().add(Box.createHorizontalStrut(20));
         getLeftBox().add(fourthLine);
         getLeftBox().add(Box.createHorizontalStrut(50));
+
+        Box bottomHorizontalBox = Box.createHorizontalBox();
+        bottomHorizontalBox.setBounds(0, 419, 621, 51);
+
+        Box leftBox = Box.createVerticalBox();
+        setPermanentWidth(leftBox, 70);
+        leftBox.setAlignmentY(Component.TOP_ALIGNMENT);
+
+        CustomizedButton custom = new CustomizedButton("Custom", 16);
+        custom.setAlignmentY(Component.TOP_ALIGNMENT);
+
+        Box rightBox = Box.createVerticalBox();
+        rightBox.setAlignmentY(Component.TOP_ALIGNMENT);
+        setPermanentWidthAndHeight(rightBox, 70, 51);
+
+        circles = new PanelOfCircles(2);
+        circles.changeCircleColor(activePage);
+        rightBox.add(Box.createVerticalStrut(10));
+        rightBox.add(circles);
+
+        bottomHorizontalBox.add(leftBox);
+        bottomHorizontalBox.add(Box.createHorizontalGlue());
+        bottomHorizontalBox.add(custom);
+        bottomHorizontalBox.add(Box.createHorizontalGlue());
+        bottomHorizontalBox.add(rightBox);
+
+        getLayeredPane().add(bottomHorizontalBox, JLayeredPane.PALETTE_LAYER);
     }
 
     @Override
@@ -181,7 +205,7 @@ public class TrainingPage extends SinglePageTemplate {
     public class CustomDownClick extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
-            move("down");
+            moveScroller("down");
         }
     }
 
@@ -193,11 +217,43 @@ public class TrainingPage extends SinglePageTemplate {
     public class CustomUpClick extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
-            move("up");
+            moveScroller("up");
         }
     }
 
-    private void move(String direction) {
+    @Override
+    protected AbstractAction getLeftClickAction() {
+        return new TrainingPage.CustomLeftClick();
+    }
+
+    public class CustomLeftClick extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            changeStatBars("left");
+        }
+    }
+
+    @Override
+    protected AbstractAction getRightClickAction() {
+        return new TrainingPage.CustomRightClick();
+    }
+
+    public class CustomRightClick extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            changeStatBars("right");
+        }
+    }
+
+    private void changeStatBars(String direction) {
+        if (!activePage.equals(direction)) {
+            activePage = direction;
+            populatePlayerAttributes();
+            circles.changeCircleColor(activePage);
+        }
+    }
+
+    private void moveScroller(String direction) {
         Container rightBox = getRightBox();
         int count = rightBox.getComponentCount();
 
@@ -267,7 +323,6 @@ public class TrainingPage extends SinglePageTemplate {
 
     private void addAttackerAttributes() {
         firstLine.changeContent(selectedPlayer.getAttackingAttributes(), "Attack");
-        ((PlayerAttributeBox) firstLine.getComponent(3)).addTripleIncrease();
         secondLine.changeContent(selectedPlayer.getMovementAttributes(), "Movement");
         thirdLine.changeContent(selectedPlayer.getGeneralAttributes(), "General");
         fourthLine.changeContent(selectedPlayer.getLastAttributes(), String.valueOf(selectedPlayer.getOVR()));
@@ -281,10 +336,17 @@ public class TrainingPage extends SinglePageTemplate {
     }
 
     private void addDefenderAttributes() {
-        firstLine.changeContent(selectedPlayer.getDefendingAttributes(), "Defence");
-        secondLine.changeContent(selectedPlayer.getPassingAttributes(), "Passing");
-        thirdLine.changeContent(selectedPlayer.getGeneralAttributes(), "General");
-        fourthLine.changeContent(selectedPlayer.getLastAttributes(), String.valueOf(selectedPlayer.getOVR()));
+        if (activePage.equals("left")) {
+            firstLine.changeContent(selectedPlayer.getDefendingAttributes(), "Defence");
+            secondLine.changeContent(selectedPlayer.getPassingAttributes(), "Passing");
+            thirdLine.changeContent(selectedPlayer.getGeneralAttributes(), "General");
+            fourthLine.changeContent(selectedPlayer.getLastAttributes(), String.valueOf(selectedPlayer.getOVR()));
+        } else {
+            firstLine.changeContent(selectedPlayer.getMovementAttributes(), "Movement");
+            secondLine.changeContent(selectedPlayer.getAttackingAttributes(), "Attack");
+            thirdLine.changeContent(selectedPlayer.getGkAttributes(), "Goalkeeping");
+            fourthLine.changeContent(selectedPlayer.getSetPieceAttributes(), String.valueOf(selectedPlayer.getOVR()));
+        }
     }
 
     private void setupPlayerListOnRight() {
@@ -318,7 +380,7 @@ public class TrainingPage extends SinglePageTemplate {
 
     private void getButtonClickedAction(PlayerMenuBar playerMenuBar) {
         // Supply the retrieved index of this bar to 'move'
-        move(String.valueOf(Arrays.asList(getRightBox().getComponents()).indexOf(playerMenuBar)));
+        moveScroller(String.valueOf(Arrays.asList(getRightBox().getComponents()).indexOf(playerMenuBar)));
     }
 
     @Override
