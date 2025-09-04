@@ -82,10 +82,6 @@ public class PlayerAttributeLine extends Box {
         }
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        System.out.println("Box size: " + firstBox.getSize());
-        System.out.println("Title: " + firstBox.getTitle().getText());
-        System.out.println("Stat: " + firstBox.getStat().getText());
-
         revalidate();
         repaint();
     }

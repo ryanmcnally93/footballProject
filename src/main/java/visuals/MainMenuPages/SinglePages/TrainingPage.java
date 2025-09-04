@@ -1,14 +1,20 @@
 package visuals.MainMenuPages.SinglePages;
 
 import people.Footballer;
+import visuals.CustomizedElements.CustomizedButton;
 import visuals.CustomizedElements.PlayerAttributeLine;
 import visuals.CustomizedElements.PlayerMenuBar;
 import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.LayerUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.util.Arrays;
 import java.util.Map;
 
 public class TrainingPage extends SinglePageTemplate {
@@ -30,8 +36,52 @@ public class TrainingPage extends SinglePageTemplate {
         setupAttributesOnLeft();
         populatePlayerAttributes();
 
+        addScrollDownButton();
+
         addKeyListeners();
         setVisible(true);
+    }
+
+    private void addScrollDownButton() {
+        CustomizedButton scrollDownButton = new CustomizedButton("▼");
+        scrollDownButton.setBounds(0, 0, 155, 20); // bottom right corner
+        scrollDownButton.setVisible(false); // start hidden
+
+        JPanel hoverArea = new JPanel(null); // null layout for manual positioning
+        hoverArea.setOpaque(false); // invisible
+        hoverArea.setBounds(633, 413, 155, 20); // 20-pixel-high strip over bottom of scroller
+        hoverArea.add(scrollDownButton);
+        getLayeredPane().add(hoverArea, JLayeredPane.PALETTE_LAYER);
+
+        hoverArea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                JScrollBar vBar = getScroller().getVerticalScrollBar();
+                int max = vBar.getMaximum() - vBar.getVisibleAmount();
+                int value = vBar.getValue();
+                boolean atBottom = value >= max;
+
+                scrollDownButton.setVisible(!atBottom);
+            }
+
+        });
+
+        scrollDownButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseExited(MouseEvent e) {
+                scrollDownButton.setVisible(false);
+            }
+        });
+
+        scrollDownButton.addActionListener(e -> {
+            JScrollBar vBar = getScroller().getVerticalScrollBar();
+            int newVal = Math.min(vBar.getValue() + 100, vBar.getMaximum()); // scroll down 100px
+            vBar.setValue(newVal);
+
+            int max = vBar.getMaximum() - vBar.getVisibleAmount();
+            boolean atBottom = vBar.getValue() >= max;
+            scrollDownButton.setVisible(!atBottom);
+        });
     }
 
     private void setupAttributesOnLeft() {
@@ -95,11 +145,12 @@ public class TrainingPage extends SinglePageTemplate {
                 } else if (direction.equals("up")) {
                     nextIndex = (i - 2 >= 0) ? i - 2 : i;
                 } else {
-                    throw new IllegalArgumentException("Invalid direction");
+                    nextIndex = Integer.parseInt(direction);
                 }
 
                 PlayerMenuBar nextBar = (PlayerMenuBar) rightBox.getComponent(nextIndex);
                 nextBar.setAsSelected(true);
+                scrollToButton(nextBar);
                 nextBar.revalidate();
                 nextBar.repaint();
 
@@ -109,6 +160,14 @@ public class TrainingPage extends SinglePageTemplate {
                 break;
             }
         }
+    }
+
+    public void scrollToButton(JButton button) {
+        Rectangle bounds = button.getBounds();
+        Point location = SwingUtilities.convertPoint(button.getParent(), bounds.getLocation(), getScroller().getViewport());
+        bounds.setLocation(location);
+
+        getScroller().getViewport().scrollRectToVisible(bounds);
     }
 
     private void populatePlayerAttributes() {
@@ -166,6 +225,12 @@ public class TrainingPage extends SinglePageTemplate {
             PlayerMenuBar playerMenuBar = new PlayerMenuBar(player, title);
             playerMenuBar.setAlignmentX(Component.LEFT_ALIGNMENT);
             playerMenuBar.setFocusable(false);
+            playerMenuBar.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    getButtonClickedAction(playerMenuBar);
+                }
+            });
             getRightBox().add(playerMenuBar);
             getRightBox().add(Box.createVerticalStrut(5));
         }
@@ -177,6 +242,11 @@ public class TrainingPage extends SinglePageTemplate {
             getRightBox().revalidate();
             getRightBox().repaint();
         }
+    }
+
+    private void getButtonClickedAction(PlayerMenuBar playerMenuBar) {
+        // Supply the retrieved index of this bar to 'move'
+        move(String.valueOf(Arrays.asList(getRightBox().getComponents()).indexOf(playerMenuBar)));
     }
 
     @Override

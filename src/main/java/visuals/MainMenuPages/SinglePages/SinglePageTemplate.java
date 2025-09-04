@@ -90,4 +90,12 @@ public class SinglePageTemplate extends MainPageTemplate {
     public boolean isFromScheduler() {
         return true;
     }
+
+    public JScrollPane getScroller() {
+        return scroller;
+    }
+
+    public void setScroller(JScrollPane scroller) {
+        this.scroller = scroller;
+    }
 }
