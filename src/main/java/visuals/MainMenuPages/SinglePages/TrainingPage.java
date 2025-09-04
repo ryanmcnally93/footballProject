@@ -22,6 +22,7 @@ public class TrainingPage extends SinglePageTemplate {
     private Scheduler scheduler;
     private Footballer selectedPlayer;
     private PlayerAttributeLine firstLine, secondLine, thirdLine, fourthLine;
+    private Timer downTimer, upTimer;
 
     public TrainingPage(Scheduler scheduler) {
         super(scheduler);
@@ -37,6 +38,7 @@ public class TrainingPage extends SinglePageTemplate {
         populatePlayerAttributes();
 
         addScrollDownButton();
+        addScrollUpButton();
 
         addKeyListeners();
         setVisible(true);
@@ -44,12 +46,12 @@ public class TrainingPage extends SinglePageTemplate {
 
     private void addScrollDownButton() {
         CustomizedButton scrollDownButton = new CustomizedButton("▼");
-        scrollDownButton.setBounds(0, 0, 155, 20); // bottom right corner
-        scrollDownButton.setVisible(false); // start hidden
+        scrollDownButton.setBounds(0, 0, 155, 20);
+        scrollDownButton.setVisible(false);
 
-        JPanel hoverArea = new JPanel(null); // null layout for manual positioning
-        hoverArea.setOpaque(false); // invisible
-        hoverArea.setBounds(633, 413, 155, 20); // 20-pixel-high strip over bottom of scroller
+        JPanel hoverArea = new JPanel(null);
+        hoverArea.setOpaque(false);
+        hoverArea.setBounds(633, 413, 155, 20);
         hoverArea.add(scrollDownButton);
         getLayeredPane().add(hoverArea, JLayeredPane.PALETTE_LAYER);
 
@@ -63,24 +65,90 @@ public class TrainingPage extends SinglePageTemplate {
 
                 scrollDownButton.setVisible(!atBottom);
             }
-
         });
 
         scrollDownButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseExited(MouseEvent e) {
                 scrollDownButton.setVisible(false);
+                if (downTimer != null && downTimer.isRunning()) {
+                    downTimer.stop();
+                }
             }
         });
 
-        scrollDownButton.addActionListener(e -> {
-            JScrollBar vBar = getScroller().getVerticalScrollBar();
-            int newVal = Math.min(vBar.getValue() + 100, vBar.getMaximum()); // scroll down 100px
-            vBar.setValue(newVal);
+        scrollDownButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                JScrollBar vBar = getScroller().getVerticalScrollBar();
+                downTimer = new Timer(20, evt -> {
+                    int newVal = Math.min(vBar.getValue() + 2, vBar.getMaximum());
+                    vBar.setValue(newVal);
 
-            int max = vBar.getMaximum() - vBar.getVisibleAmount();
-            boolean atBottom = vBar.getValue() >= max;
-            scrollDownButton.setVisible(!atBottom);
+                    int max = vBar.getMaximum() - vBar.getVisibleAmount();
+                    boolean atBottom = vBar.getValue() >= max;
+
+                    if (atBottom) {
+                        scrollDownButton.setVisible(false);
+                        downTimer.stop();
+                    }
+                });
+
+                downTimer.start();
+            }
+        });
+    }
+
+    private void addScrollUpButton() {
+        CustomizedButton scrollUpButton = new CustomizedButton("▼");
+        scrollUpButton.setBounds(0, 0, 155, 20);
+        scrollUpButton.setVisible(false);
+
+        JPanel hoverArea = new JPanel(null);
+        hoverArea.setOpaque(false);
+        hoverArea.setBounds(633, 168, 155, 20);
+        hoverArea.add(scrollUpButton);
+        getLayeredPane().add(hoverArea, JLayeredPane.PALETTE_LAYER);
+
+        hoverArea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                JScrollBar vBar = getScroller().getVerticalScrollBar();
+                int value = vBar.getValue();
+                boolean atTop = value == 0;
+
+                scrollUpButton.setVisible(!atTop);
+            }
+        });
+
+        scrollUpButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseExited(MouseEvent e) {
+                scrollUpButton.setVisible(false);
+                if (upTimer != null && upTimer.isRunning()) {
+                    upTimer.stop();
+                }
+            }
+        });
+
+        scrollUpButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                JScrollBar vBar = getScroller().getVerticalScrollBar();
+                upTimer = new Timer(20, evt -> {
+                    int newVal = Math.min(vBar.getValue() - 2, vBar.getMaximum());
+                    vBar.setValue(newVal);
+
+                    boolean atTop = vBar.getValue() == 0;
+
+                    if (atTop) {
+                        scrollUpButton.setVisible(false);
+                        upTimer.stop();
+                    }
+                });
+
+                upTimer.start();
+            }
         });
     }
 
