@@ -27,7 +27,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 	private JLabel time, dateAndTime, stadiumAndAttendance;
 	private Speedometer speedometer;
 	private Box speedometerBox;
-	private JButton back;
+	private CustomizedButton back;
 
 	public MatchFrames(CardLayout cardLayout, JPanel pages, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
     	super(cardLayout, pages);
@@ -44,10 +44,11 @@ public class MatchFrames extends CardmapMainPageTemplate {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				handleClick();
+                playButton.init();
 			}
 		});
 
-		back = new JButton("Back");
+		back = new CustomizedButton("Back");
 		back.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -72,6 +73,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 				getMatch().getScheduler().getWindow().repaint();
 				// We call this so that setMatch() is updated with correct Match
 				getMatch().getScheduler().refreshMessages();
+                back.init();
 			}
 		});
 
@@ -319,6 +321,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					getMatch().continueToScheduler();
+                    continueButton.init();
 				}
 			});
 		}
@@ -338,7 +341,6 @@ public class MatchFrames extends CardmapMainPageTemplate {
 	}
 
     public class PlayGame extends AbstractAction {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(match.getTimer().getTime().equals("00:00")){

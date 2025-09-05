@@ -10,7 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.util.Arrays;
 import java.util.Map;
 
 public class MainMenuPageTemplate extends CardmapMainPageTemplate {
@@ -18,6 +18,7 @@ public class MainMenuPageTemplate extends CardmapMainPageTemplate {
     private JPanel mainPanel;
     private UsersMatch match;
     private Events event;
+    private MouseAdapter playButtonListener;
 
     public MainMenuPageTemplate(CardLayout cardLayout, JPanel pages, Scheduler scheduler, boolean fromScheduler){
         super(cardLayout, pages);
@@ -25,7 +26,6 @@ public class MainMenuPageTemplate extends CardmapMainPageTemplate {
         setFromScheduler(fromScheduler);
 
         getFooterPanel().addBackButton();
-
         updateBackButtonFunctionality();
     }
 
@@ -33,37 +33,39 @@ public class MainMenuPageTemplate extends CardmapMainPageTemplate {
     public void updateBackButtonFunctionality(){
         CustomizedButton back = getFooterPanel().getBackButton();
         if (event == null) {
-            if (back.getMouseListeners().length == 1) {
-                getFooterPanel().addBackButtonListener(back);
-            } else {
-                MouseListener[] listeners = back.getMouseListeners();
-                back.removeMouseListener(listeners[listeners.length - 1]);
-                getFooterPanel().addBackButtonListener(back);
+            if (Arrays.stream(back.getMouseListeners()).anyMatch(listener -> listener == playButtonListener)) {
+                removePlayFunctionalityToBackButton(back);
             }
+            getFooterPanel().addBackButtonListener(back);
         } else {
-            if (back.getMouseListeners().length == 1) {
-                addPlayFunctionalityToBackButton(back);
-            } else {
-                MouseListener[] listeners = back.getMouseListeners();
-                back.removeMouseListener(listeners[listeners.length - 1]);
-                addPlayFunctionalityToBackButton(back);
+            if (Arrays.stream(back.getMouseListeners()).anyMatch(listener -> listener == getFooterPanel().getBackButtonListener())) {
+                getFooterPanel().removeBackButtonListener(back);
             }
+            addPlayFunctionalityToBackButton(back);
         }
     }
 
     public void addPlayFunctionalityToBackButton(CustomizedButton back) {
-        back.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                for (Map.Entry<String, JPanel> page : getScheduler().getMatchFramesMap().entrySet()) {
-                    MatchFrames frame = (MatchFrames) page.getValue();
-                    event.getMatch().setScheduler(getScheduler());
-                    frame.setMatch(event.getMatch());
+        if (playButtonListener == null) {
+            playButtonListener = new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    for (Map.Entry<String, JPanel> page : getScheduler().getMatchFramesMap().entrySet()) {
+                        MatchFrames frame = (MatchFrames) page.getValue();
+                        event.getMatch().setScheduler(getScheduler());
+                        frame.setMatch(event.getMatch());
+                    }
+                    getScheduler().displayMatchFrames(event.getMatch());
+                    setEvent(null);
+                    back.init();
                 }
-                getScheduler().displayMatchFrames(event.getMatch());
-                setEvent(null);
-            }
-        });
+            };
+        }
+        back.addMouseListener(playButtonListener);
+    }
+
+    public void removePlayFunctionalityToBackButton(CustomizedButton back) {
+        back.removeMouseListener(playButtonListener);
     }
 
     public JPanel getMainPanel() {

@@ -65,6 +65,7 @@ public class Speedometer extends GamePanel {
                         each.getTimer().changeSpeedDuringMatch(speedIndex+1);
                     }
                     System.out.println("Speed is: " + getMatch().getSpeed());
+                    slowDown.init();
                 }
             });
 
@@ -90,6 +91,7 @@ public class Speedometer extends GamePanel {
                         each.getTimer().changeSpeedDuringMatch(speedIndex+1);
                     }
                     System.out.println("Speed is: " + getMatch().getSpeed());
+                    speedUp.init();
                 }
             });
             setPermanentWidthAndHeight(this, 400, 20);

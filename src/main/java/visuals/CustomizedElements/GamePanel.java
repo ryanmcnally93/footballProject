@@ -63,6 +63,19 @@ public abstract class GamePanel extends JPanel {
         mainPanel.add(east, BorderLayout.EAST);
     }
 
+    public static boolean isTheCursorStillOverTheButton(JButton button) {
+        if (!button.isShowing()) {
+            return false;
+        }
+        Point mouseOnScreen = MouseInfo.getPointerInfo().getLocation();
+        Rectangle buttonOnScreen = new Rectangle(
+                button.getLocationOnScreen(),
+                button.getSize()
+        );
+
+        return buttonOnScreen.contains(mouseOnScreen);
+    }
+
     public static ImageIcon getOppositeImage(ImageIcon icon) {
         if (icon.getDescription().equals("Down")) {
             return new ImageIcon("./src/main/java/visuals/Images/down_arrow_darkbg.png", "DownDark");

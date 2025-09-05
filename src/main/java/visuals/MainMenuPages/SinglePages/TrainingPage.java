@@ -10,7 +10,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -56,17 +55,7 @@ public class TrainingPage extends SinglePageTemplate {
     }
 
     private void addScrollButton(String direction) {
-        CustomizedButton button;
-        if (direction.equals("down") || direction.equals("up")) {
-            ImageIcon buttonIcon = new ImageIcon("./src/main/java/visuals/Images/" + direction + "_arrow.png", direction.substring(0, 1).toUpperCase() + direction.substring(1) + "Small");
-            button = new CustomizedButton(buttonIcon);
-        } else if (direction.equals("left")) {
-            button = new CustomizedButton("<");
-        } else if (direction.equals("right")) {
-            button = new CustomizedButton(">");
-        } else {
-            throw new IllegalArgumentException("Invalid direction");
-        }
+        CustomizedButton button = getCustomizedButton(direction);
 
         button.setBounds(boundsByDirection.get(direction));
         button.setVisible(false);
@@ -146,6 +135,20 @@ public class TrainingPage extends SinglePageTemplate {
                 }
             });
         }
+    }
+
+    private static CustomizedButton getCustomizedButton(String direction) {
+        CustomizedButton button;
+        switch (direction) {
+            case "down", "up" -> {
+                ImageIcon buttonIcon = new ImageIcon("./src/main/java/visuals/Images/" + direction + "_arrow.png", direction.substring(0, 1).toUpperCase() + direction.substring(1) + "Small");
+                button = new CustomizedButton(buttonIcon);
+            }
+            case "left" -> button = new CustomizedButton("<");
+            case "right" -> button = new CustomizedButton(">");
+            default -> throw new IllegalArgumentException("Invalid direction");
+        }
+        return button;
     }
 
     private void setupAttributesOnLeft() {

@@ -6,8 +6,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import static visuals.CustomizedElements.GamePanel.getCharcoal;
-import static visuals.CustomizedElements.GamePanel.getOppositeImage;
+import static visuals.CustomizedElements.GamePanel.*;
 
 public class CustomizedButton extends JButton {
 
@@ -70,23 +69,7 @@ public class CustomizedButton extends JButton {
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-                hoverColor = primaryColor;
-                revalidate();
-                repaint();
-                if (isSelected()) {
-                    return;
-                }
-				if (hasImage) {
-					ImageIcon newIcon = getOppositeImage(icon);
-					setIcon(newIcon);
-					icon = newIcon;
-				} else {
-					setForeground(primaryColor);
-				}
-				setBackground(secondaryColor);
-                childMouseEntered();
-				revalidate();
-				repaint();
+                mouseEnteredMethod();
 			}
 
 			@Override
@@ -111,6 +94,26 @@ public class CustomizedButton extends JButton {
 			}
 		});
 	}
+
+    public void mouseEnteredMethod() {
+        hoverColor = primaryColor;
+        revalidate();
+        repaint();
+        if (isSelected()) {
+            return;
+        }
+        if (hasImage) {
+            ImageIcon newIcon = getOppositeImage(icon);
+            setIcon(newIcon);
+            icon = newIcon;
+        } else {
+            setForeground(primaryColor);
+        }
+        setBackground(secondaryColor);
+        childMouseEntered();
+        revalidate();
+        repaint();
+    }
 
     protected void childMouseExited() {}
 

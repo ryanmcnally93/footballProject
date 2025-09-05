@@ -8,7 +8,7 @@ import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.util.Arrays;
 
 public class MainPageTemplate extends GamePanel {
 
@@ -122,13 +122,13 @@ public class MainPageTemplate extends GamePanel {
         private CustomizedButton prevButton, nextButton;
         private JPanel buttonBox, middleBox, backButtonBox, leftBlankBox;
         private CustomizedButton back;
+        private MouseAdapter backButtonListener;
 
         public FooterPanel() {
             setLayout(new BorderLayout());
             setBackground(Color.LIGHT_GRAY);
 
-            backButtonBox = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            backButtonBox.setBackground(Color.LIGHT_GRAY);
+            backButtonBox = new JPanel(new FlowLayout(FlowLayout.CENTER));
             setPermanentWidth(backButtonBox, 115);
 
             leftBlankBox = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -138,7 +138,29 @@ public class MainPageTemplate extends GamePanel {
             add(backButtonBox, BorderLayout.EAST);
             add(leftBlankBox, BorderLayout.WEST);
 
-            back = new CustomizedButton("Back");
+            back = new CustomizedButton("Back", 16);
+            back.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            backButtonListener = new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (e.getSource() instanceof CustomizedButton button) button.init();
+                    if (isFromScheduler()) {
+                        getScheduler().displayPage(getScheduler().getWindow());
+                    } else {
+                        getScheduler().displayMatchFrames(getScheduler().getMatch());
+                    }
+                    back.init();
+                }
+            };
+        }
+
+        public MouseAdapter getBackButtonListener() {
+            return backButtonListener;
+        }
+
+        public void setBackButtonListener(MouseAdapter backButtonListener) {
+            this.backButtonListener = backButtonListener;
         }
 
         public void addBackButton() {
@@ -148,16 +170,11 @@ public class MainPageTemplate extends GamePanel {
         }
 
         public void addBackButtonListener(CustomizedButton back) {
-            back.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    if (isFromScheduler()) {
-                        getScheduler().displayPage(getScheduler().getWindow());
-                    } else {
-                        getScheduler().displayMatchFrames(getScheduler().getMatch());
-                    }
-                }
-            });
+            back.addMouseListener(backButtonListener);
+        }
+
+        public void removeBackButtonListener(CustomizedButton back) {
+            back.removeMouseListener(backButtonListener);
         }
 
         public void addLeftAndRightButtons() {
@@ -237,11 +254,7 @@ public class MainPageTemplate extends GamePanel {
 
     public void updateBackButtonFunctionality() {
         CustomizedButton back = getFooterPanel().getBackButton();
-        if (back.getMouseListeners().length == 1) {
-            getFooterPanel().addBackButtonListener(back);
-        } else {
-            MouseListener[] listeners = back.getMouseListeners();
-            back.removeMouseListener(listeners[listeners.length - 1]);
+        if (Arrays.stream(back.getMouseListeners()).noneMatch(listener -> listener == getFooterPanel().getBackButtonListener())) {
             getFooterPanel().addBackButtonListener(back);
         }
     }

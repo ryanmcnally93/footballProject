@@ -58,6 +58,11 @@ public class MessageViewer extends GamePanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 scheduler.addDay();
+                SwingUtilities.invokeLater(() -> {
+                    if (!isTheCursorStillOverTheButton(advance)) {
+                        advance.init();
+                    }
+                });
             }
         });
 
@@ -68,6 +73,7 @@ public class MessageViewer extends GamePanel {
             public void mouseClicked(MouseEvent e) {
                 scheduler.viewTacticsPages(true, event);
                 event.setRemoveEvent(true);
+                playGame.init();
             }
         });
 
@@ -93,6 +99,7 @@ public class MessageViewer extends GamePanel {
 
                 event.setRemoveEvent(true);
                 scheduler.showTodaysEvents(todaysEvents);
+                simGame.init();
             }
         });
 
@@ -108,6 +115,9 @@ public class MessageViewer extends GamePanel {
                 event.setRemoveEvent(true);
                 scheduler.showTodaysEvents(todaysEvents);
 
+                if(!isTheCursorStillOverTheButton(dismiss)) {
+                    dismiss.init();
+                }
                 revalidate();
                 repaint();
             }
@@ -128,6 +138,7 @@ public class MessageViewer extends GamePanel {
                     }
                 }
                 removeAdvanceToGameButton();
+                advanceToGame.init();
             }
         });
     }
@@ -154,6 +165,17 @@ public class MessageViewer extends GamePanel {
             buttonContainer.add(advanceToGame);
             buttonContainer.add(Box.createHorizontalGlue());
         }
+        // If we are hovered over this new button
+        addHoverStylingIfNeeded(advanceToGame);
+
+    }
+
+    private void addHoverStylingIfNeeded(CustomizedButton button) {
+        SwingUtilities.invokeLater(() -> {
+            if(isTheCursorStillOverTheButton(button)){
+                button.mouseEnteredMethod();
+            }
+        });
     }
 
     public void removeAdvanceToGameButton() {
@@ -219,6 +241,8 @@ public class MessageViewer extends GamePanel {
             buttonContainer.add(dismiss);
             buttonContainer.add(Box.createHorizontalGlue());
         }
+        // If we are hovered over this new button
+        addHoverStylingIfNeeded(dismiss);
         buttonContainer.revalidate();
         buttonContainer.repaint();
     }
@@ -236,6 +260,8 @@ public class MessageViewer extends GamePanel {
             buttonContainer.add(playGame);
             buttonContainer.add(Box.createHorizontalGlue());
         }
+        // If we are hovered over this new button
+        addHoverStylingIfNeeded(playGame);
     }
 
     public void removePlayGameButton() {
@@ -252,6 +278,8 @@ public class MessageViewer extends GamePanel {
             buttonContainer.add(simGame);
             buttonContainer.add(Box.createHorizontalGlue());
         }
+        // If we are hovered over this new button
+        addHoverStylingIfNeeded(simGame);
     }
 
     public void removeSimGameButton() {
@@ -265,6 +293,8 @@ public class MessageViewer extends GamePanel {
             buttonContainer.add(advance);
             buttonContainer.add(Box.createHorizontalGlue());
         }
+        // If we are hovered over this new button
+        addHoverStylingIfNeeded(advance);
     }
 
     public void removeAdvanceButton() {
