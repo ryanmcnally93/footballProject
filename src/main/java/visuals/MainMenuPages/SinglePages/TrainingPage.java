@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -18,9 +19,19 @@ public class TrainingPage extends SinglePageTemplate {
     private Scheduler scheduler;
     private Footballer selectedPlayer;
     private PlayerAttributeLine firstLine, secondLine, thirdLine, fourthLine;
-    private Timer downTimer, upTimer;
+    private Timer timer;
     private String activePage = "left";
     private PanelOfCircles circles;
+    private final Map<String, Rectangle> boundsByDirection = Map.of(
+            "down", new Rectangle(0, 0, 155, 20),
+            "up",   new Rectangle(0, 0, 155, 20),
+            "left", new Rectangle(0, 0, 50, 50),
+            "right", new Rectangle(0, 0, 50, 50),
+            "downHover", new Rectangle(633, 413, 155, 20),
+            "upHover",   new Rectangle(633, 168, 155, 20),
+            "leftHover", new Rectangle(5, 272, 50, 50),
+            "rightHover", new Rectangle(565, 272, 50, 50)
+    );
 
     public TrainingPage(Scheduler scheduler) {
         super(scheduler);
@@ -35,121 +46,106 @@ public class TrainingPage extends SinglePageTemplate {
         setupAttributesOnLeft();
         populatePlayerAttributes();
 
-        addScrollDownButton();
-        addScrollUpButton();
+        addScrollButton("down");
+        addScrollButton("up");
+        addScrollButton("left");
+        addScrollButton("right");
 
         addKeyListeners();
         setVisible(true);
     }
 
-    private void addScrollDownButton() {
-        ImageIcon buttonIcon = new ImageIcon("./src/main/java/visuals/Images/down_arrow.png", "DownSmall");
-        CustomizedButton scrollDownButton = new CustomizedButton(buttonIcon);
-        scrollDownButton.setBounds(0, 0, 155, 20);
-        scrollDownButton.setVisible(false);
+    private void addScrollButton(String direction) {
+        CustomizedButton button;
+        if (direction.equals("down") || direction.equals("up")) {
+            ImageIcon buttonIcon = new ImageIcon("./src/main/java/visuals/Images/" + direction + "_arrow.png", direction.substring(0, 1).toUpperCase() + direction.substring(1) + "Small");
+            button = new CustomizedButton(buttonIcon);
+        } else if (direction.equals("left")) {
+            button = new CustomizedButton("<");
+        } else if (direction.equals("right")) {
+            button = new CustomizedButton(">");
+        } else {
+            throw new IllegalArgumentException("Invalid direction");
+        }
+
+        button.setBounds(boundsByDirection.get(direction));
+        button.setVisible(false);
 
         JPanel hoverArea = new JPanel(null);
         hoverArea.setOpaque(false);
-        hoverArea.setBounds(633, 413, 155, 20);
-        hoverArea.add(scrollDownButton);
+        hoverArea.setBounds(boundsByDirection.get(direction + "Hover"));
+        hoverArea.add(button);
         getLayeredPane().add(hoverArea, JLayeredPane.PALETTE_LAYER);
 
         hoverArea.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                JScrollBar vBar = getScroller().getVerticalScrollBar();
-                int max = vBar.getMaximum() - vBar.getVisibleAmount();
-                int value = vBar.getValue();
-                boolean atBottom = value >= max;
-
-                scrollDownButton.setVisible(!atBottom);
-            }
-        });
-
-        scrollDownButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseExited(MouseEvent e) {
-                scrollDownButton.setVisible(false);
-                if (downTimer != null && downTimer.isRunning()) {
-                    downTimer.stop();
-                }
-            }
-        });
-
-        scrollDownButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                JScrollBar vBar = getScroller().getVerticalScrollBar();
-                downTimer = new Timer(20, evt -> {
-                    int newVal = Math.min(vBar.getValue() + 2, vBar.getMaximum());
-                    vBar.setValue(newVal);
-
+                if (!direction.equals(activePage)) {
+                    JScrollBar vBar = getScroller().getVerticalScrollBar();
                     int max = vBar.getMaximum() - vBar.getVisibleAmount();
-                    boolean atBottom = vBar.getValue() >= max;
-
-                    if (atBottom) {
-                        scrollDownButton.setVisible(false);
-                        downTimer.stop();
+                    int value = vBar.getValue();
+                    boolean edgeOfPosition = false;
+                    if (direction.equals("down")) {
+                        edgeOfPosition = value >= max;
+                    } else if (direction.equals("up")) {
+                        edgeOfPosition = value == 0;
                     }
-                });
 
-                downTimer.start();
-            }
-        });
-    }
-
-    private void addScrollUpButton() {
-        ImageIcon buttonIcon = new ImageIcon("./src/main/java/visuals/Images/up_arrow.png", "UpSmall");
-        CustomizedButton scrollUpButton = new CustomizedButton(buttonIcon);
-        scrollUpButton.setBounds(0, 0, 155, 20);
-        scrollUpButton.setVisible(false);
-
-        JPanel hoverArea = new JPanel(null);
-        hoverArea.setOpaque(false);
-        hoverArea.setBounds(633, 168, 155, 20);
-        hoverArea.add(scrollUpButton);
-        getLayeredPane().add(hoverArea, JLayeredPane.PALETTE_LAYER);
-
-        hoverArea.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                JScrollBar vBar = getScroller().getVerticalScrollBar();
-                int value = vBar.getValue();
-                boolean atTop = value == 0;
-
-                scrollUpButton.setVisible(!atTop);
-            }
-        });
-
-        scrollUpButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseExited(MouseEvent e) {
-                scrollUpButton.setVisible(false);
-                if (upTimer != null && upTimer.isRunning()) {
-                    upTimer.stop();
+                    button.setVisible(!edgeOfPosition);
                 }
             }
         });
 
-        scrollUpButton.addMouseListener(new MouseAdapter() {
+        button.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseEntered(MouseEvent e) {
-                JScrollBar vBar = getScroller().getVerticalScrollBar();
-                upTimer = new Timer(20, evt -> {
-                    int newVal = Math.min(vBar.getValue() - 2, vBar.getMaximum());
-                    vBar.setValue(newVal);
-
-                    boolean atTop = vBar.getValue() == 0;
-
-                    if (atTop) {
-                        scrollUpButton.setVisible(false);
-                        upTimer.stop();
-                    }
-                });
-
-                upTimer.start();
+            public void mouseExited(MouseEvent e) {
+                button.setVisible(false);
+                if (timer != null && timer.isRunning()) {
+                    timer.stop();
+                }
             }
         });
+
+        if (direction.equals("down") || direction.equals("up")) {
+            button.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    JScrollBar vBar = getScroller().getVerticalScrollBar();
+                    timer = new Timer(20, evt -> {
+                        int newVal = 0;
+                        if (direction.equals("down")) {
+                            newVal = Math.min(vBar.getValue() + 2, vBar.getMaximum());
+                        } else {
+                            newVal = Math.min(vBar.getValue() - 2, vBar.getMaximum());
+                        }
+                        vBar.setValue(newVal);
+
+                        int max = vBar.getMaximum() - vBar.getVisibleAmount();
+                        boolean edgeOfPosition = false;
+                        if (direction.equals("down")) {
+                            edgeOfPosition = vBar.getValue() >= max;
+                        } else {
+                            edgeOfPosition = vBar.getValue() == 0;
+                        }
+
+                        if (edgeOfPosition) {
+                            button.setVisible(false);
+                            timer.stop();
+                        }
+                    });
+
+                    timer.start();
+                }
+            });
+        } else {
+            button.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    changeStatBars(direction);
+                    button.setVisible(false);
+                }
+            });
+        }
     }
 
     private void setupAttributesOnLeft() {
@@ -299,40 +295,57 @@ public class TrainingPage extends SinglePageTemplate {
 
     private void populatePlayerAttributes() {
         String position = selectedPlayer.getPositionPlaced();
-        if (position.equals("RB") || position.equals("CB1") || position.equals("CB2") || position.equals("LB")) {
-            addDefenderAttributes();
-        } else if (position.equals("CM1") || position.equals("CM2") || position.equals("CAM") || position.equals("LM") || position.equals("RM") || position.equals("CDM")) {
-            addMidfielderAttributes();
-        } else if (position.equals("RW") || position.equals("ST") || position.equals("LW")) {
-            addAttackerAttributes();
-        } else if (position.equals("GK")) {
-            addGoalkeeperAttributes();
-        } else {
-            throw new IllegalArgumentException("Invalid position: " + position);
+        switch (position) {
+            case "RB", "CB1", "CB2", "LB" -> addDefenderAttributes();
+            case "CM1", "CM2", "CAM", "LM", "RM", "CDM" -> addMidfielderAttributes();
+            case "RW", "ST", "LW" -> addAttackerAttributes();
+            case "GK" -> addGoalkeeperAttributes();
+            default -> throw new IllegalArgumentException("Invalid position: " + position);
         }
         getLeftBox().revalidate();
         getLeftBox().repaint();
     }
 
     private void addGoalkeeperAttributes() {
-        firstLine.changeContent(selectedPlayer.getGkAttributes(), "Goalkeeper");
-        secondLine.changeContent(selectedPlayer.getPassingAttributes(), "Passing");
-        thirdLine.changeContent(selectedPlayer.getGeneralAttributes(), "General");
-        fourthLine.changeContent(selectedPlayer.getLastAttributes(), String.valueOf(selectedPlayer.getOVR()));
+        if (activePage.equals("left")) {
+            firstLine.changeContent(selectedPlayer.getGkAttributes(), "Goalkeeping");
+            secondLine.changeContent(selectedPlayer.getPassingAttributes(), "Passing");
+            thirdLine.changeContent(selectedPlayer.getGeneralAttributes(), "General");
+            fourthLine.changeContent(selectedPlayer.getLastAttributes(), String.valueOf(selectedPlayer.getOVR()));
+        } else {
+            firstLine.changeContent(selectedPlayer.getMovementAttributes(), "Movement");
+            secondLine.changeContent(selectedPlayer.getDefendingAttributes(), "Defence");
+            thirdLine.changeContent(selectedPlayer.getAttackingAttributes(), "Attack");
+            fourthLine.changeContent(selectedPlayer.getSetPieceAttributes(), String.valueOf(selectedPlayer.getOVR()));
+        }
     }
 
     private void addAttackerAttributes() {
-        firstLine.changeContent(selectedPlayer.getAttackingAttributes(), "Attack");
-        secondLine.changeContent(selectedPlayer.getMovementAttributes(), "Movement");
-        thirdLine.changeContent(selectedPlayer.getGeneralAttributes(), "General");
-        fourthLine.changeContent(selectedPlayer.getLastAttributes(), String.valueOf(selectedPlayer.getOVR()));
+        if (activePage.equals("left")) {
+            firstLine.changeContent(selectedPlayer.getAttackingAttributes(), "Attack");
+            secondLine.changeContent(selectedPlayer.getMovementAttributes(), "Movement");
+            thirdLine.changeContent(selectedPlayer.getGeneralAttributes(), "General");
+            fourthLine.changeContent(selectedPlayer.getSetPieceAttributes(), String.valueOf(selectedPlayer.getOVR()));
+        } else {
+            firstLine.changeContent(selectedPlayer.getPassingAttributes(), "Passing");
+            secondLine.changeContent(selectedPlayer.getDefendingAttributes(), "Defence");
+            thirdLine.changeContent(selectedPlayer.getGkAttributes(), "Goalkeeping");
+            fourthLine.changeContent(selectedPlayer.getLastAttributes(), String.valueOf(selectedPlayer.getOVR()));
+        }
     }
 
     private void addMidfielderAttributes() {
-        firstLine.changeContent(selectedPlayer.getMovementAttributes(), "Movement");
-        secondLine.changeContent(selectedPlayer.getPassingAttributes(), "Passing");
-        thirdLine.changeContent(selectedPlayer.getGeneralAttributes(), "General");
-        fourthLine.changeContent(selectedPlayer.getLastAttributes(), String.valueOf(selectedPlayer.getOVR()));
+        if (activePage.equals("left")) {
+            firstLine.changeContent(selectedPlayer.getMovementAttributes(), "Movement");
+            secondLine.changeContent(selectedPlayer.getPassingAttributes(), "Passing");
+            thirdLine.changeContent(selectedPlayer.getGeneralAttributes(), "General");
+            fourthLine.changeContent(selectedPlayer.getSetPieceAttributes(), String.valueOf(selectedPlayer.getOVR()));
+        } else {
+            firstLine.changeContent(selectedPlayer.getDefendingAttributes(), "Defence");
+            secondLine.changeContent(selectedPlayer.getAttackingAttributes(), "Attack");
+            thirdLine.changeContent(selectedPlayer.getGkAttributes(), "Goalkeeping");
+            fourthLine.changeContent(selectedPlayer.getLastAttributes(), String.valueOf(selectedPlayer.getOVR()));
+        }
     }
 
     private void addDefenderAttributes() {
