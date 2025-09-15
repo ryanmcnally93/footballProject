@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class MatchTable extends MatchFrames {
+public class MatchTable extends MatchPageTemplate {
 
 	private Box centerBox;
 	private LeagueTable table;

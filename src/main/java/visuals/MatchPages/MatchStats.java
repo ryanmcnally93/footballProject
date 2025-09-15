@@ -10,7 +10,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 
-public class MatchStats extends MatchFrames {
+public class MatchStats extends MatchPageTemplate {
     private static final long serialVersionUID = 5937268249853937276L;
     private JLabel homeShotsOn, awayShotsOn, homeAllShots, awayAllShots, homeCorners, awayCorners, homeOffsides, awayOffsides, homeFouls, awayFouls;
     private CustomProgressBar shotsOnBar, allShotsBar, cornerBar, offsideBar, foulsBar;

@@ -13,7 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-public class MatchEvents extends MatchFrames {
+public class MatchEvents extends MatchPageTemplate {
 
     private Box container;
     private JPanel leftIconBox, leftBox, middleBox, rightBox, rightIconBox;

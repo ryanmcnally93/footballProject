@@ -1,12 +1,12 @@
 package visuals.MainMenuPages.TacticsPages;
 
-import visuals.MainMenuPages.MainMenuPageTemplate;
+import visuals.MainMenuPages.TacticsPageTemplate;
 import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class MatchRolesPage extends MainMenuPageTemplate {
+public class MatchRolesPage extends TacticsPageTemplate {
 
     private JPanel mainPanel;
 

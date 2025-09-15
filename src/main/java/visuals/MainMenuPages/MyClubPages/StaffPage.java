@@ -1,12 +1,12 @@
 package visuals.MainMenuPages.MyClubPages;
 
-import visuals.MainMenuPages.MainMenuPageTemplate;
+import visuals.MainMenuPages.TacticsPageTemplate;
 import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class StaffPage extends MainMenuPageTemplate {
+public class StaffPage extends TacticsPageTemplate {
 
     private JPanel mainPanel;
 

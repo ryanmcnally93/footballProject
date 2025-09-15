@@ -73,20 +73,7 @@ public class PlayerStatsLineOnRatingsPage extends RoundedPanel {
         add(ratingLabel);
 
         // This is for the football image
-        BufferedImage image = null;
-        try {
-            image = ImageIO.read(new File("./src/main/java/visuals/images/ratings_page_goal.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if(image != null) {
-            Image scaledImage = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-            bufferedScaledImage = new BufferedImage(20, 20, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2d = bufferedScaledImage.createGraphics();
-            g2d.drawImage(scaledImage, 0, 0, null);
-            g2d.dispose();
-            icon = new ImageIcon(bufferedScaledImage);
-        }
+        icon = getIconWithSpecificSize("./src/main/java/visuals/images/ratings_page_goal.png", "Goal", 20);
 
         setPermanentHeight(this, 30);
         revalidate();

@@ -17,7 +17,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class MatchRatings extends MatchFrames {
+public class MatchRatings extends MatchPageTemplate {
 
     private Box centerBox;
     private JPanel mainPanel, titleLine;

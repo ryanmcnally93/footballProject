@@ -2,13 +2,11 @@ package visuals.MainMenuPages.SinglePages;
 
 import entities.Match;
 import entities.UsersMatch;
-import visuals.CustomizedElements.MainPageTemplate;
 import visuals.CustomizedElements.MatchLineOnFixturesPages;
-import visuals.MatchPages.MatchFrames;
+import visuals.MatchPages.MatchPageTemplate;
 import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -16,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
 
-public class FixturesPage extends SinglePageTemplate {
+public class FixturesPage extends LeftContentRightScrollPagesTemplate {
 
     private ArrayList<MatchLineOnFixturesPages> lines;
 
@@ -48,7 +46,7 @@ public class FixturesPage extends SinglePageTemplate {
             @Override
             public void mouseClicked(MouseEvent e) {
                 for (Map.Entry<String, JPanel> page : getScheduler().getMatchFramesMap().entrySet()) {
-                    MatchFrames frame = (MatchFrames) page.getValue();
+                    MatchPageTemplate frame = (MatchPageTemplate) page.getValue();
                     matchToView.setScheduler(getScheduler());
                     frame.setMatch(matchToView);
                     frame.setFromScheduler(true);

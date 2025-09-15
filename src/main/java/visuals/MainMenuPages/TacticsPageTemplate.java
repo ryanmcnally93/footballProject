@@ -1,9 +1,9 @@
 package visuals.MainMenuPages;
 
 import entities.UsersMatch;
-import visuals.CustomizedElements.CardmapMainPageTemplate;
 import visuals.CustomizedElements.CustomizedButton;
-import visuals.MatchPages.MatchFrames;
+import visuals.CustomizedElements.HeaderFooterAndCardMapTemplate;
+import visuals.MatchPages.MatchPageTemplate;
 import visuals.ScheduleFrames.Events;
 import visuals.ScheduleFrames.Scheduler;
 import javax.swing.*;
@@ -13,14 +13,14 @@ import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.Map;
 
-public class MainMenuPageTemplate extends CardmapMainPageTemplate {
+public class TacticsPageTemplate extends HeaderFooterAndCardMapTemplate {
 
     private JPanel mainPanel;
     private UsersMatch match;
     private Events event;
     private MouseAdapter playButtonListener;
 
-    public MainMenuPageTemplate(CardLayout cardLayout, JPanel pages, Scheduler scheduler, boolean fromScheduler){
+    public TacticsPageTemplate(CardLayout cardLayout, JPanel pages, Scheduler scheduler, boolean fromScheduler){
         super(cardLayout, pages);
         setScheduler(scheduler);
         setFromScheduler(fromScheduler);
@@ -51,7 +51,7 @@ public class MainMenuPageTemplate extends CardmapMainPageTemplate {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     for (Map.Entry<String, JPanel> page : getScheduler().getMatchFramesMap().entrySet()) {
-                        MatchFrames frame = (MatchFrames) page.getValue();
+                        MatchPageTemplate frame = (MatchPageTemplate) page.getValue();
                         event.getMatch().setScheduler(getScheduler());
                         frame.setMatch(event.getMatch());
                     }

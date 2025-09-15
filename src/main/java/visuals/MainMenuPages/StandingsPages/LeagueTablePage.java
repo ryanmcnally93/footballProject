@@ -1,13 +1,13 @@
 package visuals.MainMenuPages.StandingsPages;
 
 import visuals.CustomizedElements.LeagueTable;
-import visuals.MainMenuPages.MainMenuPageTemplate;
+import visuals.MainMenuPages.TacticsPageTemplate;
 import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class LeagueTablePage extends MainMenuPageTemplate {
+public class LeagueTablePage extends TacticsPageTemplate {
 
     private JPanel mainPanel;
     private Box centerBox;

@@ -13,35 +13,23 @@ import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.Map;
 
-public class TrainingPage extends SinglePageTemplate {
+public class TrainingPage extends LeftContentRightScrollPagesTemplate {
 
     private Scheduler scheduler;
     private Footballer selectedPlayer;
     private PlayerAttributeLine firstLine, secondLine, thirdLine, fourthLine;
-    private Timer timer;
     private String activePage = "left";
     private PanelOfCircles circles;
-    private final Map<String, Rectangle> boundsByDirection = Map.of(
-            "down", new Rectangle(0, 0, 155, 20),
-            "up",   new Rectangle(0, 0, 155, 20),
-            "left", new Rectangle(0, 0, 50, 50),
-            "right", new Rectangle(0, 0, 50, 50),
-            "downHover", new Rectangle(633, 413, 155, 20),
-            "upHover",   new Rectangle(633, 168, 155, 20),
-            "leftHover", new Rectangle(5, 272, 50, 50),
-            "rightHover", new Rectangle(565, 272, 50, 50)
-    );
 
     public TrainingPage(Scheduler scheduler) {
         super(scheduler);
         this.scheduler = scheduler;
         getHeaderPanel().setTitle("Training");
 
-        setupPlayerListOnRight();
-        PlayerMenuBar firstPlayerBar = (PlayerMenuBar) getRightBox().getComponent(0);
-        firstPlayerBar.setAsSelected(true);
-        selectedPlayer = firstPlayerBar.getPlayer();
+        ImageIcon buttonIcon = getIconWithSpecificSize("./src/main/java/visuals/Images/training_icon.png", "Training", 16);
+        getHeaderPanel().getPageIcon().setIcon(buttonIcon);
 
+        setupPlayerListOnRight();
         setupAttributesOnLeft();
         populatePlayerAttributes();
 
@@ -52,103 +40,6 @@ public class TrainingPage extends SinglePageTemplate {
 
         addKeyListeners();
         setVisible(true);
-    }
-
-    private void addScrollButton(String direction) {
-        CustomizedButton button = getCustomizedButton(direction);
-
-        button.setBounds(boundsByDirection.get(direction));
-        button.setVisible(false);
-
-        JPanel hoverArea = new JPanel(null);
-        hoverArea.setOpaque(false);
-        hoverArea.setBounds(boundsByDirection.get(direction + "Hover"));
-        hoverArea.add(button);
-        getLayeredPane().add(hoverArea, JLayeredPane.PALETTE_LAYER);
-
-        hoverArea.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                if (!direction.equals(activePage)) {
-                    JScrollBar vBar = getScroller().getVerticalScrollBar();
-                    int max = vBar.getMaximum() - vBar.getVisibleAmount();
-                    int value = vBar.getValue();
-                    boolean edgeOfPosition = false;
-                    if (direction.equals("down")) {
-                        edgeOfPosition = value >= max;
-                    } else if (direction.equals("up")) {
-                        edgeOfPosition = value == 0;
-                    }
-
-                    button.setVisible(!edgeOfPosition);
-                }
-            }
-        });
-
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseExited(MouseEvent e) {
-                button.setVisible(false);
-                if (timer != null && timer.isRunning()) {
-                    timer.stop();
-                }
-            }
-        });
-
-        if (direction.equals("down") || direction.equals("up")) {
-            button.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    JScrollBar vBar = getScroller().getVerticalScrollBar();
-                    timer = new Timer(20, evt -> {
-                        int newVal = 0;
-                        if (direction.equals("down")) {
-                            newVal = Math.min(vBar.getValue() + 2, vBar.getMaximum());
-                        } else {
-                            newVal = Math.min(vBar.getValue() - 2, vBar.getMaximum());
-                        }
-                        vBar.setValue(newVal);
-
-                        int max = vBar.getMaximum() - vBar.getVisibleAmount();
-                        boolean edgeOfPosition = false;
-                        if (direction.equals("down")) {
-                            edgeOfPosition = vBar.getValue() >= max;
-                        } else {
-                            edgeOfPosition = vBar.getValue() == 0;
-                        }
-
-                        if (edgeOfPosition) {
-                            button.setVisible(false);
-                            timer.stop();
-                        }
-                    });
-
-                    timer.start();
-                }
-            });
-        } else {
-            button.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    changeStatBars(direction);
-                    button.setVisible(false);
-                }
-            });
-        }
-    }
-
-    private static CustomizedButton getCustomizedButton(String direction) {
-        CustomizedButton button;
-        switch (direction) {
-            case "down", "up" -> {
-                ImageIcon buttonIcon = new ImageIcon("./src/main/java/visuals/Images/" + direction + "_arrow.png", direction.substring(0, 1).toUpperCase() + direction.substring(1) + "Small");
-                button = new CustomizedButton(buttonIcon);
-            }
-            case "left" -> button = new CustomizedButton("<");
-            case "right" -> button = new CustomizedButton(">");
-            default -> throw new IllegalArgumentException("Invalid direction");
-        }
-        return button;
     }
 
     private void setupAttributesOnLeft() {
@@ -252,50 +143,6 @@ public class TrainingPage extends SinglePageTemplate {
         }
     }
 
-    private void moveScroller(String direction) {
-        Container rightBox = getRightBox();
-        int count = rightBox.getComponentCount();
-
-        for (int i = 0; i < count; i++) {
-            Component comp = rightBox.getComponent(i);
-
-            if (comp instanceof PlayerMenuBar playerBar && playerBar.isSelected()) {
-                // Deselect current
-                playerBar.setAsSelected(false);
-                playerBar.revalidate();
-                playerBar.repaint();
-
-                int nextIndex;
-                if (direction.equals("down")) {
-                    nextIndex = (i + 2 < count) ? i + 2 : i; // stay at end if no next
-                } else if (direction.equals("up")) {
-                    nextIndex = (i - 2 >= 0) ? i - 2 : i;
-                } else {
-                    nextIndex = Integer.parseInt(direction);
-                }
-
-                PlayerMenuBar nextBar = (PlayerMenuBar) rightBox.getComponent(nextIndex);
-                nextBar.setAsSelected(true);
-                scrollToButton(nextBar);
-                nextBar.revalidate();
-                nextBar.repaint();
-
-                // Update reference
-                selectedPlayer = nextBar.getPlayer();
-                populatePlayerAttributes();
-                break;
-            }
-        }
-    }
-
-    public void scrollToButton(JButton button) {
-        Rectangle bounds = button.getBounds();
-        Point location = SwingUtilities.convertPoint(button.getParent(), bounds.getLocation(), getScroller().getViewport());
-        bounds.setLocation(location);
-
-        getScroller().getViewport().scrollRectToVisible(bounds);
-    }
-
     private void populatePlayerAttributes() {
         String position = selectedPlayer.getPositionPlaced();
         switch (position) {
@@ -392,11 +239,51 @@ public class TrainingPage extends SinglePageTemplate {
             getRightBox().revalidate();
             getRightBox().repaint();
         }
+
+        PlayerMenuBar firstPlayerBar = (PlayerMenuBar) getRightBox().getComponent(0);
+        firstPlayerBar.setAsSelected(true);
+        selectedPlayer = firstPlayerBar.getPlayer();
     }
 
     private void getButtonClickedAction(PlayerMenuBar playerMenuBar) {
         // Supply the retrieved index of this bar to 'move'
         moveScroller(String.valueOf(Arrays.asList(getRightBox().getComponents()).indexOf(playerMenuBar)));
+    }
+
+    private void moveScroller(String direction) {
+        Container rightBox = getRightBox();
+        int count = rightBox.getComponentCount();
+
+        for (int i = 0; i < count; i++) {
+            Component comp = rightBox.getComponent(i);
+
+            if (comp instanceof PlayerMenuBar playerBar && playerBar.isSelected()) {
+                // Deselect current
+                playerBar.setAsSelected(false);
+                playerBar.revalidate();
+                playerBar.repaint();
+
+                int nextIndex;
+                if (direction.equals("down")) {
+                    nextIndex = (i + 2 < count) ? i + 2 : i; // stay at end if no next
+                } else if (direction.equals("up")) {
+                    nextIndex = (i - 2 >= 0) ? i - 2 : i;
+                } else {
+                    nextIndex = Integer.parseInt(direction);
+                }
+
+                PlayerMenuBar nextBar = (PlayerMenuBar) rightBox.getComponent(nextIndex);
+                nextBar.setAsSelected(true);
+                scrollToButton(nextBar);
+                nextBar.revalidate();
+                nextBar.repaint();
+
+                // Update reference
+                selectedPlayer = nextBar.getPlayer();
+                populatePlayerAttributes();
+                break;
+            }
+        }
     }
 
     @Override
@@ -407,5 +294,14 @@ public class TrainingPage extends SinglePageTemplate {
     @Override
     public void setScheduler(Scheduler scheduler) {
         this.scheduler = scheduler;
+    }
+
+    @Override
+    protected boolean directionEqualsPage(String direction) {
+        return direction.equals(activePage);
+    }
+    @Override
+    protected void moveLeftOrRight(String direction) {
+        changeStatBars(direction);
     }
 }

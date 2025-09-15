@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class MatchWatch extends MatchFrames {
+public class MatchWatch extends MatchPageTemplate {
 
 	private static final long serialVersionUID = -3730364980616724000L;
 	private Box centerBox;

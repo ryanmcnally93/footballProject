@@ -2,7 +2,7 @@ package visuals.MainMenuPages.TacticsPages;
 
 import people.Footballer;
 import visuals.CustomizedElements.PlayerStatsLineOnRatingsPage;
-import visuals.MainMenuPages.MainMenuPageTemplate;
+import visuals.MainMenuPages.TacticsPageTemplate;
 import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
@@ -14,7 +14,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FirstTeamPage extends MainMenuPageTemplate {
+public class FirstTeamPage extends TacticsPageTemplate {
 
     private JPanel mainPanel;
     private Box centerBox;

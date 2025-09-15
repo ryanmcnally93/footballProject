@@ -1,0 +1,228 @@
+package visuals.MainMenuPages.SinglePages;
+
+import visuals.CustomizedElements.CustomizedButton;
+import visuals.CustomizedElements.HeaderFooterAndCardMapTemplate;
+import visuals.CustomizedElements.PlayerMenuBar;
+import visuals.CustomizedElements.RoundedPanel;
+import visuals.ScheduleFrames.Scheduler;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Map;
+
+public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapTemplate {
+
+    private JPanel mainPanel;
+    private RoundedPanel leftBox, rightBox;
+    private JScrollPane scroller;
+    private Image backgroundImage;
+    private Timer timer;
+    private final Map<String, Rectangle> boundsByDirection = Map.of(
+            "down", new Rectangle(0, 0, 155, 20),
+            "up",   new Rectangle(0, 0, 155, 20),
+            "left", new Rectangle(0, 0, 50, 50),
+            "right", new Rectangle(0, 0, 50, 50),
+            "downHover", new Rectangle(633, 413, 155, 20),
+            "upHover",   new Rectangle(633, 168, 155, 20),
+            "leftHover", new Rectangle(5, 272, 50, 50),
+            "rightHover", new Rectangle(565, 272, 50, 50)
+    );
+
+    public LeftContentRightScrollPagesTemplate(Scheduler scheduler) {
+        super(scheduler);
+        getHeaderPanel().setOpaque(false);
+        getHeaderPanel().setBounds(0, 0, 800, 120);
+        getFooterPanel().setOpaque(false);
+        getFooterPanel().getBackButtonBox().setOpaque(false);
+        getFooterPanel().getLeftBlankBox().setOpaque(false);
+        backgroundImage = new ImageIcon("./src/main/java/visuals/Images/start_page_main.jpg").getImage();
+
+        JLayeredPane layeredPane = getLayeredPane();
+        mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
+        mainPanel.setOpaque(false);
+
+        leftBox = new RoundedPanel(30);
+        Color newColor = new Color(217, 217, 217, (int)(0.9 * 255));
+        leftBox.setBorderColor(newColor);
+        leftBox.setBackground(newColor);
+        setPermanentWidthAndHeight(leftBox, 621, 340);
+
+        rightBox = new RoundedPanel(30);
+        rightBox.setBorderColor(newColor);
+        rightBox.setBackground(newColor);
+
+        mainPanel.add(leftBox);
+        mainPanel.add(Box.createRigidArea(new Dimension(12, 0)));
+
+        scroller = makeScroller(rightBox);
+        scroller.setFocusable(false);
+        scroller.setOpaque(false);
+        scroller.getViewport().setOpaque(false);
+        setPermanentWidthAndHeight(scroller, 155, 265);
+        mainPanel.add(scroller);
+
+        mainPanel.setBounds(0, 90, 800, 420);
+        layeredPane.add(mainPanel, JLayeredPane.DEFAULT_LAYER);
+
+        getFooterPanel().addBackButton();
+        updateBackButtonFunctionality();
+
+        setVisible(true);
+    }
+
+    protected void addScrollButton(String direction) {
+        CustomizedButton scrollButton = getCustomizedButton(direction);
+
+        scrollButton.setBounds(boundsByDirection.get(direction));
+        scrollButton.setVisible(false);
+
+        JPanel hoverArea = new JPanel(null);
+        hoverArea.setOpaque(false);
+        hoverArea.setBounds(boundsByDirection.get(direction + "Hover"));
+        hoverArea.add(scrollButton);
+        getLayeredPane().add(hoverArea, JLayeredPane.PALETTE_LAYER);
+
+        scrollButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseExited(MouseEvent e) {
+                scrollButton.setVisible(false);
+                if (timer != null && timer.isRunning()) {
+                    timer.stop();
+                }
+            }
+        });
+
+        hoverArea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (!directionEqualsPage(direction)) {
+                    JScrollBar vBar = getScroller().getVerticalScrollBar();
+                    int max = vBar.getMaximum() - vBar.getVisibleAmount();
+                    int value = vBar.getValue();
+                    boolean edgeOfPosition = false;
+                    if (direction.equals("down")) {
+                        edgeOfPosition = value >= max;
+                    } else if (direction.equals("up")) {
+                        edgeOfPosition = value == 0;
+                    }
+
+                    scrollButton.setVisible(!edgeOfPosition);
+                }
+            }
+        });
+
+        if (direction.equals("down") || direction.equals("up")) {
+            scrollButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    JScrollBar vBar = getScroller().getVerticalScrollBar();
+                    timer = new Timer(20, evt -> {
+                        int newVal = 0;
+                        if (direction.equals("down")) {
+                            newVal = Math.min(vBar.getValue() + 2, vBar.getMaximum());
+                        } else {
+                            newVal = Math.min(vBar.getValue() - 2, vBar.getMaximum());
+                        }
+                        vBar.setValue(newVal);
+
+                        int max = vBar.getMaximum() - vBar.getVisibleAmount();
+                        boolean edgeOfPosition = false;
+                        if (direction.equals("down")) {
+                            edgeOfPosition = vBar.getValue() >= max;
+                        } else {
+                            edgeOfPosition = vBar.getValue() == 0;
+                        }
+
+                        if (edgeOfPosition) {
+                            scrollButton.setVisible(false);
+                            timer.stop();
+                        }
+                    });
+
+                    timer.start();
+                }
+            });
+        } else {
+            scrollButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    moveLeftOrRight(direction);
+                    scrollButton.setVisible(false);
+                }
+            });
+        }
+    }
+
+    protected void moveLeftOrRight(String direction) {}
+
+    protected boolean directionEqualsPage(String direction) {
+        return true;
+    }
+
+    private static CustomizedButton getCustomizedButton(String direction) {
+        CustomizedButton button;
+        switch (direction) {
+            case "down", "up" -> {
+                ImageIcon buttonIcon = new ImageIcon("./src/main/java/visuals/Images/" + direction + "_arrow.png", direction.substring(0, 1).toUpperCase() + direction.substring(1) + "Small");
+                button = new CustomizedButton(buttonIcon);
+            }
+            case "left" -> button = new CustomizedButton("<");
+            case "right" -> button = new CustomizedButton(">");
+            default -> throw new IllegalArgumentException("Invalid direction");
+        }
+        return button;
+    }
+
+    public void scrollToButton(JButton button) {
+        Rectangle bounds = button.getBounds();
+        Point location = SwingUtilities.convertPoint(button.getParent(), bounds.getLocation(), getScroller().getViewport());
+        bounds.setLocation(location);
+
+        getScroller().getViewport().scrollRectToVisible(bounds);
+    }
+
+    public RoundedPanel getLeftBox() {
+        return leftBox;
+    }
+
+    public void setLeftBox(RoundedPanel leftBox) {
+        this.leftBox = leftBox;
+    }
+
+    public RoundedPanel getRightBox() {
+        return rightBox;
+    }
+
+    public void setRightBox(RoundedPanel rightBox) {
+        this.rightBox = rightBox;
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (backgroundImage != null) {
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.43f)); // 57% transparency
+        g2d.setColor(new Color(255, 255, 255)); // Change color if needed (white here)
+        g2d.fillRect(0, 0, getWidth(), getHeight());
+        g2d.dispose();
+    }
+
+    @Override
+    public boolean isFromScheduler() {
+        return true;
+    }
+
+    public JScrollPane getScroller() {
+        return scroller;
+    }
+
+    public void setScroller(JScrollPane scroller) {
+        this.scroller = scroller;
+    }
+}

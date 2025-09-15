@@ -2,8 +2,8 @@ package visuals.MatchPages;
 
 import entities.Match;
 import entities.UsersMatch;
-import visuals.CustomizedElements.CardmapMainPageTemplate;
 import visuals.CustomizedElements.CustomizedButton;
+import visuals.CustomizedElements.HeaderFooterAndCardMapTemplate;
 import visuals.CustomizedElements.SlidingPanel;
 
 import javax.swing.*;
@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class MatchFrames extends CardmapMainPageTemplate {
+public class MatchPageTemplate extends HeaderFooterAndCardMapTemplate {
 
 	private static final String PLAY = "Play Game";
 	private SlidingPanel slidingPanel;
@@ -29,7 +29,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 	private Box speedometerBox;
 	private CustomizedButton back;
 
-	public MatchFrames(CardLayout cardLayout, JPanel pages, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
+	public MatchPageTemplate(CardLayout cardLayout, JPanel pages, Speedometer speedometer, ArrayList<CustomizedButton> buttons) {
     	super(cardLayout, pages);
 		this.speedometer = speedometer;
 		this.pauseButton = buttons.getFirst();
@@ -62,12 +62,12 @@ public class MatchFrames extends CardmapMainPageTemplate {
 				}
 				// Remove the back button in MatchFrames now that it has been clicked
 				for (Map.Entry<String, JPanel> eachPage : match.getScheduler().getMatchFramesMap().entrySet()) {
-					JPanel buttonBox = ((MatchFrames) eachPage.getValue()).getFooterPanel().getBackButtonBox();
+					JPanel buttonBox = ((MatchPageTemplate) eachPage.getValue()).getFooterPanel().getBackButtonBox();
 					if (buttonBox.getComponents().length > 0) {
 						buttonBox.remove(0);
 					}
-					((MatchFrames) eachPage.getValue()).setFromScheduler(false);
-					((MatchFrames) eachPage.getValue()).removeMatchFramesContentWhenLeavingMatch();
+					((MatchPageTemplate) eachPage.getValue()).setFromScheduler(false);
+					((MatchPageTemplate) eachPage.getValue()).removeMatchFramesContentWhenLeavingMatch();
 				}
 				getMatch().getScheduler().getWindow().revalidate();
 				getMatch().getScheduler().getWindow().repaint();
@@ -114,7 +114,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 					getMatch().getTimer().pauseTimer();
 				}
 
-				MatchFrames current = getCurrentPage();
+				MatchPageTemplate current = getCurrentPage();
 				current.getFooterPanel().getMiddleBox().add(getResumeButton());
 				current.getFooterPanel().getMiddleBox().revalidate();
 				current.getFooterPanel().getMiddleBox().repaint();
@@ -142,7 +142,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 					getMatch().getTimer().resumeTimer();
 				}
 
-				MatchFrames current = getCurrentPage();
+				MatchPageTemplate current = getCurrentPage();
 				current.getFooterPanel().getMiddleBox().add(getPauseButton());
 				current.getFooterPanel().getMiddleBox().revalidate();
 				current.getFooterPanel().getMiddleBox().repaint();
@@ -153,7 +153,7 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		playButtonActionMap = getActionMap();
 
 		playButtonInputMap.put(KeyStroke.getKeyStroke("ENTER"), PLAY);
-		playButtonActionMap.put(PLAY, new MatchFrames.PlayGame());
+		playButtonActionMap.put(PLAY, new MatchPageTemplate.PlayGame());
 
 		getFooterPanel().getMiddleBox().add(playButton);
 	}
@@ -166,11 +166,11 @@ public class MatchFrames extends CardmapMainPageTemplate {
 
 	public void removeOtherMatchFramesAttributes_WhenFromScheduler() {
 		for (Map.Entry<String, JPanel> eachPanel : getMatch().getScheduler().getMatchFramesMap().entrySet()) {
-			MatchFrames currentPage = (MatchFrames) eachPanel.getValue();
+			MatchPageTemplate currentPage = (MatchPageTemplate) eachPanel.getValue();
 			currentPage.getTime().setText(getMatch().getTimer().getTime());
 		}
-		MatchFrames tablePanel = getMatch().getScheduler().getTablePanel();
-		CardmapMainPageTemplate.FooterPanel footer = tablePanel.getFooterPanel();
+		MatchPageTemplate tablePanel = getMatch().getScheduler().getTablePanel();
+		HeaderFooterAndCardMapTemplate.FooterPanel footer = tablePanel.getFooterPanel();
 
 		footer.getButtonBox().remove(footer.getMiddleBox());
 		footer.getButtonBox().add(footer.getPrevButton());
@@ -180,8 +180,8 @@ public class MatchFrames extends CardmapMainPageTemplate {
 	}
 
 	public void removeUnplayedMatchViewAttributes() {
-		MatchFrames tablePanel = getMatch().getScheduler().getTablePanel();
-		CardmapMainPageTemplate.FooterPanel footer = tablePanel.getFooterPanel();
+		MatchPageTemplate tablePanel = getMatch().getScheduler().getTablePanel();
+		HeaderFooterAndCardMapTemplate.FooterPanel footer = tablePanel.getFooterPanel();
 
 		// Set attendance back to default value 6000, change later
 		tablePanel.getStadiumAndAttendance().setText(tablePanel.getStadiumAndAttendance() + " 6000");
@@ -224,14 +224,14 @@ public class MatchFrames extends CardmapMainPageTemplate {
 	}
 
 	public void moveButtons(String pageName, String direction) {
-		MatchFrames page = (MatchFrames) getMatch().getScheduler().getMatchFramesMap().get(pageName);
+		MatchPageTemplate page = (MatchPageTemplate) getMatch().getScheduler().getMatchFramesMap().get(pageName);
 		// Skip a page that has been removed from the cardmap
 		if (page == null && direction.equals("forward")) {
 			getMatch().setCurrentPageName(getMatch().getNextPageName());
-			page = (MatchFrames) getMatch().getScheduler().getMatchFramesMap().get(getMatch().getNextPageName());
+			page = (MatchPageTemplate) getMatch().getScheduler().getMatchFramesMap().get(getMatch().getNextPageName());
 		} else if (page == null && direction.equals("backward")) {
 			getMatch().setCurrentPageName(getMatch().getPrevPageName());
-			page = (MatchFrames) getMatch().getScheduler().getMatchFramesMap().get(getMatch().getPrevPageName());
+			page = (MatchPageTemplate) getMatch().getScheduler().getMatchFramesMap().get(getMatch().getPrevPageName());
 		}
 
 		// Take components with us through the pages
@@ -352,14 +352,14 @@ public class MatchFrames extends CardmapMainPageTemplate {
 	public void replacePlayButtonWithPauseButton(){
 		// Removing the play button as soon as it's clicked
 		getFooterPanel().getMiddleBox().remove(getPlayButton());
-		MatchFrames current = getCurrentPage();
+		MatchPageTemplate current = getCurrentPage();
 		current.getFooterPanel().getMiddleBox().add(getPauseButton());
 		current.getFooterPanel().getMiddleBox().revalidate();
 		current.getFooterPanel().getMiddleBox().repaint();
 	}
 
 	public void displayTacticsButton() {
-		MatchFrames current = getCurrentPage();
+		MatchPageTemplate current = getCurrentPage();
 		if (!getTacticsButton().isAncestorOf(current.getFooterPanel().getMiddleBox())) {
 			current.getFooterPanel().getMiddleBox().add(getTacticsButton());
 			current.getFooterPanel().getMiddleBox().revalidate();
@@ -367,9 +367,9 @@ public class MatchFrames extends CardmapMainPageTemplate {
 		}
 	}
 
-	public MatchFrames getCurrentPage(){
+	public MatchPageTemplate getCurrentPage(){
 		String currentPageString = getMatch().getCurrentPageName();
-		return (MatchFrames) getMatch().getScheduler().getMatchFramesMap().get(currentPageString);
+		return (MatchPageTemplate) getMatch().getScheduler().getMatchFramesMap().get(currentPageString);
 	}
 
 	public void handleClick() {

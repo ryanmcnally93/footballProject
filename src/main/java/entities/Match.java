@@ -6,10 +6,10 @@ import visuals.CustomizedElements.PlayerAchievementLine;
 import visuals.CustomizedElements.PlayerStatsBoxOnRatingsPage;
 import visuals.CustomizedElements.PlayerStatsLineOnRatingsPage;
 import visuals.CustomizedElements.TeamAchievementLine;
-import visuals.MainMenuPages.MainMenuPageTemplate;
+import visuals.MainMenuPages.TacticsPageTemplate;
 import visuals.ScheduleFrames.Events;
 import visuals.ScheduleFrames.Scheduler;
-import visuals.MatchPages.MatchFrames;
+import visuals.MatchPages.MatchPageTemplate;
 
 import javax.swing.*;
 import java.time.LocalDateTime;
@@ -577,7 +577,7 @@ public class Match {
 	public void continueToScheduler() {
 		if (!simulated) {
 			for (Map.Entry<String, JPanel> eachPage : getScheduler().getMatchFramesMap().entrySet()) {
-				MatchFrames matchPage = (MatchFrames) eachPage.getValue();
+				MatchPageTemplate matchPage = (MatchPageTemplate) eachPage.getValue();
 				matchPage.removeMatchFramesContentWhenLeavingMatch();
 				matchPage.getFooterPanel().getMiddleBox().remove(matchPage.getContinueButton());
 			}
@@ -615,7 +615,7 @@ public class Match {
 
 		// Set the back button on tactics cardmap to normal
 		for (Map.Entry<String, JPanel> eachTacticsPage : getScheduler().getTacticsMap().entrySet()) {
-			((MainMenuPageTemplate) eachTacticsPage.getValue()).setFromScheduler(true);
+			((TacticsPageTemplate) eachTacticsPage.getValue()).setFromScheduler(true);
 		}
 
 		if (simulatedMatch != null) {

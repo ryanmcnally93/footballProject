@@ -9,6 +9,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import static visuals.CustomizedElements.GamePanel.getIconWithSpecificSize;
+
 public class TacticsPanel extends JPanel {
 
     private Polygon shape;
@@ -17,22 +19,8 @@ public class TacticsPanel extends JPanel {
 
     public TacticsPanel() {
         setLayout(null);
-        BufferedImage image = null;
-        ImageIcon football = null;
-        try {
-            image = ImageIO.read(new File("./src/main/java/visuals/images/ratings_page_goal.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if(image != null) {
-            Image scaledImage = image.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-            BufferedImage bufferedScaledImage = new BufferedImage(30, 30, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2d = bufferedScaledImage.createGraphics();
-            g2d.drawImage(scaledImage, 0, 0, null);
-            g2d.dispose();
-            football = new ImageIcon(bufferedScaledImage);
-        }
 
+        ImageIcon football = getIconWithSpecificSize("./src/main/java/visuals/images/ratings_page_goal.png", "Football", 30);
         footballLabel = new JLabel(football);
         footballLabel.setBounds(121,85,30,30);
 

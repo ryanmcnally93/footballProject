@@ -7,14 +7,13 @@ import entities.Team;
 import entities.User;
 import entities.UsersMatch;
 import gameSetup.GameWindow;
-import visuals.CustomizedElements.CardmapMainPageTemplate;
 import visuals.CustomizedElements.CustomizedButton;
 import visuals.CustomizedElements.CustomizedTitle;
 import visuals.CustomizedElements.GamePanel;
 import visuals.CustomizedElements.MainMenu;
-import visuals.CustomizedElements.MainPageTemplate;
+import visuals.CustomizedElements.HeaderFooterAndCardMapTemplate;
 import visuals.CustomizedElements.TacticsPanel;
-import visuals.MainMenuPages.MainMenuPageTemplate;
+import visuals.MainMenuPages.TacticsPageTemplate;
 import visuals.MainMenuPages.MyClubPages.BudgetPage;
 import visuals.MainMenuPages.MyClubPages.FacilitiesPage;
 import visuals.MainMenuPages.MyClubPages.StaffPage;
@@ -32,7 +31,7 @@ import visuals.MainMenuPages.TacticsPages.FormationPage;
 import visuals.MainMenuPages.TacticsPages.MatchRolesPage;
 import visuals.MatchPages.MatchAllMatches;
 import visuals.MatchPages.MatchEvents;
-import visuals.MatchPages.MatchFrames;
+import visuals.MatchPages.MatchPageTemplate;
 import visuals.MatchPages.MatchRatings;
 import visuals.MatchPages.MatchScorers;
 import visuals.MatchPages.MatchStats;
@@ -262,7 +261,7 @@ public class Scheduler extends GamePanel {
 		addSinglePageListener(myTeamButton, myTeamPage);
 	}
 
-	private void addSinglePageListener(CustomizedButton button, MainPageTemplate page) {
+	private void addSinglePageListener(CustomizedButton button, HeaderFooterAndCardMapTemplate page) {
 		button.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mouseClicked(MouseEvent e){
@@ -688,7 +687,7 @@ public class Scheduler extends GamePanel {
 	}
 
 	public void viewMatchAfterTacticsPageViewed() {
-		MatchFrames currentPage = (MatchFrames) matchFramesMap.get(match.getCurrentPageName());
+		MatchPageTemplate currentPage = (MatchPageTemplate) matchFramesMap.get(match.getCurrentPageName());
 		ratingsPanel.updateLinesAfterTacticsChange();
 		currentPage.getFooterPanel().getMiddleBox().add(currentPage.getResumeButton());
 		currentPage.displayTacticsButton();
@@ -698,8 +697,8 @@ public class Scheduler extends GamePanel {
 	public void viewTacticsPages(boolean beforeMatch, Events event) {
 		getWindow().getContentPane().removeAll();
 		for (Map.Entry<String, JPanel> eachTacticsPage : getTacticsMap().entrySet()) {
-			((MainMenuPageTemplate) eachTacticsPage.getValue()).setFromScheduler(beforeMatch);
-			((MainMenuPageTemplate) eachTacticsPage.getValue()).setEvent(event);
+			((TacticsPageTemplate) eachTacticsPage.getValue()).setFromScheduler(beforeMatch);
+			((TacticsPageTemplate) eachTacticsPage.getValue()).setEvent(event);
 		}
 		getWindow().getContentPane().add(getTacticsPages(), BorderLayout.CENTER);
 		getTacticsLayout().show(getTacticsPages(), "First Team");
@@ -721,13 +720,13 @@ public class Scheduler extends GamePanel {
 	public void removePage(String pageName, Map<String, JPanel> cardMap, JPanel cardPanel) {
 		// Ensure the page exists
 		if (cardMap.containsKey(pageName)) {
-			CardmapMainPageTemplate page = (CardmapMainPageTemplate) cardMap.get(pageName);
+			HeaderFooterAndCardMapTemplate page = (HeaderFooterAndCardMapTemplate) cardMap.get(pageName);
 
 			// Remove from the card layout panel
 			cardPanel.remove(page);
 			if (cardMap == getMatchFramesMap()) {
 				for (Map.Entry<String, JPanel> eachMatchPage : getMatchFramesMap().entrySet()) {
-					((MatchFrames) eachMatchPage.getValue()).setPages(cardPanel);
+					((MatchPageTemplate) eachMatchPage.getValue()).setPages(cardPanel);
 				}
 			}
 
@@ -772,7 +771,7 @@ public class Scheduler extends GamePanel {
 				cardPanel.add(entry.getValue(), entry.getKey());
 			}
 			for (Map.Entry<String, JPanel> entry : getTacticsMap().entrySet()) {
-				CardmapMainPageTemplate cardPage = (CardmapMainPageTemplate) entry.getValue();
+				HeaderFooterAndCardMapTemplate cardPage = (HeaderFooterAndCardMapTemplate) entry.getValue();
 				cardPage.setPages(cardPanel);
 			}
 		} else if (mapType.equals("Match Frames")) {
@@ -783,7 +782,7 @@ public class Scheduler extends GamePanel {
 				cardPanel.add(entry.getValue(), entry.getKey());
 			}
 			for (Map.Entry<String, JPanel> entry : getMatchFramesMap().entrySet()) {
-				CardmapMainPageTemplate cardPage = (CardmapMainPageTemplate) entry.getValue();
+                HeaderFooterAndCardMapTemplate cardPage = (HeaderFooterAndCardMapTemplate) entry.getValue();
 				cardPage.setPages(cardPanel);
 			}
 		}
@@ -808,7 +807,7 @@ public class Scheduler extends GamePanel {
 
 	public void viewMatchFromScheduler() {
 		for (Map.Entry<String, JPanel> eachPanel : getMatchFramesMap().entrySet()) {
-			MatchFrames page = (MatchFrames) eachPanel.getValue();
+			MatchPageTemplate page = (MatchPageTemplate) eachPanel.getValue();
 			for (Component button : page.getFooterPanel().getMiddleBox().getComponents()) {
 				if (button == page.getPauseButton() || button == page.getPlayButton() || button == page.getResumeButton() || button == page.getTacticsButton() || button == page.getContinueButton()) {
 					page.getFooterPanel().getMiddleBox().remove(button);

@@ -1,9 +1,11 @@
 package visuals.CustomizedElements;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -61,6 +63,17 @@ public abstract class GamePanel extends JPanel {
         east = Box.createHorizontalBox();
         east.setPreferredSize(new Dimension(width,200));
         mainPanel.add(east, BorderLayout.EAST);
+    }
+
+    public void addLabelToTitleLine(String text, int width, JPanel titleLine) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Menlo", Font.BOLD, 12));
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        if (text.equals("RAT.")) {
+            label.setToolTipText("RATING");
+        }
+        setPermanentWidth(label, width);
+        titleLine.add(label);
     }
 
     public static boolean isTheCursorStillOverTheButton(JButton button) {
@@ -156,6 +169,39 @@ public abstract class GamePanel extends JPanel {
         Image scaledImage = icon.getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
 
         return new ImageIcon(scaledImage, icon.getDescription());
+    }
+
+    private static int findCustomisedTitleWidthBeforeDrawn(String text, Font font) {
+        BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = img.createGraphics();
+        // optional: make measuring match rendering quality
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2.setFont(font);
+        FontMetrics fm = g2.getFontMetrics();
+        int width = fm.stringWidth(text);
+        g2.dispose();
+        return width;
+    }
+
+    public static ImageIcon getIconWithSpecificSize(String url, String description, int size) {
+        BufferedImage image = null;
+        ImageIcon buttonIcon = null;
+        try {
+            image = ImageIO.read(new File(url));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(image != null) {
+            Image scaledImage = image.getScaledInstance(size, size, Image.SCALE_SMOOTH);
+            BufferedImage bufferedScaledImage = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedScaledImage.createGraphics();
+            g2d.drawImage(scaledImage, 0, 0, null);
+            g2d.dispose();
+            buttonIcon = new ImageIcon(bufferedScaledImage);
+            buttonIcon.setDescription(description);
+        }
+        return buttonIcon;
     }
 
     public static ImageIcon alterImageSizeWithTarget(ImageIcon icon, int targetSize) {

@@ -1,29 +1,43 @@
 package visuals.CustomizedElements;
 
-import visuals.MainMenuPages.MainMenuPageTemplate;
+import visuals.MainMenuPages.TacticsPageTemplate;
 import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 
-public class MainPageTemplate extends GamePanel {
+public class HeaderFooterAndCardMapTemplate extends GamePanel {
 
     private Scheduler scheduler;
     private JLayeredPane layeredPane;
-    private MainMenuPageTemplate.HeaderPanel headerPanel;
-    private MainMenuPageTemplate.FooterPanel footerPanel;
-    private boolean fromScheduler = false;
+    private TacticsPageTemplate.HeaderPanel headerPanel;
+    private TacticsPageTemplate.FooterPanel footerPanel;
+    private boolean fromScheduler, cardmap;
+    private CardLayout layout;
+    private JPanel pages;
 
-    public MainPageTemplate(Scheduler scheduler) {
+    public HeaderFooterAndCardMapTemplate(Scheduler scheduler) {
         setScheduler(scheduler);
         init();
     }
 
-    public MainPageTemplate() {
+    public HeaderFooterAndCardMapTemplate(CardLayout cardLayout, JPanel pages){
+        init();
+        this.layout = cardLayout;
+        this.pages = pages;
+        this.cardmap = true;
+
+        getFooterPanel().addLeftAndRightButtons();
+        addLeftAndRightActionListeners();
+        addKeyListeners();
+    }
+
+    public HeaderFooterAndCardMapTemplate() {
         init();
     }
 
@@ -35,10 +49,10 @@ public class MainPageTemplate extends GamePanel {
         layeredPane = new JLayeredPane();
         layeredPane.setPreferredSize(new Dimension(800, 600));
 
-        headerPanel = new MainMenuPageTemplate.HeaderPanel();
+        headerPanel = new TacticsPageTemplate.HeaderPanel();
         headerPanel.setBounds(0, 0, 800, 80);
 
-        footerPanel = new MainMenuPageTemplate.FooterPanel();
+        footerPanel = new TacticsPageTemplate.FooterPanel();
         footerPanel.setBounds(0, 500, 800, 100);
 
         layeredPane.add(headerPanel, JLayeredPane.PALETTE_LAYER);
@@ -48,9 +62,25 @@ public class MainPageTemplate extends GamePanel {
         setVisible(true);
     }
 
+    public void addLeftAndRightActionListeners() {
+        getFooterPanel().getPrevButton().addActionListener(e -> {
+            layout.previous(pages);
+            moveButtonsWithUser_Backwards();
+        });
+
+        getFooterPanel().getNextButton().addActionListener(e -> {
+            layout.next(pages);
+            moveButtonsWithUser_Forwards();
+        });
+    }
+
+    public void moveButtonsWithUser_Forwards() {}
+
+    public void moveButtonsWithUser_Backwards() {}
+
     public class HeaderPanel extends JPanel {
 
-        private CustomizedTitle title;
+        private CustomizedTitle title, pageIcon;
 
         public HeaderPanel() {
             setLayout(new BorderLayout());
@@ -59,7 +89,7 @@ public class MainPageTemplate extends GamePanel {
             teamName.setFontSize(20);
 
             if (getScheduler() != null && getScheduler().getTeam() != null) {
-                teamName = new CustomizedTitle(getScheduler().getTeam().getName());
+                teamName.setText(getScheduler().getTeam().getName());
             }
 
             JPanel leftPanel = new JPanel();
@@ -75,21 +105,27 @@ public class MainPageTemplate extends GamePanel {
             userName.setFontSize(20);
 
             if (getScheduler() != null && getScheduler().getUser() != null) {
-                userName = new CustomizedTitle(getScheduler().getUser().getName());
+                userName.setText(getScheduler().getUser().getName());
             }
             userName.setAlignmentX(Component.RIGHT_ALIGNMENT);
+
+            pageIcon = new CustomizedTitle("");
+            pageIcon.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
             JPanel rightPanel = new JPanel();
             rightPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 30));
             rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
             rightPanel.setOpaque(false);
             rightPanel.add(Box.createVerticalGlue());
+            rightPanel.add(Box.createVerticalStrut(31));
             rightPanel.add(userName);
+            rightPanel.add(Box.createVerticalStrut(5));
+            rightPanel.add(pageIcon);
             rightPanel.add(Box.createVerticalGlue());
             setPermanentWidthAndHeight(rightPanel, 200, 120);
 
             title = new CustomizedTitle("", SwingConstants.CENTER);
-            title.setFont(getBebasNeueFont());
+            title.setFont(getBebasNeueFontWithSize(32f));
             title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             JPanel titlePanel = new JPanel();
@@ -115,6 +151,13 @@ public class MainPageTemplate extends GamePanel {
             repaint();
         }
 
+        public CustomizedTitle getPageIcon() {
+            return pageIcon;
+        }
+
+        public void setPageIcon(CustomizedTitle pageIcon) {
+            this.pageIcon = pageIcon;
+        }
     }
 
     public class FooterPanel extends JPanel {
@@ -275,11 +318,11 @@ public class MainPageTemplate extends GamePanel {
         this.headerPanel = headerPanel;
     }
 
-    public MainMenuPageTemplate.FooterPanel getFooterPanel() {
+    public TacticsPageTemplate.FooterPanel getFooterPanel() {
         return footerPanel;
     }
 
-    public void setFooterPanel(MainMenuPageTemplate.FooterPanel footerPanel) {
+    public void setFooterPanel(TacticsPageTemplate.FooterPanel footerPanel) {
         this.footerPanel = footerPanel;
     }
 
@@ -297,5 +340,43 @@ public class MainPageTemplate extends GamePanel {
 
     public void setScheduler(Scheduler scheduler) {
         this.scheduler = scheduler;
+    }
+
+    public void setPages(JPanel pages) {
+        this.pages = pages;
+    }
+
+    @Override
+    protected AbstractAction getRightClickAction() {
+        if (cardmap) {
+            return new CardMapRightClick();
+        } else {
+            return null;
+        }
+    }
+
+    public class CardMapRightClick extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            layout.next(pages);
+            moveButtonsWithUser_Forwards();
+        }
+    }
+
+    @Override
+    protected AbstractAction getLeftClickAction() {
+        if (cardmap) {
+            return new CardMapLeftClick();
+        } else {
+            return null;
+        }
+    }
+
+    public class CardMapLeftClick extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            layout.previous(pages);
+            moveButtonsWithUser_Backwards();
+        }
     }
 }

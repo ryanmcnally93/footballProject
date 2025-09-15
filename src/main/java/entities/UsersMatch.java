@@ -9,7 +9,7 @@ import javax.swing.*;
 import people.Footballer;
 import people.Goalkeeper;
 import gameSetup.GameWindow;
-import visuals.MatchPages.MatchFrames;
+import visuals.MatchPages.MatchPageTemplate;
 
 public class UsersMatch extends Match {
 
@@ -72,8 +72,8 @@ public class UsersMatch extends Match {
 		}
 
 		for (JPanel page : getScheduler().getMatchFramesMap().values()) {
-			if (page instanceof MatchFrames) {
-            	((MatchFrames) page).goalAlert(player.getName(), String.valueOf(roundedUp));
+			if (page instanceof MatchPageTemplate) {
+            	((MatchPageTemplate) page).goalAlert(player.getName(), String.valueOf(roundedUp));
             }
         }
 	}
@@ -107,8 +107,8 @@ public class UsersMatch extends Match {
 	@Override
 	public void updateScoreOnScreen() {
 		for (JPanel page : getScheduler().getMatchFramesMap().values()) {
-            if (page instanceof MatchFrames) {
-            	((MatchFrames) page).updateScoreBoard(getHomeScore(), getAwayScore());
+            if (page instanceof MatchPageTemplate) {
+            	((MatchPageTemplate) page).updateScoreBoard(getHomeScore(), getAwayScore());
             }
         }
 	}
@@ -162,8 +162,8 @@ public class UsersMatch extends Match {
 		}
 
 		for (JPanel page : getScheduler().getMatchFramesMap().values()) {
-            if (page instanceof MatchFrames) {
-            	((MatchFrames) page).createContinueButton();
+            if (page instanceof MatchPageTemplate) {
+            	((MatchPageTemplate) page).createContinueButton();
             }
         }
 	}
@@ -171,8 +171,8 @@ public class UsersMatch extends Match {
 	@Override
 	public void replacePlayButtonWithPauseButton() {
 		for (JPanel page : getScheduler().getMatchFramesMap().values()) {
-			if (page instanceof MatchFrames) {
-				((MatchFrames) page).replacePlayButtonWithPauseButton();
+			if (page instanceof MatchPageTemplate) {
+				((MatchPageTemplate) page).replacePlayButtonWithPauseButton();
 			}
 		}
 	}

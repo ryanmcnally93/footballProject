@@ -1,6 +1,6 @@
 package entities;
 
-import visuals.MatchPages.MatchFrames;
+import visuals.MatchPages.MatchPageTemplate;
 
 import javax.swing.*;
 import java.util.concurrent.CompletableFuture;
@@ -66,8 +66,8 @@ public class MatchTimer {
                 // Prints the current in-app time
                 if (this.match instanceof UsersMatch newMatch) {
                     for (JPanel page : newMatch.getScheduler().getMatchFramesMap().values()) {
-                        if (page instanceof MatchFrames) {
-                            ((MatchFrames) page).getTime().setText(getGameMinutes() + ":" + getGameSeconds());
+                        if (page instanceof MatchPageTemplate) {
+                            ((MatchPageTemplate) page).getTime().setText(getGameMinutes() + ":" + getGameSeconds());
                         }
                     }
                 }

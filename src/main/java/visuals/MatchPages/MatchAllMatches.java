@@ -10,7 +10,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class MatchAllMatches extends MatchFrames {
+public class MatchAllMatches extends MatchPageTemplate {
 
     private Box topBox, centerBox, bottomBox;
     private Boolean earlyUpdated;

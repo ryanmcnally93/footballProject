@@ -9,7 +9,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 
-public class MatchScorers extends MatchFrames {
+public class MatchScorers extends MatchPageTemplate {
 
     private JPanel leftBox, rightBox;
     private Box centerBox, container;

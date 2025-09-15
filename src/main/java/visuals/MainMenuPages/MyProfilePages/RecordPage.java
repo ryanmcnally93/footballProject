@@ -1,12 +1,12 @@
 package visuals.MainMenuPages.MyProfilePages;
 
-import visuals.MainMenuPages.MainMenuPageTemplate;
+import visuals.MainMenuPages.TacticsPageTemplate;
 import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class RecordPage extends MainMenuPageTemplate {
+public class RecordPage extends TacticsPageTemplate {
 
     private JPanel mainPanel;
 

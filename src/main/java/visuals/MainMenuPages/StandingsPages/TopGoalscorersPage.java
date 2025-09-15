@@ -1,13 +1,13 @@
 package visuals.MainMenuPages.StandingsPages;
 
 import visuals.CustomizedElements.PlayerLeaderboards;
-import visuals.MainMenuPages.MainMenuPageTemplate;
+import visuals.MainMenuPages.TacticsPageTemplate;
 import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class TopGoalscorersPage extends MainMenuPageTemplate {
+public class TopGoalscorersPage extends TacticsPageTemplate {
 
     private JPanel mainPanel;
     private PlayerLeaderboards leaderboard;
