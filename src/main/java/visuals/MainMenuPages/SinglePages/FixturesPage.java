@@ -3,6 +3,8 @@ package visuals.MainMenuPages.SinglePages;
 import entities.Match;
 import entities.UsersMatch;
 import visuals.CustomizedElements.MatchLineOnFixturesPages;
+import visuals.CustomizedElements.OptionBar;
+import visuals.CustomizedElements.PlayerMenuBar;
 import visuals.MatchPages.MatchPageTemplate;
 import visuals.ScheduleFrames.Scheduler;
 
@@ -10,17 +12,31 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Map;
+import java.util.*;
 
 public class FixturesPage extends LeftContentRightScrollPagesTemplate {
 
+    private static final List<String> FIRST_OPTIONS = List.of("All Fixtures", "My Fixtures");
+    private static List<String> SECOND_OPTIONS = List.of("One", "Two");
+    private static List<String> THIRD_OPTIONS = List.of("Three", "Four");
     private ArrayList<MatchLineOnFixturesPages> lines;
 
     public FixturesPage(Scheduler scheduler) {
         super(scheduler);
         getHeaderPanel().setTitle("My Fixtures");
+
+        ImageIcon buttonIcon = getIconWithSpecificSize("./src/main/java/visuals/Images/fixtures_icon.png", "Fixtures", 16);
+        getHeaderPanel().getPageIcon().setIcon(buttonIcon);
+
+        HashMap<String, List<String>> options = new HashMap<>();
+        options.put("First Options", FIRST_OPTIONS);
+        options.put("Second Options", SECOND_OPTIONS);
+        options.put("Third Options", THIRD_OPTIONS);
+
+        setupPlayerListOnRight(options,
+                (option, i) -> option.getFirst(),
+                (option, title) -> new OptionBar(option, getBarHeights(options)));
+
         lines = new ArrayList<>();
 
         setVisible(true);

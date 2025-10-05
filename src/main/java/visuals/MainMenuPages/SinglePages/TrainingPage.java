@@ -5,17 +5,11 @@ import visuals.CustomizedElements.*;
 import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Arrays;
-import java.util.Map;
 
 public class TrainingPage extends LeftContentRightScrollPagesTemplate {
 
-    private Scheduler scheduler;
     private Footballer selectedPlayer;
     private PlayerAttributeLine firstLine, secondLine, thirdLine, fourthLine;
     private String activePage = "left";
@@ -23,13 +17,19 @@ public class TrainingPage extends LeftContentRightScrollPagesTemplate {
 
     public TrainingPage(Scheduler scheduler) {
         super(scheduler);
-        this.scheduler = scheduler;
         getHeaderPanel().setTitle("Training");
 
         ImageIcon buttonIcon = getIconWithSpecificSize("./src/main/java/visuals/Images/training_icon.png", "Training", 16);
         getHeaderPanel().getPageIcon().setIcon(buttonIcon);
 
-        setupPlayerListOnRight();
+        setupPlayerListOnRight(
+                scheduler.getTeam().getPlayers(),
+                (player, i) -> player.getName().charAt(0) + " " +
+                        player.getName().substring(player.getName().lastIndexOf(' ') + 1),
+                PlayerMenuBar::new
+        );
+
+        selectedPlayer = ((PlayerMenuBar) getRightBox().getComponent(0)).getPlayer();
         setupAttributesOnLeft();
         populatePlayerAttributes();
 
@@ -212,94 +212,17 @@ public class TrainingPage extends LeftContentRightScrollPagesTemplate {
         }
     }
 
-    private void setupPlayerListOnRight() {
-        getRightBox().setLayout(new BoxLayout(getRightBox(), BoxLayout.Y_AXIS));
-        getRightBox().setBorder(new EmptyBorder(5, 5, 5, 5));
-
-        for (Map.Entry<String, Footballer> eachPlayer : scheduler.getTeam().getPlayers().entrySet()) {
-            Footballer player = eachPlayer.getValue();
-            String title = player.getName().charAt(0) + " " + player.getName().substring(player.getName().lastIndexOf(' ') + 1);
-            PlayerMenuBar playerMenuBar = new PlayerMenuBar(player, title);
-            playerMenuBar.setAlignmentX(Component.LEFT_ALIGNMENT);
-            playerMenuBar.setFocusable(false);
-            playerMenuBar.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    getButtonClickedAction(playerMenuBar);
-                }
-            });
-            getRightBox().add(playerMenuBar);
-            getRightBox().add(Box.createVerticalStrut(5));
-        }
-
-        // Remove that last 5px
-        int count = getRightBox().getComponentCount();
-        if (count > 0) {
-            getRightBox().remove(count - 1);
-            getRightBox().revalidate();
-            getRightBox().repaint();
-        }
-
-        PlayerMenuBar firstPlayerBar = (PlayerMenuBar) getRightBox().getComponent(0);
-        firstPlayerBar.setAsSelected(true);
-        selectedPlayer = firstPlayerBar.getPlayer();
-    }
-
-    private void getButtonClickedAction(PlayerMenuBar playerMenuBar) {
-        // Supply the retrieved index of this bar to 'move'
-        moveScroller(String.valueOf(Arrays.asList(getRightBox().getComponents()).indexOf(playerMenuBar)));
-    }
-
-    private void moveScroller(String direction) {
-        Container rightBox = getRightBox();
-        int count = rightBox.getComponentCount();
-
-        for (int i = 0; i < count; i++) {
-            Component comp = rightBox.getComponent(i);
-
-            if (comp instanceof PlayerMenuBar playerBar && playerBar.isSelected()) {
-                // Deselect current
-                playerBar.setAsSelected(false);
-                playerBar.revalidate();
-                playerBar.repaint();
-
-                int nextIndex;
-                if (direction.equals("down")) {
-                    nextIndex = (i + 2 < count) ? i + 2 : i; // stay at end if no next
-                } else if (direction.equals("up")) {
-                    nextIndex = (i - 2 >= 0) ? i - 2 : i;
-                } else {
-                    nextIndex = Integer.parseInt(direction);
-                }
-
-                PlayerMenuBar nextBar = (PlayerMenuBar) rightBox.getComponent(nextIndex);
-                nextBar.setAsSelected(true);
-                scrollToButton(nextBar);
-                nextBar.revalidate();
-                nextBar.repaint();
-
-                // Update reference
-                selectedPlayer = nextBar.getPlayer();
-                populatePlayerAttributes();
-                break;
-            }
-        }
-    }
-
     @Override
-    public Scheduler getScheduler() {
-        return scheduler;
-    }
-
-    @Override
-    public void setScheduler(Scheduler scheduler) {
-        this.scheduler = scheduler;
+    protected void barSelected(RightBoxBar nextBar) {
+        selectedPlayer = ((PlayerMenuBar) nextBar).getPlayer();
+        populatePlayerAttributes();
     }
 
     @Override
     protected boolean directionEqualsPage(String direction) {
         return direction.equals(activePage);
     }
+
     @Override
     protected void moveLeftOrRight(String direction) {
         changeStatBars(direction);

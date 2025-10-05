@@ -379,7 +379,9 @@ public class StartPage extends GamePanel {
 				.map(Team::getName)
 				.toList();
 
-		teamField = new CustomizedOptionField(newTeams, 400);
+		teamField = new CustomizedOptionField(newTeams, 400, 10, 30, true);
+        teamField.setForeground(GamePanel.getCharcoal());
+        teamField.addButtons();
 		setPermanentWidthAndHeight(teamField, 400, 50);
 
 		mainContentBox.add(teamField);

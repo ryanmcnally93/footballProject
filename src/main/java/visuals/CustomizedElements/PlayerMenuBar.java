@@ -3,24 +3,27 @@ package visuals.CustomizedElements;
 import people.Footballer;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 import static visuals.CustomizedElements.GamePanel.*;
 
-public class PlayerMenuBar extends CustomizedButton {
+public class PlayerMenuBar extends RightBoxBar {
 
     private Footballer player;
     private JLabel squadNo;
     private JLabel playerName;
 
     public PlayerMenuBar(Footballer player, String title) {
-        super("", 20);
+        super(20);
         this.player = player;
+        playerName = new JLabel(title);
+    }
+
+    @Override
+    public void createBar() {
         setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0)); // left align, 5px gap
 
         squadNo = new JLabel(player.getSquadNo());
-        playerName = new JLabel(title);
 
         if (player.getSquadNo().length() > 1) {
             squadNo.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 2)); // top, left, bottom, right
@@ -77,6 +80,7 @@ public class PlayerMenuBar extends CustomizedButton {
         this.player = player;
     }
 
+    @Override
     public void setAsSelected(boolean bool) {
         setSelected(bool);
         // This should be done ideally within the CustomisedButton class

@@ -1,16 +1,18 @@
 package visuals.MainMenuPages.SinglePages;
 
-import visuals.CustomizedElements.CustomizedButton;
-import visuals.CustomizedElements.HeaderFooterAndCardMapTemplate;
-import visuals.CustomizedElements.PlayerMenuBar;
-import visuals.CustomizedElements.RoundedPanel;
+import visuals.CustomizedElements.*;
 import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
+import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapTemplate {
 
@@ -225,4 +227,119 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
     public void setScroller(JScrollPane scroller) {
         this.scroller = scroller;
     }
+
+    protected int getBarHeights(HashMap<String, List<String>> options) {
+        int numberOfElements = options.size();
+        if (numberOfElements == 0) return 0;
+
+        int totalHeight = 265;
+        int padding = 10;
+        int gapSize = 5;
+        int totalGapHeight = (numberOfElements - 1) * gapSize;
+
+        int availableHeight = totalHeight - padding - totalGapHeight;
+        return availableHeight / numberOfElements;
+    }
+
+    protected <T> void setupPlayerListOnRight(
+            Map<?, T> hashMap,
+            BiFunction<T, Integer, String> titleProvider,
+            BiFunction<T, String, RightBoxBar> menuBarFactory) {
+
+        getRightBox().setLayout(new BoxLayout(getRightBox(), BoxLayout.Y_AXIS));
+        getRightBox().setBorder(new EmptyBorder(5, 5, 5, 5));
+
+        int index = 0;
+        for (Map.Entry<?, T> entry : hashMap.entrySet()) {
+            T value = entry.getValue();
+            String title = titleProvider.apply(value, index);
+
+            RightBoxBar rightBoxBar = menuBarFactory.apply(value, title);
+            if (index == 0 && rightBoxBar instanceof OptionBar) {
+                ((OptionBar) rightBoxBar).getOptionField().addButtons();
+            }
+            rightBoxBar.createBar();
+            rightBoxBar.setAlignmentX(Component.LEFT_ALIGNMENT);
+            rightBoxBar.setFocusable(false);
+
+            rightBoxBar.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    getButtonClickedAction(rightBoxBar);
+                }
+            });
+
+            getRightBox().add(rightBoxBar);
+            getRightBox().add(Box.createVerticalStrut(5));
+
+            index++;
+        }
+
+        // Remove that last 5px
+        int count = getRightBox().getComponentCount();
+        if (count > 0) {
+            getRightBox().remove(count - 1);
+            getRightBox().revalidate();
+            getRightBox().repaint();
+        }
+
+        if (getRightBox().getComponentCount() > 0 && getRightBox().getComponent(0) instanceof RightBoxBar firstBar) {
+            firstBar.setAsSelected(true);
+        }
+
+        // This gives bars the ability to change their child bars values when their values change.
+        int numberOfComponents = getRightBox().getComponentCount();
+        int newIndex = 0;
+
+        while (newIndex + 2 < numberOfComponents) {
+            Component current = getRightBox().getComponent(newIndex);
+            Component next = getRightBox().getComponent(newIndex + 2);
+            if (current instanceof OptionBar parentBar && next instanceof OptionBar childBar) {
+                parentBar.setDependant(childBar);
+            }
+            newIndex++;
+        }
+    }
+
+    private void getButtonClickedAction(RightBoxBar rightBoxBar) {
+        // Supply the retrieved index of this bar to 'move'
+        moveScroller(String.valueOf(Arrays.asList(getRightBox().getComponents()).indexOf(rightBoxBar)));
+    }
+
+    protected void moveScroller(String direction) {
+        Container rightBox = getRightBox();
+        int count = rightBox.getComponentCount();
+
+        for (int i = 0; i < count; i++) {
+            Component comp = rightBox.getComponent(i);
+
+            if (comp instanceof RightBoxBar playerBar && playerBar.isSelected()) {
+                // Deselect current
+                playerBar.setAsSelected(false);
+                playerBar.revalidate();
+                playerBar.repaint();
+
+                int nextIndex;
+                if (direction.equals("down")) {
+                    nextIndex = (i + 2 < count) ? i + 2 : i; // stay at end if no next
+                } else if (direction.equals("up")) {
+                    nextIndex = (i - 2 >= 0) ? i - 2 : i;
+                } else {
+                    nextIndex = Integer.parseInt(direction);
+                }
+
+                RightBoxBar nextBar = (RightBoxBar) rightBox.getComponent(nextIndex);
+                nextBar.setAsSelected(true);
+                scrollToButton(nextBar);
+                nextBar.revalidate();
+                nextBar.repaint();
+
+                // Update reference
+                barSelected(nextBar);
+                break;
+            }
+        }
+    }
+
+    protected void barSelected(RightBoxBar nextBar) {}
 }
