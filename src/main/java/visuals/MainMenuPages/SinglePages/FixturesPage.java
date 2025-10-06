@@ -9,11 +9,13 @@ import visuals.MatchPages.MatchPageTemplate;
 import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -49,6 +51,12 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
 
         buildDependencyMaps(createdBars);
         lines = new ArrayList<>();
+
+        // These also need to be triggered when components inside these boxes are clicked
+        // Should we check bounds instead?
+        addFocusListeners(getLeftBox(), true);
+        addFocusListeners(getRightBox(), false);
+
         addKeyListeners();
         setVisible(true);
     }
@@ -61,7 +69,11 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
     public class CustomDownClick extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
-            moveScroller("down");
+            if (isLeftFocused()) {
+                // Do nothing yet
+            } else {
+                moveScroller("down");
+            }
         }
     }
 
@@ -73,7 +85,11 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
     public class CustomUpClick extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
-            moveScroller("up");
+            if (isLeftFocused()) {
+                // Do nothing yet
+            } else {
+                moveScroller("up");
+            }
         }
     }
 

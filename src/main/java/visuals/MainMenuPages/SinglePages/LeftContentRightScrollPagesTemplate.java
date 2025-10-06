@@ -21,6 +21,7 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
     private JScrollPane scroller;
     private Image backgroundImage;
     private Timer timer;
+    private boolean leftFocused;
     private final Map<String, Rectangle> boundsByDirection = Map.of(
             "down", new Rectangle(0, 0, 155, 20),
             "up",   new Rectangle(0, 0, 155, 20),
@@ -340,5 +341,36 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
         }
     }
 
+    protected void addFocusListeners(JPanel panel, boolean left) {
+        panel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                leftFocused = left;
+            }
+        });
+
+        // Recursively attach to children
+        for (Component comp : panel.getComponents()) {
+            if (comp instanceof JPanel childPanel) {
+                addFocusListeners(childPanel, left);
+            } else {
+                comp.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        leftFocused = left;
+                    }
+                });
+            }
+        }
+    }
+
     protected void barSelected(RightBoxBar nextBar) {}
+
+    public boolean isLeftFocused() {
+        return leftFocused;
+    }
+
+    public void setLeftFocused(boolean leftFocused) {
+        this.leftFocused = leftFocused;
+    }
 }
