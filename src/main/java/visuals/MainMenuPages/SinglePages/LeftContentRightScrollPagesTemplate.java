@@ -287,18 +287,6 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
             firstBar.setAsSelected(true);
         }
 
-        // This gives bars the ability to change their child bars values when their values change.
-        int numberOfComponents = getRightBox().getComponentCount();
-        int newIndex = 0;
-
-        while (newIndex + 2 < numberOfComponents) {
-            Component current = getRightBox().getComponent(newIndex);
-            Component next = getRightBox().getComponent(newIndex + 2);
-            if (current instanceof OptionBar parentBar && next instanceof OptionBar childBar) {
-                parentBar.setDependant(childBar);
-            }
-            newIndex++;
-        }
     }
 
     private void getButtonClickedAction(RightBoxBar rightBoxBar) {

@@ -16,7 +16,7 @@ public class CustomizedOptionField extends JComponent {
 	private CustomizedButton left, right;
     private int fontSize;
     private boolean borderRequired;
-    private Runnable onClickDone;
+    private Runnable onClickLeft, onClickRight;
 
 	public CustomizedOptionField(List<String> options, int width, int offset, int fontSize, boolean borderRequired) {
 		this.options = options;
@@ -63,7 +63,10 @@ public class CustomizedOptionField extends JComponent {
 			if (currentOption == (options.size() - 1)) {
 				remove(right);
 			}
-			repaint();
+            if (onClickRight != null) {
+                onClickRight.run();
+            }
+            repaint();
 		}
 	}
 
@@ -76,7 +79,10 @@ public class CustomizedOptionField extends JComponent {
 			if (currentOption == 0) {
 				remove(left);
 			}
-			repaint();
+            if (onClickLeft != null) {
+                onClickLeft.run();
+            }
+            repaint();
 		}
 	}
 
@@ -145,5 +151,29 @@ public class CustomizedOptionField extends JComponent {
         }
         revalidate();
         repaint();
+    }
+
+    public Runnable getOnClickLeft() {
+        return onClickLeft;
+    }
+
+    public void setOnClickLeft(Runnable onClickLeft) {
+        this.onClickLeft = onClickLeft;
+    }
+
+    public Runnable getOnClickRight() {
+        return onClickRight;
+    }
+
+    public void setOnClickRight(Runnable onClickRight) {
+        this.onClickRight = onClickRight;
+    }
+
+    public int getCurrentOption() {
+        return currentOption;
+    }
+
+    public void setCurrentOption(int currentOption) {
+        this.currentOption = currentOption;
     }
 }

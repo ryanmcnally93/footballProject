@@ -1,11 +1,6 @@
 package visuals.ScheduleFrames;
 
-import entities.League;
-import entities.Match;
-import entities.Season;
-import entities.Team;
-import entities.User;
-import entities.UsersMatch;
+import entities.*;
 import gameSetup.GameWindow;
 import visuals.CustomizedElements.CustomizedButton;
 import visuals.CustomizedElements.CustomizedTitle;
@@ -76,6 +71,8 @@ public class Scheduler extends GamePanel {
 	// Entities
 	private User user;
 	private Team team;
+    private List<Competition> playersCompetitions;
+    private List<Competition> otherCompetitions;
 	private League league;
 	private ArrayList<Events> events;
 	private GameWindow window;
@@ -126,6 +123,14 @@ public class Scheduler extends GamePanel {
 		this.league = league;
 		this.events = new ArrayList<Events>();
 		this.season = league.getSeason();
+        this.playersCompetitions = new ArrayList<>();
+        this.otherCompetitions = new ArrayList<>();
+        playersCompetitions.add(league);
+
+        Cup otherCup = new Cup();
+        otherCup.setName("Other Cup");
+        otherCompetitions.add(otherCup);
+
 		this.setLayout(new BorderLayout());
 
 		ImageIcon image = new ImageIcon("./src/main/java/visuals/Images/main_scheduler.jpeg");
@@ -1311,4 +1316,20 @@ public class Scheduler extends GamePanel {
 	public void setMessageViewer(MessageViewer messageViewer) {
 		this.messageViewer = messageViewer;
 	}
+
+    public List<Competition> getPlayersCompetitions() {
+        return playersCompetitions;
+    }
+
+    public void setPlayersCompetitions(List<Competition> playersCompetitions) {
+        this.playersCompetitions = playersCompetitions;
+    }
+
+    public List<Competition> getOtherCompetitions() {
+        return otherCompetitions;
+    }
+
+    public void setOtherCompetitions(List<Competition> otherCompetitions) {
+        this.otherCompetitions = otherCompetitions;
+    }
 }

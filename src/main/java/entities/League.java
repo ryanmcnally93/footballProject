@@ -13,43 +13,34 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class League {
+public class League extends Competition {
 
-	private String name, country;
-	private Map<String, Team> teams;
 	private int tier;
-	private Map<String, Match> fixtures;
-	private Season season;
 	private ArrayList<Match> mainFixtureList, temporaryFixtureList;
 	private Map<Integer, Map<String, Match>> matchWeeksMatches;
 	private Map<Integer, Map<Integer, LocalDateTime>> matchWeeksSlots;
 	private boolean restartWholeProcess = false;
 	private LeagueTable leagueTable;
 	private PlayerLeaderboards leaderboard;
+    private int weeks;
 
     public League() {};
 
 	protected League(String name, String country, Map<String, Team> teams, int tier, Season season) {
-		this.name = name;
-		this.country = country;
-        if (teams.isEmpty()) {
-            throw new IllegalArgumentException("You cannot start a League with no teams");
-        } else if (teams.size()% 2 != 0) {
+        super(name, country, teams, season);
+        if (getTeams().size()% 2 != 0) {
             throw new IllegalArgumentException("You must have an even number of teams when creating a league");
         }
-		this.teams = teams;
 		this.tier = tier;
-		this.fixtures = new HashMap<>();
 		this.matchWeeksMatches = new HashMap<>();
 		this.matchWeeksSlots = new HashMap<>();
 		this.leagueTable = new LeagueTable(this);
-		this.season = season;
 		this.leaderboard = new PlayerLeaderboards(this);
 
 		// Creating visual League table
 		// Adding all the teams to a list
 		List<Team> teamNamesInOrder = new ArrayList<>();
-		for(Map.Entry<String, Team> eachTeam : teams.entrySet()) {
+		for(Map.Entry<String, Team> eachTeam : getTeams().entrySet()) {
 			Team team = eachTeam.getValue();
 			teamNamesInOrder.add(team);
 		}
@@ -64,7 +55,7 @@ public class League {
 		// This will organise the teams, shouldn't really do much first time around
 		// But if a table is constructed and teams have stats, this will re-sort the table by stats
 		getLeagueTable().updateLinesInTableLogic();
-
+        weeks = (teams.size()-1)*2;
 	}
 	
 	public void assignFixturesToWeekNumber() {
@@ -74,9 +65,6 @@ public class League {
 		// Here we have two lists of fixtures, this will be useful when creating matchweeks
 		mainFixtureList = new ArrayList<>(getFixtures().values());
 		temporaryFixtureList = new ArrayList<>(mainFixtureList);
-
-		// This finds out how many matchweeks will be played this season
-		int weeks = (teams.size()-1)*2;
 
 		for(int i = 0; i<weeks; i++) {
 			// For each week, we create a matchweek
@@ -195,10 +183,10 @@ public class League {
 	
 	private void createFixtures() {
 		// For each team
-		for(Map.Entry<String, Team> each : teams.entrySet()) {
+		for(Map.Entry<String, Team> each : getTeams().entrySet()) {
 			Team current = each.getValue();
 			// For each team again
-			for(Map.Entry<String, Team> otherEach : teams.entrySet()) {
+			for(Map.Entry<String, Team> otherEach : getTeams().entrySet()) {
 				Team opposition = otherEach.getValue();
 
 				// We're going to check that the team we got on the first loop
@@ -206,21 +194,21 @@ public class League {
 				if(!current.equals(opposition)) {
 					Match fixture = new Match(current, opposition, this);
 					// We're going to check here that the away team hasn't already created this fixture
-					if(!fixtures.containsKey(current.getName() + " vs " + opposition.getName())) {
-						fixtures.put(current.getName() + " vs " + opposition.getName(), fixture);
+					if(!getFixtures().containsKey(current.getName() + " vs " + opposition.getName())) {
+                        getFixtures().put(current.getName() + " vs " + opposition.getName(), fixture);
 					}
 				}
 				
 			}
 			// Now we're going to do the same to create this teams away fixtures
-			for(Map.Entry<String, Team> otherEach : teams.entrySet()) {
+			for(Map.Entry<String, Team> otherEach : getTeams().entrySet()) {
 				Team opposition = otherEach.getValue();
 				
 				if(!current.equals(opposition)) {
 					Match fixture = new Match(opposition, current, this);
 					// Checking again that the match doesn't already exist
-					if(!fixtures.containsKey(opposition.getName() + " vs " + current.getName())) {
-						fixtures.put(opposition.getName() + " vs " + current.getName(), fixture);
+					if(!getFixtures().containsKey(opposition.getName() + " vs " + current.getName())) {
+						getFixtures().put(opposition.getName() + " vs " + current.getName(), fixture);
 					}
 				}
 				
@@ -267,8 +255,8 @@ public class League {
 	
 	public void assignDatetimesToWeekNumber() {
 		// Let's find what year we are in
-		int startYear = 2023 + season.getNumber();
-		System.out.println("Giving times to season " + season.getYearFrom() + " to " + season.getYearTo());
+		int startYear = 2023 + getSeason().getNumber();
+		System.out.println("Giving times to season " + getSeason().getYearFrom() + " to " + getSeason().getYearTo());
 
 		// Let's find the first available Saturday, and add fixture slots relative to that
 		// So many of these weeks will be normal Friday-Sunday weekends, this is called a 'normalWeekend'
@@ -377,50 +365,7 @@ public class League {
 		return firstSaturday;
 	}
 
-    void getFixturesToString() {
-        // Returns all league matches this season
-        for(Map.Entry<String, Match> each : fixtures.entrySet()) {
-            Match value = each.getValue();
-            System.out.println(value.toString());
-        }
-    }
-
-    void getTeamFixturesToString(Team team) {
-        // Returns all fixtures for specific team
-        for(Map.Entry<String, Match> each : fixtures.entrySet()) {
-            Team homeTeam = each.getValue().getHome();
-            Team awayTeam = each.getValue().getAway();
-            if(homeTeam.equals(team) || awayTeam.equals(team)) {
-                System.out.println(each.getValue().toString());
-            }
-        }
-    }
-
 	// Getters & Setters
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
-	public Map<String, Team> getTeams() {
-		return teams;
-	}
-
-	public void setTeams(Map<String, Team> teams) {
-		this.teams = teams;
-	}
 
 	public PlayerLeaderboards getPlayerLeaderboard() {
 		return leaderboard;
@@ -432,22 +377,6 @@ public class League {
 
 	public void setTier(int tier) {
 		this.tier = tier;
-	}
-
-	public Map<String, Match> getFixtures() {
-		return fixtures;
-	}
-
-	public void setFixtures(Map<String, Match> fixtures) {
-		this.fixtures = fixtures;
-	}
-
-	public Season getSeason() {
-		return season;
-	}
-
-	public void setSeason(Season season) {
-		this.season = season;
 	}
 
 	public ArrayList<Match> getMainFixtureList() {
@@ -501,4 +430,17 @@ public class League {
 	public void setLeaderboard(PlayerLeaderboards leaderboard) {
 		this.leaderboard = leaderboard;
 	}
+
+    public int getWeeks() {
+        return weeks;
+    }
+
+    @Override
+    public List<String> getRoundNames() {
+        List<String> result = new ArrayList<>();
+        for (int i = 1; i < getWeeks() + 1; i++) {
+            result.add("GW " + i);
+        }
+        return result;
+    }
 }
