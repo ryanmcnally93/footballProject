@@ -9,6 +9,7 @@ import visuals.MatchPages.MatchPageTemplate;
 import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -48,7 +49,56 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
 
         buildDependencyMaps(createdBars);
         lines = new ArrayList<>();
+        addKeyListeners();
         setVisible(true);
+    }
+
+    @Override
+    protected AbstractAction getDownClickAction() {
+        return new FixturesPage.CustomDownClick();
+    }
+
+    public class CustomDownClick extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            moveScroller("down");
+        }
+    }
+
+    @Override
+    protected AbstractAction getUpClickAction() {
+        return new FixturesPage.CustomUpClick();
+    }
+
+    public class CustomUpClick extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            moveScroller("up");
+        }
+    }
+
+    @Override
+    protected AbstractAction getLeftClickAction() {
+        return new FixturesPage.CustomLeftClick();
+    }
+
+    public class CustomLeftClick extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            moveScroller("left");
+        }
+    }
+
+    @Override
+    protected AbstractAction getRightClickAction() {
+        return new FixturesPage.CustomRightClick();
+    }
+
+    public class CustomRightClick extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            moveScroller("right");
+        }
     }
 
     private void buildDependencyMaps(List<OptionBar> bars) {

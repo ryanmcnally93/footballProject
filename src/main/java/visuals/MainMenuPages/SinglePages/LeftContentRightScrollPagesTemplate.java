@@ -301,6 +301,17 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
         for (int i = 0; i < count; i++) {
             Component comp = rightBox.getComponent(i);
 
+            if ((direction.equals("left") || direction.equals("right")) && comp instanceof OptionBar optionBar && optionBar.isSelected()) {
+                if (direction.equals("right")) {
+                    optionBar.getOptionField().moveForward();
+                } else {
+                    optionBar.getOptionField().moveBackward();
+                }
+                optionBar.revalidate();
+                optionBar.repaint();
+                break;
+            }
+
             if (comp instanceof RightBoxBar playerBar && playerBar.isSelected()) {
                 // Deselect current
                 playerBar.setAsSelected(false);

@@ -73,7 +73,9 @@ public class PlayerStatsLineOnRatingsPage extends RoundedPanel {
         add(ratingLabel);
 
         // This is for the football image
-        icon = getIconWithSpecificSize("./src/main/java/visuals/images/ratings_page_goal.png", "Goal", 20);
+        bufferedScaledImage = getIconWithSpecificSizeAsBufferedScaledImage("./src/main/java/visuals/images/ratings_page_goal.png", 20);
+        icon = new ImageIcon(bufferedScaledImage);
+        icon.setDescription("Goal");
 
         setPermanentHeight(this, 30);
         revalidate();

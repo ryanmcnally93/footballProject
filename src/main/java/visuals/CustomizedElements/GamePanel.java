@@ -185,8 +185,17 @@ public abstract class GamePanel extends JPanel {
     }
 
     public static ImageIcon getIconWithSpecificSize(String url, String description, int size) {
+        BufferedImage bufferedImage = getIconWithSpecificSizeAsBufferedScaledImage(url, size);
+
+        ImageIcon buttonIcon = new ImageIcon(bufferedImage);
+        buttonIcon.setDescription(description);
+
+        return buttonIcon;
+    }
+
+    public static BufferedImage getIconWithSpecificSizeAsBufferedScaledImage(String url, int size) {
         BufferedImage image = null;
-        ImageIcon buttonIcon = null;
+        BufferedImage bufferedScaledImage = null;
         try {
             image = ImageIO.read(new File(url));
         } catch (IOException e) {
@@ -194,14 +203,12 @@ public abstract class GamePanel extends JPanel {
         }
         if(image != null) {
             Image scaledImage = image.getScaledInstance(size, size, Image.SCALE_SMOOTH);
-            BufferedImage bufferedScaledImage = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+            bufferedScaledImage = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2d = bufferedScaledImage.createGraphics();
             g2d.drawImage(scaledImage, 0, 0, null);
             g2d.dispose();
-            buttonIcon = new ImageIcon(bufferedScaledImage);
-            buttonIcon.setDescription(description);
         }
-        return buttonIcon;
+        return bufferedScaledImage;
     }
 
     public static ImageIcon alterImageSizeWithTarget(ImageIcon icon, int targetSize) {
