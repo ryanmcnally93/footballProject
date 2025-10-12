@@ -4,7 +4,7 @@ import entities.Team;
 import people.Footballer;
 import visuals.CustomizedElements.CustomizedButton;
 import visuals.CustomizedElements.PlayerStatsBoxOnRatingsPage;
-import visuals.CustomizedElements.PlayerStatsLineOnRatingsPage;
+import visuals.CustomizedElements.MatchRatingsStatLine;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +21,7 @@ public class MatchRatings extends MatchPageTemplate {
 
     private Box centerBox;
     private JPanel mainPanel, titleLine;
-    private ArrayList<PlayerStatsLineOnRatingsPage> playerStatsLines;
+    private ArrayList<MatchRatingsStatLine> playerStatsLines;
     private PlayerStatsBoxOnRatingsPage playerStatsBox;
     private int lineInView;
     private InputMap inputMap;
@@ -59,7 +59,7 @@ public class MatchRatings extends MatchPageTemplate {
 
         playerStatsBox = new PlayerStatsBoxOnRatingsPage();
         for (int i = 0; i < 11; i++) {
-            PlayerStatsLineOnRatingsPage newLine = new PlayerStatsLineOnRatingsPage();
+            MatchRatingsStatLine newLine = new MatchRatingsStatLine(false);
             playerStatsLines.add(newLine);
             centerBox.add(newLine);
         }
@@ -225,7 +225,7 @@ public class MatchRatings extends MatchPageTemplate {
     }
 
     public void turnClickedLineYellow(int i) {
-        PlayerStatsLineOnRatingsPage line = playerStatsLines.get(i);
+        MatchRatingsStatLine line = playerStatsLines.get(i);
         line.setBackground(i == lineInView ? Color.YELLOW : Color.LIGHT_GRAY);
         if (i == lineInView) {
             line.requestFocusInWindow();

@@ -49,7 +49,7 @@ public class League extends Competition {
 		// This will create new lines for each team
 		// They're called achievement lines because they will contain the teams statistics for the season
 		for(int i=1;i<teamNamesInOrder.size()+1;i++){
-			TeamAchievementLine line = new TeamAchievementLine(teamNamesInOrder.get(i-1));
+			TeamAchievementLine line = new TeamAchievementLine(teamNamesInOrder.get(i-1), false);
 			getLeagueTable().getAllLines().add(line);
 		}
 		// This will organise the teams, shouldn't really do much first time around

@@ -3,16 +3,13 @@ package visuals.CustomizedElements;
 import entities.Match;
 import people.Footballer;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
 
-public class PlayerStatsLineOnRatingsPage extends RoundedPanel {
+public class MatchRatingsStatLine extends AbstractStatBar {
 
     private JLabel nameLabel, savesLabel, duelsWonLabel, passingAccuracyLabel, shootingAccuracyLabel, fitnessLabel, ratingLabel, posLabel;
     private CircledLabel captaincyLabel;
@@ -22,64 +19,36 @@ public class PlayerStatsLineOnRatingsPage extends RoundedPanel {
     private BufferedImage bufferedScaledImage;
     private ImageIcon playerViewIcon = new ImageIcon("./src/main/java/visuals/images/playerViewIcon.png");
 
-    public PlayerStatsLineOnRatingsPage (){
-        super(20);
+    public MatchRatingsStatLine(boolean showBorder){
+        super(20, showBorder);
+        loadGoalIcon();
+        buildColumns(); // Let subclasses define which columns to add
+    }
 
-        setBackground(Color.LIGHT_GRAY);
-
+    @Override
+    protected void buildColumns() {
         captaincyLabel = new CircledLabel("");
-        captaincyLabel.setOffset(3);
-        setPermanentWidth(captaincyLabel, 18);
         captaincyLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
-        posLabel = new JLabel("N/A");
-        setPermanentWidth(posLabel, 30);
-        posLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
-        nameLabel = new JLabel("N/A");
-        setPermanentWidth(nameLabel, 127);
-
-        savesLabel = new JLabel("N/A");
-        setPermanentWidth(savesLabel, 50);
-        savesLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
-        passingAccuracyLabel = new JLabel("N/A");
-        setPermanentWidth(passingAccuracyLabel, 50);
-        passingAccuracyLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
-        shootingAccuracyLabel = new JLabel("N/A");
-        setPermanentWidth(shootingAccuracyLabel, 50);
-        shootingAccuracyLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
-        duelsWonLabel = new JLabel("N/A");
-        setPermanentWidth(duelsWonLabel, 50);
-        duelsWonLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
-        fitnessLabel = new JLabel(100 + "%");
-        setPermanentWidth(fitnessLabel, 50);
-        fitnessLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
-        ratingLabel = new JLabel("N/A");
-        setPermanentWidth(ratingLabel, 35);
-        ratingLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
+        setPermanentWidthAndHeight(captaincyLabel, 20, 20);
+        columns.add(captaincyLabel);
         add(captaincyLabel);
-        add(posLabel);
-        add(nameLabel);
-        add(duelsWonLabel);
-        add(passingAccuracyLabel);
-        add(shootingAccuracyLabel);
-        add(fitnessLabel);
-        add(ratingLabel);
 
-        // This is for the football image
-        bufferedScaledImage = getIconWithSpecificSizeAsBufferedScaledImage("./src/main/java/visuals/images/ratings_page_goal.png", 20);
+        posLabel = createColumn("N/A", 30);
+        nameLabel = createColumn("N/A", 120);
+        duelsWonLabel = createColumn("N/A", 50);
+        passingAccuracyLabel = createColumn("N/A", 50);
+        shootingAccuracyLabel = createColumn("N/A", 50);
+        fitnessLabel = createColumn("100%", 50);
+        ratingLabel = createColumn("N/A", 35);
+    }
+
+    private void loadGoalIcon() {
+        bufferedScaledImage = getIconWithSpecificSizeAsBufferedScaledImage(
+                "./src/main/java/visuals/images/ratings_page_goal.png",
+                20
+        );
         icon = new ImageIcon(bufferedScaledImage);
         icon.setDescription("Goal");
-
-        setPermanentHeight(this, 30);
-        revalidate();
-        repaint();
     }
 
     public void addCaptaincy() {

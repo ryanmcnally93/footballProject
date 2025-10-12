@@ -2,33 +2,49 @@ package visuals.CustomizedElements;
 
 import entities.Team;
 
-public class TeamAchievementLine {
+import javax.swing.*;
 
-	private Team team;
-	private int position;
-	private int gamesPlayed;
-	private int wins;
-	private int draws;
-	private int losses;
-	private Integer goalDifference;
-	private int goalsScored;
-	private int goalsConceded;
-	private Integer points;
+public class TeamAchievementLine extends AbstractStatBar {
+
+    private JLabel position, clubName, played, wins, draws, losses, gf, ga, gd, points;
+    private Team team;
 	private static int initialPos = 0;
-	
-	public TeamAchievementLine(Team team) {
-		this.team = team;
-		this.wins = 0;
-		this.draws = 0;
-		this.losses = 0;
-		this.goalDifference = 0;
-		this.goalsScored = 0;
-		this.goalsConceded = 0;
-		this.points = 0;
-		initialPos++;
-		this.position = initialPos;
-		this.gamesPlayed = 0;
-	}
+
+    public TeamAchievementLine(Team team, boolean showBorder) {
+        super(20, showBorder);
+        initialPos++;
+        this.team = team;
+        buildColumns();
+    }
+
+    @Override
+    protected void buildColumns() {
+        position = createColumn(String.valueOf(initialPos), 30);
+        clubName = createColumn("", 150);
+        played = createColumn("0", 40);
+        wins = createColumn("0", 40);
+        draws = createColumn("0", 40);
+        losses = createColumn("0", 40);
+        gf = createColumn("0", 40);
+        ga = createColumn("0", 40);
+        gd = createColumn("0", 40);
+        points = createColumn("0", 50);
+        // points.setFont(points.getFont().deriveFont(Font.BOLD));
+    }
+
+    public void updateFromAchievement(TeamAchievementLine line) {
+        position.setText(String.valueOf(line.getPosition()));
+        clubName.setText(line.getTeamName());
+        played.setText(String.valueOf(line.getPlayed()));
+        wins.setText(String.valueOf(line.getWins()));
+        draws.setText(String.valueOf(line.getDraws()));
+        losses.setText(String.valueOf(line.getLosses()));
+        gf.setText(String.valueOf(line.getGoalsScored()));
+        ga.setText(String.valueOf(line.getGoalsConceded()));
+        gd.setText(String.valueOf(line.getGoalDifference()));
+        points.setText(String.valueOf(line.getPoints()));
+        refresh();
+    }
 
 	public Team getTeam() {
 		return team;
@@ -43,128 +59,128 @@ public class TeamAchievementLine {
 	}
 
 	public int getPosition() {
-		return position;
+		return Integer.parseInt(position.getText());
 	}
 
 	public void setPosition(int position) {
-		this.position = position;
+		this.position.setText(String.valueOf(position));
 	}
 
 	public int getWins() {
-		return wins;
+		return Integer.parseInt(wins.getText());
 	}
 
 	public void addWin() {
-		this.wins += 1;
-		this.points +=3;
+        this.wins.setText(String.valueOf(Integer.parseInt(this.wins.getText()) + 1));
+        this.points.setText(String.valueOf(Integer.parseInt(this.points.getText()) + 3));
 	}
 
 	public void addMatchPlayed(){
-		this.gamesPlayed += 1;
+        this.played.setText(String.valueOf(Integer.parseInt(this.played.getText()) + 1));
 	}
 
 	public int getDraws() {
-		return draws;
+		return Integer.parseInt(draws.getText());
 	}
 
 	public void addDraw() {
-		this.draws += 1;
-		this.points +=1;
+        this.draws.setText(String.valueOf(Integer.parseInt(this.draws.getText()) + 1));
+        this.points.setText(String.valueOf(Integer.parseInt(this.points.getText()) + 1));;
 	}
 
 	public int getLosses() {
-		return losses;
+		return Integer.parseInt(losses.getText());
 	}
 
 	public void addLoss() {
-		this.losses += 1;
+        this.losses.setText(String.valueOf(Integer.parseInt(this.losses.getText()) + 1));
 	}
 
 	public void removeLoss() {
-		this.losses -= 1;
+        this.losses.setText(String.valueOf(Integer.parseInt(this.losses.getText()) - 1));
 	}
 
 	public void removeWin() {
-		this.wins -= 1;
-		this.points -= 3;
+        this.wins.setText(String.valueOf(Integer.parseInt(this.wins.getText()) - 1));
+        this.points.setText(String.valueOf(Integer.parseInt(this.points.getText()) - 3));
 	}
 
 	public void removeDraw() {
-		this.draws -= 1;
-		this.points -= 1;
+        this.draws.setText(String.valueOf(Integer.parseInt(this.draws.getText()) - 1));
+        this.points.setText(String.valueOf(Integer.parseInt(this.points.getText()) - 1));
 	}
 
 	public Integer getGoalDifference() {
-		return goalDifference;
+		return Integer.parseInt(gd.getText());
 	}
 
 	public void setGoalDifference(Integer goalDifference) {
-		this.goalDifference = goalDifference;
+		this.gd.setText(String.valueOf(goalDifference));
 	}
 
 	public int getGoalsScored() {
-		return goalsScored;
+		return Integer.parseInt(gf.getText());
 	}
 
 	public void setGoalsScored(int goalsScored) {
-		this.goalsScored = goalsScored;
+		this.gf.setText(String.valueOf(goalsScored));
 	}
 	
 	public void addGoalsScored() {
-		this.goalsScored += 1;
-		this.goalDifference +=1;
+        this.gf.setText(String.valueOf(Integer.parseInt(this.gf.getText()) + 1));
+        this.gd.setText(String.valueOf(Integer.parseInt(this.gd.getText()) + 1));
 	}
 	
 	public void addGoalsConceded() {
-		this.goalsConceded += 1;
-		this.goalDifference -=1;
+        this.ga.setText(String.valueOf(Integer.parseInt(this.ga.getText()) + 1));
+        this.gd.setText(String.valueOf(Integer.parseInt(this.gd.getText()) - 1));
 	}
 
 	public int getGoalsConceded() {
-		return goalsConceded;
+		return Integer.parseInt(ga.getText());
 	}
 
 	public void setGoalsConceded(int goalsConceded) {
-		this.goalsConceded = goalsConceded;
+		this.ga.setText(String.valueOf(goalsConceded));
 	}
 
 	public Integer getPoints() {
-		return points;
+		return Integer.parseInt(points.getText());
 	}
 
 	public void setPoints(int points) {
-		this.points = points;
+		this.points.setText(String.valueOf(points));
 	}
 
 	@Override
 	public String toString() {
-		return "TableLine [team=" + team.getName() + ", position=" + position + ", wins=" + wins + ", draws=" + draws
-				+ ", losses=" + losses + ", goalDifference=" + goalDifference + ", goalsScored=" + goalsScored
-				+ ", goalsConceded=" + goalsConceded + ", points=" + points + "]";
+		return "TableLine [team=" + team.getName() + ", position=" + position.getText() + ", wins=" + wins.getText() + ", draws=" + draws.getText()
+				+ ", losses=" + losses.getText() + ", goalDifference=" + gd.getText() + ", goalsScored=" + gf.getText()
+				+ ", goalsConceded=" + ga.getText() + ", points=" + points.getText() + "]";
 	}
 
 	public void setWins(int wins) {
-		this.wins = wins;
+		this.wins.setText(String.valueOf(wins));
 	}
 
 	public void setDraws(int draws) {
-		this.draws = draws;
+		this.draws.setText(String.valueOf(draws));
 	}
 
 	public void setLosses(int losses) {
-		this.losses = losses;
+		this.losses.setText(String.valueOf(losses));
 	}
 
 	public void setPoints(Integer points) {
-		this.points = points;
+		this.points.setText(String.valueOf(points));
 	}
 
-	public int getGamesPlayed() {
-		return gamesPlayed;
+	public int getPlayed() {
+		return Integer.parseInt(played.getText());
 	}
 
-	public void setGamesPlayed(int gamesPlayed) {
-		this.gamesPlayed = gamesPlayed;
+	public void setPlayed(int gamesPlayed) {
+		this.played.setText(String.valueOf(gamesPlayed));
 	}
 
 }

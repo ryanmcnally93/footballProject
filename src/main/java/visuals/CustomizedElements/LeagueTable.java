@@ -118,41 +118,9 @@ public class LeagueTable extends GamePanel {
 		tableContainer.removeAll();
 		tableContainer.add(titleRow);
 		for(TeamAchievementLine eachLine : lines) {
-			Box row = Box.createHorizontalBox();
-			row.setPreferredSize(new Dimension(600,20));
-        	JLabel position = new JLabel(String.valueOf(eachLine.getPosition()));
-			setPermanentWidthAndHeight(position, 30, 20);
-        	JLabel clubName = new JLabel(eachLine.getTeamName());
-			setPermanentWidthAndHeight(clubName, 330, 20);
-            JLabel matchesPlayed = new JLabel(String.valueOf(eachLine.getGamesPlayed()));
-			setPermanentWidthAndHeight(matchesPlayed, 30, 20);
-        	JLabel wins = new JLabel(String.valueOf(eachLine.getWins()));
-			setPermanentWidthAndHeight(wins, 30, 20);
-        	JLabel draws = new JLabel(String.valueOf(eachLine.getDraws()));
-			setPermanentWidthAndHeight(draws, 30, 20);
-        	JLabel losses = new JLabel(String.valueOf(eachLine.getLosses()));
-			setPermanentWidthAndHeight(losses, 30, 20);
-            JLabel goalsFor = new JLabel(String.valueOf(eachLine.getGoalsScored()));
-			setPermanentWidthAndHeight(goalsFor, 30, 20);
-            JLabel goalsAgainst = new JLabel(String.valueOf(eachLine.getGoalsConceded()));
-			setPermanentWidthAndHeight(goalsAgainst, 30, 20);
-            JLabel goalDifference = new JLabel(String.valueOf(eachLine.getGoalDifference()));
-			setPermanentWidthAndHeight(goalDifference, 30, 20);
-        	JLabel points = new JLabel(String.valueOf(eachLine.getPoints()));
-        	Font newFont = new Font(points.getFont().getName(), Font.BOLD, points.getFont().getSize());
-        	points.setFont(newFont);
-			setPermanentWidthAndHeight(points, 30, 20);
-            row.add(position);
-        	row.add(clubName);
-        	row.add(matchesPlayed);
-        	row.add(wins);
-        	row.add(draws);
-        	row.add(losses);
-        	row.add(goalsFor);
-        	row.add(goalsAgainst);
-        	row.add(goalDifference);
-        	row.add(points);
-        	tableContainer.add(row);
+            TeamAchievementLine row = new TeamAchievementLine(eachLine.getTeam(), false);
+            row.updateFromAchievement(eachLine);
+            tableContainer.add(row);
         };
 
 		SwingUtilities.invokeLater(() -> {

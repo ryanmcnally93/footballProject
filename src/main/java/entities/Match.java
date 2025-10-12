@@ -4,7 +4,7 @@ import people.Footballer;
 import people.Goalkeeper;
 import visuals.CustomizedElements.PlayerAchievementLine;
 import visuals.CustomizedElements.PlayerStatsBoxOnRatingsPage;
-import visuals.CustomizedElements.PlayerStatsLineOnRatingsPage;
+import visuals.CustomizedElements.MatchRatingsStatLine;
 import visuals.CustomizedElements.TeamAchievementLine;
 import visuals.MainMenuPages.TacticsPageTemplate;
 import visuals.ScheduleFrames.Events;
@@ -44,7 +44,7 @@ public class Match {
 	private ArrayList<String> homeScorers, awayScorers;
 	private boolean matchHasPlayed = false;
 	private ArrayList<MatchEvent> matchEvents;
-	private ArrayList<PlayerStatsLineOnRatingsPage> firstTeamsPlayersLines, secondTeamsPlayersLines;
+	private ArrayList<MatchRatingsStatLine> firstTeamsPlayersLines, secondTeamsPlayersLines;
 	private ArrayList<PlayerStatsBoxOnRatingsPage> firstTeamsPlayersBoxes, secondTeamsPlayersBoxes;
 	private UsersMatch simulatedMatch;
 	private Map<Footballer, Integer> homeRatings, awayRatings;

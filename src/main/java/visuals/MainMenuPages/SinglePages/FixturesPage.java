@@ -3,13 +3,12 @@ package visuals.MainMenuPages.SinglePages;
 import entities.Competition;
 import entities.Match;
 import entities.UsersMatch;
-import visuals.CustomizedElements.MatchLineOnFixturesPages;
+import visuals.CustomizedElements.FixturesPageStatLine;
 import visuals.CustomizedElements.OptionBar;
 import visuals.MatchPages.MatchPageTemplate;
 import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -26,7 +25,7 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
     private static List<String> ALL_COMPETITIONS = new ArrayList<>();
     private static Map<String, List<String>> competitionRounds = new HashMap<>();;
     private static Map<String, List<String>> otherCompetitionRounds = new HashMap<>();;
-    private ArrayList<MatchLineOnFixturesPages> lines;
+    private ArrayList<FixturesPageStatLine> lines;
 
     public FixturesPage(Scheduler scheduler) {
         super(scheduler);
@@ -156,12 +155,12 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
     }
 
     public void addFixtureLine(UsersMatch child) {
-        MatchLineOnFixturesPages matchLine = new MatchLineOnFixturesPages(child);
+        FixturesPageStatLine matchLine = new FixturesPageStatLine(child);
         updateMatchLineListener(matchLine, child);
         lines.add(matchLine);
     }
 
-    public void updateMatchLineListener(MatchLineOnFixturesPages line, UsersMatch matchToView) {
+    public void updateMatchLineListener(FixturesPageStatLine line, UsersMatch matchToView) {
         if (line.getMouseListeners().length > 1) {
             MouseListener[] listeners = line.getMouseListeners();
             line.removeMouseListener(listeners[listeners.length - 1]);
@@ -188,27 +187,27 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
     }
 
     public void organiseMyFixtures() {
-        lines.sort(new Comparator<MatchLineOnFixturesPages>() {
+        lines.sort(new Comparator<FixturesPageStatLine>() {
             @Override
-            public int compare(MatchLineOnFixturesPages line1, MatchLineOnFixturesPages line2) {
+            public int compare(FixturesPageStatLine line1, FixturesPageStatLine line2) {
                 return line1.getMatch().getDateTime().compareTo(line2.getMatch().getDateTime());
             }
         });
 
-        for (MatchLineOnFixturesPages eachLine : lines) {
+        for (FixturesPageStatLine eachLine : lines) {
             getLeftBox().add(eachLine);
         }
         getLeftBox().revalidate();
         getLeftBox().repaint();
     }
 
-    public MatchLineOnFixturesPages getLine(Match match) {
-        for (MatchLineOnFixturesPages eachLine : lines) {
+    public FixturesPageStatLine getLine(Match match) {
+        for (FixturesPageStatLine eachLine : lines) {
             if (eachLine.getMatch().toString().equals(match.toString())) {
                 return eachLine;
             }
         }
         System.out.println("ERROR You haven't found your match line");
-        return new MatchLineOnFixturesPages(match);
+        return new FixturesPageStatLine(match);
     }
 }

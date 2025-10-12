@@ -1,7 +1,7 @@
 package visuals.MainMenuPages.TacticsPages;
 
 import people.Footballer;
-import visuals.CustomizedElements.PlayerStatsLineOnRatingsPage;
+import visuals.CustomizedElements.MatchRatingsStatLine;
 import visuals.MainMenuPages.TacticsPageTemplate;
 import visuals.ScheduleFrames.Scheduler;
 
@@ -19,9 +19,9 @@ public class FirstTeamPage extends TacticsPageTemplate {
     private JPanel mainPanel;
     private Box centerBox;
     private JPanel titleLine;
-    private ArrayList<PlayerStatsLineOnRatingsPage> listOfLines;
-    private PlayerStatsLineOnRatingsPage firstClickedLine = null;
-    private PlayerStatsLineOnRatingsPage secondClickedLine = null;
+    private ArrayList<MatchRatingsStatLine> listOfLines;
+    private MatchRatingsStatLine firstClickedLine = null;
+    private MatchRatingsStatLine secondClickedLine = null;
 
     public FirstTeamPage(CardLayout cardLayout, JPanel pages, Scheduler scheduler, boolean fromScheduler){
         super(cardLayout, pages, scheduler, fromScheduler);
@@ -69,7 +69,7 @@ public class FirstTeamPage extends TacticsPageTemplate {
     public void chooseLinesToView(List<String> sortedPositions) {
         // Remove any previous lines
         for (Component comp : centerBox.getComponents()) {
-            if (comp instanceof PlayerStatsLineOnRatingsPage) {
+            if (comp instanceof MatchRatingsStatLine) {
                 centerBox.remove(comp);
             }
         }
@@ -77,7 +77,7 @@ public class FirstTeamPage extends TacticsPageTemplate {
         if (getMatch() == null) {
             for (String position : sortedPositions) {
                 Footballer player = getScheduler().getTeam().getFirstTeam().get(position);
-                PlayerStatsLineOnRatingsPage newLine = createRatingLine(player);
+                MatchRatingsStatLine newLine = createRatingLine(player);
                 setPermanentWidth(newLine.getNameAsJLabel(), 200);
                 newLine.addPlayerViewButton();
                 centerBox.add(newLine);
@@ -85,7 +85,7 @@ public class FirstTeamPage extends TacticsPageTemplate {
         } else if (getMatch().getHome() == getScheduler().getTeam()) {
             for (String position : sortedPositions) {
                 Footballer player = getMatch().getHomeTeam().get(position);
-                PlayerStatsLineOnRatingsPage newLine = createRatingLine(player);
+                MatchRatingsStatLine newLine = createRatingLine(player);
                 setPermanentWidth(newLine.getNameAsJLabel(), 200);
                 newLine.addPlayerViewButton();
                 centerBox.add(newLine);
@@ -93,7 +93,7 @@ public class FirstTeamPage extends TacticsPageTemplate {
         } else if (getMatch().getAway() == getScheduler().getTeam()) {
             for (String position : sortedPositions) {
                 Footballer player = getMatch().getAwayTeam().get(position);
-                PlayerStatsLineOnRatingsPage newLine = createRatingLine(player);
+                MatchRatingsStatLine newLine = createRatingLine(player);
                 setPermanentWidth(newLine.getNameAsJLabel(), 200);
                 newLine.addPlayerViewButton();
                 centerBox.add(newLine);
@@ -101,7 +101,7 @@ public class FirstTeamPage extends TacticsPageTemplate {
         }
     }
 
-    private void handleLineClick(PlayerStatsLineOnRatingsPage clickedLine) {
+    private void handleLineClick(MatchRatingsStatLine clickedLine) {
         if (firstClickedLine == null) {
             // First click: highlight the line
             firstClickedLine = clickedLine;
@@ -119,7 +119,7 @@ public class FirstTeamPage extends TacticsPageTemplate {
         }
     }
 
-    public void swapPlayerPositionsLogically(PlayerStatsLineOnRatingsPage line1, PlayerStatsLineOnRatingsPage line2) {
+    public void swapPlayerPositionsLogically(MatchRatingsStatLine line1, MatchRatingsStatLine line2) {
         // If we are outside a match, this should effect our first team
         if (isFromScheduler()) {
             line1.getPlayer().setPositionPlaced(line2.getPosLabel().getText());
@@ -147,7 +147,7 @@ public class FirstTeamPage extends TacticsPageTemplate {
         line2.getPosLabel().setText(firstLinePosition);
     }
 
-    public void swapPlayerPositionsVisually(PlayerStatsLineOnRatingsPage line1, PlayerStatsLineOnRatingsPage line2) {
+    public void swapPlayerPositionsVisually(MatchRatingsStatLine line1, MatchRatingsStatLine line2) {
         Point start1 = line1.getLocation();
         Point start2 = line2.getLocation();
 
@@ -211,8 +211,8 @@ public class FirstTeamPage extends TacticsPageTemplate {
     }
 
     // Could this be in adult class? repeated code
-    public PlayerStatsLineOnRatingsPage createRatingLine(Footballer player) {
-        PlayerStatsLineOnRatingsPage newLine = new PlayerStatsLineOnRatingsPage();
+    public MatchRatingsStatLine createRatingLine(Footballer player) {
+        MatchRatingsStatLine newLine = new MatchRatingsStatLine(false);
         newLine.updateLine(player);
         listOfLines.add(newLine);
         newLine.addMouseListener(new MouseAdapter() {
