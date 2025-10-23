@@ -18,10 +18,7 @@ public abstract class AbstractStatBar extends RoundedPanel {
         setOpaque(true);
         setBackground(Color.LIGHT_GRAY);
         setPreferredSize(new Dimension(600, 30));
-
-        if (showBorder) {
-            setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-        }
+        setBorderThickness(showBorder ? 1 : 0);
     }
 
     /** Subclasses implement this to add their JLabels in the desired order */
@@ -42,5 +39,13 @@ public abstract class AbstractStatBar extends RoundedPanel {
     protected void refresh() {
         revalidate();
         repaint();
+    }
+
+    public List<JLabel> getColumns() {
+        return columns;
+    }
+
+    public void setColumns(List<JLabel> columns) {
+        this.columns = columns;
     }
 }

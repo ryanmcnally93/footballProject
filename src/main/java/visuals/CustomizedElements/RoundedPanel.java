@@ -52,4 +52,12 @@ public class RoundedPanel extends GamePanel {
     public void setBorderColor(Color borderColor) {
         this.borderColor = borderColor;
     }
+
+    public int getBorderThickness() {
+        return borderThickness;
+    }
+
+    public void setBorderThickness(int borderThickness) {
+        this.borderThickness = borderThickness;
+    }
 }

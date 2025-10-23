@@ -4,24 +4,16 @@ import entities.Match;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDateTime;
 
 public class FixturesPageStatLine extends AbstractStatBar {
 
-    private JLabel title;
     private Match match;
 
     public FixturesPageStatLine(Match match){
         super(20, true);
         this.match = match;
-        buildColumns(); // Let subclasses define which columns to add
-    }
-
-    public String getMatchTitle() {
-        return title.getText();
-    }
-
-    public void setMatchTitle(JLabel name) {
-        this.title = name;
+        buildColumns();
     }
 
     public Match getMatch() {
@@ -34,15 +26,22 @@ public class FixturesPageStatLine extends AbstractStatBar {
 
     public void gameComplete() {
         setBackground(Color.GREEN);
+        getColumns().get(0).setText("FT");
+        getColumns().get(2).setText(match.getHomeScore() + " - " + match.getAwayScore());
         refresh();
     }
 
     @Override
     protected void buildColumns() {
+        createColumn("", 50); // Blank Box Column, save width as button 50px?
+        createColumn(match.getHome().getName(), 225);
         if (match.getTimer().getTime().equals("00:00")) {
-            title = createColumn(match.getHome().getName() + " vs " + match.getAway().getName(), 200);
+            LocalDateTime date = match.getDateTime();
+            createColumn(date.getDayOfMonth() + "/" + date.getMonthValue(), 50);
         } else {
-            title = createColumn(match.getHome().getName() + " " + match.getHomeScore() + " - " + match.getAwayScore() + " " + match.getAway().getName(), 200);
+            createColumn(match.getHomeScore() + " - " + match.getAwayScore(), 50);
         }
+        createColumn(match.getAway().getName(), 225);
+        createColumn("", 50); // Button Box
     }
 }

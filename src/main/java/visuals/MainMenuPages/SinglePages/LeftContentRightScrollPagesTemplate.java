@@ -18,7 +18,7 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
 
     private JPanel mainPanel;
     private RoundedPanel leftBox, rightBox;
-    private JScrollPane scroller;
+    private JScrollPane leftScroller, rightScroller;
     private Image backgroundImage;
     private Timer timer;
     private boolean leftFocused;
@@ -53,19 +53,25 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
         leftBox.setBackground(newColor);
         setPermanentWidthAndHeight(leftBox, 621, 340);
 
+        leftScroller = makeScroller(leftBox);
+        leftScroller.setFocusable(false);
+        leftScroller.setOpaque(false);
+        leftScroller.getViewport().setOpaque(false);
+        setPermanentWidthAndHeight(leftScroller, 621, 340);
+
         rightBox = new RoundedPanel(30);
         rightBox.setBorderColor(newColor);
         rightBox.setBackground(newColor);
 
-        mainPanel.add(leftBox);
+        mainPanel.add(leftScroller);
         mainPanel.add(Box.createRigidArea(new Dimension(12, 0)));
 
-        scroller = makeScroller(rightBox);
-        scroller.setFocusable(false);
-        scroller.setOpaque(false);
-        scroller.getViewport().setOpaque(false);
-        setPermanentWidthAndHeight(scroller, 155, 265);
-        mainPanel.add(scroller);
+        rightScroller = makeScroller(rightBox);
+        rightScroller.setFocusable(false);
+        rightScroller.setOpaque(false);
+        rightScroller.getViewport().setOpaque(false);
+        setPermanentWidthAndHeight(rightScroller, 155, 265);
+        mainPanel.add(rightScroller);
 
         mainPanel.setBounds(0, 90, 800, 420);
         layeredPane.add(mainPanel, JLayeredPane.DEFAULT_LAYER);
@@ -102,7 +108,7 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
             @Override
             public void mouseEntered(MouseEvent e) {
                 if (!directionEqualsPage(direction)) {
-                    JScrollBar vBar = getScroller().getVerticalScrollBar();
+                    JScrollBar vBar = getRightScroller().getVerticalScrollBar();
                     int max = vBar.getMaximum() - vBar.getVisibleAmount();
                     int value = vBar.getValue();
                     boolean edgeOfPosition = false;
@@ -121,7 +127,7 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
             scrollButton.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                    JScrollBar vBar = getScroller().getVerticalScrollBar();
+                    JScrollBar vBar = getRightScroller().getVerticalScrollBar();
                     timer = new Timer(20, evt -> {
                         int newVal = 0;
                         if (direction.equals("down")) {
@@ -181,10 +187,10 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
 
     public void scrollToButton(JButton button) {
         Rectangle bounds = button.getBounds();
-        Point location = SwingUtilities.convertPoint(button.getParent(), bounds.getLocation(), getScroller().getViewport());
+        Point location = SwingUtilities.convertPoint(button.getParent(), bounds.getLocation(), getRightScroller().getViewport());
         bounds.setLocation(location);
 
-        getScroller().getViewport().scrollRectToVisible(bounds);
+        getRightScroller().getViewport().scrollRectToVisible(bounds);
     }
 
     public RoundedPanel getLeftBox() {
@@ -221,12 +227,20 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
         return true;
     }
 
-    public JScrollPane getScroller() {
-        return scroller;
+    public JScrollPane getLeftScroller() {
+        return leftScroller;
     }
 
-    public void setScroller(JScrollPane scroller) {
-        this.scroller = scroller;
+    public void setLeftScroller(JScrollPane leftScroller) {
+        this.leftScroller = leftScroller;
+    }
+
+    public JScrollPane getRightScroller() {
+        return rightScroller;
+    }
+
+    public void setRightScroller(JScrollPane rightScroller) {
+        this.rightScroller = rightScroller;
     }
 
     protected int getBarHeights(HashMap<String, List<String>> options) {

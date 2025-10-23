@@ -196,6 +196,12 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
 
         for (FixturesPageStatLine eachLine : lines) {
             getLeftBox().add(eachLine);
+            // Re-evaluate the size of leftBox so the scrolling functionality works
+            if (getLeftBox().getComponentCount() == 10) {
+                setPermanentWidthAndHeight(getLeftBox(), 621, (int) getLeftBox().getPreferredSize().getHeight() + 10);
+            } else if (getLeftBox().getComponentCount() > 10) {
+                setPermanentWidthAndHeight(getLeftBox(), 621, (int) getLeftBox().getPreferredSize().getHeight() + 35);
+            }
         }
         getLeftBox().revalidate();
         getLeftBox().repaint();
