@@ -56,6 +56,9 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         addFocusListeners(getLeftBox(), true);
         addFocusListeners(getRightBox(), false);
 
+        addScrollButton("leftDown");
+        addScrollButton("leftUp");
+
         addKeyListeners();
         setVisible(true);
     }
@@ -215,5 +218,10 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         }
         System.out.println("ERROR You haven't found your match line");
         return new FixturesPageStatLine(match);
+    }
+
+    @Override
+    protected boolean directionEqualsPage(String direction) {
+        return false;
     }
 }
