@@ -22,15 +22,19 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
     private Image backgroundImage;
     private Timer timer;
     private boolean leftFocused;
-    private final Map<String, Rectangle> boundsByDirection = Map.of(
-            "down", new Rectangle(0, 0, 155, 20),
-            "up",   new Rectangle(0, 0, 155, 20),
-            "left", new Rectangle(0, 0, 50, 50),
-            "right", new Rectangle(0, 0, 50, 50),
-            "downHover", new Rectangle(633, 413, 155, 20),
-            "upHover",   new Rectangle(633, 168, 155, 20),
-            "leftHover", new Rectangle(5, 272, 50, 50),
-            "rightHover", new Rectangle(565, 272, 50, 50)
+    private final Map<String, Rectangle> boundsByDirection = Map.ofEntries(
+            Map.entry("down", new Rectangle(0, 0, 155, 20)),
+            Map.entry("up",   new Rectangle(0, 0, 155, 20)),
+            Map.entry("left", new Rectangle(0, 0, 50, 50)),
+            Map.entry("right", new Rectangle(0, 0, 50, 50)),
+            Map.entry("leftDown" , new Rectangle(0, 0, 218, 40)),
+            Map.entry("leftUp" , new Rectangle(0, 0, 218, 40)),
+            Map.entry("downHover", new Rectangle(633, 413, 155, 20)),
+            Map.entry("upHover",   new Rectangle(633, 168, 155, 20)),
+            Map.entry("leftHover", new Rectangle(5, 272, 50, 50)),
+            Map.entry("rightHover", new Rectangle(565, 272, 50, 50)),
+            Map.entry("leftDownHover", new Rectangle(201, 425, 218, 40)),
+            Map.entry("leftUpHover", new Rectangle(201, 135, 218, 40))
     );
 
     public LeftContentRightScrollPagesTemplate(Scheduler scheduler) {
@@ -176,6 +180,11 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
         switch (direction) {
             case "down", "up" -> {
                 ImageIcon buttonIcon = new ImageIcon("./src/main/java/visuals/Images/" + direction + "_arrow.png", direction.substring(0, 1).toUpperCase() + direction.substring(1) + "Small");
+                button = new CustomizedButton(buttonIcon);
+            }
+            case "leftDown", "leftUp" -> {
+                String upOrDown = direction.substring(4);
+                ImageIcon buttonIcon = new ImageIcon("./src/main/java/visuals/Images/" + upOrDown + "_arrow.png", upOrDown.substring(0, 1).toUpperCase() + upOrDown.substring(1) + "Small");
                 button = new CustomizedButton(buttonIcon);
             }
             case "left" -> button = new CustomizedButton("<");
