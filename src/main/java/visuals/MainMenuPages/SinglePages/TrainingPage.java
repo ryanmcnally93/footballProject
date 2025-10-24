@@ -95,7 +95,7 @@ public class TrainingPage extends LeftContentRightScrollPagesTemplate {
     public class CustomDownClick extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
-            moveScroller("down");
+            moveRightScroller("down");
         }
     }
 
@@ -107,7 +107,7 @@ public class TrainingPage extends LeftContentRightScrollPagesTemplate {
     public class CustomUpClick extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
-            moveScroller("up");
+            moveRightScroller("up");
         }
     }
 
@@ -213,7 +213,7 @@ public class TrainingPage extends LeftContentRightScrollPagesTemplate {
     }
 
     @Override
-    protected void barSelected(RightBoxBar nextBar) {
+    protected void rightBarSelected(RightBoxBar nextBar) {
         selectedPlayer = ((PlayerMenuBar) nextBar).getPlayer();
         populatePlayerAttributes();
     }

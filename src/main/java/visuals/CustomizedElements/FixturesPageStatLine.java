@@ -1,12 +1,13 @@
 package visuals.CustomizedElements;
 
+import Interfaces.Hoverable;
 import entities.Match;
 
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDateTime;
 
-public class FixturesPageStatLine extends AbstractStatBar {
+public class FixturesPageStatLine extends AbstractStatBar implements Hoverable {
 
     private Match match;
 
@@ -14,6 +15,9 @@ public class FixturesPageStatLine extends AbstractStatBar {
         super(20, true);
         this.match = match;
         buildColumns();
+        setCursor(new Cursor(Cursor.HAND_CURSOR));
+        setBackground(new Color(245, 245, 245));
+        addHoverEffect(this, this::repaint);
     }
 
     public Match getMatch() {

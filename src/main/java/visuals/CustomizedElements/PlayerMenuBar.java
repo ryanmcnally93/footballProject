@@ -60,17 +60,17 @@ public class PlayerMenuBar extends RightBoxBar {
         return new Dimension(Integer.MAX_VALUE, d.height);
     }
 
-    @Override
-    protected void childMouseExited() {
-        squadNo.setForeground(getSecondaryColor());
-        playerName.setForeground(getSecondaryColor());
-    }
-
-    @Override
-    protected void childMouseEntered() {
-        squadNo.setForeground(getPrimaryColor());
-        playerName.setForeground(getPrimaryColor());
-    }
+//    @Override
+//    protected void childMouseExited() {
+//        squadNo.setForeground(getSecondaryColor());
+//        playerName.setForeground(getSecondaryColor());
+//    }
+//
+//    @Override
+//    protected void childMouseEntered() {
+//        squadNo.setForeground(getPrimaryColor());
+//        playerName.setForeground(getPrimaryColor());
+//    }
 
     public Footballer getPlayer() {
         return player;

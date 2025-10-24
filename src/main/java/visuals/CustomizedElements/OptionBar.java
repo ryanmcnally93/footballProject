@@ -97,15 +97,15 @@ public class OptionBar extends RightBoxBar {
         return new Dimension(Integer.MAX_VALUE, d.height);
     }
 
-    @Override
-    protected void childMouseExited() {
-        optionField.setForeground(getSecondaryColor());
-    }
-
-    @Override
-    protected void childMouseEntered() {
-        optionField.setForeground(getPrimaryColor());
-    }
+//    @Override
+//    protected void childMouseExited() {
+//        optionField.setForeground(getSecondaryColor());
+//    }
+//
+//    @Override
+//    protected void childMouseEntered() {
+//        optionField.setForeground(getPrimaryColor());
+//    }
 
     @Override
     public void setAsSelected(boolean bool) {

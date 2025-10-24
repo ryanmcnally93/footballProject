@@ -74,7 +74,7 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
             if (isLeftFocused()) {
                 // Do nothing yet
             } else {
-                moveScroller("down");
+                moveRightScroller("down");
             }
         }
     }
@@ -90,7 +90,7 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
             if (isLeftFocused()) {
                 // Do nothing yet
             } else {
-                moveScroller("up");
+                moveRightScroller("up");
             }
         }
     }
@@ -103,7 +103,7 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
     public class CustomLeftClick extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
-            moveScroller("left");
+            moveRightScroller("left");
         }
     }
 
@@ -115,7 +115,7 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
     public class CustomRightClick extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
-            moveScroller("right");
+            moveRightScroller("right");
         }
     }
 

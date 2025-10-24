@@ -173,7 +173,7 @@ public class MessageViewer extends GamePanel {
     private void addHoverStylingIfNeeded(CustomizedButton button) {
         SwingUtilities.invokeLater(() -> {
             if(isTheCursorStillOverTheButton(button)){
-                button.mouseEnteredMethod();
+                button.onHoverEnter(button);
             }
         });
     }
