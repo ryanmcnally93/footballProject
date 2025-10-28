@@ -13,10 +13,10 @@ public abstract class GamePanel extends JPanel {
     private static final long serialVersionUID = -8911764479146802449L;
     private Box east;
     private Box west;
-    private static final String RIGHT = "Next Page";
-    private static final String LEFT = "Previous Page";
-    private static final String UP = "Up";
-    private static final String DOWN = "Down";
+    protected static final String RIGHT = "Next Page";
+    protected static final String LEFT = "Previous Page";
+    protected static final String UP = "Up";
+    protected static final String DOWN = "Down";
 
     public GamePanel() {};
 
@@ -138,6 +138,10 @@ public abstract class GamePanel extends JPanel {
         } else if (icon.getDescription().equals("UpSmallDark")) {
             ImageIcon newIcon =  new ImageIcon("./src/main/java/visuals/Images/up_arrow.png", "UpSmall");
             return alterImageSize(newIcon, 2);
+        } else if (icon.getDescription().equals("Select")) {
+            return getIconWithSpecificSize("./src/main/java/visuals/Images/select_icon_darkbg.png", "SelectDark", 20);
+        } else if (icon.getDescription().equals("SelectDark")) {
+            return getIconWithSpecificSize("./src/main/java/visuals/Images/select_icon.png", "Select", 20);
         } else {
             System.out.println("ERROR: getOppositeImage() is unable to determine which image should be shown! Icon description is: " + icon.getDescription() + ".");
             throw new RuntimeException();
@@ -273,6 +277,18 @@ public abstract class GamePanel extends JPanel {
 
         inputMap.put(KeyStroke.getKeyStroke("DOWN"), DOWN);
         actionMap.put(DOWN, getDownClickAction());
+
+        inputMap.put(KeyStroke.getKeyStroke("pressed UP"), "pressUp");
+        actionMap.put("pressUp", getUpPressAction());
+
+        inputMap.put(KeyStroke.getKeyStroke("pressed DOWN"), "pressDown");
+        actionMap.put("pressDown", getDownPressAction());
+
+        inputMap.put(KeyStroke.getKeyStroke("released DOWN"), "releaseDown");
+        actionMap.put("releaseDown", getDownReleaseAction());
+
+        inputMap.put(KeyStroke.getKeyStroke("released UP"), "releaseUp");
+        actionMap.put("releaseUp", getUpReleaseAction());
     }
 
     protected AbstractAction getRightClickAction() {
@@ -302,6 +318,50 @@ public abstract class GamePanel extends JPanel {
     }
 
     public static class DownClick extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Default: Do nothing
+        }
+    }
+
+    protected AbstractAction getUpReleaseAction() {
+        return new UpRelease();
+    }
+
+    public static class UpRelease extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Default: Do nothing
+        }
+    }
+
+    protected AbstractAction getUpPressAction() {
+        return new UpPress();
+    }
+
+    public static class UpPress extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Default: Do nothing
+        }
+    }
+
+    protected AbstractAction getDownPressAction() {
+        return new DownPress();
+    }
+
+    public static class DownPress extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Default: Do nothing
+        }
+    }
+
+    protected AbstractAction getDownReleaseAction() {
+        return new DownRelease();
+    }
+
+    public static class DownRelease extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
             // Default: Do nothing

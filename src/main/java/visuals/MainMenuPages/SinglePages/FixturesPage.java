@@ -3,6 +3,7 @@ package visuals.MainMenuPages.SinglePages;
 import entities.Competition;
 import entities.Match;
 import entities.UsersMatch;
+import visuals.CustomizedElements.CustomizedButton;
 import visuals.CustomizedElements.FixturesPageStatLine;
 import visuals.CustomizedElements.OptionBar;
 import visuals.MatchPages.MatchPageTemplate;
@@ -12,7 +13,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,36 +61,77 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
 
         addKeyListeners();
         setVisible(true);
+        setFocusable(true);
+        setRequestFocusEnabled(true);
+        requestFocusInWindow();
     }
 
     @Override
-    protected AbstractAction getDownClickAction() {
-        return new FixturesPage.CustomDownClick();
+    public void addKeyListeners() {
+        InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = getActionMap();
+
+        inputMap.put(KeyStroke.getKeyStroke("LEFT"), LEFT);
+        actionMap.put(LEFT, getLeftClickAction());
+
+        inputMap.put(KeyStroke.getKeyStroke("RIGHT"), RIGHT);
+        actionMap.put(RIGHT, getRightClickAction());
+
+        inputMap.put(KeyStroke.getKeyStroke("pressed UP"), "pressUp");
+        actionMap.put("pressUp", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (isLeftFocused()) {
+                    scrollUpOrDownOnHover("leftUp", null);
+                } else {
+                    moveRightScroller("up");
+                }
+            }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke("pressed DOWN"), "pressDown");
+        actionMap.put("pressDown", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (isLeftFocused()) {
+                    scrollUpOrDownOnHover("leftDown", null);
+                } else {
+                    moveRightScroller("down");
+                }
+            }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke("released DOWN"), "releaseDown");
+        actionMap.put("releaseDown", getDownReleaseAction());
+
+        inputMap.put(KeyStroke.getKeyStroke("released UP"), "releaseUp");
+        actionMap.put("releaseUp", getUpReleaseAction());
     }
 
-    public class CustomDownClick extends AbstractAction {
+    @Override
+    protected AbstractAction getUpReleaseAction() {
+        return new FixturesPage.UpRelease();
+    }
+
+    public class UpRelease extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (isLeftFocused()) {
-                // Do nothing yet
-            } else {
-                moveRightScroller("down");
+            if (getTimer() != null && getTimer().isRunning()) {
+                getTimer().stop();
             }
         }
     }
 
     @Override
-    protected AbstractAction getUpClickAction() {
-        return new FixturesPage.CustomUpClick();
+    protected AbstractAction getDownReleaseAction() {
+        return new FixturesPage.DownRelease();
     }
 
-    public class CustomUpClick extends AbstractAction {
+    public class DownRelease extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (isLeftFocused()) {
-                // Do nothing yet
-            } else {
-                moveRightScroller("up");
+            if (getTimer() != null && getTimer().isRunning()) {
+                getTimer().stop();
             }
         }
     }
@@ -164,11 +205,8 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
     }
 
     public void updateMatchLineListener(FixturesPageStatLine line, UsersMatch matchToView) {
-        if (line.getMouseListeners().length > 1) {
-            MouseListener[] listeners = line.getMouseListeners();
-            line.removeMouseListener(listeners[listeners.length - 1]);
-        }
-        line.addMouseListener(new MouseAdapter() {
+        CustomizedButton icon = line.getSelectIcon();
+        icon.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 for (Map.Entry<String, JPanel> page : getScheduler().getMatchFramesMap().entrySet()) {
@@ -185,6 +223,7 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
                 }
                 getScheduler().setMatch(matchToView);
                 getScheduler().displayMatchFrames(matchToView);
+                icon.triggerColorReverse();
             }
         });
     }

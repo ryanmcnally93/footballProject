@@ -1,23 +1,21 @@
 package visuals.CustomizedElements;
 
-import Interfaces.Hoverable;
 import entities.Match;
 
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDateTime;
 
-public class FixturesPageStatLine extends AbstractStatBar implements Hoverable {
+public class FixturesPageStatLine extends AbstractStatBar {
 
     private Match match;
+    private CustomizedButton selectIcon;
 
     public FixturesPageStatLine(Match match){
         super(20, true);
         this.match = match;
         buildColumns();
-        setCursor(new Cursor(Cursor.HAND_CURSOR));
         setBackground(new Color(245, 245, 245));
-        addHoverEffect(this, this::repaint);
     }
 
     public Match getMatch() {
@@ -46,6 +44,18 @@ public class FixturesPageStatLine extends AbstractStatBar implements Hoverable {
             createColumn(match.getHomeScore() + " - " + match.getAwayScore(), 50);
         }
         createColumn(match.getAway().getName(), 225);
-        createColumn("", 50); // Button Box
+        ImageIcon buttonIcon = getIconWithSpecificSize("./src/main/java/visuals/Images/select_icon.png", "Select", 20);
+        selectIcon = createColumn(buttonIcon, 30);
+        selectIcon.setBorderWanted(false);
+        selectIcon.setFillWanted(false);
+        selectIcon.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
+
+    public CustomizedButton getSelectIcon() {
+        return selectIcon;
+    }
+
+    public void setSelectIcon(CustomizedButton selectIcon) {
+        this.selectIcon = selectIcon;
     }
 }

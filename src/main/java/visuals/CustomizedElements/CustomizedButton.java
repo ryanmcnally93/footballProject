@@ -15,6 +15,8 @@ public class CustomizedButton extends JButton implements Hoverable {
     private boolean selected;
     private int arcHeight = 10;
     private int arcWidth = 10;
+    private boolean borderWanted = true;
+    private boolean fillWanted = true;
 
     public CustomizedButton(String text) {
         super(text);
@@ -65,7 +67,7 @@ public class CustomizedButton extends JButton implements Hoverable {
 
     @Override
     protected void paintComponent(Graphics g) {
-        paintHoverableBackground(g, this, getBackground(), getSecondaryColor(), getArcWidth(), getArcHeight());
+        paintHoverableBackground(g, this, getBackground(), getSecondaryColor(), getArcWidth(), getArcHeight(), borderWanted, fillWanted);
         super.paintComponent(g);
     }
 
@@ -77,7 +79,8 @@ public class CustomizedButton extends JButton implements Hoverable {
 
     public void triggerColorReverse() {
         ImageIcon oppositeImage = getOppositeImage((ImageIcon) getIcon());
-        icon = oppositeImage; setIcon(oppositeImage);
+        icon = oppositeImage;
+        setIcon(oppositeImage);
         this.init();
         this.revalidate();
         this.repaint();
@@ -105,5 +108,21 @@ public class CustomizedButton extends JButton implements Hoverable {
 
     public void setArcHeight(int arcHeight) {
         this.arcHeight = arcHeight;
+    }
+
+    public boolean isBorderWanted() {
+        return borderWanted;
+    }
+
+    public void setBorderWanted(boolean borderWanted) {
+        this.borderWanted = borderWanted;
+    }
+
+    public boolean isFillWanted() {
+        return fillWanted;
+    }
+
+    public void setFillWanted(boolean fillWanted) {
+        this.fillWanted = fillWanted;
     }
 }

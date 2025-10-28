@@ -34,14 +34,18 @@ public interface Hoverable {
     }
 
     // Draw rounded background and border — reusable across buttons/panels
-    default void paintHoverableBackground(Graphics g, JComponent c, Color background, Color border, int arcWidth, int arcHeight) {
+    default void paintHoverableBackground(Graphics g, JComponent c, Color background, Color border, int arcWidth, int arcHeight, boolean borderWanted, boolean fillWanted) {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(background);
-        g2.fillRoundRect(0, 0, c.getWidth(), c.getHeight(), arcWidth, arcHeight);
-        g2.setColor(border);
-        g2.setStroke(new BasicStroke(2));
-        g2.drawRoundRect(1, 1, c.getWidth() - 2, c.getHeight() - 2, arcWidth, arcHeight);
+        if (fillWanted) {
+            g2.setColor(background);
+            g2.fillRoundRect(0, 0, c.getWidth(), c.getHeight(), arcWidth, arcHeight);
+        }
+        if (borderWanted) {
+            g2.setColor(border);
+            g2.setStroke(new BasicStroke(2));
+            g2.drawRoundRect(1, 1, c.getWidth() - 2, c.getHeight() - 2, arcWidth, arcHeight);
+        }
         g2.dispose();
     }
 

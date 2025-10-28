@@ -6,6 +6,7 @@ import visuals.ScheduleFrames.Scheduler;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
@@ -27,14 +28,14 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
             Map.entry("up",   new Rectangle(0, 0, 155, 20)),
             Map.entry("left", new Rectangle(0, 0, 50, 50)),
             Map.entry("right", new Rectangle(0, 0, 50, 50)),
-            Map.entry("leftDown" , new Rectangle(0, 0, 218, 40)),
-            Map.entry("leftUp" , new Rectangle(0, 0, 218, 40)),
+            Map.entry("leftDown" , new Rectangle(0, 0, 218, 25)),
+            Map.entry("leftUp" , new Rectangle(0, 0, 218, 25)),
             Map.entry("downHover", new Rectangle(633, 413, 155, 20)),
             Map.entry("upHover",   new Rectangle(633, 168, 155, 20)),
             Map.entry("leftHover", new Rectangle(5, 272, 50, 50)),
             Map.entry("rightHover", new Rectangle(565, 272, 50, 50)),
-            Map.entry("leftDownHover", new Rectangle(201, 425, 218, 40)),
-            Map.entry("leftUpHover", new Rectangle(201, 135, 218, 40))
+            Map.entry("leftDownHover", new Rectangle(201, 440, 218, 25)),
+            Map.entry("leftUpHover", new Rectangle(201, 135, 218, 25))
     );
 
     public LeftContentRightScrollPagesTemplate(Scheduler scheduler) {
@@ -136,36 +137,7 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
             scrollButton.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                    JScrollBar vBar;
-                    if (direction.equals("down") || direction.equals("up")) {
-                        vBar = getRightScroller().getVerticalScrollBar();
-                    } else {
-                        vBar = getLeftScroller().getVerticalScrollBar();
-                    }
-                    timer = new Timer(direction.equals("leftDown") || direction.equals("leftUp") ? 5 : 20, evt -> {
-                        int newVal = 0;
-                        if (direction.equals("down") || direction.equals("leftDown")) {
-                            newVal = Math.min(vBar.getValue() + 2, vBar.getMaximum());
-                        } else {
-                            newVal = Math.min(vBar.getValue() - 2, vBar.getMaximum());
-                        }
-                        vBar.setValue(newVal);
-
-                        int max = vBar.getMaximum() - vBar.getVisibleAmount();
-                        boolean edgeOfPosition = false;
-                        if (direction.equals("down") || direction.equals("leftDown")) {
-                            edgeOfPosition = vBar.getValue() >= max;
-                        } else {
-                            edgeOfPosition = vBar.getValue() == 0;
-                        }
-
-                        if (edgeOfPosition) {
-                            scrollButton.setVisible(false);
-                            timer.stop();
-                        }
-                    });
-
-                    timer.start();
+                    scrollUpOrDownOnHover(direction, scrollButton);
                 }
             });
         } else {
@@ -177,6 +149,28 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
                 }
             });
         }
+    }
+
+    protected void scrollUpOrDownOnHover(String direction, CustomizedButton scrollButton) {
+        if (timer != null && timer.isRunning()) timer.stop();
+        JScrollBar vBar = (direction.contains("left") ? getLeftScroller() : getRightScroller()).getVerticalScrollBar();
+        boolean isDown = direction.toLowerCase().contains("down");
+        int delay = direction.startsWith("left") ? 5 : 20;
+
+        timer = new Timer(delay, evt -> {
+            int newVal = isDown ? Math.min(vBar.getValue() + 2, vBar.getMaximum()) : Math.max(vBar.getValue() - 2, 0);
+            vBar.setValue(newVal);
+
+            int max = vBar.getMaximum() - vBar.getVisibleAmount();
+            boolean atEdge = isDown ? newVal >= max : newVal == 0;
+
+            if (atEdge) {
+                if (scrollButton != null) scrollButton.setVisible(false);
+                timer.stop();
+            }
+        });
+
+        timer.start();
     }
 
     protected void moveLeftOrRight(String direction) {}
@@ -382,50 +376,15 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
         }
     }
 
-//    protected void moveLeftScroller(String direction) {
-//        Container leftBox = getLeftBox();
-//        int count = leftBox.getComponentCount();
-//
-//        for (int i = 0; i < count; i++) {
-//            Component comp = rightBox.getComponent(i);
-//
-//            if (comp instanceof AbstractStatBar statBar && statBar.isSelected()) {
-//                // Deselect current
-//                statBar.setAsSelected(false);
-//                statBar.revalidate();
-//                statBar.repaint();
-//
-//                int nextIndex;
-//                if (direction.equals("leftDown")) {
-//                    nextIndex = (i + 2 < count) ? i + 2 : i; // stay at end if no next
-//                } else if (direction.equals("leftUp")) {
-//                    nextIndex = (i - 2 >= 0) ? i - 2 : i;
-//                } else {
-//                    nextIndex = Integer.parseInt(direction);
-//                }
-//
-//                AbstractStatBar nextBar = (AbstractStatBar) leftBox.getComponent(nextIndex);
-//                nextBar.setAsSelected(true);
-//                scrollToButton(nextBar);
-//                nextBar.revalidate();
-//                nextBar.repaint();
-//
-//                // Update reference
-//                leftBarSelected(nextBar);
-//                break;
-//            }
-//        }
-//    }
-
     protected void addFocusListeners(JPanel panel, boolean left) {
         panel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 leftFocused = left;
+                getPage().requestFocusInWindow();
             }
         });
 
-        // Recursively attach to children
         for (Component comp : panel.getComponents()) {
             if (comp instanceof JPanel childPanel) {
                 addFocusListeners(childPanel, left);
@@ -434,6 +393,7 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         leftFocused = left;
+                        getPage().requestFocusInWindow();
                     }
                 });
             }
@@ -451,4 +411,17 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
     public void setLeftFocused(boolean leftFocused) {
         this.leftFocused = leftFocused;
     }
+
+    public Timer getTimer() {
+        return timer;
+    }
+
+    public void setTimer(Timer timer) {
+        this.timer = timer;
+    }
+
+    public LeftContentRightScrollPagesTemplate getPage() {
+        return this;
+    }
+
 }

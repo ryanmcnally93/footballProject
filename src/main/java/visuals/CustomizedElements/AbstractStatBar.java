@@ -35,6 +35,19 @@ public abstract class AbstractStatBar extends RoundedPanel {
         return label;
     }
 
+    protected CustomizedButton createColumn(ImageIcon icon, int width) {
+        CustomizedButton button = new CustomizedButton(icon);
+        button.setBorderPainted(false);
+        button.setFocusPainted(false);
+        button.setContentAreaFilled(false);
+        button.setOpaque(false);
+        button.setPreferredSize(new Dimension(width, 20));
+        button.setMaximumSize(new Dimension(width, 20));
+        button.setMinimumSize(new Dimension(width, 20));
+        add(button);
+        return button;
+    }
+
     /** Repaint + revalidate utility */
     protected void refresh() {
         revalidate();
