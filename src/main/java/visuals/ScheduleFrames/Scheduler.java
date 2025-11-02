@@ -1004,7 +1004,7 @@ public class Scheduler extends GamePanel {
             if (adult != null) {
                 UsersMatch child = new UsersMatch(adult.getHome(), adult.getAway(), league, adult.getDateTime()); // Create ChildClass instance
                 league.getFixtures().put(key, child); // Replace the entry in the map
-				fixturesPage.addFixtureLine(child);
+				fixturesPage.addMyFixtureLine(child);
             }
         }
 		fixturesPage.organiseMyFixtures();

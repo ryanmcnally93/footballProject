@@ -26,10 +26,11 @@ public abstract class AbstractStatBar extends RoundedPanel {
 
     /** Helper to create a JLabel with fixed width & center alignment */
     protected JLabel createColumn(String text, int width) {
-        JLabel label = new JLabel(text, SwingConstants.CENTER);
+        JLabel label = new JLabel(text.toUpperCase(), SwingConstants.CENTER);
         label.setPreferredSize(new Dimension(width, 20));
         label.setMaximumSize(new Dimension(width, 20));
         label.setMinimumSize(new Dimension(width, 20));
+        label.setFont(getBebasNeueFontWithSize(20));
         columns.add(label);
         add(label);
         return label;

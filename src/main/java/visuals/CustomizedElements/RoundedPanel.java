@@ -10,27 +10,32 @@ public class RoundedPanel extends GamePanel {
     public RoundedPanel(int radius) {
         super();
         this.cornerRadius = radius;
-        setOpaque(false); // Make sure the panel is transparent so that the background color isn't drawn
+        setOpaque(false);
     }
 
     public void setBorder(Color color, int thickness) {
         this.borderColor = color;
         this.borderThickness = thickness;
-        repaint(); // Repaint the component to show the updated border
+        repaint();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g.create();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); // Smooths the edges
+        // Clear with transparent background
+        g2.setComposite(AlphaComposite.Clear);
+        g2.fillRect(0, 0, getWidth(), getHeight());
 
-        // Fill the panel with a rounded background color
+        // Switch back to normal paint mode
+        g2.setComposite(AlphaComposite.SrcOver);
+
+        // Fill the rounded background
         g2.setColor(getBackground());
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), cornerRadius, cornerRadius);
 
-        // Draw the rounded border if thickness > 0
+        // Draw border if needed
         if (borderThickness > 0) {
             g2.setColor(borderColor);
             g2.setStroke(new BasicStroke(borderThickness));
@@ -43,6 +48,10 @@ public class RoundedPanel extends GamePanel {
                     cornerRadius
             );
         }
+
+        g2.dispose();
+
+        super.paintChildren(g);
     }
 
     public Color getBorderColor() {

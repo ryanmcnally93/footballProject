@@ -125,7 +125,7 @@ public class HeaderFooterAndCardMapTemplate extends GamePanel {
             setPermanentWidthAndHeight(rightPanel, 200, 120);
 
             title = new CustomizedTitle("", SwingConstants.CENTER);
-            title.setFont(getBebasNeueFontWithSize(32f));
+            title.setFont(getBebasNeueFontWithSizeBold(32f));
             title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             JPanel titlePanel = new JPanel();

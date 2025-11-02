@@ -25,10 +25,11 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
     private static List<String> ALL_COMPETITIONS = new ArrayList<>();
     private static Map<String, List<String>> competitionRounds = new HashMap<>();;
     private static Map<String, List<String>> otherCompetitionRounds = new HashMap<>();;
-    private ArrayList<FixturesPageStatLine> lines;
+    private ArrayList<FixturesPageStatLine> myMatchLines;
+    private ArrayList<FixturesPageStatLine> otherMatchlines;
 
     public FixturesPage(Scheduler scheduler) {
-        super(scheduler);
+        super(scheduler, true);
         getHeaderPanel().setTitle("My Fixtures");
 
         ImageIcon buttonIcon = getIconWithSpecificSize("./src/main/java/visuals/Images/fixtures_icon.png", "Fixtures", 16);
@@ -49,7 +50,7 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         );
 
         buildDependencyMaps(createdBars);
-        lines = new ArrayList<>();
+        myMatchLines = new ArrayList<>();
 
         // These also need to be triggered when components inside these boxes are clicked
         // Should we check bounds instead?
@@ -64,6 +65,12 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         setFocusable(true);
         setRequestFocusEnabled(true);
         requestFocusInWindow();
+
+        FixturesPageStatLine titleLine = FixturesPageStatLine.createTitleLine();
+        getLeftHeader().add(titleLine);
+        getLeftBox().revalidate();
+        getLeftBox().repaint();
+
     }
 
     @Override
@@ -198,10 +205,10 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         return options;
     }
 
-    public void addFixtureLine(UsersMatch child) {
+    public void addMyFixtureLine(UsersMatch child) {
         FixturesPageStatLine matchLine = new FixturesPageStatLine(child);
         updateMatchLineListener(matchLine, child);
-        lines.add(matchLine);
+        myMatchLines.add(matchLine);
     }
 
     public void updateMatchLineListener(FixturesPageStatLine line, UsersMatch matchToView) {
@@ -229,19 +236,19 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
     }
 
     public void organiseMyFixtures() {
-        lines.sort(new Comparator<FixturesPageStatLine>() {
+        myMatchLines.sort(new Comparator<FixturesPageStatLine>() {
             @Override
             public int compare(FixturesPageStatLine line1, FixturesPageStatLine line2) {
                 return line1.getMatch().getDateTime().compareTo(line2.getMatch().getDateTime());
             }
         });
 
-        for (FixturesPageStatLine eachLine : lines) {
+        for (FixturesPageStatLine eachLine : myMatchLines) {
             getLeftBox().add(eachLine);
             // Re-evaluate the size of leftBox so the scrolling functionality works
-            if (getLeftBox().getComponentCount() == 10) {
-                setPermanentWidthAndHeight(getLeftBox(), 621, (int) getLeftBox().getPreferredSize().getHeight() + 10);
-            } else if (getLeftBox().getComponentCount() > 10) {
+            if (getLeftBox().getComponentCount() == 9) {
+                setPermanentWidthAndHeight(getLeftBox(), 621, (int) getLeftBox().getPreferredSize().getHeight() + 15);
+            } else if (getLeftBox().getComponentCount() > 9) {
                 setPermanentWidthAndHeight(getLeftBox(), 621, (int) getLeftBox().getPreferredSize().getHeight() + 35);
             }
         }
@@ -250,7 +257,7 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
     }
 
     public FixturesPageStatLine getLine(Match match) {
-        for (FixturesPageStatLine eachLine : lines) {
+        for (FixturesPageStatLine eachLine : myMatchLines) {
             if (eachLine.getMatch().toString().equals(match.toString())) {
                 return eachLine;
             }

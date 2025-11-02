@@ -24,12 +24,24 @@ public abstract class GamePanel extends JPanel {
         addMouseListener(mouseAdapter);
     }
 
-//    public static Color getGreenCharcoal() {
-//        return new Color(0x36, 0x6A, 0x4F);
-//    }
+    public static Color getGreenCharcoal() {
+        return new Color(0x36, 0x6A, 0x4F);
+    }
 
     public static Color getCharcoal() {
         return new Color(0x36, 0x45, 0x4F);
+    }
+
+    public static Color getDarkGrey() {
+        return new Color(94, 94, 94);
+    }
+
+    public static Color getLightGrey() {
+        return new Color(185, 185, 185, (int)(0.9 * 255));
+    }
+
+    public static Color getOffWhite() {
+        return new Color(245, 245, 245);
     }
 
     public static Font getBebasNeueFont() {
@@ -42,10 +54,20 @@ public abstract class GamePanel extends JPanel {
         }
     }
 
-    public static Font getBebasNeueFontWithSize(float size) {
+    public static Font getBebasNeueFontWithSizeBold(float size) {
         try {
             File fontFile = new File("./src/main/java/visuals/Fonts/BebasNeue-Regular.ttf");
             return Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(Font.BOLD, size);
+        } catch (FontFormatException | IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Font getBebasNeueFontWithSize(float size) {
+        try {
+            File fontFile = new File("./src/main/java/visuals/Fonts/BebasNeue-Regular.ttf");
+            return Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(Font.PLAIN, size);
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
             return null;
@@ -157,7 +179,7 @@ public abstract class GamePanel extends JPanel {
         return scroller;
     }
 
-    public JScrollPane makeScroller(RoundedPanel container){
+    public JScrollPane makeScroller(JPanel container){
         JScrollPane scroller = new JScrollPane(container);
         scroller.getViewport().setBackground(Color.LIGHT_GRAY);
         scroller.setBorder(null);

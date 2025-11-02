@@ -17,12 +17,12 @@ import java.util.function.BiFunction;
 
 public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapTemplate {
 
-    private JPanel mainPanel;
-    private RoundedPanel leftBox, rightBox;
+    private JPanel mainPanel, leftHeader, leftBox;
+    private RoundedPanel rightBox;
     private JScrollPane leftScroller, rightScroller;
     private Image backgroundImage;
     private Timer timer;
-    private boolean leftFocused;
+    private boolean leftFocused, constantLeftHeader;
     private final Map<String, Rectangle> boundsByDirection = Map.ofEntries(
             Map.entry("down", new Rectangle(0, 0, 155, 20)),
             Map.entry("up",   new Rectangle(0, 0, 155, 20)),
@@ -35,11 +35,13 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
             Map.entry("leftHover", new Rectangle(5, 272, 50, 50)),
             Map.entry("rightHover", new Rectangle(565, 272, 50, 50)),
             Map.entry("leftDownHover", new Rectangle(201, 440, 218, 25)),
-            Map.entry("leftUpHover", new Rectangle(201, 135, 218, 25))
+            Map.entry("leftUpHover", new Rectangle(201, 135, 218, 25)),
+            Map.entry("leftUpWithHeaderHover" , new Rectangle(201, 170, 218, 25))
     );
 
-    public LeftContentRightScrollPagesTemplate(Scheduler scheduler) {
+    public LeftContentRightScrollPagesTemplate(Scheduler scheduler, Boolean constantLeftHeader) {
         super(scheduler);
+        this.constantLeftHeader = constantLeftHeader;
         getHeaderPanel().setOpaque(false);
         getHeaderPanel().setBounds(0, 0, 800, 120);
         getFooterPanel().setOpaque(false);
@@ -52,11 +54,24 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
         mainPanel.setOpaque(false);
 
-        leftBox = new RoundedPanel(30);
         Color newColor = new Color(217, 217, 217, (int)(0.9 * 255));
-        leftBox.setBorderColor(newColor);
+
+        RoundedPanel leftWrapper = new RoundedPanel(30);
+        leftWrapper.setLayout(new BorderLayout());
+        leftWrapper.setOpaque(false);
+        leftWrapper.setBackground(newColor);
+        leftWrapper.setBorderColor(newColor);
+        setPermanentWidthAndHeight(leftWrapper, 621, 340);
+
+        leftHeader = new JPanel();
+        leftHeader.setOpaque(false);
+        leftHeader.setBackground(newColor);
+        setPermanentWidthAndHeight(leftHeader, 621, 35);
+
+        leftBox = new JPanel();
+        leftBox.setOpaque(false);
         leftBox.setBackground(newColor);
-        setPermanentWidthAndHeight(leftBox, 621, 340);
+        setPermanentWidthAndHeight(leftBox, 621, constantLeftHeader ? 305 : 340);
 
         leftScroller = makeScroller(leftBox);
         leftScroller.setFocusable(false);
@@ -68,7 +83,12 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
         rightBox.setBorderColor(newColor);
         rightBox.setBackground(newColor);
 
-        mainPanel.add(leftScroller);
+        if (constantLeftHeader) {
+            leftWrapper.add(leftHeader, BorderLayout.NORTH);
+        }
+        leftWrapper.add(leftScroller, BorderLayout.CENTER);
+        mainPanel.add(leftWrapper);
+
         mainPanel.add(Box.createRigidArea(new Dimension(12, 0)));
 
         rightScroller = makeScroller(rightBox);
@@ -95,7 +115,11 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
 
         JPanel hoverArea = new JPanel(null);
         hoverArea.setOpaque(false);
-        hoverArea.setBounds(boundsByDirection.get(direction + "Hover"));
+        if (isConstantLeftHeader() && direction.equals("leftUp")) {
+            hoverArea.setBounds(boundsByDirection.get(direction + "WithHeaderHover"));
+        } else {
+            hoverArea.setBounds(boundsByDirection.get(direction + "Hover"));
+        }
         hoverArea.add(scrollButton);
         getLayeredPane().add(hoverArea, JLayeredPane.PALETTE_LAYER);
 
@@ -214,11 +238,11 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
         getLeftScroller().getViewport().scrollRectToVisible(bounds);
     }
 
-    public RoundedPanel getLeftBox() {
+    public JPanel getLeftBox() {
         return leftBox;
     }
 
-    public void setLeftBox(RoundedPanel leftBox) {
+    public void setLeftBox(JPanel leftBox) {
         this.leftBox = leftBox;
     }
 
@@ -424,4 +448,19 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
         return this;
     }
 
+    public JPanel getLeftHeader() {
+        return leftHeader;
+    }
+
+    public void setLeftHeader(JPanel leftHeader) {
+        this.leftHeader = leftHeader;
+    }
+
+    public boolean isConstantLeftHeader() {
+        return constantLeftHeader;
+    }
+
+    public void setConstantLeftHeader(boolean constantLeftHeader) {
+        this.constantLeftHeader = constantLeftHeader;
+    }
 }

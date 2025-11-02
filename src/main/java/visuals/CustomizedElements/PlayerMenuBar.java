@@ -29,12 +29,12 @@ public class PlayerMenuBar extends RightBoxBar {
             squadNo.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 2)); // top, left, bottom, right
         }
 
-        squadNo.setFont(getBebasNeueFontWithSize(20));
+        squadNo.setFont(getBebasNeueFontWithSizeBold(20));
         squadNo.setForeground(getSecondaryColor());
         squadNo.setHorizontalAlignment(SwingConstants.CENTER);
         setPermanentWidth(squadNo, 25);
 
-        playerName.setFont(getBebasNeueFontWithSize(20));
+        playerName.setFont(getBebasNeueFontWithSizeBold(20));
         playerName.setForeground(getSecondaryColor());
         playerName.setHorizontalAlignment(SwingConstants.LEFT);
 
@@ -87,7 +87,7 @@ public class PlayerMenuBar extends RightBoxBar {
         if (bool) {
             squadNo.setForeground(getPrimaryColor());
             playerName.setForeground(getPrimaryColor());
-            setBackground(getSecondaryColor());
+            setBackground(getThirdColor());
         } else {
             squadNo.setForeground(getSecondaryColor());
             playerName.setForeground(getSecondaryColor());

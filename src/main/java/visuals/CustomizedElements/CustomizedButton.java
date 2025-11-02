@@ -27,7 +27,7 @@ public class CustomizedButton extends JButton implements Hoverable {
 
     public CustomizedButton(String text, int size) {
         super(text);
-        setFont(GamePanel.getBebasNeueFontWithSize((float) size));
+        setFont(GamePanel.getBebasNeueFontWithSizeBold((float) size));
         setMargin(new Insets(size/4, 0, 0, 0));
         init();
     }
@@ -67,7 +67,7 @@ public class CustomizedButton extends JButton implements Hoverable {
 
     @Override
     protected void paintComponent(Graphics g) {
-        paintHoverableBackground(g, this, getBackground(), getSecondaryColor(), getArcWidth(), getArcHeight(), borderWanted, fillWanted);
+        paintHoverableBackground(g, this, getBackground(), getArcWidth(), getArcHeight(), borderWanted, fillWanted);
         super.paintComponent(g);
     }
 

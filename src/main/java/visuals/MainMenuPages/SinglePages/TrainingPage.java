@@ -16,7 +16,7 @@ public class TrainingPage extends LeftContentRightScrollPagesTemplate {
     private PanelOfCircles circles;
 
     public TrainingPage(Scheduler scheduler) {
-        super(scheduler);
+        super(scheduler, false);
         getHeaderPanel().setTitle("Training");
 
         ImageIcon buttonIcon = getIconWithSpecificSize("./src/main/java/visuals/Images/training_icon.png", "Training", 16);

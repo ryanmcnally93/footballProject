@@ -107,7 +107,7 @@ public class CustomizedOptionField extends JComponent {
         }
 
 		// Draw text
-		g2.setFont(GamePanel.getBebasNeueFontWithSize(fontSize));
+		g2.setFont(GamePanel.getBebasNeueFontWithSizeBold(fontSize));
 		g2.setColor(getForeground());
 
 		FontMetrics fm = g2.getFontMetrics();

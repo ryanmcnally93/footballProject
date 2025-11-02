@@ -97,23 +97,13 @@ public class OptionBar extends RightBoxBar {
         return new Dimension(Integer.MAX_VALUE, d.height);
     }
 
-//    @Override
-//    protected void childMouseExited() {
-//        optionField.setForeground(getSecondaryColor());
-//    }
-//
-//    @Override
-//    protected void childMouseEntered() {
-//        optionField.setForeground(getPrimaryColor());
-//    }
-
     @Override
     public void setAsSelected(boolean bool) {
         setSelected(bool);
         // This should be done ideally within the CustomisedButton class
         if (bool) {
             optionField.setForeground(getPrimaryColor());
-            setBackground(getSecondaryColor());
+            setBackground(getThirdColor());
             optionField.addButtons();
         } else {
             optionField.setForeground(getSecondaryColor());

@@ -11,11 +11,30 @@ public class FixturesPageStatLine extends AbstractStatBar {
     private Match match;
     private CustomizedButton selectIcon;
 
+    public FixturesPageStatLine(){
+        super(20, false);
+        setBackground(getDarkGrey());
+        setOpaque(false);
+    }
+
     public FixturesPageStatLine(Match match){
-        super(20, true);
+        super(20, false);
         this.match = match;
         buildColumns();
-        setBackground(new Color(245, 245, 245));
+        setBackground(Color.LIGHT_GRAY);
+    }
+
+    public static FixturesPageStatLine createTitleLine() {
+        FixturesPageStatLine line = new FixturesPageStatLine();
+        line.createColumn("", 50);
+        line.createColumn("Home", 225);
+        line.createColumn("Score", 50);
+        line.createColumn("Away", 225);
+        line.createColumn("", 50);
+        for (JLabel column : line.getColumns()) {
+            column.setForeground(Color.WHITE);
+        }
+        return line;
     }
 
     public Match getMatch() {

@@ -3,7 +3,7 @@ package visuals.CustomizedElements;
 import javax.swing.*;
 import java.awt.*;
 
-import static visuals.CustomizedElements.GamePanel.getBebasNeueFontWithSize;
+import static visuals.CustomizedElements.GamePanel.getBebasNeueFontWithSizeBold;
 import static visuals.CustomizedElements.GamePanel.getCharcoal;
 import static visuals.CustomizedElements.PlayerAttributeBox.getStatColour;
 
@@ -27,7 +27,7 @@ public class CircledOVRLabel extends CircledLabel{
 
     @Override
     protected void drawText(Graphics g2d, String text, int textX, int textY) {
-        g2d.setFont(getBebasNeueFontWithSize(28));
+        g2d.setFont(getBebasNeueFontWithSizeBold(28));
         g2d.setColor(getCharcoal());
         g2d.drawString(text, textX + 6, textY - 2);
     }

@@ -5,7 +5,7 @@ import visuals.ScheduleFrames.Scheduler;
 public class MyTeamPage extends LeftContentRightScrollPagesTemplate {
 
     public MyTeamPage(Scheduler scheduler) {
-        super(scheduler);
+        super(scheduler, false);
         getHeaderPanel().setTitle("My Team");
 
         setVisible(true);

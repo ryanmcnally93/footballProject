@@ -1,9 +1,6 @@
 package visuals.CustomizedElements;
 
-import javax.swing.*;
 import java.awt.*;
-
-import static visuals.CustomizedElements.GamePanel.getBebasNeueFontWithSize;
 
 public class RightBoxBar extends CustomizedButton {
 

@@ -11,11 +11,15 @@ public interface Hoverable {
 
     // Default color palette and geometry
     default Color getPrimaryColor() {
-        return new Color(245, 245, 245);
+        return getOffWhite();
     }
 
     default Color getSecondaryColor() {
         return getCharcoal();
+    }
+
+    default Color getThirdColor() {
+        return getDarkGrey();
     }
 
     // Selection handling (optional to override)
@@ -27,14 +31,12 @@ public interface Hoverable {
     }
 
     // Called when hover enters/exits — can be overridden
-    default void onHoverEnter(JComponent c) {
-    }
+    default void onHoverEnter(JComponent c) {}
 
-    default void onHoverExit(JComponent c) {
-    }
+    default void onHoverExit(JComponent c) {}
 
     // Draw rounded background and border — reusable across buttons/panels
-    default void paintHoverableBackground(Graphics g, JComponent c, Color background, Color border, int arcWidth, int arcHeight, boolean borderWanted, boolean fillWanted) {
+    default void paintHoverableBackground(Graphics g, JComponent c, Color background, int arcWidth, int arcHeight, boolean borderWanted, boolean fillWanted) {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         if (fillWanted) {
@@ -42,7 +44,8 @@ public interface Hoverable {
             g2.fillRoundRect(0, 0, c.getWidth(), c.getHeight(), arcWidth, arcHeight);
         }
         if (borderWanted) {
-            g2.setColor(border);
+            Color border = (Color) c.getClientProperty("borderColor");
+            g2.setColor(border != null ? border : getDarkGrey());
             g2.setStroke(new BasicStroke(2));
             g2.drawRoundRect(1, 1, c.getWidth() - 2, c.getHeight() - 2, arcWidth, arcHeight);
         }
@@ -53,6 +56,7 @@ public interface Hoverable {
     default void addHoverEffect(JComponent component, Runnable repaintTrigger) {
         Color primary = getPrimaryColor();
         Color secondary = getSecondaryColor();
+        Color thirdly = getThirdColor();
 
         component.addMouseListener(new MouseAdapter() {
             Color hoverColor = secondary;
@@ -61,8 +65,15 @@ public interface Hoverable {
             public void mouseEntered(MouseEvent e) {
                 if (isSelected()) return;
                 onHoverEnter(component);
-                component.setBackground(secondary);
+                component.setBackground(thirdly);
+                for (Component childComponent : component.getComponents()) {
+                    childComponent.setForeground(primary);
+                }
                 component.setForeground(primary);
+                for (Component child : component.getComponents()) {
+                    if (child instanceof JLabel label) label.setForeground(primary);
+                }
+                component.putClientProperty("borderColor", getDarkGrey());
                 hoverColor = primary;
                 component.revalidate();
                 component.repaint();
@@ -74,7 +85,14 @@ public interface Hoverable {
                 if (isSelected()) return;
                 onHoverExit(component);
                 component.setBackground(primary);
+                for (Component childComponent : component.getComponents()) {
+                    childComponent.setForeground(secondary);
+                }
                 component.setForeground(secondary);
+                for (Component child : component.getComponents()) {
+                    if (child instanceof JLabel label) label.setForeground(secondary);
+                }
+                component.putClientProperty("borderColor", getCharcoal());
                 hoverColor = secondary;
                 component.revalidate();
                 component.repaint();

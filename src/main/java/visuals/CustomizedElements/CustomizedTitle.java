@@ -23,7 +23,7 @@ public class CustomizedTitle extends JLabel {
     }
 
     public void setFontSize(float size) {
-        setFont(GamePanel.getBebasNeueFontWithSize(size));
+        setFont(GamePanel.getBebasNeueFontWithSizeBold(size));
     }
 
     @Override
