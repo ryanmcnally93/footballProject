@@ -38,8 +38,46 @@ public class TrainingPage extends LeftContentRightScrollPagesTemplate {
         addScrollButton("left");
         addScrollButton("right");
 
-        addKeyListeners();
+        SwingUtilities.invokeLater(this::addKeyListeners);
         setVisible(true);
+    }
+
+    @Override
+    public void addKeyListeners() {
+        InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = getActionMap();
+
+        inputMap.put(KeyStroke.getKeyStroke("LEFT"), LEFT);
+        actionMap.put(LEFT, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                changeStatBars("left");
+            }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke("RIGHT"), RIGHT);
+        actionMap.put(RIGHT, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                changeStatBars("right");
+            }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke("pressed UP"), UP);
+        actionMap.put(UP, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moveRightScroller("up");
+            }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke("pressed DOWN"), DOWN);
+        actionMap.put(DOWN, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moveRightScroller("down");
+            }
+        });
     }
 
     private void setupAttributesOnLeft() {
@@ -85,54 +123,6 @@ public class TrainingPage extends LeftContentRightScrollPagesTemplate {
         bottomHorizontalBox.add(rightBox);
 
         getLayeredPane().add(bottomHorizontalBox, JLayeredPane.PALETTE_LAYER);
-    }
-
-    @Override
-    protected AbstractAction getDownClickAction() {
-        return new TrainingPage.CustomDownClick();
-    }
-
-    public class CustomDownClick extends AbstractAction {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            moveRightScroller("down");
-        }
-    }
-
-    @Override
-    protected AbstractAction getUpClickAction() {
-        return new TrainingPage.CustomUpClick();
-    }
-
-    public class CustomUpClick extends AbstractAction {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            moveRightScroller("up");
-        }
-    }
-
-    @Override
-    protected AbstractAction getLeftClickAction() {
-        return new TrainingPage.CustomLeftClick();
-    }
-
-    public class CustomLeftClick extends AbstractAction {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            changeStatBars("left");
-        }
-    }
-
-    @Override
-    protected AbstractAction getRightClickAction() {
-        return new TrainingPage.CustomRightClick();
-    }
-
-    public class CustomRightClick extends AbstractAction {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            changeStatBars("right");
-        }
     }
 
     private void changeStatBars(String direction) {

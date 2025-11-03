@@ -320,7 +320,7 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
             }
             rightBoxBar.createBar();
             rightBoxBar.setAlignmentX(Component.LEFT_ALIGNMENT);
-            rightBoxBar.setFocusable(false);
+//            rightBoxBar.setFocusable(true);
 
             rightBoxBar.addMouseListener(new MouseAdapter() {
                 @Override
