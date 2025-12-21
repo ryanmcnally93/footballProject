@@ -1,5 +1,7 @@
 package visuals.CustomizedElements;
 
+import visuals.MainMenuPages.SinglePages.FixturesPage;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
@@ -9,7 +11,7 @@ public class OptionBar extends RightBoxBar {
 
     private CustomizedOptionField optionField;
     private OptionBar dependant;
-
+    private Runnable onFallbackTriggered;
     private List<String> options;
     private HashMap<String, List<String>> optionsMap = new HashMap<>();
 
@@ -68,18 +70,41 @@ public class OptionBar extends RightBoxBar {
     }
 
     // --- Selection Change Handler ---
-    private void onSelectionChanged() {
-        // if there is a dependant, update its options based on current value
-        if (dependant != null && !optionsMap.isEmpty()) {
-            String selectedValue = getCurrentValue();
-            List<String> newDependantOptions = optionsMap.get(selectedValue);
+    public void onSelectionChanged() {
+        String selectedValue = (currentIndex + 1) <= options.size() ? getCurrentValue() : "";
+        if (dependant != null) {
+            // if there is a dependant, update its options based on current value
+            List<String> options = null;
 
-            if (newDependantOptions != null) {
-                dependant.setOptions(newDependantOptions);
-                dependant.revalidate();
-                dependant.repaint();
-                dependant.onSelectionChanged();
+            if (!optionsMap.isEmpty()) {
+                List<String> mappedOptions = optionsMap.get(selectedValue);
+                if (mappedOptions != null && !mappedOptions.isEmpty()) {
+                    options = mappedOptions;
+                }
             }
+
+            if (options == null) {
+                // Clearing fixtures in view
+                if (onFallbackTriggered != null) {
+                    onFallbackTriggered.run();
+                }
+
+                boolean isMyOrAllFixtures =
+                        selectedValue.equals("My Fixtures") || selectedValue.equals("All Fixtures");
+
+                options = FixturesPage.getInitialOptions().get(
+                        isMyOrAllFixtures ? "Second Options" : "Third Options"
+                );
+            }
+
+            dependant.setOptions(options);
+            dependant.revalidate();
+            dependant.repaint();
+            dependant.onSelectionChanged();
+        }
+
+        if (optionField != null) {
+            optionField.triggerUpdate();
         }
     }
 
@@ -126,5 +151,13 @@ public class OptionBar extends RightBoxBar {
 
     public void setDependant(OptionBar dependant) {
         this.dependant = dependant;
+    }
+
+    public Runnable getOnFallbackTriggered() {
+        return onFallbackTriggered;
+    }
+
+    public void setOnFallbackTriggered(Runnable onFallbackTriggered) {
+        this.onFallbackTriggered = onFallbackTriggered;
     }
 }

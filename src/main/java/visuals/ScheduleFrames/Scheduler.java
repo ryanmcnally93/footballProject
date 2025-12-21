@@ -1004,10 +1004,11 @@ public class Scheduler extends GamePanel {
             if (adult != null) {
                 UsersMatch child = new UsersMatch(adult.getHome(), adult.getAway(), league, adult.getDateTime()); // Create ChildClass instance
                 league.getFixtures().put(key, child); // Replace the entry in the map
-				fixturesPage.addMyFixtureLine(child);
+                league.getUserMatches().add(child);
             }
         }
-		fixturesPage.organiseMyFixtures();
+        fixturesPage.getMyCompetitions().add(league);
+        fixturesPage.buildDependencyMaps();
 		System.out.println("Created " + k + "UserMatches");
 		
 		// This looks for UsersMatches and creates an event from it

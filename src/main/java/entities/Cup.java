@@ -6,7 +6,6 @@ import java.util.*;
 public class Cup extends Competition {
 
 	private ArrayList<Match> mainFixtureList, temporaryFixtureList;
-	private Map<Integer, Map<String, Match>> matchWeeksMatches;
 	private Map<Integer, Map<Integer, LocalDateTime>> matchWeeksSlots;
 	private boolean restartWholeProcess = false;
 
@@ -14,7 +13,6 @@ public class Cup extends Competition {
 
 	protected Cup(String name, String country, Map<String, Team> teams, Season season) {
         super(name, country, teams, season);
-		this.matchWeeksMatches = new HashMap<>();
 		this.matchWeeksSlots = new HashMap<>();
 	}
 
@@ -24,14 +22,6 @@ public class Cup extends Competition {
 
 	public void setMainFixtureList(ArrayList<Match> mainFixtureList) {
 		this.mainFixtureList = mainFixtureList;
-	}
-
-	public Map<Integer, Map<String, Match>> getMatchWeeksMatches() {
-		return matchWeeksMatches;
-	}
-
-	public void setMatchWeeksMatches(Map<Integer, Map<String, Match>> matchWeeksMatches) {
-		this.matchWeeksMatches = matchWeeksMatches;
 	}
 
 	public boolean isRestartWholeProcess() {

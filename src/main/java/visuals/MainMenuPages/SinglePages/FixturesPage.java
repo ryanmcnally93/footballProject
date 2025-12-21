@@ -4,6 +4,7 @@ import entities.Competition;
 import entities.Match;
 import entities.UsersMatch;
 import visuals.CustomizedElements.CustomizedButton;
+import visuals.CustomizedElements.CustomizedOptionField;
 import visuals.CustomizedElements.FixturesPageStatLine;
 import visuals.CustomizedElements.OptionBar;
 import visuals.MatchPages.MatchPageTemplate;
@@ -20,13 +21,13 @@ import java.util.stream.Stream;
 
 public class FixturesPage extends LeftContentRightScrollPagesTemplate {
 
-    private static final List<String> FIRST_OPTIONS = List.of("My Fixtures", "All Fixtures");
-    private static List<String> MY_COMPETITIONS = new ArrayList<>();
-    private static List<String> ALL_COMPETITIONS = new ArrayList<>();
-    private static Map<String, List<String>> competitionRounds = new HashMap<>();;
-    private static Map<String, List<String>> otherCompetitionRounds = new HashMap<>();;
-    private ArrayList<FixturesPageStatLine> myMatchLines;
-    private ArrayList<FixturesPageStatLine> otherMatchlines;
+    public static final List<String> FIRST_OPTIONS = List.of("My Fixtures", "All Fixtures");
+    private List<Competition> myCompetitions = new ArrayList<>();
+    private List<Competition> otherCompetitions = new ArrayList<>();
+    private ArrayList<FixturesPageStatLine> currentMatchLines;
+    List<OptionBar> createdBars;
+    private boolean firstTime = true;
+    private static HashMap<String, List<String>> initialOptions;
 
     public FixturesPage(Scheduler scheduler) {
         super(scheduler, true);
@@ -35,9 +36,8 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         ImageIcon buttonIcon = getIconWithSpecificSize("./src/main/java/visuals/Images/fixtures_icon.png", "Fixtures", 16);
         getHeaderPanel().getPageIcon().setIcon(buttonIcon);
 
-        createCompetitionOptions();
-        HashMap<String, List<String>> initialOptions = createInitialOptions();
-        List<OptionBar> createdBars = new ArrayList<>();
+        initialOptions = createInitialOptions();
+        createdBars = new ArrayList<>();
 
         setupPlayerListOnRight(
                 initialOptions,
@@ -49,8 +49,8 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
                 }
         );
 
-        buildDependencyMaps(createdBars);
-        myMatchLines = new ArrayList<>();
+        buildDependencyMaps();
+        currentMatchLines = new ArrayList<>();
 
         // These also need to be triggered when components inside these boxes are clicked
         // Should we check bounds instead?
@@ -62,15 +62,11 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
 
         addKeyListeners();
         setVisible(true);
-        setFocusable(true);
-        setRequestFocusEnabled(true);
-        requestFocusInWindow();
 
         FixturesPageStatLine titleLine = FixturesPageStatLine.createTitleLine();
         getLeftHeader().add(titleLine);
         getLeftBox().revalidate();
         getLeftBox().repaint();
-
     }
 
     @Override
@@ -79,10 +75,20 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         ActionMap actionMap = getActionMap();
 
         inputMap.put(KeyStroke.getKeyStroke("LEFT"), LEFT);
-        actionMap.put(LEFT, getLeftClickAction());
+        actionMap.put(LEFT, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moveRightScroller("left");
+            }
+        });
 
         inputMap.put(KeyStroke.getKeyStroke("RIGHT"), RIGHT);
-        actionMap.put(RIGHT, getRightClickAction());
+        actionMap.put(RIGHT, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moveRightScroller("right");
+            }
+        });
 
         inputMap.put(KeyStroke.getKeyStroke("pressed UP"), "pressUp");
         actionMap.put("pressUp", new AbstractAction() {
@@ -109,106 +115,125 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         });
 
         inputMap.put(KeyStroke.getKeyStroke("released DOWN"), "releaseDown");
-        actionMap.put("releaseDown", getDownReleaseAction());
+        actionMap.put("releaseDown", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (getTimer() != null && getTimer().isRunning()) {
+                    getTimer().stop();
+                }
+            }
+        });
 
         inputMap.put(KeyStroke.getKeyStroke("released UP"), "releaseUp");
-        actionMap.put("releaseUp", getUpReleaseAction());
-    }
-
-    @Override
-    protected AbstractAction getUpReleaseAction() {
-        return new FixturesPage.UpRelease();
-    }
-
-    public class UpRelease extends AbstractAction {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (getTimer() != null && getTimer().isRunning()) {
-                getTimer().stop();
+        actionMap.put("releaseUp", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (getTimer() != null && getTimer().isRunning()) {
+                    getTimer().stop();
+                }
             }
-        }
+        });
     }
 
-    @Override
-    protected AbstractAction getDownReleaseAction() {
-        return new FixturesPage.DownRelease();
-    }
-
-    public class DownRelease extends AbstractAction {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (getTimer() != null && getTimer().isRunning()) {
-                getTimer().stop();
-            }
-        }
-    }
-
-    @Override
-    protected AbstractAction getLeftClickAction() {
-        return new FixturesPage.CustomLeftClick();
-    }
-
-    public class CustomLeftClick extends AbstractAction {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            moveRightScroller("left");
-        }
-    }
-
-    @Override
-    protected AbstractAction getRightClickAction() {
-        return new FixturesPage.CustomRightClick();
-    }
-
-    public class CustomRightClick extends AbstractAction {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            moveRightScroller("right");
-        }
-    }
-
-    private void buildDependencyMaps(List<OptionBar> bars) {
-        // Define dependency maps in order
-        List<Map<String, List<String>>> dependencyMaps = List.of(
-                Map.of("My Fixtures", MY_COMPETITIONS, "All Fixtures", ALL_COMPETITIONS),
-                Stream.concat(competitionRounds.entrySet().stream(), otherCompetitionRounds.entrySet().stream())
-                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+    public void buildDependencyMaps() {
+        Map<String, List<String>> competitionMap = Map.of(
+                "My Fixtures", myCompetitions.stream().map(Competition::getName).toList(),
+                "All Fixtures", otherCompetitions.stream().map(Competition::getName).toList()
         );
 
-        // Wire bars to dependants automatically
+        Map<String, List<String>> roundNameMap = Stream.concat(myCompetitions.stream(), otherCompetitions.stream())
+                .collect(Collectors.toMap(
+                        Competition::getName,
+                        Competition::getRoundNames
+                ));
+
+        List<Map<String, List<String>>> dependencyMaps = List.of(competitionMap, roundNameMap);
+
         for (int i = 0; i < dependencyMaps.size(); i++) {
-            bars.get(i).setDependant(bars.get(i + 1));
-            bars.get(i).setOptionsMap(dependencyMaps.get(i));
+            createdBars.get(i).setDependant(createdBars.get(i + 1));
+            createdBars.get(i).setOptionsMap(dependencyMaps.get(i));
+        }
+
+        // Add listeners to the optionBars for when they change value
+        CustomizedOptionField chosenField = createdBars.get(2).getOptionField();
+        if (firstTime) {
+            assignListenerToOptionFields(chosenField);
+            createdBars.getFirst().setOnFallbackTriggered(this::clearFixtures);
+            createdBars.get(1).setOnFallbackTriggered(this::clearFixtures);
+            firstTime = false;
+        } else {
+            // Calling the listener to populate the first group of fixtures
+            createdBars.getFirst().onSelectionChanged();
+            chosenField.triggerUpdate();
         }
     }
 
-    private void createCompetitionOptions() {
-        for (Competition competition : getScheduler().getPlayersCompetitions()) {
-            String name = competition.getName();
-            MY_COMPETITIONS.add(name);
-            ALL_COMPETITIONS.add(name);
-            competitionRounds.put(name, new ArrayList<>(competition.getRoundNames()));
+    private void assignListenerToOptionFields(CustomizedOptionField chosenField) {
+        chosenField.setOnSelectionChange(roundName -> {
+            if (currentMatchLines != null) {
+                OptionBar firstBar = createdBars.getFirst();
+                String topChoice = getCurrentValueFromOptionBar(firstBar);
+                OptionBar secondBar = createdBars.get(1);
+                String competitionName = getCurrentValueFromOptionBar(secondBar);
+
+                updateDisplayedFixtures(topChoice, competitionName, roundName);
+            }
+        });
+    }
+
+    private String getCurrentValueFromOptionBar(OptionBar optionBar) {
+        return optionBar.getOptionField().getOptions().get(optionBar.getOptionField().getCurrentOption());
+    }
+
+    private void updateDisplayedFixtures(String topChoice, String competitionName, String roundName) {
+        clearFixtures();
+        Competition selectedCompetition = null;
+
+        if (topChoice.equals("My Fixtures")) {
+            List<Competition> sourceList = myCompetitions;
+
+            selectedCompetition = sourceList.stream()
+                    .filter(c -> c.getName().equals(competitionName))
+                    .findFirst()
+                    .orElse(null);
+
+            if (selectedCompetition == null) return;
+        } else {
+            List<Competition> sourceList = otherCompetitions;
+
+            selectedCompetition = sourceList.stream()
+                    .filter(c -> c.getName().equals(competitionName))
+                    .findFirst()
+                    .orElse(null);
+
+            if (selectedCompetition == null) return;
         }
 
-        for (Competition competition : getScheduler().getOtherCompetitions()) {
-            String name = competition.getName();
-            ALL_COMPETITIONS.add(name);
-            otherCompetitionRounds.put(name, new ArrayList<>(competition.getRoundNames()));
+        int roundInt = selectedCompetition.getRoundNames().indexOf(roundName);
+        Map<String, Match> matchesForRound = selectedCompetition.getMatchWeeksMatches().get(roundInt + 1);
+
+        for (Map.Entry<String, Match> eachMatch : matchesForRound.entrySet()) {
+            addMyFixtureLine(eachMatch.getValue());
+            organiseMyFixtures();
         }
     }
 
     private HashMap<String, List<String>> createInitialOptions() {
         HashMap<String, List<String>> options = new HashMap<>();
-        options.put("First Options", FIRST_OPTIONS);
-        options.put("Second Options", MY_COMPETITIONS);
-        options.put("Third Options", competitionRounds.get(getScheduler().getLeague().getName()));
+
+        options.put("First Options", List.of("My Fixtures", "All Fixtures"));
+        options.put("Second Options", List.of("Select Competition"));
+        options.put("Third Options", List.of("Select Round"));
+
         return options;
     }
 
-    public void addMyFixtureLine(UsersMatch child) {
+    public void addMyFixtureLine(Match child) {
         FixturesPageStatLine matchLine = new FixturesPageStatLine(child);
-        updateMatchLineListener(matchLine, child);
-        myMatchLines.add(matchLine);
+        if (child instanceof UsersMatch) {
+            updateMatchLineListener(matchLine, (UsersMatch) child);
+        }
+        currentMatchLines.add(matchLine);
     }
 
     public void updateMatchLineListener(FixturesPageStatLine line, UsersMatch matchToView) {
@@ -236,14 +261,14 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
     }
 
     public void organiseMyFixtures() {
-        myMatchLines.sort(new Comparator<FixturesPageStatLine>() {
+        currentMatchLines.sort(new Comparator<FixturesPageStatLine>() {
             @Override
             public int compare(FixturesPageStatLine line1, FixturesPageStatLine line2) {
                 return line1.getMatch().getDateTime().compareTo(line2.getMatch().getDateTime());
             }
         });
 
-        for (FixturesPageStatLine eachLine : myMatchLines) {
+        for (FixturesPageStatLine eachLine : currentMatchLines) {
             getLeftBox().add(eachLine);
             // Re-evaluate the size of leftBox so the scrolling functionality works
             if (getLeftBox().getComponentCount() == 9) {
@@ -257,7 +282,7 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
     }
 
     public FixturesPageStatLine getLine(Match match) {
-        for (FixturesPageStatLine eachLine : myMatchLines) {
+        for (FixturesPageStatLine eachLine : currentMatchLines) {
             if (eachLine.getMatch().toString().equals(match.toString())) {
                 return eachLine;
             }
@@ -269,5 +294,32 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
     @Override
     protected boolean directionEqualsPage(String direction) {
         return false;
+    }
+
+    public List<Competition> getMyCompetitions() {
+        return this.myCompetitions;
+    }
+
+    public void setMyCompetitions(List<Competition> myCompetitions) {
+        this.myCompetitions = myCompetitions;
+    }
+
+    public List<Competition> getOtherCompetitions() {
+        return this.otherCompetitions;
+    }
+
+    public void setOtherCompetitions(List<Competition> otherCompetitions) {
+        this.otherCompetitions = otherCompetitions;
+    }
+
+    public static HashMap<String, List<String>> getInitialOptions() {
+        return initialOptions;
+    }
+
+    private void clearFixtures() {
+        currentMatchLines.clear();
+        getLeftBox().removeAll();
+        getLeftBox().revalidate();
+        getLeftBox().repaint();
     }
 }

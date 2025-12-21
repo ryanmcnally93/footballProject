@@ -7,6 +7,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class CustomizedOptionField extends JComponent {
 
@@ -17,6 +18,7 @@ public class CustomizedOptionField extends JComponent {
     private int fontSize;
     private boolean borderRequired;
     private Runnable onClickLeft, onClickRight;
+    private Consumer<String> onSelectionChange;
 
 	public CustomizedOptionField(List<String> options, int width, int offset, int fontSize, boolean borderRequired) {
 		this.options = options;
@@ -66,6 +68,9 @@ public class CustomizedOptionField extends JComponent {
             if (onClickRight != null) {
                 onClickRight.run();
             }
+            if (onSelectionChange != null) {
+                triggerUpdate();
+            }
             repaint();
 		}
 	}
@@ -82,9 +87,18 @@ public class CustomizedOptionField extends JComponent {
             if (onClickLeft != null) {
                 onClickLeft.run();
             }
+            if (onSelectionChange != null) {
+                triggerUpdate();
+            }
             repaint();
 		}
 	}
+
+    public void triggerUpdate() {
+        if (onSelectionChange != null && (currentOption + 1) <= options.size()) {
+            onSelectionChange.accept(options.get(currentOption));
+        }
+    }
 
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -110,16 +124,17 @@ public class CustomizedOptionField extends JComponent {
 		g2.setFont(GamePanel.getBebasNeueFontWithSizeBold(fontSize));
 		g2.setColor(getForeground());
 
-		FontMetrics fm = g2.getFontMetrics();
-		int textWidth = fm.stringWidth(options.get(currentOption));
-		int x = (getWidth() - textWidth) / 2;
+        if (currentOption + 1 <= options.size()) {
+            FontMetrics fm = g2.getFontMetrics();
+            int textWidth = fm.stringWidth(options.get(currentOption));
+            int x = (getWidth() - textWidth) / 2;
 
-		int textHeight = fm.getAscent();
-		int gapAbove = (getHeight() - textHeight) / 2;
-        int y = gapAbove + textHeight - 1;
+            int textHeight = fm.getAscent();
+            int gapAbove = (getHeight() - textHeight) / 2;
+            int y = gapAbove + textHeight - 1;
 
-		g2.drawString(options.get(currentOption), x, y);
-
+            g2.drawString(options.get(currentOption), x, y);
+        }
 		g2.dispose();
 		super.paintComponent(g);
 	}
@@ -151,6 +166,14 @@ public class CustomizedOptionField extends JComponent {
         }
         revalidate();
         repaint();
+    }
+
+    public void setOnSelectionChange(Consumer<String> listener) {
+        this.onSelectionChange = listener;
+    }
+
+    public Consumer<String> getOnSelectionChange() {
+        return this.onSelectionChange;
     }
 
     public Runnable getOnClickLeft() {

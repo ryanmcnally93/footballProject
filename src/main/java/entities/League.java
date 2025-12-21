@@ -17,12 +17,12 @@ public class League extends Competition {
 
 	private int tier;
 	private ArrayList<Match> mainFixtureList, temporaryFixtureList;
-	private Map<Integer, Map<String, Match>> matchWeeksMatches;
 	private Map<Integer, Map<Integer, LocalDateTime>> matchWeeksSlots;
 	private boolean restartWholeProcess = false;
 	private LeagueTable leagueTable;
 	private PlayerLeaderboards leaderboard;
     private int weeks;
+    private ArrayList<UsersMatch> userMatches;
 
     public League() {};
 
@@ -32,8 +32,8 @@ public class League extends Competition {
             throw new IllegalArgumentException("You must have an even number of teams when creating a league");
         }
 		this.tier = tier;
-		this.matchWeeksMatches = new HashMap<>();
 		this.matchWeeksSlots = new HashMap<>();
+        this.userMatches = new ArrayList<>();
 		this.leagueTable = new LeagueTable(this);
 		this.leaderboard = new PlayerLeaderboards(this);
 
@@ -77,19 +77,19 @@ public class League extends Competition {
 				System.out.println("We are acting on the restart whole process!");
 
 				// This will add the fixtures we took back to our main list
-				for (Map<String, Match> eachWeek : matchWeeksMatches.values()) {
+				for (Map<String, Match> eachWeek : getMatchWeeksMatches().values()) {
 		            mainFixtureList.addAll(eachWeek.values());
 		        }
 
 				// Now we clear the matchweeks, and restart the process by re-setting 'i'
-				matchWeeksMatches.clear();
+                getMatchWeeksMatches().clear();
 				i = -1;
 				restartWholeProcess = false;
 				
 			} else {
 				// This is a successful matchweek creation
 				// So we add it to the collection of matchweek maps and number it so we can call it later
-				matchWeeksMatches.put(i + 1, currentMW);
+                getMatchWeeksMatches().put(i + 1, currentMW);
 				for(Map.Entry<String, Match> each : currentMW.entrySet()) {
 					int j = i + 1;
 					System.out.println("Match Week " + j + " contains: " + each.getKey());
@@ -218,10 +218,10 @@ public class League extends Competition {
 
 	public void assignSlotsToMatches() {
 		// For each of our matchweeks
-		for(int i = 1; i<=matchWeeksMatches.size() ; i++ ) {
+		for(int i = 1; i<=getMatchWeeksMatches().size() ; i++ ) {
 
 			// This matchweek
-			Map<String, Match> thisWeeksMatches = matchWeeksMatches.get(i);
+			Map<String, Match> thisWeeksMatches = getMatchWeeksMatches().get(i);
 			// This weeks available time slots
 			Map<Integer, LocalDateTime> thisWeeksSlots = matchWeeksSlots.get(i);
 
@@ -387,14 +387,6 @@ public class League extends Competition {
 		this.mainFixtureList = mainFixtureList;
 	}
 
-	public Map<Integer, Map<String, Match>> getMatchWeeksMatches() {
-		return matchWeeksMatches;
-	}
-
-	public void setMatchWeeksMatches(Map<Integer, Map<String, Match>> matchWeeksMatches) {
-		this.matchWeeksMatches = matchWeeksMatches;
-	}
-
 	public LeagueTable getLeagueTable() {
 		return leagueTable;
 	}
@@ -442,5 +434,13 @@ public class League extends Competition {
             result.add("GW " + i);
         }
         return result;
+    }
+
+    public ArrayList<UsersMatch> getUserMatches() {
+        return userMatches;
+    }
+
+    public void setUserMatches(ArrayList<UsersMatch> userMatches) {
+        this.userMatches = userMatches;
     }
 }

@@ -8,12 +8,14 @@ public class Competition {
 	private Map<String, Team> teams;
 	private Map<String, Match> fixtures;
 	private Season season;
+    private Map<Integer, Map<String, Match>> matchWeeksMatches;
 
     public Competition() {};
 
 	protected Competition(String name, String country, Map<String, Team> teams, Season season) {
 		this.name = name;
 		this.country = country;
+        this.matchWeeksMatches = new HashMap<>();
         if (teams.isEmpty()) {
             throw new IllegalArgumentException("You cannot start a Competition with no teams");
         }
@@ -87,4 +89,11 @@ public class Competition {
 		this.season = season;
 	}
 
+    public Map<Integer, Map<String, Match>> getMatchWeeksMatches() {
+        return matchWeeksMatches;
+    }
+
+    public void setMatchWeeksMatches(Map<Integer, Map<String, Match>> matchWeeksMatches) {
+        this.matchWeeksMatches = matchWeeksMatches;
+    }
 }
