@@ -45,13 +45,6 @@ public class FixturesPageStatLine extends AbstractStatBar {
         this.match = match;
     }
 
-    public void gameComplete() {
-        setBackground(Color.GREEN);
-        getColumns().get(0).setText("FT");
-        getColumns().get(2).setText(match.getHomeScore() + " - " + match.getAwayScore());
-        refresh();
-    }
-
     @Override
     protected void buildColumns() {
         createColumn("", 50); // Blank Box Column, save width as button 50px?

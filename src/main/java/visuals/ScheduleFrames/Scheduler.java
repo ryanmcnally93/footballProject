@@ -1002,8 +1002,11 @@ public class Scheduler extends GamePanel {
 		for (String key : keysToReplace) {
             Match adult = league.getFixtures().get(key);
             if (adult != null) {
+                // Is this mapping all attributes?
                 UsersMatch child = new UsersMatch(adult.getHome(), adult.getAway(), league, adult.getDateTime()); // Create ChildClass instance
-                league.getFixtures().put(key, child); // Replace the entry in the map
+                // Replace the entry in the maps
+                league.getFixtures().put(key, child);
+                league.getMatchWeeksMatches().get(adult.getMatchWeek()).put(key, child);
                 league.getUserMatches().add(child);
             }
         }

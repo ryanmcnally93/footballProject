@@ -48,6 +48,7 @@ public class Match {
 	private ArrayList<PlayerStatsBoxOnRatingsPage> firstTeamsPlayersBoxes, secondTeamsPlayersBoxes;
 	private UsersMatch simulatedMatch;
 	private Map<Footballer, Integer> homeRatings, awayRatings;
+    private int matchWeek;
 
 	public Match() {}
 
@@ -596,7 +597,6 @@ public class Match {
 			getScheduler().addFirstPositionMessage();
 		}
 
-		getScheduler().getFixturesPage().getLine(this).gameComplete();
 		getScheduler().getWindow().getContentPane().removeAll();
 		getScheduler().displayPage(getScheduler().getWindow());
 		getScheduler().refreshMessages();
@@ -994,4 +994,12 @@ public class Match {
 	public void setAwayRatings(Map<Footballer, Integer> awayRatings) {
 		this.awayRatings = awayRatings;
 	}
+
+    public int getMatchWeek() {
+        return matchWeek;
+    }
+
+    public void setMatchWeek(int matchWeek) {
+        this.matchWeek = matchWeek;
+    }
 }

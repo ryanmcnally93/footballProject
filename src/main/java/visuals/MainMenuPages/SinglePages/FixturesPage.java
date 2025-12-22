@@ -28,6 +28,7 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
     List<OptionBar> createdBars;
     private boolean firstTime = true;
     private static HashMap<String, List<String>> initialOptions;
+    private int baseHeight;
 
     public FixturesPage(Scheduler scheduler) {
         super(scheduler, true);
@@ -53,7 +54,6 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         currentMatchLines = new ArrayList<>();
 
         // These also need to be triggered when components inside these boxes are clicked
-        // Should we check bounds instead?
         addFocusListeners(getLeftBox(), true);
         addFocusListeners(getRightBox(), false);
 
@@ -67,6 +67,7 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         getLeftHeader().add(titleLine);
         getLeftBox().revalidate();
         getLeftBox().repaint();
+        baseHeight = (int) getLeftBox().getPreferredSize().getHeight();
     }
 
     @Override
@@ -94,7 +95,7 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         actionMap.put("pressUp", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (isLeftFocused()) {
+                if (isLeftFocused() && getLeftBox().getComponentCount() != 0) {
                     scrollUpOrDownOnHover("leftUp", null);
                 } else {
                     moveRightScroller("up");
@@ -106,7 +107,7 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         actionMap.put("pressDown", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (isLeftFocused()) {
+                if (isLeftFocused() && getLeftBox().getComponentCount() != 0) {
                     scrollUpOrDownOnHover("leftDown", null);
                 } else {
                     moveRightScroller("down");
@@ -213,9 +214,10 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         Map<String, Match> matchesForRound = selectedCompetition.getMatchWeeksMatches().get(roundInt + 1);
 
         for (Map.Entry<String, Match> eachMatch : matchesForRound.entrySet()) {
+            // New Lines Are Created Here, The Match May Be Re-Created At Some Point, Hence The Timer Being 00:00
             addMyFixtureLine(eachMatch.getValue());
-            organiseMyFixtures();
         }
+        organiseMyFixtures();
     }
 
     private HashMap<String, List<String>> createInitialOptions() {
@@ -270,13 +272,17 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
 
         for (FixturesPageStatLine eachLine : currentMatchLines) {
             getLeftBox().add(eachLine);
-            // Re-evaluate the size of leftBox so the scrolling functionality works
-            if (getLeftBox().getComponentCount() == 9) {
-                setPermanentWidthAndHeight(getLeftBox(), 621, (int) getLeftBox().getPreferredSize().getHeight() + 15);
-            } else if (getLeftBox().getComponentCount() > 9) {
-                setPermanentWidthAndHeight(getLeftBox(), 621, (int) getLeftBox().getPreferredSize().getHeight() + 35);
-            }
         }
+
+        // Re-evaluate the size of leftBox so the scrolling functionality works
+        int nineItemsHeight = baseHeight - 7;
+        if (getLeftBox().getComponentCount() == 9) {
+            setPermanentWidthAndHeight(getLeftBox(), 621, nineItemsHeight);
+        } else if (getLeftBox().getComponentCount() > 9) {
+            int furtherOptionsHeight = (getLeftBox().getComponentCount() - 8) * 29;
+            setPermanentWidthAndHeight(getLeftBox(), 621, nineItemsHeight + furtherOptionsHeight);
+        }
+
         getLeftBox().revalidate();
         getLeftBox().repaint();
     }

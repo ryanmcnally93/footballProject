@@ -93,6 +93,7 @@ public class League extends Competition {
 				for(Map.Entry<String, Match> each : currentMW.entrySet()) {
 					int j = i + 1;
 					System.out.println("Match Week " + j + " contains: " + each.getKey());
+                    each.getValue().setMatchWeek(j);
 				}
 			}
 		}

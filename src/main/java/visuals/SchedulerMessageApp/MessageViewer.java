@@ -1,6 +1,7 @@
 package visuals.SchedulerMessageApp;
 
 import entities.Match;
+import entities.UsersMatch;
 import visuals.CustomizedElements.CustomizedButton;
 import visuals.CustomizedElements.GamePanel;
 import visuals.ScheduleFrames.Events;
@@ -13,6 +14,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class MessageViewer extends GamePanel {
@@ -93,8 +95,9 @@ public class MessageViewer extends GamePanel {
                     for(Match eachMatch : event.getMatch().getSameDayMatches()){
                         CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
                     }
-                    scheduler.getFixturesPage().getLine(event.getMatch()).gameComplete();
-                    SwingUtilities.invokeLater(() -> addDismissButtonAfterChecks(event, todaysEvents));
+                    SwingUtilities.invokeLater(() -> {
+                        addDismissButtonAfterChecks(event, todaysEvents);
+                    });
                 }
 
                 event.setRemoveEvent(true);
