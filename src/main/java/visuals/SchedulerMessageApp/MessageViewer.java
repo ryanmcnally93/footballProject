@@ -1,7 +1,6 @@
 package visuals.SchedulerMessageApp;
 
 import entities.Match;
-import entities.UsersMatch;
 import visuals.CustomizedElements.CustomizedButton;
 import visuals.CustomizedElements.GamePanel;
 import visuals.ScheduleFrames.Events;
@@ -14,7 +13,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class MessageViewer extends GamePanel {
@@ -74,7 +72,7 @@ public class MessageViewer extends GamePanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 scheduler.viewTacticsPages(true, event);
-                event.setRemoveEvent(true);
+                event.setEventHasBeenShownToUser(true);
                 playGame.init();
             }
         });
@@ -97,10 +95,11 @@ public class MessageViewer extends GamePanel {
                     }
                     SwingUtilities.invokeLater(() -> {
                         addDismissButtonAfterChecks(event, todaysEvents);
+                        scheduler.getFixturesPage().requestFixturesUpdate();
                     });
                 }
 
-                event.setRemoveEvent(true);
+                event.setEventHasBeenShownToUser(true);
                 scheduler.showTodaysEvents(todaysEvents);
                 simGame.init();
             }
@@ -115,7 +114,7 @@ public class MessageViewer extends GamePanel {
                 addAdvanceButton();
 
                 messageContainer.removeAll();
-                event.setRemoveEvent(true);
+                event.setEventHasBeenShownToUser(true);
                 scheduler.showTodaysEvents(todaysEvents);
 
                 if(!isTheCursorStillOverTheButton(dismiss)) {

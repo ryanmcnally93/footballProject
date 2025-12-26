@@ -29,6 +29,7 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
     private boolean firstTime = true;
     private static HashMap<String, List<String>> initialOptions;
     private int baseHeight;
+    private boolean fixturesUpdateScheduled = false;
 
     public FixturesPage(Scheduler scheduler) {
         super(scheduler, true);
@@ -169,17 +170,28 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         }
     }
 
-    private void assignListenerToOptionFields(CustomizedOptionField chosenField) {
-        chosenField.setOnSelectionChange(roundName -> {
+    public void requestFixturesUpdate() {
+        if (fixturesUpdateScheduled) return;
+
+        fixturesUpdateScheduled = true;
+
+        SwingUtilities.invokeLater(() -> {
+            fixturesUpdateScheduled = false;
+
             if (currentMatchLines != null) {
                 OptionBar firstBar = createdBars.getFirst();
                 String topChoice = getCurrentValueFromOptionBar(firstBar);
                 OptionBar secondBar = createdBars.get(1);
                 String competitionName = getCurrentValueFromOptionBar(secondBar);
+                String roundName = getCurrentValueFromOptionBar(createdBars.get(2));
 
                 updateDisplayedFixtures(topChoice, competitionName, roundName);
             }
         });
+    }
+
+    private void assignListenerToOptionFields(CustomizedOptionField chosenField) {
+        chosenField.setOnSelectionChange(roundName -> requestFixturesUpdate());
     }
 
     private String getCurrentValueFromOptionBar(OptionBar optionBar) {
@@ -234,6 +246,9 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         FixturesPageStatLine matchLine = new FixturesPageStatLine(child);
         if (child instanceof UsersMatch) {
             updateMatchLineListener(matchLine, (UsersMatch) child);
+        } else {
+            UsersMatch temporaryUsersMatch = new UsersMatch(child);
+            updateMatchLineListener(matchLine, temporaryUsersMatch);
         }
         currentMatchLines.add(matchLine);
     }
@@ -250,7 +265,7 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
                     frame.setFromScheduler(true);
                 }
                 // Provide back button for the first viewed MatchPage when viewing through main menu
-                if (matchToView.isMatchHasPlayed()) {
+                if (matchToView.isMatchFinished()) {
                     getScheduler().getStatsPanel().getFooterPanel().getBackButtonBox().add(getScheduler().getStatsPanel().getBackButton());
                 } else {
                     getScheduler().getTablePanel().getFooterPanel().getBackButtonBox().add(getScheduler().getTablePanel().getBackButton());

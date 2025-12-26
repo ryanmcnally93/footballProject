@@ -177,6 +177,9 @@ public class MatchTimer {
             setGameSeconds(inAppTime[0] % 60);
         }
         System.out.println("AN INSTANTLY PLAYED MATCH JUST FINISHED");
+        if (!match.isMatchFinished()) {
+            match.fullTimeCheck();
+        }
         match.updateWinsDrawsAndLossesForInstantMatches();
         match.updateDomesticLeagueTable();
         match.getLeague().getPlayerLeaderboard().updateLinesInTableLogic("Goals");

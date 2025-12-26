@@ -18,15 +18,47 @@ public class UsersMatch extends Match {
 	private String currentPageName;
 
 	public UsersMatch() {};
-	
-	public UsersMatch(Team home, Team away) {
-		super(home, away);
-	}
 
-	public UsersMatch(Team home, Team away, League league, LocalDateTime dateTime) {
-		super(home, away, league, dateTime);
+    // Used for Users Games from Scheduler when starting a game
+	public UsersMatch(Team home, Team away, League league, LocalDateTime dateTime, int matchWeek) {
+		super(home, away, league, dateTime, matchWeek);
 		setSpeed("slowest");
 	}
+
+    // Used to map Matches to UsersMatches when viewing on Fixtures Page
+    public UsersMatch(Match match) {
+        super(match.getHome(), match.getAway(), match.getLeague(), match.getDateTime(), match.getMatchWeek());
+        setSpeed(match.getSpeed());
+        setAwaygk(match.getAwaygk());
+        setHomegk(match.getHomegk());
+        setAwayAllShots(match.getAwayAllShots());
+        setHomeAllShots(match.getHomeAllShots());
+        setAwayRatings(match.getAwayRatings());
+        setHomeRatings(match.getHomeRatings());
+        setAwayScore(match.getAwayScore());
+        setHomeScore(match.getHomeScore());
+        setAwayScorers(match.getAwayScorers());
+        setHomeScorers(match.getHomeScorers());
+        setAwayShotsOn(match.getAwayShotsOn());
+        setHomeShotsOn(match.getHomeShotsOn());
+        setHomeTeam(match.getHomeTeam());
+        setAwayTeam(match.getAwayTeam());
+        setBackgroundGame(match.getBackgroundGame());
+        setDateTime(match.getDateTime());
+        setEarlierMatches(match.getEarlierMatches());
+        setLaterMatches(match.getLaterMatches());
+        setLeague(match.getLeague());
+        setMatchEvents(match.getMatchEvents());
+        setSameDayMatches(match.getSameDayMatches());
+        setScheduler(match.getScheduler());
+        setSimulated(match.getSimulated());
+        setSimulatedMatch(match.getSimulatedMatch());
+        setStadium(match.getStadium());
+        setTimer(match.getTimer());
+        if (match.isMatchFinished()) {
+           markFinished();
+        }
+    }
 
 	@Override
 	public void updateAllMatchesPage(){
@@ -36,7 +68,7 @@ public class UsersMatch extends Match {
 	@Override
 	public void callUpdateTableVisually() {
 		getScheduler().getTablePanel().updateTableVisually();
-		if (isMatchHasPlayed()) {
+		if (isMatchFinished()) {
 			getScheduler().getTeamStandings().updateTableVisually();
 		}
 	};

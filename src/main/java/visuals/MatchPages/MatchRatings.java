@@ -168,7 +168,7 @@ public class MatchRatings extends MatchPageTemplate {
     }
 
     public void updateLinesAndBox(Map<String, Footballer> players, Team team) {
-        if (getMatch().isMatchHasPlayed()) {
+        if (getMatch().isMatchFinished()) {
             for (int i = 0; i < team.getFormation().getPositionOrder().size(); i++) {
                 Footballer player = players.get(team.getFormation().getPositionOrder().get(i));
                 playerStatsLines.get(i).updateLineWhenMatchFinished(player, players, getMatch());

@@ -444,4 +444,14 @@ public class League extends Competition {
     public void setUserMatches(ArrayList<UsersMatch> userMatches) {
         this.userMatches = userMatches;
     }
+
+    public void updateFixtureToAMappedUsersMatch(String key, UsersMatch child, Match adult) {
+        getFixtures().put(key, child);
+        getMatchWeeksMatches().get(adult.getMatchWeek()).put(key, child);
+    }
+
+    public void updateFixture(String key, Match child) {
+        getFixtures().put(key, child);
+        getMatchWeeksMatches().get(child.getMatchWeek()).put(key, child);
+    }
 }

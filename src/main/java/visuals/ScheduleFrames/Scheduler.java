@@ -623,12 +623,13 @@ public class Scheduler extends GamePanel {
 		System.out.println("Todays Events: " + todaysEvents);
 
 		// Find events to remove and remove them
-        todaysEvents.removeIf(Events::getRemoveEvent);
-        events.removeIf(Events::getRemoveEvent);
+        todaysEvents.removeIf(Events::getEventHasBeenShownToUser);
+        events.removeIf(Events::getEventHasBeenShownToUser);
 
 		// Let's look through todays events that are left
 		for(Events event : new ArrayList<>(todaysEvents)){
 			messageViewer.displayEvent(event);
+            event.setEventHasBeenShownToUser(true);
 			messageViewer.removeAdvanceButton();
 
 			// This is a match event
@@ -660,9 +661,9 @@ public class Scheduler extends GamePanel {
 		window.getContentPane().removeAll();
 		window.getContentPane().add(matchFramesPages, BorderLayout.CENTER);
 
-		if (!match.isMatchHasPlayed() && tablePanel.isFromScheduler()) {
+		if (!match.isMatchFinished() && tablePanel.isFromScheduler()) {
 			viewMatchFramesWhenMatchNotPlayed();
-		} else if (match.isMatchHasPlayed() && tablePanel.isFromScheduler()) {
+		} else if (match.isMatchFinished() && tablePanel.isFromScheduler()) {
 			viewMatchFramesWhenMatchPlayed();
 		} else if (match.getTimer().isPaused()) {
 			viewMatchAfterTacticsPageViewed();
@@ -674,6 +675,8 @@ public class Scheduler extends GamePanel {
 			match.getSameDayMatches().add(match);
 		}
 
+        // I don't think we want to update the league table
+        // under each of these circumstances. When viewing an old match for example
 		allMatchesPanel.addTodaysMatchesToPage();
 		match.updateDomesticLeagueTable();
 
@@ -914,6 +917,9 @@ public class Scheduler extends GamePanel {
 					// We add this to the usersmatch earlier matches list
 					getMatch().appendEarlierMatches(backgroundMatch);
 					CompletableFuture.runAsync(() -> backgroundMatch.startMatch("instant"));
+                    SwingUtilities.invokeLater(() -> {
+                       getFixturesPage().requestFixturesUpdate();
+                    });
 				} else if (backgroundMatch.getDateTime().isEqual(getMatch().getDateTime())) {
 					// Make sure we add this to the usersmatch too
 					getMatch().appendSameDayMatches(backgroundMatch);
@@ -924,6 +930,9 @@ public class Scheduler extends GamePanel {
 				}
 			} else {
 				CompletableFuture.runAsync(() -> backgroundMatch.startMatch("instant"));
+                SwingUtilities.invokeLater(() -> {
+                    getFixturesPage().requestFixturesUpdate();
+                });
 			}
 		}
 
@@ -1002,11 +1011,9 @@ public class Scheduler extends GamePanel {
 		for (String key : keysToReplace) {
             Match adult = league.getFixtures().get(key);
             if (adult != null) {
-                // Is this mapping all attributes?
-                UsersMatch child = new UsersMatch(adult.getHome(), adult.getAway(), league, adult.getDateTime()); // Create ChildClass instance
+                UsersMatch child = new UsersMatch(adult.getHome(), adult.getAway(), adult.getLeague(), adult.getDateTime(), adult.getMatchWeek()); // Create ChildClass instance
                 // Replace the entry in the maps
-                league.getFixtures().put(key, child);
-                league.getMatchWeeksMatches().get(adult.getMatchWeek()).put(key, child);
+                league.updateFixtureToAMappedUsersMatch(key, child, adult);
                 league.getUserMatches().add(child);
             }
         }

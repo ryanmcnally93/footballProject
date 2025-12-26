@@ -55,7 +55,7 @@ public class MatchPageTemplate extends HeaderFooterAndCardMapTemplate {
 				// THIS BACK BUTTON IS ONLY VISIBLE WHEN WE ARE FROM SCHEDULER
 				getMatch().getScheduler().getWindow().getContentPane().removeAll();
 				getMatch().getScheduler().getWindow().getContentPane().add(getMatch().getScheduler().getFixturesPage(), BorderLayout.CENTER);
-				if (!getMatch().isMatchHasPlayed()) {
+				if (!getMatch().isMatchFinished()) {
 					removeUnplayedMatchViewAttributes();
 				} else {
 					removePlayedMatchViewAttributes();

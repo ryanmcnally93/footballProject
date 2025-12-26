@@ -47,14 +47,11 @@ public class FixturesPageStatLine extends AbstractStatBar {
 
     @Override
     protected void buildColumns() {
-        createColumn("", 50); // Blank Box Column, save width as button 50px?
+        createColumn(match.getTimer().getTime().equals("90:00") ? "FT" : "", 50); // Blank Box Column, save width as button 50px?
         createColumn(match.getHome().getName(), 225);
-        if (match.getTimer().getTime().equals("00:00")) {
-            LocalDateTime date = match.getDateTime();
-            createColumn(date.getDayOfMonth() + "/" + date.getMonthValue(), 50);
-        } else {
-            createColumn(match.getHomeScore() + " - " + match.getAwayScore(), 50);
-        }
+        LocalDateTime date = match.getDateTime();
+        createColumn(match.getTimer().getTime().equals("00:00") ? date.getDayOfMonth() + "/" + date.getMonthValue()
+                : match.getHomeScore() + " - " + match.getAwayScore(), 50);
         createColumn(match.getAway().getName(), 225);
         ImageIcon buttonIcon = getIconWithSpecificSize("./src/main/java/visuals/Images/select_icon.png", "Select", 20);
         selectIcon = createColumn(buttonIcon, 30);

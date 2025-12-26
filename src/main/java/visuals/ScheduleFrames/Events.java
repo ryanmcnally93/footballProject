@@ -21,7 +21,7 @@ public class Events {
 	private JLabel title;
 	private JLabel description;
 	private UsersMatch match;
-	private Boolean removeEvent;
+	private boolean eventHasBeenShownToUser;
 
 	public Events(){};
 
@@ -39,14 +39,14 @@ public class Events {
 		this.type = "Match";
 		this.title  = new JLabel("Matchday");
 		this.match = match;
-		this.removeEvent = false;
+		this.eventHasBeenShownToUser = false;
 	}
 
 	public Events(String person, String message, LocalDateTime dateTime){
 		this.date = dateTime;
-		this.removeEvent = false;
+		this.eventHasBeenShownToUser = false;
 		this.description = SpeechBubbleGenerator.createSpeechBubbleReceived(message);
-		if(person.equals("Chairman")){
+		if (person.equals("Chairman")){
 			this.type = "Chairman Message";
 			this.title = new JLabel("Chairman");
 		} else if (person.equals("Youth Coach")){
@@ -127,11 +127,11 @@ public class Events {
 		return "Events [date=" + date + ", type=" + type + ", title=" + ", match=" + match + "]";
 	}
 
-	public Boolean getRemoveEvent() {
-		return removeEvent;
+	public boolean getEventHasBeenShownToUser() {
+		return eventHasBeenShownToUser;
 	}
 
-	public void setRemoveEvent(Boolean removeEvent) {
-		this.removeEvent = removeEvent;
+	public void setEventHasBeenShownToUser(boolean eventHasBeenShownToUser) {
+		this.eventHasBeenShownToUser = eventHasBeenShownToUser;
 	}
 }

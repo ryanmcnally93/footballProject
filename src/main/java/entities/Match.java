@@ -17,6 +17,7 @@ import java.util.*;
 import java.util.Timer;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Match {
 
@@ -42,16 +43,18 @@ public class Match {
 	private String speed;
 	private ArrayList<Match> laterMatches, sameDayMatches, earlierMatches;
 	private ArrayList<String> homeScorers, awayScorers;
-	private boolean matchHasPlayed = false;
+    private final AtomicBoolean matchFinished = new AtomicBoolean(false);
 	private ArrayList<MatchEvent> matchEvents;
 	private ArrayList<MatchRatingsStatLine> firstTeamsPlayersLines, secondTeamsPlayersLines;
 	private ArrayList<PlayerStatsBoxOnRatingsPage> firstTeamsPlayersBoxes, secondTeamsPlayersBoxes;
 	private UsersMatch simulatedMatch;
 	private Map<Footballer, Integer> homeRatings, awayRatings;
     private int matchWeek;
+    private final AtomicBoolean resultEventCreated = new AtomicBoolean(false);
 
 	public Match() {}
 
+    // Creating a match from a UsersMatch
 	public Match(UsersMatch simulatedMatch) {
 		this.simulatedMatch = simulatedMatch;
 		this.home = simulatedMatch.getHome();
@@ -79,6 +82,7 @@ public class Match {
 		this.matchEvents = new ArrayList<>();
 		this.homeRatings = new HashMap<>();
 		this.awayRatings = new HashMap<>();
+        this.matchWeek = simulatedMatch.getMatchWeek();
 	}
 
 	public Match(Team home, Team away) {
@@ -126,7 +130,7 @@ public class Match {
 		this.awayRatings = new HashMap<>();
 	}
 
-	public Match(Team home, Team away, League league, LocalDateTime dateTime) {
+	public Match(Team home, Team away, League league, LocalDateTime dateTime, int matchWeek) {
 		this.home = home;
 		this.away = away;
 		this.stadium = home.getStadium();
@@ -150,11 +154,12 @@ public class Match {
 		this.awayShotsOn = 0;
 		this.homeRatings = new HashMap<>();
 		this.awayRatings = new HashMap<>();
+        this.matchWeek = matchWeek;
 	}
 
 	public void updateAllMatchesPage(){
 		for(Match eachMatch : getSameDayMatches()){
-			if(eachMatch instanceof UsersMatch usersMatch){
+			if(eachMatch instanceof UsersMatch){
 				eachMatch.getScheduler().getAllMatchesPanel().addTodaysMatchesToPage();
 			}
 		}
@@ -543,6 +548,7 @@ public class Match {
 		System.out.println("RUNNING fullTimeCheck METHOD");
 		if (getTimer().getTime().equals("90:00")) {
 			System.out.println("It's fulltime");
+            matchFinished.compareAndSet(false, true);
 
 			// Should make the bar green
 			if(!getSpeed().equals("instant")) {
@@ -551,23 +557,23 @@ public class Match {
 
 			System.out.println("*****" + getHome().getName() + " " + getHomeScore() + " - " + getAwayScore() + " " + getAway().getName() + "*****");
 			if (!(this instanceof UsersMatch)) {
-				matchHasPlayed = true;
 				saveRatingsAndRefreshPlayerData();
 			}
 			if(scheduler != null){
 				scheduler.getMessageViewer().removeMessage();
 				// We only want this on a simulated match
-				if(simulated) {
+				if(simulated && resultEventCreated.compareAndSet(false, true)) {
 					Events simulatedResult = new Events("Result", getScore(), getDateTime().plusHours(2));
-					System.out.println("Adding an event in match class (for simulated matches)");
+					System.out.println("Adding a 'Result' event in match class for " + System.identityHashCode(this));
 					scheduler.getEvents().add(simulatedResult);
 
 					continueToScheduler();
 					simulated = false;
 				}
 			}
-			
+
 			continueButtonOnScreen();
+            getLeague().updateFixture(this.toString(), this);
 			return true;
 	    } else {
 			System.out.println("Full time checked, but it is " + getTimer().getTime());
@@ -611,6 +617,9 @@ public class Match {
 			for(Match eachMatch : getLaterMatches()){
 				CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
 			}
+            SwingUtilities.invokeLater(() -> {
+               getScheduler().getFixturesPage().requestFixturesUpdate();
+            });
 		}
 
 		// Set the back button on tactics cardmap to normal
@@ -621,7 +630,7 @@ public class Match {
 		if (simulatedMatch != null) {
 			giveSimulatedMatchAttributesOfThis();
 		}
-		matchHasPlayed = true;
+
 		if (this instanceof UsersMatch) {
 			callUpdateTableVisually();
 		}
@@ -665,7 +674,7 @@ public class Match {
 		simulatedMatch.setAwayScorers(awayScorers);
 		simulatedMatch.setHomeRatings(homeRatings);
 		simulatedMatch.setAwayRatings(awayRatings);
-		simulatedMatch.setMatchHasPlayed(true);
+		simulatedMatch.markFinished();
 		simulatedMatch.setTimer(getTimer());
 	}
 
@@ -911,8 +920,8 @@ public class Match {
 		this.earlierMatches.add(newMatch);
 	}
 
-	public boolean isMatchHasPlayed() {
-		return matchHasPlayed;
+	public boolean isMatchFinished() {
+		return matchFinished.get();
 	}
 
 	public ArrayList<MatchEvent> getMatchEvents() {
@@ -953,10 +962,6 @@ public class Match {
 
 	public void setAwayShotsOn(int awayShotsOn) {
 		this.awayShotsOn = awayShotsOn;
-	}
-
-	public void setMatchHasPlayed(boolean matchHasPlayed) {
-		this.matchHasPlayed = matchHasPlayed;
 	}
 
 	public void setEarlierMatches(ArrayList<Match> earlierMatches) {
@@ -1001,5 +1006,16 @@ public class Match {
 
     public void setMatchWeek(int matchWeek) {
         this.matchWeek = matchWeek;
+    }
+
+    public void markFinished() {
+        matchFinished.set(true);
+    }
+
+    public AtomicBoolean isResultEventCreated() {
+        return resultEventCreated;
+    }
+    public void markResultEventCreated() {
+        resultEventCreated.set(true);
     }
 }
