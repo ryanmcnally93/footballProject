@@ -17,6 +17,7 @@ public class CustomizedButton extends JButton implements Hoverable {
     private int arcWidth = 10;
     private boolean borderWanted = true;
     private boolean fillWanted = true;
+    private boolean disabled = false;
 
     public CustomizedButton(String text) {
         super(text);
@@ -77,6 +78,12 @@ public class CustomizedButton extends JButton implements Hoverable {
     @Override
     public void setSelected(boolean selected) { this.selected = selected; }
 
+    @Override
+    public boolean isDisabled() { return disabled; }
+
+    @Override
+    public void setDisabled(boolean disabled) { this.disabled = disabled; }
+
     public void triggerColorReverse() {
         ImageIcon oppositeImage = getOppositeImage((ImageIcon) getIcon());
         icon = oppositeImage;
@@ -124,5 +131,13 @@ public class CustomizedButton extends JButton implements Hoverable {
 
     public void setFillWanted(boolean fillWanted) {
         this.fillWanted = fillWanted;
+    }
+
+    public void disableBar() {
+        this.disabled = true;
+    }
+
+    public void enableBar() {
+        this.disabled = false;
     }
 }

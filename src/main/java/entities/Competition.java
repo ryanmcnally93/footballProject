@@ -1,6 +1,7 @@
 package entities;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Competition {
 
@@ -76,6 +77,15 @@ public class Competition {
 	public Map<String, Match> getFixtures() {
 		return fixtures;
 	}
+
+    public Map<String, Match> getTeamsFixtures(Team team) {
+        return fixtures.entrySet().stream()
+                .filter(match -> match.toString().contains(team.getName()))
+                .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                Map.Entry::getValue
+        ));
+    }
 
 	public void setFixtures(Map<String, Match> fixtures) {
 		this.fixtures = fixtures;

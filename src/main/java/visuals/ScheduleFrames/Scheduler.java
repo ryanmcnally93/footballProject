@@ -383,6 +383,7 @@ public class Scheduler extends GamePanel {
 	public void createLayoutsMapsAndPages() {
 		// Single Pages
 		fixturesPage = new FixturesPage(this);
+        fixturesPage.setTeam(team);
 		playerSearchPage = new PlayerSearchPage(this);
 		myTeamPage = new MyTeamPage(this);
 		trainingPage = new TrainingPage(this);
@@ -1011,13 +1012,13 @@ public class Scheduler extends GamePanel {
 		for (String key : keysToReplace) {
             Match adult = league.getFixtures().get(key);
             if (adult != null) {
-                UsersMatch child = new UsersMatch(adult.getHome(), adult.getAway(), adult.getLeague(), adult.getDateTime(), adult.getMatchWeek()); // Create ChildClass instance
+                UsersMatch child = new UsersMatch(adult.getHome(), adult.getAway(), adult.getLeague(), adult.getDateTime(), adult.getRoundNumber()); // Create ChildClass instance
                 // Replace the entry in the maps
                 league.updateFixtureToAMappedUsersMatch(key, child, adult);
                 league.getUserMatches().add(child);
             }
         }
-        fixturesPage.getMyCompetitions().add(league);
+        fixturesPage.addToMyCompetitions(league);
         fixturesPage.buildDependencyMaps();
 		System.out.println("Created " + k + "UserMatches");
 		

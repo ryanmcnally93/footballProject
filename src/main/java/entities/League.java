@@ -93,7 +93,7 @@ public class League extends Competition {
 				for(Map.Entry<String, Match> each : currentMW.entrySet()) {
 					int j = i + 1;
 					System.out.println("Match Week " + j + " contains: " + each.getKey());
-                    each.getValue().setMatchWeek(j);
+                    each.getValue().setRoundNumber(j);
 				}
 			}
 		}
@@ -447,11 +447,11 @@ public class League extends Competition {
 
     public void updateFixtureToAMappedUsersMatch(String key, UsersMatch child, Match adult) {
         getFixtures().put(key, child);
-        getMatchWeeksMatches().get(adult.getMatchWeek()).put(key, child);
+        getMatchWeeksMatches().get(adult.getRoundNumber()).put(key, child);
     }
 
     public void updateFixture(String key, Match child) {
         getFixtures().put(key, child);
-        getMatchWeeksMatches().get(child.getMatchWeek()).put(key, child);
+        getMatchWeeksMatches().get(child.getRoundNumber()).put(key, child);
     }
 }

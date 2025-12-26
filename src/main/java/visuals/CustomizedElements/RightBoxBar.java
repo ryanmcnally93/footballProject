@@ -32,16 +32,6 @@ public class RightBoxBar extends CustomizedButton {
         return new Dimension(Integer.MAX_VALUE, d.height);
     }
 
-//    @Override
-//    protected void childMouseExited() {
-//        setForeground(getSecondaryColor());
-//    }
-//
-//    @Override
-//    protected void childMouseEntered() {
-//        setForeground(getPrimaryColor());
-//    }
-
     public void setAsSelected(boolean bool) {
         setSelected(bool);
         // This should be done ideally within the CustomisedButton class

@@ -10,6 +10,8 @@ public class FixturesPageStatLine extends AbstractStatBar {
 
     private Match match;
     private CustomizedButton selectIcon;
+    private String leftText;
+    private boolean usersMatch;
 
     public FixturesPageStatLine(){
         super(20, false);
@@ -17,9 +19,11 @@ public class FixturesPageStatLine extends AbstractStatBar {
         setOpaque(false);
     }
 
-    public FixturesPageStatLine(Match match){
+    public FixturesPageStatLine(Match match, String leftText, boolean usersMatch){
         super(20, false);
         this.match = match;
+        this.leftText = leftText;
+        this.usersMatch = usersMatch;
         buildColumns();
         setBackground(Color.LIGHT_GRAY);
     }
@@ -47,12 +51,12 @@ public class FixturesPageStatLine extends AbstractStatBar {
 
     @Override
     protected void buildColumns() {
-        createColumn(match.getTimer().getTime().equals("90:00") ? "FT" : "", 50); // Blank Box Column, save width as button 50px?
-        createColumn(match.getHome().getName(), 225);
+        createColumn(leftText, 50, usersMatch); // Blank Box Column, save width as button 50px?
+        createColumn(match.getHome().getName(), 225, usersMatch);
         LocalDateTime date = match.getDateTime();
         createColumn(match.getTimer().getTime().equals("00:00") ? date.getDayOfMonth() + "/" + date.getMonthValue()
-                : match.getHomeScore() + " - " + match.getAwayScore(), 50);
-        createColumn(match.getAway().getName(), 225);
+                : match.getHomeScore() + " - " + match.getAwayScore(), 50,  usersMatch);
+        createColumn(match.getAway().getName(), 225, usersMatch);
         ImageIcon buttonIcon = getIconWithSpecificSize("./src/main/java/visuals/Images/select_icon.png", "Select", 20);
         selectIcon = createColumn(buttonIcon, 30);
         selectIcon.setBorderWanted(false);
@@ -66,5 +70,13 @@ public class FixturesPageStatLine extends AbstractStatBar {
 
     public void setSelectIcon(CustomizedButton selectIcon) {
         this.selectIcon = selectIcon;
+    }
+
+    public String getLeftText() {
+        return leftText;
+    }
+
+    public void setLeftText(String leftText) {
+        this.leftText = leftText;
     }
 }

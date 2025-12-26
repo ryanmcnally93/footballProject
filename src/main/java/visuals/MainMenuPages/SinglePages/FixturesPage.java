@@ -2,6 +2,7 @@ package visuals.MainMenuPages.SinglePages;
 
 import entities.Competition;
 import entities.Match;
+import entities.Team;
 import entities.UsersMatch;
 import visuals.CustomizedElements.CustomizedButton;
 import visuals.CustomizedElements.CustomizedOptionField;
@@ -11,6 +12,7 @@ import visuals.MatchPages.MatchPageTemplate;
 import visuals.ScheduleFrames.Scheduler;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -21,7 +23,6 @@ import java.util.stream.Stream;
 
 public class FixturesPage extends LeftContentRightScrollPagesTemplate {
 
-    public static final List<String> FIRST_OPTIONS = List.of("My Fixtures", "All Fixtures");
     private List<Competition> myCompetitions = new ArrayList<>();
     private List<Competition> otherCompetitions = new ArrayList<>();
     private ArrayList<FixturesPageStatLine> currentMatchLines;
@@ -30,6 +31,7 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
     private static HashMap<String, List<String>> initialOptions;
     private int baseHeight;
     private boolean fixturesUpdateScheduled = false;
+    private Team team;
 
     public FixturesPage(Scheduler scheduler) {
         super(scheduler, true);
@@ -143,11 +145,20 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
                 "All Fixtures", otherCompetitions.stream().map(Competition::getName).toList()
         );
 
-        Map<String, List<String>> roundNameMap = Stream.concat(myCompetitions.stream(), otherCompetitions.stream())
-                .collect(Collectors.toMap(
-                        Competition::getName,
-                        Competition::getRoundNames
-                ));
+        Map<String, Competition> uniqueCompetitions =
+                Stream.concat(myCompetitions.stream(), otherCompetitions.stream())
+                        .collect(Collectors.toMap(
+                                Competition::getName,
+                                c -> c,
+                                (existing, duplicate) -> existing   // keep first
+                        ));
+
+        Map<String, List<String>> roundNameMap =
+                uniqueCompetitions.values().stream()
+                        .collect(Collectors.toMap(
+                                Competition::getName,
+                                Competition::getRoundNames
+                        ));
 
         List<Map<String, List<String>>> dependencyMaps = List.of(competitionMap, roundNameMap);
 
@@ -202,34 +213,50 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         clearFixtures();
         Competition selectedCompetition = null;
 
+        List<Competition> sourceList = myCompetitions;
+
+        selectedCompetition = sourceList.stream()
+                .filter(c -> c.getName().equals(competitionName))
+                .findFirst()
+                .orElse(null);
+
+        if (selectedCompetition == null) return;
+
         if (topChoice.equals("My Fixtures")) {
-            List<Competition> sourceList = myCompetitions;
+            if (createdBars.get(2).isSelected()) {
+                createdBars.get(2).setAsSelected(false);
 
-            selectedCompetition = sourceList.stream()
-                    .filter(c -> c.getName().equals(competitionName))
-                    .findFirst()
-                    .orElse(null);
+                // This isn't working?
+                createdBars.getFirst().setAsSelected(true);
+                createdBars.getFirst().revalidate();
+                createdBars.getFirst().repaint();
+            }
+            createdBars.get(2).disableBar();
+            createdBars.get(2).revalidate();
+            createdBars.get(2).repaint();
 
-            if (selectedCompetition == null) return;
+            Map<String, Match> userMatches = selectedCompetition.getTeamsFixtures(team);
+
+            for (Map.Entry<String, Match> eachMatch : userMatches.entrySet()) {
+                Match thisMatch = eachMatch.getValue();
+                addMyFixtureLine(thisMatch, selectedCompetition.getRoundNames().get(thisMatch.getRoundNumber()-1), true);
+            }
+            organiseMyFixtures();
         } else {
-            List<Competition> sourceList = otherCompetitions;
+            createdBars.get(2).enableBar();
+            createdBars.get(2).revalidate();
+            createdBars.get(2).repaint();
 
-            selectedCompetition = sourceList.stream()
-                    .filter(c -> c.getName().equals(competitionName))
-                    .findFirst()
-                    .orElse(null);
+            int roundInt = selectedCompetition.getRoundNames().indexOf(roundName);
+            Map<String, Match> matchesForRound = selectedCompetition.getMatchWeeksMatches().get(roundInt + 1);
 
-            if (selectedCompetition == null) return;
+            for (Map.Entry<String, Match> eachMatch : matchesForRound.entrySet()) {
+                // New Lines Are Created Here, The Match May Be Re-Created At Some Point, Hence The Timer Being 00:00
+                Match thisMatch = eachMatch.getValue();
+                addMyFixtureLine(thisMatch, thisMatch.getTimer().getTime().equals("90:00") ? "FT" : "", thisMatch.toString().contains(team.getName()));
+            }
+            organiseMyFixtures();
         }
-
-        int roundInt = selectedCompetition.getRoundNames().indexOf(roundName);
-        Map<String, Match> matchesForRound = selectedCompetition.getMatchWeeksMatches().get(roundInt + 1);
-
-        for (Map.Entry<String, Match> eachMatch : matchesForRound.entrySet()) {
-            // New Lines Are Created Here, The Match May Be Re-Created At Some Point, Hence The Timer Being 00:00
-            addMyFixtureLine(eachMatch.getValue());
-        }
-        organiseMyFixtures();
     }
 
     private HashMap<String, List<String>> createInitialOptions() {
@@ -242,8 +269,8 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         return options;
     }
 
-    public void addMyFixtureLine(Match child) {
-        FixturesPageStatLine matchLine = new FixturesPageStatLine(child);
+    public void addMyFixtureLine(Match child, String leftText, boolean usersMatch) {
+        FixturesPageStatLine matchLine = new FixturesPageStatLine(child, leftText, usersMatch);
         if (child instanceof UsersMatch) {
             updateMatchLineListener(matchLine, (UsersMatch) child);
         } else {
@@ -290,27 +317,35 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         }
 
         // Re-evaluate the size of leftBox so the scrolling functionality works
-        int nineItemsHeight = baseHeight - 7;
-        if (getLeftBox().getComponentCount() == 9) {
-            setPermanentWidthAndHeight(getLeftBox(), 621, nineItemsHeight);
-        } else if (getLeftBox().getComponentCount() > 9) {
-            int furtherOptionsHeight = (getLeftBox().getComponentCount() - 8) * 29;
-            setPermanentWidthAndHeight(getLeftBox(), 621, nineItemsHeight + furtherOptionsHeight);
-        }
+        SwingUtilities.invokeLater(() -> {
+            int height = 5;
+            for (Component c : getLeftBox().getComponents()) {
+                height += c.getPreferredSize().height;
+            }
+
+            Insets insets = getLeftBox().getInsets();
+            height += insets.top + insets.bottom;
+
+            int totalMargin = getLeftBox().getComponentCount() * 5;
+
+            setPermanentWidthAndHeight(getLeftBox(), 621, height + totalMargin);
+
+            scrollToComponent((JComponent) getLeftBox().getComponent(0), getLeftScroller(), 5);
+        });
 
         getLeftBox().revalidate();
         getLeftBox().repaint();
     }
 
-    public FixturesPageStatLine getLine(Match match) {
-        for (FixturesPageStatLine eachLine : currentMatchLines) {
-            if (eachLine.getMatch().toString().equals(match.toString())) {
-                return eachLine;
-            }
-        }
-        System.out.println("ERROR You haven't found your match line");
-        return new FixturesPageStatLine(match);
-    }
+//    public FixturesPageStatLine getLine(Match match) {
+//        for (FixturesPageStatLine eachLine : currentMatchLines) {
+//            if (eachLine.getMatch().toString().equals(match.toString())) {
+//                return eachLine;
+//            }
+//        }
+//        System.out.println("ERROR You haven't found your match line");
+//        return new FixturesPageStatLine(match);
+//    }
 
     @Override
     protected boolean directionEqualsPage(String direction) {
@@ -323,6 +358,14 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
 
     public void setMyCompetitions(List<Competition> myCompetitions) {
         this.myCompetitions = myCompetitions;
+    }
+
+    public void addToMyCompetitions(Competition competition) {
+        myCompetitions.add(competition);
+
+        if (!otherCompetitions.contains(competition)) {
+            otherCompetitions.add(competition);
+        }
     }
 
     public List<Competition> getOtherCompetitions() {
@@ -342,5 +385,13 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         getLeftBox().removeAll();
         getLeftBox().revalidate();
         getLeftBox().repaint();
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }

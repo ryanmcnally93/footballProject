@@ -27,7 +27,7 @@ public class UsersMatch extends Match {
 
     // Used to map Matches to UsersMatches when viewing on Fixtures Page
     public UsersMatch(Match match) {
-        super(match.getHome(), match.getAway(), match.getLeague(), match.getDateTime(), match.getMatchWeek());
+        super(match.getHome(), match.getAway(), match.getLeague(), match.getDateTime(), match.getRoundNumber());
         setSpeed(match.getSpeed());
         setAwaygk(match.getAwaygk());
         setHomegk(match.getHomegk());

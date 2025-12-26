@@ -1,5 +1,7 @@
 package Interfaces;
 
+import visuals.CustomizedElements.OptionBar;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -27,8 +29,13 @@ public interface Hoverable {
         return false;
     }
 
-    default void setSelected(boolean selected) {
+    default void setSelected(boolean selected) {}
+
+    default boolean isDisabled() {
+        return false;
     }
+
+    default void setDisabled(boolean disabled) {}
 
     // Called when hover enters/exits — can be overridden
     default void onHoverEnter(JComponent c) {}
@@ -39,7 +46,10 @@ public interface Hoverable {
     default void paintHoverableBackground(Graphics g, JComponent c, Color background, int arcWidth, int arcHeight, boolean borderWanted, boolean fillWanted) {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        if (fillWanted) {
+        if (isDisabled()) {
+            g2.setColor(Color.LIGHT_GRAY);
+            g2.fillRoundRect(0, 0, c.getWidth(), c.getHeight(), arcWidth, arcHeight);
+        } else if (fillWanted) {
             g2.setColor(background);
             g2.fillRoundRect(0, 0, c.getWidth(), c.getHeight(), arcWidth, arcHeight);
         }
@@ -63,7 +73,7 @@ public interface Hoverable {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                if (isSelected()) return;
+                if (isSelected() || isDisabled()) return;
                 onHoverEnter(component);
                 component.setBackground(thirdly);
                 for (Component childComponent : component.getComponents()) {
@@ -82,7 +92,7 @@ public interface Hoverable {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                if (isSelected()) return;
+                if (isSelected() || isDisabled()) return;
                 onHoverExit(component);
                 component.setBackground(primary);
                 for (Component childComponent : component.getComponents()) {
@@ -112,7 +122,7 @@ public interface Hoverable {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                if (isSelected()) return;
+                if (isSelected() || isDisabled()) return;
                 onHoverEnter(button);
                 currentIcon = getOppositeImage(currentIcon);
                 button.setIcon(currentIcon);
@@ -125,7 +135,7 @@ public interface Hoverable {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                if (isSelected()) return;
+                if (isSelected() || isDisabled()) return;
                 onHoverExit(button);
                 currentIcon = getOppositeImage(currentIcon);
                 button.setIcon(currentIcon);

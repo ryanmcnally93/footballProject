@@ -160,4 +160,10 @@ public class OptionBar extends RightBoxBar {
     public void setOnFallbackTriggered(Runnable onFallbackTriggered) {
         this.onFallbackTriggered = onFallbackTriggered;
     }
+
+    @Override
+    public void disableBar() {
+        super.disableBar();
+        getOptionField().setOptions(new ArrayList<>(List.of("ALL")));
+    }
 }

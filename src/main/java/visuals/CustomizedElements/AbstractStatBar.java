@@ -36,6 +36,12 @@ public abstract class AbstractStatBar extends RoundedPanel {
         return label;
     }
 
+    protected JLabel createColumn(String text, int width, boolean usersMatch) {
+        JLabel label = createColumn(text, width);
+        label.setForeground(usersMatch ? getGreenCharcoal() : getCharcoal());
+        return label;
+    }
+
     protected CustomizedButton createColumn(ImageIcon icon, int width) {
         CustomizedButton button = new CustomizedButton(icon);
         button.setBorderPainted(false);

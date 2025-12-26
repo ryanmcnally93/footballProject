@@ -49,7 +49,7 @@ public class Match {
 	private ArrayList<PlayerStatsBoxOnRatingsPage> firstTeamsPlayersBoxes, secondTeamsPlayersBoxes;
 	private UsersMatch simulatedMatch;
 	private Map<Footballer, Integer> homeRatings, awayRatings;
-    private int matchWeek;
+    private int roundNumber;
     private final AtomicBoolean resultEventCreated = new AtomicBoolean(false);
 
 	public Match() {}
@@ -82,7 +82,7 @@ public class Match {
 		this.matchEvents = new ArrayList<>();
 		this.homeRatings = new HashMap<>();
 		this.awayRatings = new HashMap<>();
-        this.matchWeek = simulatedMatch.getMatchWeek();
+        this.roundNumber = simulatedMatch.getRoundNumber();
 	}
 
 	public Match(Team home, Team away) {
@@ -130,7 +130,7 @@ public class Match {
 		this.awayRatings = new HashMap<>();
 	}
 
-	public Match(Team home, Team away, League league, LocalDateTime dateTime, int matchWeek) {
+	public Match(Team home, Team away, League league, LocalDateTime dateTime, int roundNumber) {
 		this.home = home;
 		this.away = away;
 		this.stadium = home.getStadium();
@@ -154,7 +154,7 @@ public class Match {
 		this.awayShotsOn = 0;
 		this.homeRatings = new HashMap<>();
 		this.awayRatings = new HashMap<>();
-        this.matchWeek = matchWeek;
+        this.roundNumber = roundNumber;
 	}
 
 	public void updateAllMatchesPage(){
@@ -1000,12 +1000,12 @@ public class Match {
 		this.awayRatings = awayRatings;
 	}
 
-    public int getMatchWeek() {
-        return matchWeek;
+    public int getRoundNumber() {
+        return roundNumber;
     }
 
-    public void setMatchWeek(int matchWeek) {
-        this.matchWeek = matchWeek;
+    public void setRoundNumber(int roundNumber) {
+        this.roundNumber = roundNumber;
     }
 
     public void markFinished() {

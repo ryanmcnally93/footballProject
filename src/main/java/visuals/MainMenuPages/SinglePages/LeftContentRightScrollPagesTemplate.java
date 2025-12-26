@@ -6,7 +6,6 @@ import visuals.ScheduleFrames.Scheduler;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
@@ -222,20 +221,14 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
         return button;
     }
 
-    public void scrollToButton(JButton button) {
-        Rectangle bounds = button.getBounds();
-        Point location = SwingUtilities.convertPoint(button.getParent(), bounds.getLocation(), getRightScroller().getViewport());
+    public void scrollToComponent(JComponent component, JScrollPane scrollPane, int offset) {
+        Rectangle bounds = component.getBounds();
+        JViewport viewport = scrollPane.getViewport();
+        Point location = SwingUtilities.convertPoint(component.getParent(), bounds.getLocation(), viewport);
+        location.y -= 5;
         bounds.setLocation(location);
 
-        getRightScroller().getViewport().scrollRectToVisible(bounds);
-    }
-
-    public void scrollToButton(AbstractStatBar statBar) {
-        Rectangle bounds = statBar.getBounds();
-        Point location = SwingUtilities.convertPoint(statBar.getParent(), bounds.getLocation(), getRightScroller().getViewport());
-        bounds.setLocation(location);
-
-        getLeftScroller().getViewport().scrollRectToVisible(bounds);
+        viewport.scrollRectToVisible(bounds);
     }
 
     public JPanel getLeftBox() {
@@ -360,7 +353,7 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
         for (int i = 0; i < count; i++) {
             Component comp = rightBox.getComponent(i);
 
-            if ((direction.equals("left") || direction.equals("right")) && comp instanceof OptionBar optionBar && optionBar.isSelected()) {
+            if ((direction.equals("left") || direction.equals("right")) && comp instanceof OptionBar optionBar && optionBar.isSelected() && !optionBar.isDisabled()) {
                 if (direction.equals("right")) {
                     optionBar.getOptionField().moveForward();
                 } else {
@@ -372,10 +365,6 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
             }
 
             if (comp instanceof RightBoxBar playerBar && playerBar.isSelected()) {
-                // Deselect current
-                playerBar.setAsSelected(false);
-                playerBar.revalidate();
-                playerBar.repaint();
 
                 int nextIndex;
                 if (direction.equals("down")) {
@@ -387,8 +376,17 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
                 }
 
                 RightBoxBar nextBar = (RightBoxBar) rightBox.getComponent(nextIndex);
+
+                if (nextBar instanceof OptionBar optionBar && optionBar.isDisabled()) return;
+
+                // Deselect current
+                playerBar.setAsSelected(false);
+                playerBar.revalidate();
+                playerBar.repaint();
+
+                // Select next
                 nextBar.setAsSelected(true);
-                scrollToButton(nextBar);
+                scrollToComponent(nextBar, rightScroller, 0);
                 nextBar.revalidate();
                 nextBar.repaint();
 
