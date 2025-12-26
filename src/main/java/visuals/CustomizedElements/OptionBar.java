@@ -165,5 +165,7 @@ public class OptionBar extends RightBoxBar {
     public void disableBar() {
         super.disableBar();
         getOptionField().setOptions(new ArrayList<>(List.of("ALL")));
+        revalidate();
+        repaint();
     }
 }

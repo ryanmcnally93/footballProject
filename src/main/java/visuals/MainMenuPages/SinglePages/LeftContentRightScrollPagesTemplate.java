@@ -381,14 +381,10 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
 
                 // Deselect current
                 playerBar.setAsSelected(false);
-                playerBar.revalidate();
-                playerBar.repaint();
 
                 // Select next
                 nextBar.setAsSelected(true);
                 scrollToComponent(nextBar, rightScroller, 0);
-                nextBar.revalidate();
-                nextBar.repaint();
 
                 // Update reference
                 rightBarSelected(nextBar);

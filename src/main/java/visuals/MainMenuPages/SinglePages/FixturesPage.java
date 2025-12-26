@@ -26,10 +26,10 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
     private List<Competition> myCompetitions = new ArrayList<>();
     private List<Competition> otherCompetitions = new ArrayList<>();
     private ArrayList<FixturesPageStatLine> currentMatchLines;
-    List<OptionBar> createdBars;
+    private List<OptionBar> createdBars;
+    private OptionBar firstOption, secondOption, thirdOption;
     private boolean firstTime = true;
     private static HashMap<String, List<String>> initialOptions;
-    private int baseHeight;
     private boolean fixturesUpdateScheduled = false;
     private Team team;
 
@@ -53,6 +53,10 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
                 }
         );
 
+        firstOption = createdBars.getFirst();
+        secondOption = createdBars.get(1);
+        thirdOption = createdBars.get(2);
+
         buildDependencyMaps();
         currentMatchLines = new ArrayList<>();
 
@@ -70,7 +74,6 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         getLeftHeader().add(titleLine);
         getLeftBox().revalidate();
         getLeftBox().repaint();
-        baseHeight = (int) getLeftBox().getPreferredSize().getHeight();
     }
 
     @Override
@@ -168,15 +171,15 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         }
 
         // Add listeners to the optionBars for when they change value
-        CustomizedOptionField chosenField = createdBars.get(2).getOptionField();
+        CustomizedOptionField chosenField = thirdOption.getOptionField();
         if (firstTime) {
             assignListenerToOptionFields(chosenField);
-            createdBars.getFirst().setOnFallbackTriggered(this::clearFixtures);
-            createdBars.get(1).setOnFallbackTriggered(this::clearFixtures);
+            firstOption.setOnFallbackTriggered(this::clearFixtures);
+            secondOption.setOnFallbackTriggered(this::clearFixtures);
             firstTime = false;
         } else {
             // Calling the listener to populate the first group of fixtures
-            createdBars.getFirst().onSelectionChanged();
+            firstOption.onSelectionChanged();
             chosenField.triggerUpdate();
         }
     }
@@ -190,11 +193,9 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
             fixturesUpdateScheduled = false;
 
             if (currentMatchLines != null) {
-                OptionBar firstBar = createdBars.getFirst();
-                String topChoice = getCurrentValueFromOptionBar(firstBar);
-                OptionBar secondBar = createdBars.get(1);
-                String competitionName = getCurrentValueFromOptionBar(secondBar);
-                String roundName = getCurrentValueFromOptionBar(createdBars.get(2));
+                String topChoice = getCurrentValueFromOptionBar(firstOption);
+                String competitionName = getCurrentValueFromOptionBar(secondOption);
+                String roundName = getCurrentValueFromOptionBar(thirdOption);
 
                 updateDisplayedFixtures(topChoice, competitionName, roundName);
             }
@@ -223,17 +224,11 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         if (selectedCompetition == null) return;
 
         if (topChoice.equals("My Fixtures")) {
-            if (createdBars.get(2).isSelected()) {
-                createdBars.get(2).setAsSelected(false);
-
-                // This isn't working?
-                createdBars.getFirst().setAsSelected(true);
-                createdBars.getFirst().revalidate();
-                createdBars.getFirst().repaint();
+            if (thirdOption.isSelected()) {
+                thirdOption.setAsSelected(false);
+                firstOption.setAsSelected(true);
             }
-            createdBars.get(2).disableBar();
-            createdBars.get(2).revalidate();
-            createdBars.get(2).repaint();
+            thirdOption.disableBar();
 
             Map<String, Match> userMatches = selectedCompetition.getTeamsFixtures(team);
 
@@ -243,9 +238,7 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
             }
             organiseMyFixtures();
         } else {
-            createdBars.get(2).enableBar();
-            createdBars.get(2).revalidate();
-            createdBars.get(2).repaint();
+            thirdOption.enableBar();
 
             int roundInt = selectedCompetition.getRoundNames().indexOf(roundName);
             Map<String, Match> matchesForRound = selectedCompetition.getMatchWeeksMatches().get(roundInt + 1);
@@ -337,15 +330,15 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         getLeftBox().repaint();
     }
 
-//    public FixturesPageStatLine getLine(Match match) {
-//        for (FixturesPageStatLine eachLine : currentMatchLines) {
-//            if (eachLine.getMatch().toString().equals(match.toString())) {
-//                return eachLine;
-//            }
-//        }
-//        System.out.println("ERROR You haven't found your match line");
-//        return new FixturesPageStatLine(match);
-//    }
+    public FixturesPageStatLine getLine(Match match) {
+        for (FixturesPageStatLine eachLine : currentMatchLines) {
+            if (eachLine.getMatch().toString().equals(match.toString())) {
+                return eachLine;
+            }
+        }
+
+        throw new IllegalArgumentException("ERROR You haven't found your match line");
+    }
 
     @Override
     protected boolean directionEqualsPage(String direction) {

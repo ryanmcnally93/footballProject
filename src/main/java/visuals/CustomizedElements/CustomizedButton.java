@@ -139,5 +139,7 @@ public class CustomizedButton extends JButton implements Hoverable {
 
     public void enableBar() {
         this.disabled = false;
+        revalidate();
+        repaint();
     }
 }

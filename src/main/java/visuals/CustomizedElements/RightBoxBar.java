@@ -42,6 +42,8 @@ public class RightBoxBar extends CustomizedButton {
             setForeground(getSecondaryColor());
             setBackground(getPrimaryColor());
         }
+        revalidate();
+        repaint();
     }
 
 }
