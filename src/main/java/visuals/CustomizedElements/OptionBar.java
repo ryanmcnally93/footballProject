@@ -27,6 +27,7 @@ public class OptionBar extends RightBoxBar {
 
         optionField.setOnClickLeft(this::updateOptionsBackward);
         optionField.setOnClickRight(this::updateOptionsForward);
+        optionField.setOnClickWithIndex(this::updateOptionsWithIndex);
     }
 
     public void setOptionsMap(Map<String, List<String>> map) {
@@ -47,6 +48,11 @@ public class OptionBar extends RightBoxBar {
         currentIndex = 0;
         optionField.setOptions(newOptions);
         optionField.setCurrentOption(0);
+    }
+
+    public void updateOptionsWithIndex() {
+        currentIndex = optionField.getCurrentOption();
+        onSelectionChanged();
     }
 
     public void updateOptionsForward() {

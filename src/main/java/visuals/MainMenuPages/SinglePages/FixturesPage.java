@@ -210,6 +210,16 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         return optionBar.getOptionField().getOptions().get(optionBar.getOptionField().getCurrentOption());
     }
 
+    public void directToMatchPage(Match match) {
+        firstOption.getOptionField().moveToIndex(1);
+        int competitionIndex = secondOption.getOptionField().getOptions().indexOf(match.getLeague().getName());
+        secondOption.getOptionField().moveToIndex(competitionIndex);
+        thirdOption.getOptionField().moveToIndex(match.getRoundNumber() - 1);
+
+        requestFixturesUpdate();
+    }
+
+    // This changes the fixtures on display, does not change the OptionBars
     private void updateDisplayedFixtures(String topChoice, String competitionName, String roundName) {
         clearFixtures();
         Competition selectedCompetition = null;

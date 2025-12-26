@@ -17,7 +17,7 @@ public class CustomizedOptionField extends JComponent {
 	private CustomizedButton left, right;
     private int fontSize;
     private boolean borderRequired;
-    private Runnable onClickLeft, onClickRight;
+    private Runnable onClickLeft, onClickRight, onClickWithIndex;
     private Consumer<String> onSelectionChange;
 
 	public CustomizedOptionField(List<String> options, int width, int offset, int fontSize, boolean borderRequired) {
@@ -56,6 +56,37 @@ public class CustomizedOptionField extends JComponent {
 		repaint();
 	}
 
+    public void moveToIndex(int index) {
+        if (currentOption == index) return;
+        if (index >= (options.size() - 1)) return;
+        if (index < 0) return;
+
+        currentOption = index;
+        // Left arrow
+        if (currentOption > 0) {
+            if (!isAncestorOf(left)) add(left);
+        } else {
+            if (isAncestorOf(left)) remove(left);
+        }
+
+        // Right arrow
+        if (currentOption < options.size() - 1) {
+            if (!isAncestorOf(right)) add(right);
+        } else {
+            if (isAncestorOf(right)) remove(right);
+        }
+
+        if (onClickWithIndex != null) {
+            onClickWithIndex.run();
+        }
+
+        if (onSelectionChange != null) {
+            triggerUpdate();
+        }
+
+        repaint();
+    }
+
 	public void moveForward() {
 		if (currentOption < (options.size() - 1)) {
 			currentOption++;
@@ -65,6 +96,7 @@ public class CustomizedOptionField extends JComponent {
 			if (currentOption == (options.size() - 1)) {
 				remove(right);
 			}
+
             if (onClickRight != null) {
                 onClickRight.run();
             }
@@ -198,5 +230,13 @@ public class CustomizedOptionField extends JComponent {
 
     public void setCurrentOption(int currentOption) {
         this.currentOption = currentOption;
+    }
+
+    public Runnable getOnClickWithIndex() {
+        return onClickWithIndex;
+    }
+
+    public void setOnClickWithIndex(Runnable onClickWithIndex) {
+        this.onClickWithIndex = onClickWithIndex;
     }
 }

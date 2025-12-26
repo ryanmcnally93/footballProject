@@ -568,6 +568,7 @@ public class Match {
 					scheduler.getEvents().add(simulatedResult);
 
 					continueToScheduler();
+                    scheduler.getFixturesPage().directToMatchPage(this);
 					simulated = false;
 				}
 			}
@@ -597,6 +598,7 @@ public class Match {
 				}
 			}
 			scheduler.getFirstTeam().chooseLinesToView(scheduler.getTeam().getFormation().getPositionOrder());
+            scheduler.getFixturesPage().directToMatchPage(this);
 		}
 		// Give 1st place message if user is now 1st
 		if(getLeague().getLeagueTable().getLine(getScheduler().getTeam()).getPosition() == 1) {
@@ -618,11 +620,12 @@ public class Match {
 				CompletableFuture.runAsync(() -> eachMatch.startMatch("instant"));
 			}
             SwingUtilities.invokeLater(() -> {
-               getScheduler().getFixturesPage().requestFixturesUpdate();
+                // Complete checks to see if we are on the same page for all 3 of these calls
+                getScheduler().getFixturesPage().requestFixturesUpdate();
             });
 		}
 
-		// Set the back button on tactics cardmap to normal
+		// Set the back button on tactics cardMap to normal
 		for (Map.Entry<String, JPanel> eachTacticsPage : getScheduler().getTacticsMap().entrySet()) {
 			((TacticsPageTemplate) eachTacticsPage.getValue()).setFromScheduler(true);
 		}

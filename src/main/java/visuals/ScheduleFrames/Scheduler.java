@@ -915,14 +915,14 @@ public class Scheduler extends GamePanel {
 		for(Match backgroundMatch : todaysGames) {
 			if (getMatch() != null && getMatch().getDateTime().toLocalDate().isEqual(date.toLocalDate())) {
 				if (backgroundMatch.getDateTime().isBefore(getMatch().getDateTime())) {
-					// We add this to the usersmatch earlier matches list
+					// We add this to the usersMatch earlier matches list
 					getMatch().appendEarlierMatches(backgroundMatch);
 					CompletableFuture.runAsync(() -> backgroundMatch.startMatch("instant"));
                     SwingUtilities.invokeLater(() -> {
                        getFixturesPage().requestFixturesUpdate();
                     });
 				} else if (backgroundMatch.getDateTime().isEqual(getMatch().getDateTime())) {
-					// Make sure we add this to the usersmatch too
+					// Make sure we add this to the usersMatch too
 					getMatch().appendSameDayMatches(backgroundMatch);
 					backgroundMatch.appendSameDayMatches(getMatch());
 				} else {
