@@ -58,19 +58,19 @@ public class CustomizedOptionField extends JComponent {
 
     public void moveToIndex(int index) {
         if (currentOption == index) return;
-        if (index >= (options.size() - 1)) return;
+        if (index > (options.size() - 1)) return;
         if (index < 0) return;
 
         currentOption = index;
         // Left arrow
-        if (currentOption > 0) {
+        if (currentOption > 0 && !getForeground().equals(charcoal)) {
             if (!isAncestorOf(left)) add(left);
         } else {
             if (isAncestorOf(left)) remove(left);
         }
 
         // Right arrow
-        if (currentOption < options.size() - 1) {
+        if (currentOption < options.size() - 1 && !getForeground().equals(charcoal)) {
             if (!isAncestorOf(right)) add(right);
         } else {
             if (isAncestorOf(right)) remove(right);

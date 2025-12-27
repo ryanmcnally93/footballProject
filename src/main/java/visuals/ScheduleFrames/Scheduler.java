@@ -919,7 +919,7 @@ public class Scheduler extends GamePanel {
 					getMatch().appendEarlierMatches(backgroundMatch);
 					CompletableFuture.runAsync(() -> backgroundMatch.startMatch("instant"));
                     SwingUtilities.invokeLater(() -> {
-                       getFixturesPage().requestFixturesUpdate();
+                       getFixturesPage().checkIfFixturesNeedToBeRefreshed(backgroundMatch);
                     });
 				} else if (backgroundMatch.getDateTime().isEqual(getMatch().getDateTime())) {
 					// Make sure we add this to the usersMatch too
@@ -932,7 +932,7 @@ public class Scheduler extends GamePanel {
 			} else {
 				CompletableFuture.runAsync(() -> backgroundMatch.startMatch("instant"));
                 SwingUtilities.invokeLater(() -> {
-                    getFixturesPage().requestFixturesUpdate();
+                    getFixturesPage().checkIfFixturesNeedToBeRefreshed(backgroundMatch);
                 });
 			}
 		}

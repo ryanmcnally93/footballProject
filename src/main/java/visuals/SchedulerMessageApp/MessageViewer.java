@@ -13,6 +13,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 public class MessageViewer extends GamePanel {
@@ -95,7 +96,7 @@ public class MessageViewer extends GamePanel {
                     }
                     SwingUtilities.invokeLater(() -> {
                         addDismissButtonAfterChecks(event, todaysEvents);
-                        scheduler.getFixturesPage().requestFixturesUpdate();
+                        scheduler.getFixturesPage().checkIfFixturesNeedToBeRefreshed(event.getMatch());
                     });
                 }
 
@@ -291,7 +292,8 @@ public class MessageViewer extends GamePanel {
     }
 
     public void addAdvanceButton() {
-        if (!buttonContainer.isAncestorOf(advance)) {
+        if (Arrays.stream(buttonContainer.getComponents())
+                .noneMatch(c -> c instanceof JButton)) {
             buttonContainer.add(advance);
             buttonContainer.add(Box.createHorizontalGlue());
         }

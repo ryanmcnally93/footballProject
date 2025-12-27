@@ -621,7 +621,7 @@ public class Match {
 			}
             SwingUtilities.invokeLater(() -> {
                 // Complete checks to see if we are on the same page for all 3 of these calls
-                getScheduler().getFixturesPage().requestFixturesUpdate();
+                getScheduler().getFixturesPage().checkIfFixturesNeedToBeRefreshed(this);
             });
 		}
 

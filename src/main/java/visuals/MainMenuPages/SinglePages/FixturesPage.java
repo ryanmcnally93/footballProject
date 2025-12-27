@@ -184,6 +184,13 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         }
     }
 
+    public void checkIfFixturesNeedToBeRefreshed(Match match) {
+        // We only want to refresh a fixture line if we are on its page
+        if (match.getLeague().getName().equals(getCurrentValueFromOptionBar(secondOption)) && match.getLeague().getRoundNames().get(match.getRoundNumber()).equals(getCurrentValueFromOptionBar(thirdOption))) {
+            requestFixturesUpdate();
+        }
+    }
+
     public void requestFixturesUpdate() {
         if (fixturesUpdateScheduled) return;
 
@@ -216,7 +223,7 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         secondOption.getOptionField().moveToIndex(competitionIndex);
         thirdOption.getOptionField().moveToIndex(match.getRoundNumber() - 1);
 
-        requestFixturesUpdate();
+        checkIfFixturesNeedToBeRefreshed(match);
     }
 
     // This changes the fixtures on display, does not change the OptionBars
