@@ -46,7 +46,7 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
                 initialOptions,
                 (option, i) -> option.getFirst(),
                 (option, title) -> {
-                    OptionBar bar = new OptionBar(option, getBarHeights(initialOptions), initialOptions);
+                    OptionBar bar = new OptionBar(option, getBarHeights(initialOptions));
                     createdBars.add(bar);
                     return bar;
                 }

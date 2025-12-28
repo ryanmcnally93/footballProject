@@ -37,7 +37,7 @@ public class PlayerSearchPage extends LeftContentRightScrollPagesTemplate {
                 initialOptions,
                 (option, i) -> option.getFirst(),
                 (option, title) -> {
-                    OptionBar bar = new OptionBar(option, getBarHeights(initialOptions), initialOptions);
+                    OptionBar bar = new OptionBar(option, getBarHeights(initialOptions));
                     createdBars.add(bar);
                     return bar;
                 }
@@ -174,7 +174,7 @@ public class PlayerSearchPage extends LeftContentRightScrollPagesTemplate {
         //
         List<Footballer> resultList = sourceList.stream()
                 .filter(p -> p.getLikedPosition().equals(chosenPosition))
-                .filter(p -> isInGroup(p.getAge(), chosenAge))
+                .filter(p -> isInGroup(p.getCurrentAge(), chosenAge))
                 .filter(p -> isInGroup(p.getValue(), chosenValue))
                 .toList();
 
@@ -215,7 +215,10 @@ public class PlayerSearchPage extends LeftContentRightScrollPagesTemplate {
 
             setPermanentWidthAndHeight(getLeftBox(), 621, height + totalMargin);
 
-            scrollToComponent((JComponent) getLeftBox().getComponent(0), getLeftScroller(), 5);
+            Component[] components = getLeftBox().getComponents();
+            if (components.length > 0 && components[0] instanceof JComponent component) {
+                scrollToComponent(component, getLeftScroller(), 5);
+            }
         });
 
         getLeftBox().revalidate();

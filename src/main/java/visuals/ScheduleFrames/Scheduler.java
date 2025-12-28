@@ -58,7 +58,7 @@ import java.util.concurrent.CompletableFuture;
 public class Scheduler extends GamePanel {
 
 	// Scheduler Components
-	private LocalDateTime date;
+	private static LocalDateTime date;
 	private JPanel eventsBox, southMiddle, menuBox, header, datePanel, mainPanel;
 	private TacticsPanel tacticsPanel;
 	private CustomizedButton menuButton, closeButton, backgroundMover, trainingButton, playerSearchButton, standingsButton, myTeamButton, myClubButton, fixturesButton, myProfileButton;
@@ -1060,7 +1060,7 @@ public class Scheduler extends GamePanel {
 		System.out.println(events);
 	}
 
-	public LocalDateTime getDate() {
+	public static LocalDateTime getDate() {
 		return date;
 	}
 

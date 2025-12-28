@@ -43,8 +43,8 @@ public class PlayerSearchPageStatLine extends AbstractStatBar {
     @Override
     protected void buildColumns() {
         createColumn(player.getLikedPosition(), 50);
-        createColumn(player.getName(), 230);
-        createColumn(String.valueOf(player.getAge()), 50);
+        createColumn(player.getName(), 230, SwingConstants.LEFT);
+        createColumn(String.valueOf(player.getCurrentAge()), 50);
         createColumn(String.valueOf(player.getValue()), 120);
         createColumn(String.valueOf(player.getOVR()), 50);
         createColumn("CR", 50); // player.getTeam().getCrest();

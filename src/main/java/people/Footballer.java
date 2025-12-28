@@ -1,6 +1,7 @@
 package people;
 
 import entities.Team;
+import visuals.ScheduleFrames.Scheduler;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -346,7 +347,8 @@ public class Footballer extends Individual {
         return attributes.get("Date Of Birth");
     }
 
-    public int getCurrentAge(LocalDate asOfDate) {
+    public int getCurrentAge() {
+        LocalDate currentDate = Scheduler.getDate().toLocalDate();
         int dobInt = getDob();
 
         // Extract year, month, day from the int yyyymmdd
@@ -356,12 +358,12 @@ public class Footballer extends Individual {
 
         LocalDate dob = LocalDate.of(year, month, day);
 
-        if (asOfDate.isBefore(dob)) {
+        if (currentDate.isBefore(dob)) {
             throw new IllegalArgumentException("Date to calculate age cannot be before date of birth");
         }
 
         // Calculate age using Period.between
-        return Period.between(dob, asOfDate).getYears();
+        return Period.between(dob, currentDate).getYears();
     }
 
     private int getDribbling() {
