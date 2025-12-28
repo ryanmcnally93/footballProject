@@ -29,7 +29,6 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
     private List<OptionBar> createdBars;
     private OptionBar firstOption, secondOption, thirdOption;
     private boolean firstTime = true;
-    private static HashMap<String, List<String>> initialOptions;
     private boolean fixturesUpdateScheduled = false;
     private Team team;
 
@@ -47,7 +46,7 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
                 initialOptions,
                 (option, i) -> option.getFirst(),
                 (option, title) -> {
-                    OptionBar bar = new OptionBar(option, getBarHeights(initialOptions));
+                    OptionBar bar = new OptionBar(option, getBarHeights(initialOptions), initialOptions);
                     createdBars.add(bar);
                     return bar;
                 }
@@ -269,7 +268,8 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
         }
     }
 
-    private HashMap<String, List<String>> createInitialOptions() {
+    @Override
+    public HashMap<String, List<String>> createInitialOptions() {
         HashMap<String, List<String>> options = new HashMap<>();
 
         options.put("First Options", List.of("My Fixtures", "All Fixtures"));
@@ -384,10 +384,6 @@ public class FixturesPage extends LeftContentRightScrollPagesTemplate {
 
     public void setOtherCompetitions(List<Competition> otherCompetitions) {
         this.otherCompetitions = otherCompetitions;
-    }
-
-    public static HashMap<String, List<String>> getInitialOptions() {
-        return initialOptions;
     }
 
     private void clearFixtures() {

@@ -2,6 +2,7 @@ package visuals.ScheduleFrames;
 
 import entities.*;
 import gameSetup.GameWindow;
+import people.Footballer;
 import visuals.CustomizedElements.CustomizedButton;
 import visuals.CustomizedElements.CustomizedTitle;
 import visuals.CustomizedElements.GamePanel;
@@ -385,6 +386,12 @@ public class Scheduler extends GamePanel {
 		fixturesPage = new FixturesPage(this);
         fixturesPage.setTeam(team);
 		playerSearchPage = new PlayerSearchPage(this);
+        for (Map.Entry<String, Team> eachTeam : league.getTeams().entrySet()) {
+            for (Map.Entry<String, Footballer> eachPlayer : eachTeam.getValue().getPlayers().entrySet()) {
+                playerSearchPage.getAllFootballers().add(eachPlayer.getValue());
+            }
+        }
+
 		myTeamPage = new MyTeamPage(this);
 		trainingPage = new TrainingPage(this);
 
@@ -622,6 +629,14 @@ public class Scheduler extends GamePanel {
 
 	public void showTodaysEvents(ArrayList<Events> todaysEvents){
 		System.out.println("Todays Events: " + todaysEvents);
+
+        // If there is a match today, we want to move fixtures page to the page of our fixture
+        todaysEvents.stream()
+                .filter(e -> "Match".equals(e.getType()))
+                .findFirst()
+                .ifPresent(e ->
+                        getFixturesPage().directToMatchPage(e.getMatch())
+                );
 
 		// Find events to remove and remove them
         todaysEvents.removeIf(Events::getEventHasBeenShownToUser);

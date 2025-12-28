@@ -1,6 +1,8 @@
 package visuals.CustomizedElements;
 
 import visuals.MainMenuPages.SinglePages.FixturesPage;
+import visuals.MainMenuPages.SinglePages.LeftContentRightScrollPagesTemplate;
+import visuals.MainMenuPages.SinglePages.PlayerSearchPage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,12 +15,14 @@ public class OptionBar extends RightBoxBar {
     private OptionBar dependant;
     private Runnable onFallbackTriggered;
     private List<String> options;
+    private Map<String, List<String>> initialOptions;
     private HashMap<String, List<String>> optionsMap = new HashMap<>();
 
     private int currentIndex = 0;
 
-    public OptionBar(List<String> options, int size) {
+    public OptionBar(List<String> options, int size, Map<String, List<String>> initialOptions) {
         super(20);
+        this.initialOptions = initialOptions;
         this.options = new ArrayList<>(options);
 
         GamePanel.setPermanentHeight(this, size);
@@ -95,12 +99,14 @@ public class OptionBar extends RightBoxBar {
                     onFallbackTriggered.run();
                 }
 
-                boolean isMyOrAllFixtures =
-                        selectedValue.equals("My Fixtures") || selectedValue.equals("All Fixtures");
-
-                options = FixturesPage.getInitialOptions().get(
-                        isMyOrAllFixtures ? "Second Options" : "Third Options"
-                );
+                // Screwing up SELECT functionality on fixtures page
+                // Index 0 out of bounds for length 0
+                for (Map.Entry<String, List<String>> optionList : initialOptions.entrySet()) {
+                    options = optionList.getValue().stream()
+                            .filter(o -> o.contains(selectedValue))
+                            .findFirst()
+                            .stream().toList();
+                }
             }
 
             dependant.setOptions(options);

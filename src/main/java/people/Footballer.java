@@ -491,4 +491,8 @@ public class Footballer extends Individual {
                         key -> String.valueOf(attributes.get(key))
                 ));
     }
+
+    public long getValue() {
+        return 9000000;
+    }
 }

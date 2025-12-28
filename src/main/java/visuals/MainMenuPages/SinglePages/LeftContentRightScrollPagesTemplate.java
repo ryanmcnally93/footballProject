@@ -21,6 +21,7 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
     private JScrollPane leftScroller, rightScroller;
     private Image backgroundImage;
     private Timer timer;
+    protected HashMap<String, List<String>> initialOptions;
     private boolean leftFocused, constantLeftHeader;
     private final Map<String, Rectangle> boundsByDirection = Map.ofEntries(
             Map.entry("down", new Rectangle(0, 0, 155, 20)),
@@ -455,5 +456,9 @@ public class LeftContentRightScrollPagesTemplate extends HeaderFooterAndCardMapT
 
     public void setConstantLeftHeader(boolean constantLeftHeader) {
         this.constantLeftHeader = constantLeftHeader;
+    }
+
+    public HashMap<String, List<String>> createInitialOptions() {
+        return null;
     }
 }
