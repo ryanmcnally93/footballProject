@@ -386,11 +386,14 @@ public class Scheduler extends GamePanel {
 		fixturesPage = new FixturesPage(this);
         fixturesPage.setTeam(team);
 		playerSearchPage = new PlayerSearchPage(this);
+        List<Footballer> players = new ArrayList<>();
         for (Map.Entry<String, Team> eachTeam : league.getTeams().entrySet()) {
             for (Map.Entry<String, Footballer> eachPlayer : eachTeam.getValue().getPlayers().entrySet()) {
-                playerSearchPage.getAllFootballers().add(eachPlayer.getValue());
+                players.add(eachPlayer.getValue());
             }
         }
+        playerSearchPage.getAllPlayers().put("England", players);
+        playerSearchPage.buildAllPlayersFlat();
 
 		myTeamPage = new MyTeamPage(this);
 		trainingPage = new TrainingPage(this);
@@ -901,6 +904,7 @@ public class Scheduler extends GamePanel {
 		// This will decide which matches are played on which week
 		if(date.toLocalDate().isEqual(LocalDate.of(year, 06, 05))) {
 			league.assignFixturesToWeekNumber();
+            playerSearchPage.updateDisplayedPlayers();
 		}
 
 		// This will assign times to matchweeks

@@ -17,6 +17,7 @@ public class Footballer extends Individual {
     // Value = Potential, Rating, Age (Derived from DOB)
 
 	public String likedPosition;
+    private String basePosition;
 	private Team team;
 	public String positionPlaced;
     Map<String, Integer> attributes;
@@ -52,6 +53,7 @@ public class Footballer extends Individual {
         this.attributes = attributes;
         this.stamina = 100; // Need to change to Match Fitness
         this.likedPosition = positionPlaced;
+        this.basePosition = positionPlaced.replaceAll("\\d+", "");
         this.positionPlaced = positionPlaced;
     }
 
@@ -515,5 +517,13 @@ public class Footballer extends Individual {
         }
 
         return "£" + value;
+    }
+
+    public String getBasePosition() {
+        return basePosition;
+    }
+
+    public void setBasePosition(String basePosition) {
+        this.basePosition = basePosition;
     }
 }

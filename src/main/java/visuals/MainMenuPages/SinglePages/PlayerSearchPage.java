@@ -1,11 +1,7 @@
 package visuals.MainMenuPages.SinglePages;
 
-import entities.Competition;
-import entities.Match;
-import entities.UsersMatch;
 import people.Footballer;
 import visuals.CustomizedElements.*;
-import visuals.MatchPages.MatchPageTemplate;
 import visuals.ScheduleFrames.Scheduler;
 import javax.swing.*;
 import java.awt.*;
@@ -14,14 +10,17 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PlayerSearchPage extends LeftContentRightScrollPagesTemplate {
 
-    private List<Footballer> allFootballers = new ArrayList<>();
+    private Map<String, List<Footballer>> allPlayers = new HashMap<>();
     private List<OptionBar> createdBars;
     private OptionBar firstOption, secondOption, thirdOption, fourthOption;
     private ArrayList<PlayerSearchPageStatLine> currentPlayerLines;
     private boolean firstTime = true;
+    private List<Footballer> allPlayersFlat;
+    private final AtomicInteger playerUpdateVersion = new AtomicInteger();
 
     public PlayerSearchPage(Scheduler scheduler) {
         super(scheduler, true);
@@ -153,37 +152,82 @@ public class PlayerSearchPage extends LeftContentRightScrollPagesTemplate {
     }
 
     private void assignListenerToOptionFields(CustomizedOptionField chosenField) {
-        chosenField.setOnSelectionChange(attribute -> updateDisplayedFixtures());
+        chosenField.setOnSelectionChange(attribute -> updateDisplayedPlayers());
     }
 
     private String getCurrentValueFromOptionBar(OptionBar optionBar) {
         return optionBar.getOptionField().getOptions().get(optionBar.getOptionField().getCurrentOption());
     }
 
-    private void updateDisplayedFixtures() {
+    public void buildAllPlayersFlat() {
+        allPlayersFlat = allPlayers.values()
+                .stream()
+                .flatMap(List::stream)
+                .toList();
+    }
+
+    public void updateDisplayedPlayers() {
+        int version = playerUpdateVersion.incrementAndGet();
+
         String chosenCountry = getCurrentValueFromOptionBar(firstOption);
         String chosenPosition = getCurrentValueFromOptionBar(secondOption);
         String chosenAge = getCurrentValueFromOptionBar(thirdOption);
         String chosenValue = getCurrentValueFromOptionBar(fourthOption);
+
+        boolean anyCountry = chosenCountry.contains("Any");
+        boolean anyPosition = chosenPosition.contains("Any");
+        boolean anyAge = chosenAge.contains("Any");
+        boolean anyValue = chosenValue.contains("Any");
+
         clearPlayers();
 
-        List<Footballer> sourceList = allFootballers;
+        new SwingWorker<List<Footballer>, Void>() {
 
-        // How can I alter this to add the following restrictions?
-        // We only want the 8 results with the highest 'value'
-        //
-        List<Footballer> resultList = sourceList.stream()
-                .filter(p -> p.getLikedPosition().equals(chosenPosition))
-                .filter(p -> isInGroup(p.getCurrentAge(), chosenAge))
-                .filter(p -> isInGroup(p.getValue(), chosenValue))
-                .toList();
+            @Override
+            protected List<Footballer> doInBackground() {
+                List<Footballer> sourceList =
+                        anyCountry
+                                ? allPlayersFlat   // pre-flattened
+                                : allPlayers.getOrDefault(chosenCountry, List.of());
 
-        for (Footballer player : resultList) {
-            PlayerSearchPageStatLine playerLine = new PlayerSearchPageStatLine(player);
-            updatePlayerLineListener(playerLine);
-            currentPlayerLines.add(playerLine);
-        }
-        organiseMyPlayers();
+                return sourceList.stream()
+                        .filter(p -> anyPosition
+                                || p.getBasePosition().equals(chosenPosition))
+                        .filter(p -> anyAge
+                                || isInGroup(p.getCurrentAge(), chosenAge))
+                        .filter(p -> anyValue
+                                || isInGroup(p.getValue(), chosenValue))
+                        .sorted(Comparator.comparingLong(Footballer::getValue).reversed())
+                        .limit(8)
+                        .toList();
+            }
+
+            @Override
+            protected void done() {
+                if (version != playerUpdateVersion.get()) return;
+                try {
+                    List<Footballer> resultList = get();
+
+                    if (resultList.isEmpty()) {
+                        getLeftBox().add(new NoResultsStatLine());
+                    } else {
+                        for (Footballer player : resultList) {
+                            PlayerSearchPageStatLine line =
+                                    new PlayerSearchPageStatLine(player);
+                            updatePlayerLineListener(line);
+                            currentPlayerLines.add(line);
+                        }
+                    }
+
+                    organiseMyPlayers();
+                    getLeftBox().revalidate();
+                    getLeftBox().repaint();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.execute();
     }
 
     private void organiseMyPlayers() {
@@ -300,11 +344,11 @@ public class PlayerSearchPage extends LeftContentRightScrollPagesTemplate {
         getLeftBox().repaint();
     }
 
-    public List<Footballer> getAllFootballers() {
-        return allFootballers;
+    public Map<String, List<Footballer>> getAllPlayers() {
+        return allPlayers;
     }
 
-    public void setAllFootballers(List<Footballer> allFootballers) {
-        this.allFootballers = allFootballers;
+    public void setAllPlayers(Map<String, List<Footballer>> allPlayers) {
+        this.allPlayers = allPlayers;
     }
 }
