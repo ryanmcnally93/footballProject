@@ -260,7 +260,12 @@ public class PlayerSearchPage extends LeftContentRightScrollPagesTemplate {
                 return Long.parseLong(s.replace("K", "")) * 1_000;
             }
             if (s.endsWith("MILL")) {
-                return Long.parseLong(s.replace("MILL", "")) * 1_000_000;
+                if (s.contains(".")) {
+                    double decimalValue = Double.parseDouble(s.replace("MILL", ""));
+                    return (long) (decimalValue * 1_000_000);
+                } else {
+                    return Long.parseLong(s.replace("MILL", "")) * 1_000_000;
+                }
             }
             return Long.parseLong(s);
         };

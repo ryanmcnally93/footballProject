@@ -497,4 +497,23 @@ public class Footballer extends Individual {
     public long getValue() {
         return 9000000;
     }
+
+    public String getFormattedValue() {
+        long value = 9000000L;
+        if (value >= 1_000_000) {
+            double millions = value / 1_000_000.0;
+            return "£" + (millions % 1 == 0
+                    ? String.format("%.0f MILL", millions)
+                    : String.format("%.1f MILL", millions));
+        }
+
+        if (value >= 1_000) {
+            double thousands = value / 1_000.0;
+            return "£" + (thousands % 1 == 0
+                    ? String.format("%.0f ,000", thousands)
+                    : String.format("%.1f ,000", thousands));
+        }
+
+        return "£" + value;
+    }
 }

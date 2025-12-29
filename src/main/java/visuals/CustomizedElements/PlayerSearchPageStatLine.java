@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDateTime;
 
+import static visuals.CustomizedElements.PlayerAttributeBox.getStatColour;
+
 public class PlayerSearchPageStatLine extends AbstractStatBar {
 
     private CustomizedButton selectIcon;
@@ -45,8 +47,8 @@ public class PlayerSearchPageStatLine extends AbstractStatBar {
         createColumn(player.getLikedPosition(), 50);
         createColumn(player.getName(), 230, SwingConstants.LEFT);
         createColumn(String.valueOf(player.getCurrentAge()), 50);
-        createColumn(String.valueOf(player.getValue()), 120);
-        createColumn(String.valueOf(player.getOVR()), 50);
+        createColumn(String.valueOf(player.getFormattedValue()), 120);
+        createColumn(String.valueOf(player.getOVR()), 50, getStatColour(player.getOVR()));
         createColumn("CR", 50); // player.getTeam().getCrest();
         ImageIcon buttonIcon = getIconWithSpecificSize("./src/main/java/visuals/Images/select_icon.png", "Select", 20);
         selectIcon = createColumn(buttonIcon, 30);

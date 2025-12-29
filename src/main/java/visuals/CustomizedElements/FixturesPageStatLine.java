@@ -51,12 +51,13 @@ public class FixturesPageStatLine extends AbstractStatBar {
 
     @Override
     protected void buildColumns() {
-        createColumn(leftText, 50, usersMatch); // Blank Box Column, save width as button 50px?
-        createColumn(match.getHome().getName(), 225, usersMatch);
+        Color colour = usersMatch ? getGreenCharcoal() : getCharcoal();
+        createColumn(leftText, 50, colour); // Blank Box Column, save width as button 50px?
+        createColumn(match.getHome().getName(), 225, colour);
         LocalDateTime date = match.getDateTime();
         createColumn(match.getTimer().getTime().equals("00:00") ? date.getDayOfMonth() + "/" + date.getMonthValue()
-                : match.getHomeScore() + " - " + match.getAwayScore(), 50,  usersMatch);
-        createColumn(match.getAway().getName(), 225, usersMatch);
+                : match.getHomeScore() + " - " + match.getAwayScore(), 50,  colour);
+        createColumn(match.getAway().getName(), 225, colour);
         ImageIcon buttonIcon = getIconWithSpecificSize("./src/main/java/visuals/Images/select_icon.png", "Select", 20);
         selectIcon = createColumn(buttonIcon, 30);
         selectIcon.setBorderWanted(false);

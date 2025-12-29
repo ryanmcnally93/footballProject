@@ -42,9 +42,9 @@ public abstract class AbstractStatBar extends RoundedPanel {
         return label;
     }
 
-    protected JLabel createColumn(String text, int width, boolean usersMatch) {
+    protected JLabel createColumn(String text, int width, Color colour) {
         JLabel label = createColumn(text, width);
-        label.setForeground(usersMatch ? getGreenCharcoal() : getCharcoal());
+        label.setForeground(colour);
         return label;
     }
 
